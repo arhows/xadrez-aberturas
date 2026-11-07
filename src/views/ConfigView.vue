@@ -95,6 +95,11 @@ function resetar() {
     </label>
 
     <label class="marcar">
+      <input v-model="config.mostrarTaticas" type="checkbox" />
+      Mostrar as táticas do tabuleiro no Estudo e no Explorar
+    </label>
+
+    <label class="marcar">
       <input v-model="config.som" type="checkbox" />
       Som
     </label>

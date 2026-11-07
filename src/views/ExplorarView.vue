@@ -5,6 +5,7 @@ import Avaliacao from '../components/Avaliacao.vue'
 import AvisosDoLance from '../components/AvisosDoLance.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import LinhaMotor from '../components/LinhaMotor.vue'
+import TaticasDoTabuleiro from '../components/TaticasDoTabuleiro.vue'
 import RamoLances from '../components/RamoLances.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { CONTEXTO_ARVORE } from '../components/arvoreContexto'
@@ -69,15 +70,17 @@ const ultimoLance = computed<[string, string] | null>(() =>
 )
 const continuacoes = computed(() => saidas(noAtual.value))
 
+const formasTatica = ref<Forma[]>([])
+
 /** Seta para cada lance do livro, mais larga quanto mais linhas passam por ele. */
 const setas = computed<Forma[]>(() => {
   const maior = Math.max(1, ...continuacoes.value.map((aresta) => aresta.linhas.length))
-  const doLivro: Forma[] = continuacoes.value.map((aresta) => ({
+  const doLivro: Forma[] = [...formasTatica.value, ...continuacoes.value.map((aresta): Forma => ({
     de: aresta.from,
     para: aresta.to,
     cor: 'green',
     largura: 3 + 11 * (aresta.linhas.length / maior),
-  }))
+  }))]
   const sugestao = analise.value && casasDoLance(fen.value, analise.value.lance)
   if (sugestao && !continuacoes.value.some((aresta) => aresta.san === analise.value!.lance)) {
     doLivro.push({ de: sugestao.from, para: sugestao.to, cor: 'blue' })
@@ -181,6 +184,8 @@ if (inicial) selecionar(inicial)
       <LinhaMotor :analise="analise" :lances-do-livro="continuacoes.map((aresta) => aresta.san)" />
 
       <AvisosDoLance :aresta="ultima" />
+
+      <TaticasDoTabuleiro v-if="progresso.config.mostrarTaticas" :fen="fen" @formas="formasTatica = $event" />
 
       <CartaoDica v-for="selo in ultima?.selos ?? []" :key="selo.id" tipo="nota">
         <strong>Nota {{ selo.rotulo }}</strong>

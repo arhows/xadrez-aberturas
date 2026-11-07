@@ -5,6 +5,7 @@ import Avaliacao from '../components/Avaliacao.vue'
 import AvisosDoLance from '../components/AvisosDoLance.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import LinhaMotor from '../components/LinhaMotor.vue'
+import TaticasDoTabuleiro from '../components/TaticasDoTabuleiro.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { percorrer } from '../lib/arvore'
 import { LEGENDA } from '../lib/avaliacao'
@@ -46,8 +47,10 @@ const analise = computed(() =>
 )
 const proximoDoLivro = computed(() => lances[ply.value])
 
+const formasTatica = ref<Forma[]>([])
+
 const setaDaAmeaca = computed<Forma[]>(() => {
-  const formas: Forma[] = []
+  const formas: Forma[] = [...formasTatica.value]
   const proximo = proximoDoLivro.value
   if (analise.value && proximo) formas.push({ de: proximo.from, para: proximo.to, cor: 'green' })
   const sugestao = analise.value && casasDoLance(fen.value, analise.value.lance)
@@ -130,6 +133,7 @@ function trocarLinha(evento: Event) {
       <CartaoDica v-else texto="Avance com ▶, com as setas do teclado ou deslizando no tabuleiro." />
       <AvisosDoLance :aresta="arestaAtual" />
       <LinhaMotor :analise="analise" :lances-do-livro="proximoDoLivro ? [proximoDoLivro.san] : []" />
+      <TaticasDoTabuleiro v-if="progresso.config.mostrarTaticas" :fen="fen" @formas="formasTatica = $event" />
 
       <CartaoDica v-if="noFim" tipo="nota" class="fim">
         <strong>Fim da linha</strong>
