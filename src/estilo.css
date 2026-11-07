@@ -1,0 +1,152 @@
+:root {
+  color-scheme: light;
+  --fundo: #fafaf7;
+  --superficie: #f0efe9;
+  --texto: #1f1f1c;
+  --texto-suave: #5f5f58;
+  --borda: #d8d6cc;
+  --ok: #1d7a3d;
+  --erro: #c0352b;
+  --aviso: #b98900;
+  --destaque: #2f6f4f;
+  --sobre-destaque: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema='claro']) {
+    color-scheme: dark;
+    --fundo: #1a1a18;
+    --superficie: #262623;
+    --texto: #ecebe4;
+    --texto-suave: #a5a49b;
+    --borda: #3d3d38;
+    --ok: #56c67e;
+    --erro: #f0776c;
+    --aviso: #e0b83a;
+    --destaque: #56c67e;
+    --sobre-destaque: #10210f;
+  }
+}
+
+:root[data-tema='escuro'] {
+  color-scheme: dark;
+  --fundo: #1a1a18;
+  --superficie: #262623;
+  --texto: #ecebe4;
+  --texto-suave: #a5a49b;
+  --borda: #3d3d38;
+  --ok: #56c67e;
+  --erro: #f0776c;
+  --aviso: #e0b83a;
+  --destaque: #56c67e;
+  --sobre-destaque: #10210f;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font: 16px/1.5 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+a {
+  color: var(--destaque);
+}
+
+code {
+  font-family: ui-monospace, Consolas, monospace;
+}
+
+.pagina {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Tabuleiro de ponta a ponta no celular; lado a lado com o painel em telas largas. */
+.tela {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1rem;
+}
+
+.painel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  gap: 0.75rem;
+  min-width: 0;
+  padding: 0 1rem 1rem;
+}
+
+@media (min-width: 800px) {
+  .tela {
+    grid-template-columns: minmax(0, min(560px, 55vw)) minmax(0, 1fr);
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  .painel {
+    padding: 0;
+  }
+}
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 1rem;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.botao:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.botao.primario {
+  border-color: var(--destaque);
+  background: var(--destaque);
+  color: var(--sobre-destaque);
+  font-weight: 600;
+}
+
+.botao.perigo {
+  border-color: var(--erro);
+  color: var(--erro);
+}
+
+.campo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.25rem;
+}
+
+.campo span {
+  font-weight: 600;
+}
+
+.campo select,
+.campo input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 0.5rem;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  background: var(--fundo);
+  color: var(--texto);
+  font: inherit;
+}

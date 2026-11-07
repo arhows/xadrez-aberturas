@@ -1,0 +1,102 @@
+import { reactive, watch } from 'vue'
+import { gravar, ler } from './armazenamento'
+import type { EscolhaCor, Profundidade } from './escopo'
+import type { Notacao } from './notacao'
+import type { Cartao } from './srs'
+
+export interface Configuracoes {
+  notacao: Notacao
+  dicasNoTreino: 'sempre' | 'erro' | 'nunca'
+  animacaoMs: number
+  som: boolean
+  orientacaoAutomatica: boolean
+  novasPorDia: number
+  tema: 'auto' | 'claro' | 'escuro'
+  /** Últimas escolhas da tela de Treino, usadas também por "Revisar agora". */
+  cor: EscolhaCor
+  profundidade: Profundidade
+}
+
+export interface ErroAresta {
+  capitulo: string
+  erros: number
+  /** Sequência SAN até o lance (inclusive), para exibi-lo e abrir a posição no Explorar. */
+  caminho: string[]
+  /** Linhas que passam pelo lance, para priorizá-las no Treino. */
+  linhas: string[]
+}
+
+export interface Progresso {
+  cartoes: Record<string, Cartao>
+  errosPorAresta: Record<string, ErroAresta>
+  notasConferidas: string[]
+  config: Configuracoes
+}
+
+const CHAVE = 'aberturas.progresso.v1'
+
+export const CONFIG_PADRAO: Configuracoes = {
+  notacao: 'en',
+  dicasNoTreino: 'sempre',
+  animacaoMs: 200,
+  som: true,
+  orientacaoAutomatica: true,
+  novasPorDia: 5,
+  tema: 'auto',
+  cor: 'b',
+  profundidade: 'colunas',
+}
+
+function progressoVazio(): Progresso {
+  return { cartoes: {}, errosPorAresta: {}, notasConferidas: [], config: { ...CONFIG_PADRAO } }
+}
+
+/** Aceita dados salvos ou importados, completando o que faltar com os padrões. */
+export function normalizarProgresso(dados: unknown): Progresso | null {
+  if (typeof dados !== 'object' || dados === null) return null
+  const parcial = dados as Partial<Progresso>
+  const ehObjeto = (valor: unknown) => typeof valor === 'object' && valor !== null
+  if (!ehObjeto(parcial.cartoes)) return null
+  return {
+    cartoes: parcial.cartoes!,
+    errosPorAresta: ehObjeto(parcial.errosPorAresta) ? parcial.errosPorAresta! : {},
+    notasConferidas: Array.isArray(parcial.notasConferidas) ? parcial.notasConferidas : [],
+    config: { ...CONFIG_PADRAO, ...(ehObjeto(parcial.config) ? parcial.config : {}) },
+  }
+}
+
+/** Estado único do app; toda mudança é gravada no localStorage. */
+export const progresso = reactive<Progresso>(
+  normalizarProgresso(ler<unknown>(CHAVE, null)) ?? progressoVazio(),
+)
+
+watch(progresso, (valor) => gravar(CHAVE, valor), { deep: true })
+
+function substituirProgresso({ config, ...resto }: Progresso): void {
+  Object.assign(progresso, resto)
+  // As telas guardam referência a `progresso.config`, então o objeto precisa continuar o mesmo.
+  Object.assign(progresso.config, config)
+}
+
+export function resetarProgresso(): void {
+  // As preferências não são progresso: o reset mantém a configuração atual.
+  substituirProgresso({ ...progressoVazio(), config: { ...progresso.config } })
+}
+
+export function exportarProgresso(): string {
+  return JSON.stringify(progresso, null, 2)
+}
+
+/** Devolve false se o texto não for um progresso válido; nesse caso nada muda. */
+export function importarProgresso(texto: string): boolean {
+  let dados: unknown
+  try {
+    dados = JSON.parse(texto)
+  } catch {
+    return false
+  }
+  const novo = normalizarProgresso(dados)
+  if (!novo) return false
+  substituirProgresso(novo)
+  return true
+}

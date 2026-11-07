@@ -1,0 +1,25 @@
+import { createRouter, createWebHashHistory, type RouteLocationNormalized } from 'vue-router'
+import { buscarCapitulo } from './lib/capitulos'
+import ConfigView from './views/ConfigView.vue'
+import DiagnosticoView from './views/DiagnosticoView.vue'
+import EstudoView from './views/EstudoView.vue'
+import ExplorarView from './views/ExplorarView.vue'
+import InicioView from './views/InicioView.vue'
+import TreinoView from './views/TreinoView.vue'
+
+const exigirCapitulo = (destino: RouteLocationNormalized) =>
+  buscarCapitulo(destino.params.cap as string) ? true : { name: 'inicio' }
+
+// Rotas com hash funcionam em qualquer hospedagem estática, sem regra de reescrita.
+export const router = createRouter({
+  history: createWebHashHistory(),
+  routes: [
+    { path: '/', name: 'inicio', component: InicioView },
+    { path: '/explorar/:cap', name: 'explorar', component: ExplorarView, beforeEnter: exigirCapitulo },
+    { path: '/estudo/:cap/:linha', name: 'estudo', component: EstudoView, beforeEnter: exigirCapitulo },
+    { path: '/treino/:cap', name: 'treino', component: TreinoView, beforeEnter: exigirCapitulo },
+    { path: '/diagnostico', name: 'diagnostico', component: DiagnosticoView },
+    { path: '/config', name: 'config', component: ConfigView },
+    { path: '/:resto(.*)', redirect: '/' },
+  ],
+})
