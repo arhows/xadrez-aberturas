@@ -30,6 +30,14 @@ export function buscarNota(capitulo: CapituloCarregado, id: string): Nota | unde
   return capitulo.capitulo.notas?.find((nota) => nota.id === id)
 }
 
+/** A linha seguinte do capítulo, pulando as desativadas por erro nos dados. */
+export function proximaLinha(capitulo: CapituloCarregado, id: string): Linha | undefined {
+  const linhas = capitulo.capitulo.linhas
+  const posicao = linhas.findIndex((linha) => linha.id === id)
+  if (posicao < 0) return undefined
+  return linhas.slice(posicao + 1).find((linha) => !capitulo.desativadas.includes(linha.id))
+}
+
 function linhasDoEscopo(capitulo: CapituloCarregado, escopo: Escopo): Linha[] {
   if (escopo.tipo === 'grupo') return linhasDoGrupo(capitulo, escopo.id)
   if (escopo.tipo === 'linha') {

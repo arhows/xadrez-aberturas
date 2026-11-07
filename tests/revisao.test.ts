@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import { construirArvore } from '../src/lib/arvore'
 import type { CapituloCarregado } from '../src/lib/capitulos'
-import { corDoCapitulo, planoDeRevisao, type EstadoDaRevisao } from '../src/lib/escopo'
+import {
+  corDoCapitulo,
+  planoDeRevisao,
+  proximaLinha,
+  type EstadoDaRevisao,
+} from '../src/lib/escopo'
 import { idCartao, repartirVagas, type Cartao } from '../src/lib/srs'
 import type { Capitulo } from '../src/lib/tipos'
 import { validarCapitulo } from '../src/lib/validacao'
@@ -53,6 +58,20 @@ function estado(parcial: Partial<EstadoDaRevisao> = {}): EstadoDaRevisao {
 
 const tamanhos = (planos: ReturnType<typeof planoDeRevisao>) =>
   Object.fromEntries(planos.map((p) => [p.capitulo.capitulo.id, p.fila.length]))
+
+describe('proximaLinha', () => {
+  it('segue a ordem do capítulo e termina na última linha', () => {
+    const c = capitulo('c', 3)
+    expect(proximaLinha(c, 'l0')?.id).toBe('l1')
+    expect(proximaLinha(c, 'l2')).toBeUndefined()
+    expect(proximaLinha(c, 'nao-existe')).toBeUndefined()
+  })
+
+  it('pula linhas desativadas', () => {
+    const c = { ...capitulo('c', 3), desativadas: ['l1'] }
+    expect(proximaLinha(c, 'l0')?.id).toBe('l2')
+  })
+})
 
 describe('repartirVagas', () => {
   const candidato = (id: string, disponiveis = 10, iniciadas = 0, criadasHoje = 0) => ({

@@ -6,6 +6,7 @@ import CartaoDica from '../components/CartaoDica.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
 import {
+  buscarLinha,
   corDoCapitulo,
   coresDaEscolha,
   descreverUnidade,
@@ -71,6 +72,9 @@ const escopoEscolhido = computed<Escopo>(() => {
 
 // Estado da sessão
 let idsNoEscopo = new Set<string>()
+/** O que conta como lance do livro nesta partida; na revisão, só a linha revisada. */
+let escopoDaPartida = idsNoEscopo
+const revisando = ref(false)
 const fila = ref<UnidadeRevisao[]>([])
 let pesosDeErro = new Map<string, number>()
 const revisaoAutomatica = route.query.auto === '1'
@@ -175,7 +179,21 @@ function iniciarSessao(livre = false) {
 
 function proximaPartida() {
   const unidade = sortear(fila.value, (u) => pesoDaLinha(u.linha, u.cor))
-  partida.value = iniciarPartida(arvore, unidade.linha, unidade.cor)
+  revisando.value = false
+  escopoDaPartida = idsNoEscopo
+  comecarPartida(unidade.linha, unidade.cor)
+}
+
+/** Joga de novo a linha que acabou de terminar, sem afetar a agenda nem a fila. */
+function revisarLinha() {
+  const { alvo, cor } = partida.value!
+  revisando.value = true
+  escopoDaPartida = new Set([alvo])
+  comecarPartida(alvo, cor)
+}
+
+function comecarPartida(linha: string, cor: UnidadeRevisao['cor']) {
+  partida.value = iniciarPartida(arvore, linha, cor)
   placar.value = { acertos: 0, erros: 0, pistas: 0 }
   aviso.value = null
   fase.value = 'jogando'
@@ -204,7 +222,7 @@ function prepararJogada(atraso: number) {
 function jogarAdversario() {
   const atual = partida.value!
   const aresta = lanceEsperado(arvore, atual)!
-  partida.value = avancar(atual, aresta, idsNoEscopo)
+  partida.value = avancar(atual, aresta, escopoDaPartida)
   prepararJogada(0)
 }
 
@@ -228,7 +246,7 @@ function registrarErro(aresta: Aresta) {
 
 function aoJogar(de: string, para: string) {
   const atual = partida.value!
-  const aceito = lancesAceitos(arvore, atual, idsNoEscopo).find(
+  const aceito = lancesAceitos(arvore, atual, escopoDaPartida).find(
     (aresta) => aresta.from === de && aresta.to === para,
   )
 
@@ -264,7 +282,7 @@ function aoJogar(de: string, para: string) {
     texto: mostrarDica ? aceito.dica : null,
     fechavel: mostrarDica,
   }
-  partida.value = avancar(atual, aceito, idsNoEscopo, (id) => pesoDaLinha(id, atual.cor))
+  partida.value = avancar(atual, aceito, escopoDaPartida, (id) => pesoDaLinha(id, atual.cor))
   prepararJogada(mostrarDica ? TEMPO_DICA_MS : TEMPO_ADVERSARIO_MS)
 }
 
@@ -286,13 +304,14 @@ const textoBotaoPista = computed(() =>
 )
 
 function finalizarPartida() {
-  const { alvo, cor } = partida.value!
-  const unidade = { capitulo: idCapitulo, linha: alvo, cor }
-  const id = idCartao(unidade)
-  const nota = notaDaPartida(placar.value.erros, placar.value.pistas)
-  progresso.cartoes[id] = aplicarResultado(progresso.cartoes[id], nota, dataLocal())
-  fila.value = fila.value.filter((u) => idCartao(u) !== id)
   aviso.value = null
+  if (!revisando.value) {
+    const { alvo, cor } = partida.value!
+    const id = idCartao({ capitulo: idCapitulo, linha: alvo, cor })
+    const nota = notaDaPartida(placar.value.erros, placar.value.pistas)
+    progresso.cartoes[id] = aplicarResultado(progresso.cartoes[id], nota, dataLocal())
+    fila.value = fila.value.filter((u) => idCartao(u) !== id)
+  }
   fase.value = 'fim-partida'
 }
 
@@ -322,6 +341,20 @@ const formas = computed<Forma[]>(() => {
   if (!certo || !jogavel.value) return []
   if (nivelPista.value >= 3) return [{ de: certo.from, para: certo.to, cor: 'green' }]
   return nivelPista.value >= 1 ? [{ de: certo.from, cor: 'yellow' }] : []
+})
+
+/** Linhas abrem no Estudo; notas, que não têm estudo próprio, abrem no Explorar. */
+const linkParaRever = computed(() => {
+  const atual = partida.value
+  if (!atual) return { name: 'inicio' }
+  if (buscarLinha(capitulo, atual.alvo)) {
+    return { name: 'estudo', params: { cap: idCapitulo, linha: atual.alvo } }
+  }
+  return {
+    name: 'explorar',
+    params: { cap: idCapitulo },
+    query: { c: atual.jogadas.map((jogada) => jogada.san).join(' ') },
+  }
 })
 
 const titulo = computed(() =>
@@ -413,6 +446,7 @@ if (revisaoAutomatica) iniciarSessao()
         <p class="situacao">
           <strong>{{ titulo?.titulo }}</strong> ·
           {{ partida?.cor === 'w' ? 'você joga de brancas' : 'você joga de pretas' }}
+          <template v-if="revisando"> · revisão</template>
         </p>
 
         <CartaoDica
@@ -450,6 +484,7 @@ if (revisaoAutomatica) iniciarSessao()
       <template v-else>
         <h1>{{ titulo?.titulo }}</h1>
         <p v-if="titulo?.nome" class="suave">{{ titulo.nome }}</p>
+        <p v-if="revisando" class="suave">Revisão: não altera a agenda de repetição.</p>
 
         <dl class="placar">
           <div><dt>Acertos</dt><dd>{{ placar.acertos }}</dd></div>
@@ -465,6 +500,8 @@ if (revisaoAutomatica) iniciarSessao()
         </CartaoDica>
 
         <div class="acoes">
+          <button type="button" class="botao" @click="revisarLinha">Revisar esta linha</button>
+          <RouterLink class="botao" :to="linkParaRever">Rever com dicas</RouterLink>
           <button v-if="fila.length" type="button" class="botao primario" @click="proximaPartida">
             Próxima ({{ fila.length }})
           </button>

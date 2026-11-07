@@ -76,7 +76,7 @@ Lista de capítulos → grupos → linhas, com: nome, coluna, avaliação final,
 ### 4.3 Estudo guiado
 - Escolhe uma linha; botões ◀ ▶ (e setas do teclado / swipe no celular).
 - A cada lance: anima a peça, destaca origem/destino, mostra a dica do lance (se houver) num card abaixo do tabuleiro.
-- Ao final: mostra `resumo` e `avaliacao` com legenda dos símbolos (± ⩲ = ∓ ∞).
+- Ao final: mostra `resumo` e `avaliacao` com legenda dos símbolos (± ⩲ = ∓ ∞), e os botões "Rever este estudo" (volta ao primeiro lance), "Treinar esta linha" e "Próximo estudo" (linha seguinte do capítulo).
 
 ### 4.4 Treino (jogar de memória)
 - Usuário escolhe a cor (brancas, pretas ou ambas) e o escopo (linha, grupo ou capítulo inteiro).
@@ -87,7 +87,7 @@ Lista de capítulos → grupos → linhas, com: nome, coluna, avaliação final,
   - **Lance legal mas fora do livro** → feedback vermelho, mostra seta do lance certo + a dica dele, desfaz e pede para jogar o certo.
   - **Botão "Pista"** (custa pontuação): 1º toque destaca a peça que deve mover; 2º toque mostra a dica do lance sem revelar a casa; 3º mostra a seta.
   - Se a posição tem mais de um lance do livro para o usuário, qualquer um deles é aceito e conta para a linha correspondente.
-- Fim da linha: placar (acertos, erros, pistas), resumo da linha e botão "Próxima".
+- Fim da linha: placar (acertos, erros, pistas), resumo da linha e os botões "Próxima", "Revisar esta linha" e "Rever com dicas". A revisão aceita só os lances da linha revisada e não altera a agenda da repetição espaçada nem a fila da sessão; os erros contam em "lances em que você mais erra".
 
 ### 4.5 Quiz "Por quê?" (opcional, fase 2)
 Mostra a posição e o lance jogado; o usuário escolhe entre 3 dicas qual explica o lance (2 distratoras sorteadas de outras dicas do capítulo).

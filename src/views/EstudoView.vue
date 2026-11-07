@@ -7,7 +7,7 @@ import Tabuleiro from '../components/Tabuleiro.vue'
 import { percorrer } from '../lib/arvore'
 import { LEGENDA } from '../lib/avaliacao'
 import { buscarCapitulo } from '../lib/capitulos'
-import { buscarLinha } from '../lib/escopo'
+import { buscarLinha, proximaLinha } from '../lib/escopo'
 import { fmtLance, fmtTexto } from '../lib/formato'
 
 const route = useRoute()
@@ -17,6 +17,9 @@ const capitulo = buscarCapitulo(route.params.cap as string)!
 const linha = buscarLinha(capitulo, route.params.linha as string)
 const lances = capitulo.unidades.find((u) => u.id === linha?.id)?.lances ?? []
 const arestas = percorrer(capitulo.arvore, lances.map((l) => l.san)) ?? []
+const proxima = linha && proximaLinha(capitulo, linha.id)
+const tituloDaLinha = (l: { coluna: number | null }) =>
+  l.coluna === null ? 'Bônus' : `Coluna ${l.coluna}`
 
 const ply = ref(0)
 const orientacao = ref<'white' | 'black'>('white')
@@ -112,10 +115,19 @@ function trocarLinha(evento: Event) {
             </template>
           </dl>
         </details>
-        <RouterLink
-          class="botao primario"
-          :to="{ name: 'treino', params: { cap: capitulo.capitulo.id }, query: { escopo: `linha:${linha.id}` } }"
-        >Treinar esta linha</RouterLink>
+        <div class="acoes">
+          <button type="button" class="botao" @click="ply = 0">Rever este estudo</button>
+          <RouterLink
+            class="botao"
+            :to="{ name: 'treino', params: { cap: capitulo.capitulo.id }, query: { escopo: `linha:${linha.id}` } }"
+          >Treinar esta linha</RouterLink>
+          <RouterLink
+            v-if="proxima"
+            class="botao primario"
+            :to="{ name: 'estudo', params: { cap: capitulo.capitulo.id, linha: proxima.id } }"
+          >Próximo estudo: {{ tituloDaLinha(proxima) }}</RouterLink>
+          <RouterLink v-else class="botao primario" to="/">Último estudo do capítulo: voltar ao início</RouterLink>
+        </div>
       </CartaoDica>
     </div>
   </div>
@@ -140,7 +152,10 @@ function trocarLinha(evento: Event) {
 .fim p {
   margin: 0.5rem 0;
 }
-.fim .botao {
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
   margin-top: 0.75rem;
 }
 .legenda {
