@@ -7,7 +7,7 @@ import type { Key } from 'chessground/types'
 import 'chessground/assets/chessground.base.css'
 import 'chessground/assets/chessground.brown.css'
 import 'chessground/assets/chessground.cburnett.css'
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import PecasCapturadas from './PecasCapturadas.vue'
 import { corDaPosicao, destinosLegais, estaEmXeque } from '../lib/lances'
 import { progresso } from '../lib/progresso'
@@ -53,6 +53,8 @@ function configuracao(): Config {
       events: { after: (de, para) => emit('lance', de, para) },
     },
     premovable: { enabled: false },
+    // As coordenadas ficam fora do tabuleiro (ver template), para não ficarem sob as peças.
+    coordinates: false,
     drawable: { enabled: false, visible: true },
   }
 }
@@ -75,6 +77,9 @@ function sincronizar() {
 
 defineExpose({ sincronizar })
 
+const fileiras = computed(() => (props.orientacao === 'white' ? '87654321' : '12345678').split(''))
+const colunas = computed(() => (props.orientacao === 'white' ? 'abcdefgh' : 'hgfedcba').split(''))
+
 onMounted(() => {
   api = Chessground(elemento.value!, configuracao())
   desenhar()
@@ -94,25 +99,59 @@ watch(() => props.formas, desenhar)
 <template>
   <div class="conjunto">
     <PecasCapturadas :fen="fen" :lado="orientacao === 'white' ? 'b' : 'w'" />
-    <div class="moldura">
-      <div ref="elemento" class="tabuleiro"></div>
+    <div class="grade">
+      <div class="fileiras" aria-hidden="true">
+        <span v-for="f in fileiras" :key="f">{{ f }}</span>
+      </div>
+      <div class="moldura">
+        <div ref="elemento" class="tabuleiro"></div>
+      </div>
+      <div class="colunas" aria-hidden="true">
+        <span v-for="c in colunas" :key="c">{{ c }}</span>
+      </div>
     </div>
     <PecasCapturadas :fen="fen" :lado="orientacao === 'white' ? 'w' : 'b'" />
   </div>
 </template>
 
 <style scoped>
+.grade {
+  display: grid;
+  grid-template-columns: 1rem minmax(0, 1fr);
+  grid-template-rows: auto 1.25rem;
+}
 .moldura {
   width: 100%;
   aspect-ratio: 1;
 }
+.fileiras,
+.colunas {
+  display: flex;
+  color: var(--texto);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1;
+  user-select: none;
+}
+.fileiras {
+  flex-direction: column;
+}
+.fileiras span {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+.colunas {
+  grid-column: 2;
+}
+.colunas span {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .tabuleiro {
   width: 100%;
   height: 100%;
-}
-/* O padrão do chessground desloca estas letras para fora e cria rolagem lateral no celular. */
-.tabuleiro :deep(coords.files) {
-  left: 0;
-  right: 0;
 }
 </style>
