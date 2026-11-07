@@ -188,6 +188,9 @@ header .suave {
   min-height: 44px;
   border-bottom: 1px solid var(--borda);
 }
+.capitulo + .capitulo {
+  margin-top: 2rem;
+}
 .grupo {
   margin-top: 0.75rem;
   border: 1px solid var(--borda);

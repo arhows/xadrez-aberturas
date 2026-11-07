@@ -61,6 +61,18 @@ describe('exportação em PGN', () => {
     }
   })
 
+  it.each(carregarCapitulos().map((c) => [c.capitulo.id, c] as const))(
+    '%s: exporta todas as linhas e notas com lances legais',
+    (_id, capitulo) => {
+      const exportadas = exportarPgn(capitulo).split(/\n(?=\[Event)/).flatMap(linhasDoJogo)
+      for (const unidade of capitulo.unidades) {
+        const sans = unidade.lances.map((lance) => lance.san).join(' ')
+        const presente = exportadas.some((l) => l === sans || l.startsWith(`${sans} `))
+        expect(presente, unidade.id).toBe(true)
+      }
+    },
+  )
+
   it('leva dicas e comentários das notas', () => {
     expect(jogos[0]).toContain('Captura en passant!')
     expect(jogos[0]).toContain('Nota (e) — ± — Radjabov–Naiditsch, Varsóvia 2005')
