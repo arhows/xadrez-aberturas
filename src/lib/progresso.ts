@@ -7,6 +7,8 @@ import type { Cartao } from './srs'
 export interface Configuracoes {
   notacao: Notacao
   dicasNoTreino: 'sempre' | 'erro' | 'nunca'
+  /** Quanto o adversário espera depois de mostrar a dica de um acerto. */
+  tempoDica: 'normal' | 'longo' | 'toque'
   animacaoMs: number
   som: boolean
   orientacaoAutomatica: boolean
@@ -41,6 +43,7 @@ const CHAVE = 'aberturas.progresso.v1'
 export const CONFIG_PADRAO: Configuracoes = {
   notacao: 'en',
   dicasNoTreino: 'sempre',
+  tempoDica: 'normal',
   animacaoMs: 200,
   som: true,
   orientacaoAutomatica: true,

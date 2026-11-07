@@ -57,6 +57,15 @@ function resetar() {
     </label>
 
     <label class="campo">
+      <span>Tempo para ler a dica no Treino</span>
+      <select v-model="config.tempoDica">
+        <option value="normal">Normal (2 segundos)</option>
+        <option value="longo">Mais tempo (5 segundos)</option>
+        <option value="toque">Até eu tocar para continuar</option>
+      </select>
+    </label>
+
+    <label class="campo">
       <span>Velocidade da animação</span>
       <select v-model.number="config.animacaoMs">
         <option :value="0">Sem animação</option>

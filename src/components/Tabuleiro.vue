@@ -8,6 +8,7 @@ import 'chessground/assets/chessground.base.css'
 import 'chessground/assets/chessground.brown.css'
 import 'chessground/assets/chessground.cburnett.css'
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import PecasCapturadas from './PecasCapturadas.vue'
 import { corDaPosicao, destinosLegais, estaEmXeque } from '../lib/lances'
 import { progresso } from '../lib/progresso'
 
@@ -91,8 +92,12 @@ watch(() => props.formas, desenhar)
 </script>
 
 <template>
-  <div class="moldura">
-    <div ref="elemento" class="tabuleiro"></div>
+  <div class="conjunto">
+    <PecasCapturadas :fen="fen" :lado="orientacao === 'white' ? 'b' : 'w'" />
+    <div class="moldura">
+      <div ref="elemento" class="tabuleiro"></div>
+    </div>
+    <PecasCapturadas :fen="fen" :lado="orientacao === 'white' ? 'w' : 'b'" />
   </div>
 </template>
 

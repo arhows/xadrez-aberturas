@@ -55,7 +55,8 @@ const corEscolhida = computed<EscolhaCor>({
   },
 })
 
-const TEMPO_DICA_MS = 2000
+/** null = espera o usuário tocar em Continuar. */
+const TEMPO_DICA_MS = { normal: 2000, longo: 5000, toque: null } as const
 const TEMPO_ADVERSARIO_MS = 500
 const TEMPO_DESFAZER_MS = 350
 
@@ -119,14 +120,19 @@ const aviso = ref<Aviso | null>(null)
 let temporizador: ReturnType<typeof setTimeout> | undefined
 let aoFimDaEspera: (() => void) | null = null
 
-function esperar(ms: number, depois: () => void) {
+/** Sem tempo (null), a espera só termina quando o usuário toca em Continuar. */
+const esperandoToque = ref(false)
+
+function esperar(ms: number | null, depois: () => void) {
   clearTimeout(temporizador)
   aoFimDaEspera = depois
-  temporizador = setTimeout(pularEspera, ms)
+  esperandoToque.value = ms === null
+  if (ms !== null) temporizador = setTimeout(pularEspera, ms)
 }
 
 function pularEspera() {
   clearTimeout(temporizador)
+  esperandoToque.value = false
   const depois = aoFimDaEspera
   aoFimDaEspera = null
   depois?.()
@@ -200,7 +206,7 @@ function comecarPartida(linha: string, cor: UnidadeRevisao['cor']) {
   prepararJogada(0)
 }
 
-function prepararJogada(atraso: number) {
+function prepararJogada(atraso: number | null) {
   const atual = partida.value!
   nivelPista.value = 0
   erroNestaJogada.value = false
@@ -212,7 +218,7 @@ function prepararJogada(atraso: number) {
     aguardando.value = false
   } else {
     aguardando.value = true
-    esperar(Math.max(atraso, TEMPO_ADVERSARIO_MS), () => {
+    esperar(atraso === null ? null : Math.max(atraso, TEMPO_ADVERSARIO_MS), () => {
       aviso.value = null
       jogarAdversario()
     })
@@ -283,7 +289,7 @@ function aoJogar(de: string, para: string) {
     fechavel: mostrarDica,
   }
   partida.value = avancar(atual, aceito, escopoDaPartida, (id) => pesoDaLinha(id, atual.cor))
-  prepararJogada(mostrarDica ? TEMPO_DICA_MS : TEMPO_ADVERSARIO_MS)
+  prepararJogada(mostrarDica ? TEMPO_DICA_MS[config.tempoDica] : TEMPO_ADVERSARIO_MS)
 }
 
 function pedirPista() {
@@ -411,6 +417,15 @@ if (revisaoAutomatica) iniciarSessao()
       </select>
     </label>
 
+    <label class="campo">
+      <span>Tempo para ler a dica no Treino</span>
+      <select v-model="config.tempoDica">
+        <option value="normal">Normal (2 segundos)</option>
+        <option value="longo">Mais tempo (5 segundos)</option>
+        <option value="toque">Até eu tocar para continuar</option>
+      </select>
+    </label>
+
     <button type="button" class="botao primario" @click="iniciarSessao()">Começar</button>
   </div>
 
@@ -458,6 +473,9 @@ if (revisaoAutomatica) iniciarSessao()
           @click="aviso.fechavel && pularEspera()"
         >
           <p v-if="aviso.tipo === 'errado'" class="instrucao">Esse não é o lance do livro. Jogue o lance da seta.</p>
+          <button v-if="esperandoToque" type="button" class="botao primario continuar" @click.stop="pularEspera">
+            Continuar
+          </button>
         </CartaoDica>
         <p v-else class="suave">
           {{ jogavel ? 'Sua vez.' : 'O adversário está jogando…' }}
@@ -542,6 +560,9 @@ h1 {
 }
 .tocavel {
   cursor: pointer;
+}
+.continuar {
+  margin-top: 0.75rem;
 }
 .placar-linha {
   margin: 0;
