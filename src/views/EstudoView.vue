@@ -15,6 +15,7 @@ import { fmtLance, fmtTexto } from '../lib/formato'
 import { casasDoLance } from '../lib/lances'
 import { carregarMotor, type DadosMotor } from '../lib/motor'
 import { progresso } from '../lib/progresso'
+import { oportunidadeDaPosicao } from '../lib/taticas'
 
 const route = useRoute()
 const router = useRouter()
@@ -46,6 +47,9 @@ const analise = computed(() =>
   progresso.config.mostrarMotor ? (dadosMotor.value?.posicoes[chaveAtual.value] ?? null) : null,
 )
 const proximoDoLivro = computed(() => lances[ply.value])
+const oportunidade = computed(() =>
+  oportunidadeDaPosicao(fen.value, dadosMotor.value?.posicoes[chaveAtual.value]),
+)
 
 const formasTatica = ref<Forma[]>([])
 
@@ -133,7 +137,13 @@ function trocarLinha(evento: Event) {
       <CartaoDica v-else texto="Avance com ▶, com as setas do teclado ou deslizando no tabuleiro." />
       <AvisosDoLance :aresta="arestaAtual" />
       <LinhaMotor :analise="analise" :lances-do-livro="proximoDoLivro ? [proximoDoLivro.san] : []" />
-      <TaticasDoTabuleiro v-if="progresso.config.mostrarTaticas" :fen="fen" @formas="formasTatica = $event" />
+      <TaticasDoTabuleiro
+        v-if="progresso.config.mostrarTaticas"
+        :fen="fen"
+        :oportunidade="oportunidade"
+        :lances-do-livro="proximoDoLivro ? [proximoDoLivro.san] : []"
+        @formas="formasTatica = $event"
+      />
 
       <CartaoDica v-if="noFim" tipo="nota" class="fim">
         <strong>Fim da linha</strong>

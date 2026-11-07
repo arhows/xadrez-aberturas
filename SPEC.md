@@ -130,5 +130,9 @@ Lista de erros de validação (seção 3.2) e estatísticas do arquivo (linhas, 
 - `scripts/motor.cjs` avalia cada posição dos capítulos com o Stockfish e grava `data/engine/<id>.json` (melhor lance e avaliação). Rode de novo quando um capítulo mudar; posições analisadas a fundo ficam marcadas com `profundo` e são mantidas.
 - No Estudo e no Explorar: seta verde para o lance do livro e azul para o do Stockfish quando divergem, com a avaliação em texto. Nunca no Treino. Pode ser desligado nas Configurações.
 
+## 9.2 Táticas no tabuleiro (Estudo e Explorar; nunca no Treino)
+- Presentes na posição, detectadas pela geometria: cravadas, ataques duplos, espetos, peças sem defesa e peças atacadas por outra de menor valor. No máximo 5 itens.
+- Disponíveis no próximo lance: garfo, cravada, espeto ou ataque descoberto criados pelo melhor lance do Stockfish, mostrados só quando a vantagem de quem joga é de pelo menos 1,5 peão.
+
 ## 10. Fora do escopo (por enquanto)
 Engine rodando dentro do app, login/sincronização, importação automática de fotos. Novos capítulos serão adicionados manualmente como JSON.

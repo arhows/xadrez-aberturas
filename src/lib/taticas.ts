@@ -1,3 +1,4 @@
+import { Chess } from 'chess.js'
 import type { Cor } from './lances'
 
 /**
@@ -147,6 +148,12 @@ const exposto = (peca: Peca) => (NOME[peca.tipo][2] === 'f' ? 'exposta' : 'expos
 const nomeCurto = (peca: Peca) => `${NOME[peca.tipo][0]} ${NOME[peca.tipo][1]}`
 
 export function taticasDaPosicao(fen: string): Tatica[] {
+  return todasAsTaticas(fen)
+    .sort((a, b) => PRIORIDADE[a.tipo] - PRIORIDADE[b.tipo])
+    .slice(0, MAXIMO)
+}
+
+function todasAsTaticas(fen: string): Tatica[] {
   const tab = lerTabuleiro(fen)
   const defendida = (onde: string) => atacantes(tab, onde, tab.get(onde)!.cor).length > 0
   const taticas: Tatica[] = []
@@ -210,5 +217,138 @@ export function taticasDaPosicao(fen: string): Tatica[] {
     }
   }
 
-  return taticas.sort((a, b) => PRIORIDADE[a.tipo] - PRIORIDADE[b.tipo]).slice(0, MAXIMO)
+  return taticas
+}
+
+export type TipoOportunidade = 'garfo' | 'cravada' | 'espeto' | 'descoberto'
+
+/** Tática que um lance cria; só faz sentido quando o motor confirma que o lance ganha. */
+export interface Oportunidade {
+  tipo: TipoOportunidade
+  lance: string
+  /** Lado que joga o lance. */
+  cor: Cor
+  texto: string
+  /** Casas do lance, e a peça que executa a tática com os alvos dela. */
+  de: string
+  para: string
+  executor: string
+  alvos: string[]
+}
+
+/** Vantagem mínima, em centipeões, para dizer que a tática funciona. */
+export const GANHO_MINIMO = 150
+
+/** Casas estritamente entre duas casas alinhadas. */
+function entre(a: string, b: string): string[] {
+  const [fa, ra] = coordenadas(a)
+  const [fb, rb] = coordenadas(b)
+  const df = Math.sign(fb - fa)
+  const dr = Math.sign(rb - ra)
+  const casas: string[] = []
+  let [x, y] = [fa + df, ra + dr]
+  while (x !== fb || y !== rb) {
+    casas.push(casa(x, y))
+    x += df
+    y += dr
+  }
+  return casas
+}
+
+/** Procura garfo, cravada, espeto ou ataque descoberto criados por um lance; null se não houver. */
+export function taticaDoLance(fen: string, san: string): Oportunidade | null {
+  const chess = new Chess(fen)
+  let lance
+  try {
+    lance = chess.move(san)
+  } catch {
+    return null
+  }
+  const cor = lance.color as Cor
+  const antes = lerTabuleiro(fen)
+  const tab = lerTabuleiro(chess.fen())
+  const movida = tab.get(lance.to)!
+  const base = { lance: lance.san, cor, de: lance.from, para: lance.to }
+  const criadas = todasAsTaticas(chess.fen()).filter((t) => t.de === lance.to && t.favorece === cor)
+
+  // Garfo: pelo menos dois alvos de valor (peças ou o rei); peões não contam.
+  const garfo = criadas.find(
+    (t) => t.tipo === 'ataque-duplo' && t.alvos.filter((alvo) => tab.get(alvo)!.tipo !== 'p').length >= 2,
+  )
+  if (garfo) {
+    const lista = garfo.alvos.map((alvo) => nome(tab.get(alvo)!, alvo, false))
+    return {
+      ...base,
+      tipo: 'garfo',
+      executor: lance.to,
+      alvos: garfo.alvos,
+      texto: `Garfo com ${lance.san}: ${nomeCurto(movida)} ataca ${lista.slice(0, -1).join(', ')} e ${lista.at(-1)} ao mesmo tempo.`,
+    }
+  }
+
+  // A peça cravada precisa ser uma peça; um peão cravado quase nunca é o motivo do lance.
+  const cravada = criadas.find(
+    (t) => (t.tipo === 'cravada-absoluta' || t.tipo === 'cravada') && tab.get(t.alvos[0])!.tipo !== 'p',
+  )
+  if (cravada) {
+    const [p, q] = cravada.alvos.map((alvo) => tab.get(alvo)!)
+    return {
+      ...base,
+      tipo: 'cravada',
+      executor: lance.to,
+      alvos: cravada.alvos,
+      texto: `Cravada com ${lance.san}: ${nomeCurto(movida)} crava ${nome(p, cravada.alvos[0], false)} contra ${nomeCurto(q)}.`,
+    }
+  }
+
+  const espeto = criadas.find((t) => t.tipo === 'espeto')
+  if (espeto) {
+    const [p, q] = espeto.alvos.map((alvo) => tab.get(alvo)!)
+    return {
+      ...base,
+      tipo: 'espeto',
+      executor: lance.to,
+      alvos: espeto.alvos,
+      texto: `Espeto com ${lance.san}: ${nomeCurto(movida)} ataca ${nome(p, espeto.alvos[0], false)}, e atrás está ${nome(q, espeto.alvos[1], false)}.`,
+    }
+  }
+
+  // Ataque descoberto: uma peça de longo alcance passa a atingir um alvo pela casa que o lance liberou.
+  const defendida = (onde: string) => atacantes(tab, onde, tab.get(onde)!.cor).length > 0
+  for (const [origem, peca] of tab) {
+    if (peca.cor !== cor || origem === lance.to || !direcoes(peca.tipo).length) continue
+    const novos = ataques(tab, origem).filter((alvo) => {
+      const t = tab.get(alvo)
+      if (!t || t.cor === cor || t.tipo === 'p' || ataques(antes, origem).includes(alvo)) return false
+      if (!(t.tipo === 'k' || VALOR[t.tipo] > VALOR[peca.tipo] || !defendida(alvo))) return false
+      return entre(origem, alvo).includes(lance.from)
+    })
+    if (novos.length) {
+      const alvo = novos[0]
+      return {
+        ...base,
+        tipo: 'descoberto',
+        executor: origem,
+        alvos: [alvo],
+        texto: `Ataque descoberto com ${lance.san}: ao sair de ${lance.from}, ${nomeCurto(movida)} abre a linha ${contrair(nome(peca, origem, false))} contra ${nome(tab.get(alvo)!, alvo, false)}.`,
+      }
+    }
+  }
+  return null
+}
+
+/**
+ * A tática disponível numa posição, a partir da análise do motor: o melhor lance
+ * precisa criar o padrão e a vantagem de quem joga precisa ser de pelo menos GANHO_MINIMO.
+ */
+export function oportunidadeDaPosicao(
+  fen: string,
+  analise: { lance: string; cp: number } | null | undefined,
+): (Oportunidade & { cp: number }) | null {
+  if (!analise) return null
+  const vez: Cor = fen.split(' ')[1] === 'b' ? 'b' : 'w'
+  const vantagem = vez === 'w' ? analise.cp : -analise.cp
+  if (vantagem < GANHO_MINIMO) return null
+  const tatica = taticaDoLance(fen, analise.lance)
+  return tatica && { ...tatica, cp: analise.cp }
 }

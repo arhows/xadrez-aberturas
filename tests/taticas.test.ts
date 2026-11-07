@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { jogarLances } from '../src/lib/lances'
-import { taticasDaPosicao } from '../src/lib/taticas'
+import { oportunidadeDaPosicao, taticaDoLance, taticasDaPosicao } from '../src/lib/taticas'
 
 const depois = (lances: string) => jogarLances(lances).lances.at(-1)!.fenDepois
 const tipos = (fen: string) => taticasDaPosicao(fen).map((t) => t.tipo)
@@ -64,5 +64,48 @@ describe('táticas no tabuleiro', () => {
     const t = taticasDaPosicao('r3k2r/2N5/8/3q4/8/8/1B6/R3K2R w KQkq - 0 1')
     expect(t.length).toBeLessThanOrEqual(5)
     expect(t[0].tipo).toBe('ataque-duplo')
+  })
+})
+
+describe('táticas disponíveis no próximo lance', () => {
+  it('garfo de cavalo no rei e na torre', () => {
+    const garfo = taticaDoLance('r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1', 'Nc7+')!
+    expect(garfo).toMatchObject({ tipo: 'garfo', lance: 'Nc7+', de: 'b5', para: 'c7', executor: 'c7' })
+    expect(garfo.alvos.sort()).toEqual(['a8', 'e8'])
+    expect(garfo.texto).toBe('Garfo com Nc7+: o cavalo ataca o rei de e8 e a torre de a8 ao mesmo tempo.')
+  })
+
+  it('garfo só com um peão entre os alvos não conta', () => {
+    // Dama em b4 atacando a dama de c4 e o peão de b2.
+    expect(taticaDoLance('4k3/8/8/8/2Q5/8/1P2q3/4K3 b - - 0 1', 'Qb4+')?.tipo).not.toBe('garfo')
+  })
+
+  it('cravada de peão contra o rei não conta', () => {
+    expect(taticaDoLance('4k3/8/8/8/8/8/5P2/q3K3 b - - 0 1', 'Qa6')).toBeNull()
+  })
+
+  it('lance sem padrão tático devolve null', () => {
+    expect(taticaDoLance('r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1', 'Nd4')).toBeNull()
+  })
+
+  it('cravada criada pelo lance', () => {
+    // Com ...d6 jogado, d7 está livre e o cavalo fica preso ao rei.
+    const fen = 'r1bqkbnr/ppp2ppp/2np4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 1'
+    expect(taticaDoLance(fen, 'Bb5')).toMatchObject({ tipo: 'cravada', alvos: ['c6', 'e8'] })
+  })
+
+  it('ataque descoberto: o bispo sai da coluna e a torre ataca a dama', () => {
+    const t = taticaDoLance('3qk3/8/8/3B4/8/8/8/3RK3 w - - 0 1', 'Bc4')!
+    expect(t).toMatchObject({ tipo: 'descoberto', executor: 'd1', alvos: ['d8'] })
+    expect(t.texto).toBe('Ataque descoberto com Bc4: ao sair de d5, o bispo abre a linha da torre de d1 contra a dama de d8.')
+  })
+
+  it('só aponta a tática quando o motor confirma a vantagem de quem joga', () => {
+    const fen = 'r3k3/8/8/1N6/8/8/8/4K3 w - - 0 1'
+    expect(oportunidadeDaPosicao(fen, { lance: 'Nc7+', cp: 900 })?.tipo).toBe('garfo')
+    expect(oportunidadeDaPosicao(fen, { lance: 'Nc7+', cp: 40 })).toBeNull()
+    expect(oportunidadeDaPosicao(fen, null)).toBeNull()
+    // Vantagem das pretas não serve quando quem joga são as brancas.
+    expect(oportunidadeDaPosicao(fen, { lance: 'Nc7+', cp: -900 })).toBeNull()
   })
 })

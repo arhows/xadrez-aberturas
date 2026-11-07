@@ -16,6 +16,7 @@ import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
 import { casasDoLance } from '../lib/lances'
 import { carregarMotor, type DadosMotor } from '../lib/motor'
 import { progresso } from '../lib/progresso'
+import { oportunidadeDaPosicao } from '../lib/taticas'
 
 const route = useRoute()
 const capitulo = buscarCapitulo(route.params.cap as string)!
@@ -91,6 +92,9 @@ const setas = computed<Forma[]>(() => {
 
 const dadosMotor = shallowRef<DadosMotor | null>(null)
 carregarMotor(capitulo.capitulo.id).then((dados) => (dadosMotor.value = dados))
+const oportunidade = computed(() =>
+  oportunidadeDaPosicao(fen.value, dadosMotor.value?.posicoes[noAtual.value]),
+)
 const analise = computed(() =>
   progresso.config.mostrarMotor ? (dadosMotor.value?.posicoes[noAtual.value] ?? null) : null,
 )
@@ -185,7 +189,13 @@ if (inicial) selecionar(inicial)
 
       <AvisosDoLance :aresta="ultima" />
 
-      <TaticasDoTabuleiro v-if="progresso.config.mostrarTaticas" :fen="fen" @formas="formasTatica = $event" />
+      <TaticasDoTabuleiro
+        v-if="progresso.config.mostrarTaticas"
+        :fen="fen"
+        :oportunidade="oportunidade"
+        :lances-do-livro="continuacoes.map((aresta) => aresta.san)"
+        @formas="formasTatica = $event"
+      />
 
       <CartaoDica v-for="selo in ultima?.selos ?? []" :key="selo.id" tipo="nota">
         <strong>Nota {{ selo.rotulo }}</strong>
