@@ -8,6 +8,23 @@ export interface Grupo {
   colunas: number[]
 }
 
+/** O que o lado que acabou de jogar faria se pudesse jogar de novo. */
+export interface Ameaca {
+  lance: string
+  texto: string
+}
+
+/** Sequência do livro em que um lance natural é punido. O texto é comentário do app. */
+export interface Armadilha {
+  id: string
+  titulo: string
+  /** PGN desde o 1º lance; precisa ser o início de uma linha ou nota do capítulo. */
+  lances: string
+  /** Ply (1 = 1.e4) do lance natural que cai na armadilha. */
+  erroNoLance: number
+  texto: string
+}
+
 export interface Linha {
   id: string
   coluna: number | null
@@ -18,6 +35,8 @@ export interface Linha {
   avaliacao: string | null
   resumo: string
   dicas: Record<string, string>
+  /** Chave no formato de `dicas`: a ameaça criada por aquele lance. */
+  ameacas?: Record<string, Ameaca>
 }
 
 export interface Nota {
@@ -46,5 +65,6 @@ export interface Capitulo {
   grupos: Grupo[]
   linhas: Linha[]
   notas?: Nota[]
+  armadilhas?: Armadilha[]
   notasPendentes?: string
 }

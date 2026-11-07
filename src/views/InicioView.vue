@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import Avaliacao from '../components/Avaliacao.vue'
-import { percorrer } from '../lib/arvore'
+import { caminhoDaArmadilha, percorrer } from '../lib/arvore'
 import { buscarCapitulo, obterCapitulos, type CapituloCarregado } from '../lib/capitulos'
 import { baixarTexto } from '../lib/download'
 import { linhasDoGrupo, planoDeRevisao } from '../lib/escopo'
@@ -109,6 +109,20 @@ const maisErrados = computed(() =>
           <button type="button" class="botao" @click="baixarPgn(capitulo)">Exportar PGN</button>
         </div>
       </header>
+
+      <details v-if="capitulo.capitulo.armadilhas?.length" class="grupo">
+        <summary>
+          <span>Armadilhas</span>
+          <span class="suave">{{ capitulo.capitulo.armadilhas.length }}</span>
+        </summary>
+        <ul class="linhas">
+          <li v-for="armadilha in capitulo.capitulo.armadilhas" :key="armadilha.id">
+            <RouterLink
+              :to="{ name: 'explorar', params: { cap: capitulo.capitulo.id }, query: { c: caminhoDaArmadilha(armadilha).join(' ') } }"
+            >{{ armadilha.titulo }}</RouterLink>
+          </li>
+        </ul>
+      </details>
 
       <details v-for="grupo in capitulo.capitulo.grupos" :key="grupo.id" class="grupo">
         <summary>

@@ -1,5 +1,11 @@
-import { chaveDaPosicao, chaveDoLance, type LanceJogado } from './lances'
-import type { Nota } from './tipos'
+import {
+  chaveDaPosicao,
+  chaveDoLance,
+  jogarLances,
+  lanceDaAmeaca,
+  type LanceJogado,
+} from './lances'
+import type { Armadilha, Nota } from './tipos'
 import type { CapituloValidado } from './validacao'
 
 export interface SeloNota {
@@ -8,6 +14,13 @@ export interface SeloNota {
   comentario?: string
   referencia?: string
   avaliacao?: string | null
+}
+
+export interface AmeacaAresta {
+  san: string
+  from: string
+  to: string
+  texto: string
 }
 
 export interface Aresta {
@@ -24,6 +37,10 @@ export interface Aresta {
   linhas: string[]
   /** Notas que saem da linha base exatamente nesta aresta. */
   selos: SeloNota[]
+  /** O que o lado que fez este lance ameaça jogar em seguida. */
+  ameaca: AmeacaAresta | null
+  /** Armadilhas em que este é o lance natural que cai nelas. */
+  armadilhas: Armadilha[]
 }
 
 export interface No {
@@ -75,6 +92,8 @@ export function construirArvore(validado: CapituloValidado): Arvore {
         dica: null,
         linhas: [],
         selos: [],
+        ameaca: null,
+        armadilhas: [],
       }
       origem.saidas.push(aresta)
       destino.entradas.push(aresta)
@@ -84,11 +103,13 @@ export function construirArvore(validado: CapituloValidado): Arvore {
 
   const raiz = obterNo(FEN_INICIAL).chave
   const dicasPorLinha = new Map(validado.capitulo.linhas.map((linha) => [linha.id, linha.dicas]))
+  const ameacasPorLinha = new Map(validado.capitulo.linhas.map((linha) => [linha.id, linha.ameacas]))
   const notasPorId = new Map<string, Nota>((validado.capitulo.notas ?? []).map((n) => [n.id, n]))
 
   // A ordem das unidades segue o JSON, então a primeira dica não vazia prevalece.
   for (const unidade of validado.unidades) {
     const dicas = dicasPorLinha.get(unidade.id)
+    const ameacas = ameacasPorLinha.get(unidade.id)
     const nota = notasPorId.get(unidade.id)
 
     for (const lance of unidade.lances) {
@@ -97,6 +118,12 @@ export function construirArvore(validado: CapituloValidado): Arvore {
 
       const dica = dicas?.[chaveDoLance(lance.ply, lance.san)]
       if (!aresta.dica && dica) aresta.dica = dica
+
+      const ameaca = ameacas?.[chaveDoLance(lance.ply, lance.san)]
+      const lanceAmeaca = ameaca && lanceDaAmeaca(lance.fenDepois, ameaca.lance)
+      if (!aresta.ameaca && ameaca && lanceAmeaca) {
+        aresta.ameaca = { ...lanceAmeaca, texto: ameaca.texto }
+      }
 
       if (nota && lance.ply === nota.desvioNoLance) {
         aresta.selos.push({
@@ -110,7 +137,19 @@ export function construirArvore(validado: CapituloValidado): Arvore {
     }
   }
 
-  return { raiz, nos }
+  const arvore = { raiz, nos }
+  for (const armadilha of validado.capitulo.armadilhas ?? []) {
+    const caminho = percorrer(arvore, caminhoDaArmadilha(armadilha))
+    caminho?.at(-1)?.armadilhas.push(armadilha)
+  }
+  return arvore
+}
+
+/** Os lances até o erro, para marcar a aresta e abrir a posição no Explorar. */
+export function caminhoDaArmadilha(armadilha: Armadilha): string[] {
+  return jogarLances(armadilha.lances)
+    .lances.slice(0, armadilha.erroNoLance)
+    .map((lance) => lance.san)
 }
 
 /** Percorre a árvore a partir da raiz seguindo uma sequência de lances SAN. */

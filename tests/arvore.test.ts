@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { construirArvore, percorrer } from '../src/lib/arvore'
+import { caminhoDaArmadilha, construirArvore, percorrer } from '../src/lib/arvore'
 import { carregarCapitulos } from '../src/lib/capitulos'
 import { separarLances } from '../src/lib/lances'
 import type { Capitulo } from '../src/lib/tipos'
@@ -45,6 +45,25 @@ describe('mesclagem', () => {
     const b = percorrer(arvore, ['Nc3', 'Nf6', 'Nf3'])!
     expect(a[2].para).toBe(b[2].para)
     expect(arvore.nos.get(a[2].para)!.entradas).toHaveLength(2)
+  })
+
+  it('guarda a ameaça na aresta do lance que a cria, com as casas da seta', () => {
+    const arvore = arvoreDe({
+      linhas: [{ ...linha('a', '1. e4 e5 2. Nf3'), ameacas: { '2. Nf3': { lance: 'Nxe5', texto: 'pega e5' } } }],
+    })
+    const [e4, , nf3] = percorrer(arvore, ['e4', 'e5', 'Nf3'])!
+    expect(e4.ameaca).toBeNull()
+    expect(nf3.ameaca).toEqual({ san: 'Nxe5', from: 'f3', to: 'e5', texto: 'pega e5' })
+  })
+
+  it('marca a armadilha no lance do erro', () => {
+    const armadilha = { id: 'x', titulo: 't', lances: '1. e4 e5 2. Nf3', erroNoLance: 2, texto: 't' }
+    const arvore = arvoreDe({ linhas: [linha('a', '1. e4 e5 2. Nf3')], armadilhas: [armadilha] })
+    const [e4, e5, nf3] = percorrer(arvore, ['e4', 'e5', 'Nf3'])!
+    expect(e4.armadilhas).toEqual([])
+    expect(e5.armadilhas).toEqual([armadilha])
+    expect(nf3.armadilhas).toEqual([])
+    expect(caminhoDaArmadilha(armadilha)).toEqual(['e4', 'e5'])
   })
 
   it('coloca o selo da nota só na aresta do desvio', () => {

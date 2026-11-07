@@ -90,6 +90,40 @@
     "12... Qe7+": "Aproveita a coluna e aberta para dar xeque antes do roque branco.",
     "13. Ne5": "Bloqueia o xeque e soma mais um atacante em c6.",
     "13... Bd7": "Defende c6 e completa o desenvolvimento das peças menores."
+   },
+   "ameacas": {
+    "2. Nf3": {
+     "lance": "Nxe5",
+     "texto": "As brancas ameaçam pegar o peão de e5."
+    },
+    "4. c3": {
+     "lance": "d4",
+     "texto": "Ameaça d4, atacando ao mesmo tempo o bispo de c5 e o peão de e5."
+    },
+    "4... Nf6": {
+     "lance": "Nxe4",
+     "texto": "As pretas ameaçam pegar o peão de e4, que está sem defesa."
+    },
+    "5. d4": {
+     "lance": "dxc5",
+     "texto": "Se as pretas não reagirem, o peão captura o bispo de c5."
+    },
+    "7. Bd2": {
+     "lance": "d5",
+     "texto": "Ameaça d5: o peão expulsa o cavalo de c6, que é quem defende o bispo de b4."
+    },
+    "10. Qb3": {
+     "lance": "Bxd5",
+     "texto": "Dama e bispo atacam o cavalo de d5, que só a dama preta defende."
+    },
+    "10... Na5": {
+     "lance": "Nxb3",
+     "texto": "O cavalo ameaça pegar a dama."
+    },
+    "12. Bb5": {
+     "lance": "Bxc6+",
+     "texto": "O cavalo de c6 está cravado: as brancas ameaçam pegá-lo com xeque."
+    }
    }
   },
   {
@@ -115,6 +149,20 @@
     "12... Nd5": "Recua para o centro mantendo o peão a mais.",
     "13. Ba3": "Domina a diagonal e impede o roque curto das pretas.",
     "13... a6": "Tira a casa b5 das peças brancas e consolida a vantagem."
+   },
+   "ameacas": {
+    "9. Nc3": {
+     "lance": "Nxd5",
+     "texto": "Bispo e cavalo atacam o cavalo de d5, que só a dama preta defende."
+    },
+    "10. Qe2": {
+     "lance": "Bxd5",
+     "texto": "O bispo de e6 está cravado e não pode retomar: as brancas ameaçam ganhar o cavalo de d5."
+    },
+    "11... Nxc3": {
+     "lance": "Nxe2",
+     "texto": "O cavalo ameaça pegar a dama."
+    }
    }
   },
   {
@@ -140,6 +188,24 @@
     "12... Bxg5": "Troca para reduzir o ataque.",
     "13. Nxg5": "O cavalo retoma e mira f7 e h7.",
     "13... h6": "Expulsa o cavalo antes de rocar; 13...O-O permitiria 14.Nxh7."
+   },
+   "ameacas": {
+    "7. Nc3": {
+     "lance": "e5",
+     "texto": "Ameaça e5, atacando o cavalo de f6."
+    },
+    "8. O-O": {
+     "lance": "Re1",
+     "texto": "Ameaça Re1, atacando o cavalo de e4 pela coluna aberta."
+    },
+    "9. d5": {
+     "lance": "dxc6",
+     "texto": "O peão ameaça pegar o cavalo de c6."
+    },
+    "13. Nxg5": {
+     "lance": "Qh5",
+     "texto": "Ameaça Qh5, com dama e cavalo contra h7 e f7; as pretas precisam cuidar do flanco do rei."
+    }
    }
   },
   {
@@ -160,6 +226,16 @@
     "12... Nd6": "O outro cavalo se salva com ataque à dama.",
     "13. Qf4": "A dama fica ativa, apontando para o flanco do rei.",
     "13... Ne8": "Recua para defender g7 e f6, mantendo o peão a mais."
+   },
+   "ameacas": {
+    "11. Qd4": {
+     "lance": "Qxe4+",
+     "texto": "A dama ataca c4, e4 e g7 ao mesmo tempo: as pretas não conseguem salvar tudo."
+    },
+    "12... Nd6": {
+     "lance": "Nxe4",
+     "texto": "O cavalo ameaça pegar a dama."
+    }
    }
   },
   {
@@ -184,6 +260,12 @@
     "12... Qxd5": "A dama retoma, centralizada.",
     "13. Bxe7": "Troca o último bispo; agora a coluna e será o problema das pretas.",
     "13... Nxe7": "Retoma, mas o rei segue em e8, com o cavalo cravado depois de Re1."
+   },
+   "ameacas": {
+    "10. Bg5": {
+     "lance": "Bxd8",
+     "texto": "O bispo ameaça pegar a dama."
+    }
    }
   },
   {
@@ -211,6 +293,20 @@
     "12... Nxc3": "Troca antes que o cavalo seja incomodado.",
     "13. bxc3": "Retoma reforçando d4, com a coluna b semiaberta.",
     "13... Bf5": "Oferece a troca do bispo forte de d3, com igualdade."
+   },
+   "ameacas": {
+    "6. e5": {
+     "lance": "exf6",
+     "texto": "O peão ameaça pegar o cavalo de f6."
+    },
+    "6... d5": {
+     "lance": "dxc4",
+     "texto": "O peão ameaça pegar o bispo de c4."
+    },
+    "11... c6": {
+     "lance": "cxb5",
+     "texto": "O peão ameaça pegar o bispo de b5."
+    }
    }
   },
   {
@@ -236,6 +332,12 @@
     "10... Qe7": "Protege e5 e abre d8 para a torre ou o cavalo.",
     "11. Nh2": "O cavalo se reposiciona rumo a g4 ou f1, de olho no flanco do rei.",
     "11... Nd8": "O cavalo também se reagrupa, a caminho de e6."
+   },
+   "ameacas": {
+    "6. O-O": {
+     "lance": "d4",
+     "texto": "Ameaça d4, atacando ao mesmo tempo o bispo de c5 e o peão de e5."
+    }
    }
   },
   {
@@ -304,6 +406,16 @@
     "10... g5": "Rompe a cravada à custa de enfraquecer um pouco o rei.",
     "11. Bg3": "O bispo recua, mirando e5.",
     "11... Bg4": "Devolve a cravada, agora no cavalo de f3."
+   },
+   "ameacas": {
+    "7. a4": {
+     "lance": "a5",
+     "texto": "Ameaça a5: o bispo de b6 ficaria sem uma casa segura."
+    },
+    "10... g5": {
+     "lance": "gxh4",
+     "texto": "O peão ameaça pegar o bispo de h4."
+    }
    }
   },
   {
@@ -328,6 +440,12 @@
     "6. b4": "Ganha espaço com ataque ao bispo.",
     "6... Bb6": "O bispo recua mantendo a diagonal.",
     "7. a4": "Ameaça a5, prendendo o bispo."
+   },
+   "ameacas": {
+    "8. b5": {
+     "lance": "bxc6",
+     "texto": "O peão ameaça pegar o cavalo de c6."
+    }
    }
   },
   {
@@ -420,6 +538,12 @@
     "10... Ng6": "Cavalo no flanco do rei, de olho em f4.",
     "11. a5": "Expulsa o bispo de b6.",
     "11... Bc7": "O bispo muda de diagonal e fica a salvo, enquanto as pretas preparam ...d5."
+   },
+   "ameacas": {
+    "11. a5": {
+     "lance": "axb6",
+     "texto": "O peão ameaça pegar o bispo de b6."
+    }
    }
   },
   {
@@ -447,6 +571,16 @@
     "11. dxc5": "Pega o bispo e ataca d6; o cavalo de d5 também está na mira do bispo de c4.",
     "11... Nf4": "O cavalo salta com ameaça a g2.",
     "4... Nf6": "Desenvolve atacando e4, defendido pelo cavalo de c3."
+   },
+   "ameacas": {
+    "8. Nd5": {
+     "lance": "Nxf6+",
+     "texto": "O cavalo ameaça pegar a dama com xeque."
+    },
+    "11... Nf4": {
+     "lance": "Nxg2+",
+     "texto": "O cavalo ameaça pegar o peão de g2 com xeque."
+    }
    }
   },
   {
@@ -469,6 +603,12 @@
     "10... h6": "Questiona o bispo de g5.",
     "11. Bh4": "Mantém a cravada.",
     "11... O-O": "Roque, com o rei em segurança."
+   },
+   "ameacas": {
+    "8. d4": {
+     "lance": "dxc5",
+     "texto": "Ameaça pegar o bispo de c5; por isso as pretas trocam antes em b3."
+    }
    }
   },
   {
@@ -496,6 +636,16 @@
     "11. Bxe6": "Elimina o cavalo.",
     "11... Bxe6": "Retoma; as chances ficam aproximadamente iguais.",
     "4... Nf6": "Desenvolve atacando e4, que ficou sem defesa."
+   },
+   "ameacas": {
+    "10... Ne6": {
+     "lance": "Nxg5",
+     "texto": "O cavalo ameaça pegar o bispo de g5."
+    },
+    "11... Bxe6": {
+     "lance": "Qc5+",
+     "texto": "Ameaça Qc5+, com xeque na diagonal aberta pela troca em f4; por isso as brancas costumam jogar Kh1."
+    }
    }
   },
   {
@@ -525,6 +675,20 @@
     "11... f6": "Ataca o bispo de g5.",
     "12. Bxg8": "Elimina o cavalo de g8 antes de perder o outro bispo.",
     "12... fxg5": "Pega o bispo; o bispo de g8 também está em perigo."
+   },
+   "ameacas": {
+    "4. b4": {
+     "lance": "bxc5",
+     "texto": "O peão ameaça pegar o bispo de c5."
+    },
+    "9. Qb3": {
+     "lance": "Bxf7+",
+     "texto": "A bateria de dama e bispo ameaça Bxf7+, ganhando um peão com xeque."
+    },
+    "10. Bg5": {
+     "lance": "Bxf6",
+     "texto": "O bispo ameaça pegar a dama."
+    }
    }
   },
   {
@@ -550,6 +714,12 @@
     "11... f6": "Abre a casa f7 para o rei, que não pode rocar.",
     "12. Qa4": "Ataca o bispo de a5 e aumenta a pressão em c6.",
     "12... Bb6": "Salva o bispo e mira d4."
+   },
+   "ameacas": {
+    "11. Bb5": {
+     "lance": "Bxc6+",
+     "texto": "O cavalo de c6 está cravado: as brancas ameaçam pegá-lo com xeque."
+    }
    }
   },
   {
@@ -572,6 +742,16 @@
     "11... O-O": "Tira o rei do centro.",
     "12. Rad1": "Coloca a última peça em jogo, com a torre na coluna d.",
     "12... Rb8": "Prepara ...b5 para tentar liberar o jogo."
+   },
+   "ameacas": {
+    "8. Qb3": {
+     "lance": "Bxf7+",
+     "texto": "A bateria de dama e bispo ameaça Bxf7+, ganhando um peão com xeque."
+    },
+    "9. e5": {
+     "lance": "exf6",
+     "texto": "O peão ameaça pegar a dama."
+    }
    }
   },
   {
@@ -596,6 +776,20 @@
     "11... Bxa5": "Aceita; as pretas ficam com material a mais.",
     "12. dxe5": "Abre o centro atacando o cavalo de f6 e o peão de d6.",
     "12... Ng4": "O cavalo foge atacando e5 e f2."
+   },
+   "ameacas": {
+    "7. Qb3": {
+     "lance": "Bxf7+",
+     "texto": "A bateria de dama e bispo ameaça Bxf7+, ganhando um peão com xeque."
+    },
+    "10. a5": {
+     "lance": "axb6",
+     "texto": "O peão ameaça pegar o bispo de b6."
+    },
+    "10... Nxa5": {
+     "lance": "Nxb3",
+     "texto": "O cavalo ameaça pegar a dama, e ainda ataca o bispo de c4."
+    }
    }
   },
   {
@@ -622,6 +816,20 @@
     "11... g6": "Fecha a linha da dama contra g7, preparando o roque.",
     "12. O-O": "Completa o roque, com vantagem de espaço.",
     "12... Nb6": "Recua para uma casa segura, de olho em c4."
+   },
+   "ameacas": {
+    "6... Na5": {
+     "lance": "Nxc4",
+     "texto": "O cavalo ameaça pegar o bispo de c4."
+    },
+    "9... Nc6": {
+     "lance": "Nxd4",
+     "texto": "O cavalo ameaça pegar a dama."
+    },
+    "11. Qg3": {
+     "lance": "Qxg7",
+     "texto": "A dama ameaça pegar g7 e atacar a torre de h8; por isso as pretas jogam ...g6."
+    }
    }
   },
   {
@@ -650,6 +858,16 @@
     "11... O-O": "Roque.",
     "12. Nxd4": "Elimina o cavalo central.",
     "12... Bxd4": "Retoma; o bispo fica forte no centro."
+   },
+   "ameacas": {
+    "5. a4": {
+     "lance": "a5",
+     "texto": "Ameaça a5: o bispo de b6 ficaria sem uma casa segura."
+    },
+    "9. a5": {
+     "lance": "axb6",
+     "texto": "O peão ameaça pegar o bispo de b6."
+    }
    }
   }
  ],
@@ -2316,6 +2534,57 @@
    "avaliacao": "comp.",
    "referencia": "Leko",
    "comentario": "Compensação pelo peão."
+  }
+ ],
+ "armadilhas": [
+  {
+   "id": "ev-13nxg5",
+   "titulo": "Evans, Defesa Lasker: 13.Nxg5? Kf8!",
+   "lances": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. O-O d6 7. d4 Bb6 8. dxe5 dxe5 9. Qb3 Qf6 10. Bg5 Qg6 11. Bd5 f6 12. Bxg8 fxg5 13. Nxg5 Kf8! 14. Ne6+ Kxg8 15. Nxc7+ Kf8 16. Nxa8 Bh3 17. g3 Qxe4",
+   "erroNoLance": 25,
+   "texto": "Retomar o peão com o cavalo parece natural, mas 13...Kf8! ataca o bispo preso em g8. Depois de 14.Ne6+ Kxg8 15.Nxc7+ Kf8 16.Nxa8 Bh3 17.g3 Qxe4, as pretas vencem."
+  },
+  {
+   "id": "ev-7d3",
+   "titulo": "Evans, 5...Bc5: 7...d3?! e o golpe em f7",
+   "lances": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Bc5 6. d4 exd4 7. O-O d3 8. Ng5 Ne5 9. Nxf7! Nxf7 10. Bxf7+ Kxf7 11. Qh5+",
+   "erroNoLance": 14,
+   "texto": "Avançar o peão deixa f7 e o bispo de c5 vulneráveis: 8.Ng5 Ne5 9.Nxf7! Nxf7 10.Bxf7+ Kxf7 11.Qh5+, com garfo no rei e no bispo de c5."
+  },
+  {
+   "id": "ev-8qe7",
+   "titulo": "Evans, Defesa Comprometida: 8...Qe7?",
+   "lances": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. b4 Bxb4 5. c3 Ba5 6. d4 exd4 7. O-O dxc3 8. Qb3 Qe7 9. Nxc3 Qb4 10. Bxf7+ Kd8 11. Bb2 Qxb3 12. Bxb3 Bxc3 13. Bxc3 Nf6 14. Ng5",
+   "erroNoLance": 16,
+   "texto": "Defender f7 com a dama em e7, em vez de 8...Qf6, permite 10.Bxf7+! Kd8 e, depois das trocas, as brancas ficam melhor."
+  },
+  {
+   "id": "it-5d5",
+   "titulo": "Giuoco Pianissimo: 5...d5 cedo demais",
+   "lances": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d3 d5 6. exd5 Nxd5 7. Qb3 Nf4 8. Bxf4 exf4 9. Bxf7+ Kf8 10. Bc4 Qe7+ 11. Kf1",
+   "erroNoLance": 10,
+   "texto": "Romper o centro antes de preparar abre a diagonal do bispo de c4: 6.exd5 Nxd5 7.Qb3 forma a bateria contra d5 e f7, e as brancas ficam melhor."
+  },
+  {
+   "id": "it-13nxa1",
+   "titulo": "Coluna 1: 13...Nxa1? pegando a torre",
+   "lances": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d4 exd4 6. cxd4 Bb4+ 7. Bd2 Bxd2+ 8. Nbxd2 d5 9. exd5 Nxd5 10. O-O O-O 11. Ne5 Nxd4 12. Nb3 Nxb3 13. Bxd5 Nxa1 14. Bxf7+ Kh8 15. Qh5 h6 16. Rd1",
+   "erroNoLance": 26,
+   "texto": "Pegar a torre tira o cavalo do jogo: 14.Bxf7+ Kh8 15.Qh5 e as brancas atacam o rei."
+  },
+  {
+   "id": "it-17bd7",
+   "titulo": "Ataque Möller: 17...Bd7?? depois do sacrifício em h7",
+   "lances": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Nf6 5. d4 exd4 6. cxd4 Bb4+ 7. Nc3 Nxe4 8. O-O Bxc3 9. d5 Bf6 10. Re1 Ne7 11. Rxe4 d6 12. Bg5 Bxg5 13. Nxg5 O-O 14. Nxh7 Kxh7 15. Qh5+ Kg8 16. Rh4 f5 17. Be2!? Bd7 18. Qh7+ Kf7 19. Rh6!",
+   "erroNoLance": 34,
+   "texto": "Depois de 14.Nxh7! Kxh7 15.Qh5+ Kg8 16.Rh4 f5 17.Be2, desenvolver o bispo perde: 18.Qh7+ Kf7 19.Rh6! e as brancas vencem. O correto é 17...Ng6."
+  },
+  {
+   "id": "it-13bxd4",
+   "titulo": "4.c3 Bb6: 13...Bxd4? por peões",
+   "lances": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. c3 Bb6 5. d4 Qe7 6. O-O d6 7. h3 Nf6 8. Re1 h6 9. a4 a6 10. Na3 g5 11. Bf1 g4 12. hxg4 Nxg4 13. Nc4 Bxd4 14. cxd4 Nxd4 15. Be2",
+   "erroNoLance": 26,
+   "texto": "Trocar o bispo em d4 dá uma peça por dois peões: depois de 14.cxd4 Nxd4 15.Be2, as brancas ficam com vantagem clara."
   }
  ]
 }

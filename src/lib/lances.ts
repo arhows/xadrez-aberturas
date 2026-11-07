@@ -70,6 +70,27 @@ export function estaEmXeque(fen: string): boolean {
   return new Chess(fen).inCheck()
 }
 
+/**
+ * Confere um lance como se o lado que acabou de jogar pudesse jogar de novo.
+ * Devolve null se o lance for ilegal ou se o outro lado estiver em xeque, caso em
+ * que passar a vez não é uma posição válida.
+ */
+export function lanceDaAmeaca(
+  fenDepois: string,
+  san: string,
+): { san: string; from: string; to: string } | null {
+  try {
+    if (new Chess(fenDepois).inCheck()) return null
+    const partes = fenDepois.split(' ')
+    partes[1] = partes[1] === 'w' ? 'b' : 'w'
+    partes[3] = '-'
+    const lance = new Chess(partes.join(' '), { skipValidation: true }).move(san)
+    return { san: lance.san, from: lance.from, to: lance.to }
+  } catch {
+    return null
+  }
+}
+
 /** Joga os lances a partir da posição inicial e para no primeiro lance ilegal. */
 export function jogarLances(texto: string): ResultadoJogada {
   const chess = new Chess()

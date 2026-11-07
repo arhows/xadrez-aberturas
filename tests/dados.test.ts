@@ -35,6 +35,14 @@ describe('arquivos de abertura', () => {
       expect(doTipo('id-duplicado')).toEqual([])
     })
 
+    it('toda ameaça é um lance possível depois do lance indicado', () => {
+      expect(doTipo('ameaca-invalida')).toEqual([])
+    })
+
+    it('toda armadilha segue uma linha ou nota do capítulo', () => {
+      expect(doTipo('armadilha-invalida')).toEqual([])
+    })
+
     it('a cor padrão, quando existe, é válida', () => {
       const cor = capitulo.capitulo.corPadrao
       if (cor !== undefined) expect(['w', 'b', 'ambas']).toContain(cor)

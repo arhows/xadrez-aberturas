@@ -2,6 +2,7 @@
 import { computed, nextTick, onBeforeUnmount, onMounted, provide, reactive, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
+import AvisosDoLance from '../components/AvisosDoLance.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import RamoLances from '../components/RamoLances.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
@@ -67,12 +68,14 @@ const continuacoes = computed(() => saidas(noAtual.value))
 /** Seta para cada lance do livro, mais larga quanto mais linhas passam por ele. */
 const setas = computed<Forma[]>(() => {
   const maior = Math.max(1, ...continuacoes.value.map((aresta) => aresta.linhas.length))
-  return continuacoes.value.map((aresta) => ({
+  const doLivro: Forma[] = continuacoes.value.map((aresta) => ({
     de: aresta.from,
     para: aresta.to,
     cor: 'green',
     largura: 3 + 11 * (aresta.linhas.length / maior),
   }))
+  const ameaca = ultima.value?.ameaca
+  return ameaca ? [...doLivro, { de: ameaca.from, para: ameaca.to, cor: 'red' }] : doLivro
 })
 
 /** Com uma única linha ativa, mostra a ideia geral dela. */
@@ -160,6 +163,8 @@ if (inicial) selecionar(inicial)
         :texto="ultima.dica"
       />
       <CartaoDica v-else texto="Escolha um lance na lista, nas setas ou movendo a peça no tabuleiro." />
+
+      <AvisosDoLance :aresta="ultima" />
 
       <CartaoDica v-for="selo in ultima?.selos ?? []" :key="selo.id" tipo="nota">
         <strong>Nota {{ selo.rotulo }}</strong>

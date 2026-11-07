@@ -53,6 +53,7 @@ function rotulo(indice: number): string {
           @click="contexto.selecionar(caminhoAte(i))"
         >{{ rotulo(i) }}</button>
         <span v-for="selo in aresta.selos" :key="selo.id" class="selo">Nota {{ selo.rotulo }}</span>
+        <span v-if="aresta.armadilhas.length" class="selo armadilha">Armadilha</span>
       </template>
     </span>
 
@@ -86,6 +87,7 @@ function rotulo(indice: number): string {
             @click="contexto.selecionar([...caminhoFinal, ramo])"
           >{{ fmtLance(caminhoFinal.length + 1, ramo.san) }}</button>
           <span v-for="selo in ramo.selos" :key="selo.id" class="selo">Nota {{ selo.rotulo }}</span>
+          <span v-if="ramo.armadilhas.length" class="selo armadilha">Armadilha</span>
           <span class="contagem">{{ ramo.linhas.length }}</span>
         </template>
       </li>
@@ -122,6 +124,10 @@ function rotulo(indice: number): string {
   color: #1f1f1c;
   font-size: 0.75rem;
   white-space: nowrap;
+}
+.selo.armadilha {
+  background: var(--erro);
+  color: #ffffff;
 }
 .contagem {
   margin-left: 0.25rem;

@@ -1,5 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { chaveDaPosicao, chaveDoLance, jogarLances, separarLances } from '../src/lib/lances'
+import {
+  chaveDaPosicao,
+  chaveDoLance,
+  jogarLances,
+  lanceDaAmeaca,
+  separarLances,
+} from '../src/lib/lances'
 import type { Capitulo } from '../src/lib/tipos'
 import { validarCapitulo } from '../src/lib/validacao'
 
@@ -30,6 +36,17 @@ describe('lances', () => {
 
   it('remove só os contadores da chave da posição', () => {
     expect(chaveDaPosicao('8/8/8/8/8/8/8/K1k5 w - - 12 40')).toBe('8/8/8/8/8/8/8/K1k5 w - -')
+  })
+
+  it('confere a ameaça como se o mesmo lado jogasse de novo', () => {
+    const fen = jogarLances('1. e4 e5 2. Nf3').lances[2].fenDepois
+    expect(lanceDaAmeaca(fen, 'Nxe5')).toEqual({ san: 'Nxe5', from: 'f3', to: 'e5' })
+    expect(lanceDaAmeaca(fen, 'Nxd5')).toBeNull()
+  })
+
+  it('não há ameaça quando o outro lado está em xeque', () => {
+    const fen = jogarLances('1. e4 f5 2. Qh5+').lances[2].fenDepois
+    expect(lanceDaAmeaca(fen, 'Qxf5')).toBeNull()
   })
 
   it('para no primeiro lance ilegal informando lance e FEN', () => {
@@ -82,6 +99,28 @@ describe('validarCapitulo', () => {
     expect(resultado.unidades).toHaveLength(1)
     expect(resultado.unidades[0].lances[0].san).toBe('e4')
     expect(resultado.desativadas).toEqual([])
+  })
+
+  it('aceita ameaça possível e recusa as demais', () => {
+    const comAmeaca = (ameacas: Record<string, { lance: string; texto: string }>) =>
+      validarCapitulo(capitulo({ linhas: [{ ...linha('l', '1. e4 e5 2. Nf3'), ameacas }] })).problemas
+    expect(comAmeaca({ '2. Nf3': { lance: 'Nxe5', texto: 't' } })).toEqual([])
+    expect(comAmeaca({ '2. Nf3': { lance: 'Nxd5', texto: 't' } })[0].tipo).toBe('ameaca-invalida')
+    expect(comAmeaca({ '3. Nf3': { lance: 'Nxe5', texto: 't' } })[0].tipo).toBe('ameaca-invalida')
+  })
+
+  it('acusa armadilha fora do livro ou com o erro fora da sequência', () => {
+    const comArmadilha = (lances: string, erroNoLance: number) =>
+      validarCapitulo(
+        capitulo({
+          linhas: [linha('l', '1. e4 e5 2. Nf3')],
+          armadilhas: [{ id: 'a', titulo: 't', lances, erroNoLance, texto: 't' }],
+        }),
+      ).problemas.map((p) => p.tipo)
+    expect(comArmadilha('1. e4 e5', 2)).toEqual([])
+    expect(comArmadilha('1. d4', 1)).toEqual(['armadilha-invalida'])
+    expect(comArmadilha('1. e4 e5', 3)).toEqual(['armadilha-invalida'])
+    expect(comArmadilha('1. e4 Ke3', 1)).toEqual(['armadilha-invalida'])
   })
 
   it('acusa nota cujo desvio não bate com a linha base', () => {

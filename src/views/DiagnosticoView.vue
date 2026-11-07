@@ -12,6 +12,8 @@ const TITULOS: Record<TipoProblema, string> = {
   'desvio-inconsistente': 'Desvio inconsistente',
   'grupo-inexistente': 'Grupo inexistente',
   'id-duplicado': 'Id duplicado',
+  'ameaca-invalida': 'Ameaça inválida',
+  'armadilha-invalida': 'Armadilha inválida',
 }
 
 const secoes = computed(() =>

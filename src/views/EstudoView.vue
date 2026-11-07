@@ -2,8 +2,9 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
+import AvisosDoLance from '../components/AvisosDoLance.vue'
 import CartaoDica from '../components/CartaoDica.vue'
-import Tabuleiro from '../components/Tabuleiro.vue'
+import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { percorrer } from '../lib/arvore'
 import { LEGENDA } from '../lib/avaliacao'
 import { buscarCapitulo } from '../lib/capitulos'
@@ -30,7 +31,12 @@ const fen = computed(() => lanceAtual.value?.fenDepois ?? capitulo.arvore.nos.ge
 const ultimoLance = computed<[string, string] | null>(() =>
   lanceAtual.value ? [lanceAtual.value.from, lanceAtual.value.to] : null,
 )
-const dica = computed(() => arestas[ply.value - 1]?.dica ?? null)
+const arestaAtual = computed(() => arestas[ply.value - 1])
+const dica = computed(() => arestaAtual.value?.dica ?? null)
+const setaDaAmeaca = computed<Forma[]>(() => {
+  const ameaca = arestaAtual.value?.ameaca
+  return ameaca ? [{ de: ameaca.from, para: ameaca.to, cor: 'red' }] : []
+})
 
 function anterior() {
   if (ply.value > 0) ply.value--
@@ -75,7 +81,7 @@ function trocarLinha(evento: Event) {
 <template>
   <div v-if="linha && lances.length" class="tela">
     <div class="area-tabuleiro" @touchstart.passive="aoIniciarToque" @touchend.passive="aoTerminarToque">
-      <Tabuleiro :fen="fen" :orientacao="orientacao" :ultimo-lance="ultimoLance" />
+      <Tabuleiro :fen="fen" :orientacao="orientacao" :ultimo-lance="ultimoLance" :formas="setaDaAmeaca" />
     </div>
 
     <div class="painel">
@@ -101,6 +107,7 @@ function trocarLinha(evento: Event) {
         :texto="dica"
       />
       <CartaoDica v-else texto="Avance com ▶, com as setas do teclado ou deslizando no tabuleiro." />
+      <AvisosDoLance :aresta="arestaAtual" />
 
       <CartaoDica v-if="noFim" tipo="nota" class="fim">
         <strong>Fim da linha</strong>
