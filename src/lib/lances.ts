@@ -70,6 +70,16 @@ export function estaEmXeque(fen: string): boolean {
   return new Chess(fen).inCheck()
 }
 
+/** Casas de origem e destino de um lance em SAN, ou null se ele for ilegal. */
+export function casasDoLance(fen: string, san: string): { from: string; to: string } | null {
+  try {
+    const lance = new Chess(fen).move(san)
+    return { from: lance.from, to: lance.to }
+  } catch {
+    return null
+  }
+}
+
 /**
  * Confere um lance como se o lado que acabou de jogar pudesse jogar de novo.
  * Devolve null se o lance for ilegal ou se o outro lado estiver em xeque, caso em

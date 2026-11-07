@@ -81,6 +81,11 @@ function resetar() {
     </label>
 
     <label class="marcar">
+      <input v-model="config.mostrarMotor" type="checkbox" />
+      Mostrar a sugestão do Stockfish no Estudo e no Explorar
+    </label>
+
+    <label class="marcar">
       <input v-model="config.som" type="checkbox" />
       Som
     </label>

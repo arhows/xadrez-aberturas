@@ -1,15 +1,19 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
 import AvisosDoLance from '../components/AvisosDoLance.vue'
 import CartaoDica from '../components/CartaoDica.vue'
+import LinhaMotor from '../components/LinhaMotor.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { percorrer } from '../lib/arvore'
 import { LEGENDA } from '../lib/avaliacao'
 import { buscarCapitulo } from '../lib/capitulos'
 import { buscarLinha, proximaLinha } from '../lib/escopo'
 import { fmtLance, fmtTexto } from '../lib/formato'
+import { casasDoLance } from '../lib/lances'
+import { carregarMotor, type DadosMotor } from '../lib/motor'
+import { progresso } from '../lib/progresso'
 
 const route = useRoute()
 const router = useRouter()
@@ -33,9 +37,26 @@ const ultimoLance = computed<[string, string] | null>(() =>
 )
 const arestaAtual = computed(() => arestas[ply.value - 1])
 const dica = computed(() => arestaAtual.value?.dica ?? null)
+const dadosMotor = shallowRef<DadosMotor | null>(null)
+carregarMotor(capitulo.capitulo.id).then((dados) => (dadosMotor.value = dados))
+
+const chaveAtual = computed(() => fen.value.split(' ').slice(0, 4).join(' '))
+const analise = computed(() =>
+  progresso.config.mostrarMotor ? (dadosMotor.value?.posicoes[chaveAtual.value] ?? null) : null,
+)
+const proximoDoLivro = computed(() => lances[ply.value])
+
 const setaDaAmeaca = computed<Forma[]>(() => {
+  const formas: Forma[] = []
+  const proximo = proximoDoLivro.value
+  if (analise.value && proximo) formas.push({ de: proximo.from, para: proximo.to, cor: 'green' })
+  const sugestao = analise.value && casasDoLance(fen.value, analise.value.lance)
+  if (sugestao && analise.value!.lance !== proximo?.san) {
+    formas.push({ de: sugestao.from, para: sugestao.to, cor: 'blue' })
+  }
   const ameaca = arestaAtual.value?.ameaca
-  return ameaca ? [{ de: ameaca.from, para: ameaca.to, cor: 'red' }] : []
+  if (ameaca) formas.push({ de: ameaca.from, para: ameaca.to, cor: 'red' })
+  return formas
 })
 
 function anterior() {
@@ -108,6 +129,7 @@ function trocarLinha(evento: Event) {
       />
       <CartaoDica v-else texto="Avance com ▶, com as setas do teclado ou deslizando no tabuleiro." />
       <AvisosDoLance :aresta="arestaAtual" />
+      <LinhaMotor :analise="analise" :lances-do-livro="proximoDoLivro ? [proximoDoLivro.san] : []" />
 
       <CartaoDica v-if="noFim" tipo="nota" class="fim">
         <strong>Fim da linha</strong>

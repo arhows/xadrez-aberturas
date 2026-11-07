@@ -126,5 +126,9 @@ Lista de erros de validação (seção 3.2) e estatísticas do arquivo (linhas, 
 - Exportar qualquer capítulo como PGN com variantes e comentários (dicas + notas), no mesmo formato de `dois-cavalos.pgn`, que importa num Estudo do Lichess.
 - Fase 2: importar PGN com variantes para criar novos capítulos.
 
+## 9.1 Análise do Stockfish (pré-calculada)
+- `scripts/motor.cjs` avalia cada posição dos capítulos com o Stockfish e grava `data/engine/<id>.json` (melhor lance e avaliação). Rode de novo quando um capítulo mudar; posições analisadas a fundo ficam marcadas com `profundo` e são mantidas.
+- No Estudo e no Explorar: seta verde para o lance do livro e azul para o do Stockfish quando divergem, com a avaliação em texto. Nunca no Treino. Pode ser desligado nas Configurações.
+
 ## 10. Fora do escopo (por enquanto)
-Engine/análise, login/sincronização, importação automática de fotos. Novos capítulos serão adicionados manualmente como JSON.
+Engine rodando dentro do app, login/sincronização, importação automática de fotos. Novos capítulos serão adicionados manualmente como JSON.

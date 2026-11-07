@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, provide, reactive, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, provide, reactive, ref, shallowRef, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
 import AvisosDoLance from '../components/AvisosDoLance.vue'
 import CartaoDica from '../components/CartaoDica.vue'
+import LinhaMotor from '../components/LinhaMotor.vue'
 import RamoLances from '../components/RamoLances.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { CONTEXTO_ARVORE } from '../components/arvoreContexto'
@@ -11,6 +12,9 @@ import { percorrer, type Aresta } from '../lib/arvore'
 import { buscarCapitulo } from '../lib/capitulos'
 import { descreverUnidade } from '../lib/escopo'
 import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
+import { casasDoLance } from '../lib/lances'
+import { carregarMotor, type DadosMotor } from '../lib/motor'
+import { progresso } from '../lib/progresso'
 
 const route = useRoute()
 const capitulo = buscarCapitulo(route.params.cap as string)!
@@ -74,9 +78,19 @@ const setas = computed<Forma[]>(() => {
     cor: 'green',
     largura: 3 + 11 * (aresta.linhas.length / maior),
   }))
+  const sugestao = analise.value && casasDoLance(fen.value, analise.value.lance)
+  if (sugestao && !continuacoes.value.some((aresta) => aresta.san === analise.value!.lance)) {
+    doLivro.push({ de: sugestao.from, para: sugestao.to, cor: 'blue' })
+  }
   const ameaca = ultima.value?.ameaca
   return ameaca ? [...doLivro, { de: ameaca.from, para: ameaca.to, cor: 'red' }] : doLivro
 })
+
+const dadosMotor = shallowRef<DadosMotor | null>(null)
+carregarMotor(capitulo.capitulo.id).then((dados) => (dadosMotor.value = dados))
+const analise = computed(() =>
+  progresso.config.mostrarMotor ? (dadosMotor.value?.posicoes[noAtual.value] ?? null) : null,
+)
 
 /** Com uma única linha ativa, mostra a ideia geral dela. */
 const unidadeAtiva = computed(() => {
@@ -163,6 +177,8 @@ if (inicial) selecionar(inicial)
         :texto="ultima.dica"
       />
       <CartaoDica v-else texto="Escolha um lance na lista, nas setas ou movendo a peça no tabuleiro." />
+
+      <LinhaMotor :analise="analise" :lances-do-livro="continuacoes.map((aresta) => aresta.san)" />
 
       <AvisosDoLance :aresta="ultima" />
 

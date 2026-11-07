@@ -12,6 +12,8 @@ export interface Configuracoes {
   orientacaoAutomatica: boolean
   novasPorDia: number
   tema: 'auto' | 'claro' | 'escuro'
+  /** Seta azul e avaliação do Stockfish no Estudo e no Explorar. */
+  mostrarMotor: boolean
   /** Última escolha da tela de Treino, usada também por "Revisar agora". */
   profundidade: Profundidade
 }
@@ -44,6 +46,7 @@ export const CONFIG_PADRAO: Configuracoes = {
   orientacaoAutomatica: true,
   novasPorDia: 5,
   tema: 'auto',
+  mostrarMotor: true,
   profundidade: 'colunas',
 }
 
