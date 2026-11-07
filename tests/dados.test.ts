@@ -43,6 +43,15 @@ describe('arquivos de abertura', () => {
       expect(doTipo('armadilha-invalida')).toEqual([])
     })
 
+    it('todo plano de meio-jogo tem texto para os dois lados', () => {
+      for (const linha of capitulo.capitulo.linhas) {
+        if (linha.plano) {
+          expect(linha.plano.brancas.length, linha.id).toBeGreaterThan(20)
+          expect(linha.plano.pretas.length, linha.id).toBeGreaterThan(20)
+        }
+      }
+    })
+
     it('a cor padrão, quando existe, é válida', () => {
       const cor = capitulo.capitulo.corPadrao
       if (cor !== undefined) expect(['w', 'b', 'ambas']).toContain(cor)

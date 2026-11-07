@@ -87,6 +87,7 @@ export interface DescricaoUnidade {
   resumo?: string
   avaliacao?: string | null
   referencia?: string
+  plano?: { brancas: string; pretas: string }
 }
 
 /** O título não cita lances, para poder aparecer durante o Treino sem entregar a resposta. */
@@ -98,6 +99,7 @@ export function descreverUnidade(capitulo: CapituloCarregado, id: string): Descr
       nome: linha.nome,
       resumo: linha.resumo,
       avaliacao: linha.avaliacao,
+      plano: linha.plano,
     }
   }
   const nota = buscarNota(capitulo, id)

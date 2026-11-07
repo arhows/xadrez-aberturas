@@ -35,6 +35,8 @@ export interface Linha {
   avaliacao: string | null
   resumo: string
   dicas: Record<string, string>
+  /** O que cada lado busca no meio-jogo depois da última posição da linha (texto do app). */
+  plano?: { brancas: string; pretas: string }
   /** Chave no formato de `dicas`: a ameaça criada por aquele lance. */
   ameacas?: Record<string, Ameaca>
 }

@@ -5,6 +5,7 @@ import Avaliacao from '../components/Avaliacao.vue'
 import AvisosDoLance from '../components/AvisosDoLance.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import LinhaMotor from '../components/LinhaMotor.vue'
+import PlanoMeioJogo from '../components/PlanoMeioJogo.vue'
 import TaticasDoTabuleiro from '../components/TaticasDoTabuleiro.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { percorrer } from '../lib/arvore'
@@ -149,6 +150,7 @@ function trocarLinha(evento: Event) {
         <strong>Fim da linha</strong>
         <p>{{ fmtTexto(linha.resumo) }}</p>
         <p v-if="linha.avaliacao">Avaliação: <Avaliacao :valor="linha.avaliacao" detalhada /></p>
+        <PlanoMeioJogo :plano="linha.plano" />
         <details>
           <summary>Legenda dos símbolos</summary>
           <dl class="legenda">

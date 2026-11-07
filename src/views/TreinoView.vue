@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, ref, shallowRef } from 'vue'
 import { useRoute } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
 import CartaoDica from '../components/CartaoDica.vue'
+import PlanoMeioJogo from '../components/PlanoMeioJogo.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
 import {
@@ -515,6 +516,7 @@ if (revisaoAutomatica) iniciarSessao()
           <p v-if="titulo.resumo" class="instrucao">{{ fmtTexto(titulo.resumo) }}</p>
           <p v-if="titulo.avaliacao" class="instrucao">Avaliação: <Avaliacao :valor="titulo.avaliacao" detalhada /></p>
           <p v-if="titulo.referencia" class="suave">{{ titulo.referencia }}</p>
+          <PlanoMeioJogo :plano="titulo.plano" />
         </CartaoDica>
 
         <div class="acoes">
