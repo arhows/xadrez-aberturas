@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import { formatarAvaliacao } from '../lib/motor'
+import { progresso } from '../lib/progresso'
 import { taticasDaPosicao, type Oportunidade, type Tatica } from '../lib/taticas'
 import type { Forma } from './Tabuleiro.vue'
 
@@ -50,26 +51,44 @@ function formasDaOportunidade(o: Oportunidade): Forma[] {
   ]
 }
 
+/** Com as setas automáticas, nada selecionado mostra todas; um item tocado mostra só ele. */
+const formas = computed<Forma[]>(() => {
+  if (selecionada.value === -1 && props.oportunidade) return formasDaOportunidade(props.oportunidade)
+  if (selecionada.value !== null && selecionada.value >= 0) {
+    const tatica = taticas.value[selecionada.value]
+    return tatica ? formasDa(tatica) : []
+  }
+  if (!progresso.config.taticasAutomaticas) return []
+  return [
+    ...(props.oportunidade ? formasDaOportunidade(props.oportunidade) : []),
+    ...taticas.value.flatMap(formasDa),
+  ]
+})
+
+watch(formas, (valor) => emit('formas', valor), { immediate: true })
+
 function alternar(indice: number) {
   selecionada.value = selecionada.value === indice ? null : indice
-  if (selecionada.value === null) emit('formas', [])
-  else if (selecionada.value === -1) emit('formas', formasDaOportunidade(props.oportunidade!))
-  else emit('formas', formasDa(taticas.value[selecionada.value]))
 }
 
-// Nova posição: as setas da tática anterior não valem mais.
+// Nova posição: a tática selecionada na anterior não vale mais.
 watch(
   () => props.fen,
   () => {
     selecionada.value = null
-    emit('formas', [])
   },
 )
 </script>
 
 <template>
   <section v-if="taticas.length || oportunidade" class="taticas" aria-label="Táticas no tabuleiro">
-    <h2>Táticas no tabuleiro</h2>
+    <div class="cabecalho">
+      <h2>Táticas no tabuleiro</h2>
+      <label class="automatico">
+        <input v-model="progresso.config.taticasAutomaticas" type="checkbox" />
+        Setas automáticas
+      </label>
+    </div>
 
     <button
       v-if="oportunidade"
@@ -105,16 +124,32 @@ watch(
       </li>
     </ul>
     <p class="nota">
-      Toque num item para ver as setas. A lista vem da posição das peças; a tática disponível é confirmada
-      pelo Stockfish.
+      {{ progresso.config.taticasAutomaticas ? 'Toque num item para destacar só ele.' : 'Toque num item para ver as setas.' }}
+      A lista vem da posição das peças; a tática disponível é confirmada pelo Stockfish.
     </p>
   </section>
 </template>
 
 <style scoped>
+.cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  margin-bottom: 0.5rem;
+}
 h2 {
-  margin: 0 0 0.5rem;
+  margin: 0;
   font-size: 1rem;
+}
+.automatico {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 44px;
+  color: var(--texto-suave);
+  font-size: 0.875rem;
 }
 ul {
   display: grid;

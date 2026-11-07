@@ -18,6 +18,8 @@ export interface Configuracoes {
   mostrarMotor: boolean
   /** Lista de cravadas, ataques duplos etc. no Estudo e no Explorar. */
   mostrarTaticas: boolean
+  /** Setas de todas as táticas sem precisar tocar nos itens. */
+  taticasAutomaticas: boolean
   /** Última escolha da tela de Treino, usada também por "Revisar agora". */
   profundidade: Profundidade
 }
@@ -53,6 +55,7 @@ export const CONFIG_PADRAO: Configuracoes = {
   tema: 'auto',
   mostrarMotor: true,
   mostrarTaticas: true,
+  taticasAutomaticas: false,
   profundidade: 'colunas',
 }
 

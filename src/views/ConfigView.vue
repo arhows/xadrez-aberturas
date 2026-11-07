@@ -100,6 +100,11 @@ function resetar() {
     </label>
 
     <label class="marcar">
+      <input v-model="config.taticasAutomaticas" type="checkbox" :disabled="!config.mostrarTaticas" />
+      Mostrar as setas das táticas automaticamente, sem tocar nos itens
+    </label>
+
+    <label class="marcar">
       <input v-model="config.som" type="checkbox" />
       Som
     </label>
