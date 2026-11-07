@@ -8,6 +8,11 @@ describe('arquivos de abertura', () => {
     expect(capitulos.map((c) => c.capitulo.id)).toContain('two-knights')
   })
 
+  it('cada capítulo tem um id único', () => {
+    const ids = capitulos.map((c) => c.capitulo.id)
+    expect(new Set(ids).size).toBe(ids.length)
+  })
+
   describe.each(capitulos.map((c) => [c.capitulo.id, c] as const))('%s', (_id, capitulo) => {
     const doTipo = (tipo: string) =>
       capitulo.problemas
@@ -20,6 +25,19 @@ describe('arquivos de abertura', () => {
 
     it('toda chave de dicas corresponde a um lance da linha', () => {
       expect(doTipo('dica-sem-lance')).toEqual([])
+    })
+
+    it('toda linha pertence a um grupo existente', () => {
+      expect(doTipo('grupo-inexistente')).toEqual([])
+    })
+
+    it('não repete ids de linhas e notas', () => {
+      expect(doTipo('id-duplicado')).toEqual([])
+    })
+
+    it('a cor padrão, quando existe, é válida', () => {
+      const cor = capitulo.capitulo.corPadrao
+      if (cor !== undefined) expect(['w', 'b', 'ambas']).toContain(cor)
     })
 
     it('toda nota aponta para uma linha base existente', () => {

@@ -4,14 +4,17 @@ import { useRoute } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
-import { buscarCapitulo } from '../lib/capitulos'
+import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
 import {
+  corDoCapitulo,
   coresDaEscolha,
   descreverUnidade,
-  filaDeRevisao,
   idsDoEscopo,
+  planoDeRevisao,
   unidadesDeRevisao,
+  type EscolhaCor,
   type Escopo,
+  type PlanoDeRevisao,
 } from '../lib/escopo'
 import { fmtLance, fmtTexto } from '../lib/formato'
 import { progresso } from '../lib/progresso'
@@ -44,6 +47,13 @@ const { arvore } = capitulo
 const idCapitulo = capitulo.capitulo.id
 const config = progresso.config
 
+const corEscolhida = computed<EscolhaCor>({
+  get: () => corDoCapitulo(capitulo, progresso.corPorCapitulo),
+  set: (cor) => {
+    progresso.corPorCapitulo[idCapitulo] = cor
+  },
+})
+
 const TEMPO_DICA_MS = 2000
 const TEMPO_ADVERSARIO_MS = 500
 const TEMPO_DESFAZER_MS = 350
@@ -64,6 +74,27 @@ let idsNoEscopo = new Set<string>()
 const fila = ref<UnidadeRevisao[]>([])
 let pesosDeErro = new Map<string, number>()
 const revisaoAutomatica = route.query.auto === '1'
+
+function planos(): PlanoDeRevisao[] {
+  return planoDeRevisao(
+    obterCapitulos(),
+    {
+      cartoes: progresso.cartoes,
+      notasConferidas: progresso.notasConferidas,
+      corPorCapitulo: progresso.corPorCapitulo,
+      profundidade: config.profundidade,
+      novasPorDia: config.novasPorDia,
+    },
+    dataLocal(),
+  )
+}
+
+/** Em "Revisar agora", o próximo capítulo com fila depois de terminar este. */
+const proximoCapitulo = computed(() =>
+  revisaoAutomatica && fila.value.length === 0
+    ? planos().find((plano) => plano.capitulo !== capitulo && plano.fila.length > 0)
+    : undefined,
+)
 
 // Estado da partida
 const partida = shallowRef<Partida | null>(null)
@@ -122,19 +153,14 @@ function iniciarSessao(livre = false) {
   pesosDeErro = calcularPesosDeErro()
 
   if (revisaoAutomatica && !livre) {
-    const revisao = filaDeRevisao(capitulo, progresso.cartoes, hoje, {
-      cor: config.cor,
-      profundidade: config.profundidade,
-      limiteNovas: config.novasPorDia,
-      conferidas: progresso.notasConferidas,
-    })
+    const revisao = planos().find((plano) => plano.capitulo === capitulo)!
     idsNoEscopo = new Set(revisao.ids)
     fila.value = revisao.fila
   } else {
     const escopo = escopoEscolhido.value
     const ids = idsDoEscopo(capitulo, escopo, config.profundidade, progresso.notasConferidas)
     idsNoEscopo = new Set(ids)
-    const unidades = unidadesDeRevisao(capitulo, ids, coresDaEscolha(config.cor))
+    const unidades = unidadesDeRevisao(capitulo, ids, coresDaEscolha(corEscolhida.value))
     if (livre || escopo.tipo === 'linha') {
       fila.value = unidades
     } else {
@@ -311,36 +337,33 @@ const notaAoEntrar = computed(() => {
 const pontos = computed(() =>
   Math.max(0, placar.value.acertos * 2 - placar.value.erros * 2 - placar.value.pistas),
 )
+
+// "Revisar agora" já sabe a cor de cada capítulo, então começa sem perguntar nada.
+if (revisaoAutomatica) iniciarSessao()
 </script>
 
 <template>
   <div v-if="fase === 'escolha'" class="pagina formulario">
     <h1>Treino — {{ capitulo.capitulo.nome }}</h1>
 
-    <p v-if="revisaoAutomatica">
-      Revisões vencidas de qualquer cor, mais até {{ config.novasPorDia }} linhas novas por dia.
-    </p>
-
-    <template v-else>
-      <label class="campo">
-        <span>O que treinar</span>
-        <select v-model="escolhaEscopo">
-          <option value="capitulo">Capítulo inteiro</option>
-          <optgroup label="Grupos">
-            <option v-for="g in capitulo.capitulo.grupos" :key="g.id" :value="`grupo:${g.id}`">{{ g.nome }}</option>
-          </optgroup>
-          <optgroup label="Linhas">
-            <option v-for="l in capitulo.capitulo.linhas" :key="l.id" :value="`linha:${l.id}`">
-              {{ l.coluna === null ? 'Bônus' : `Coluna ${l.coluna}` }} — {{ l.nome }}
-            </option>
-          </optgroup>
-        </select>
-      </label>
-    </template>
+    <label class="campo">
+      <span>O que treinar</span>
+      <select v-model="escolhaEscopo">
+        <option value="capitulo">Capítulo inteiro</option>
+        <optgroup label="Grupos">
+          <option v-for="g in capitulo.capitulo.grupos" :key="g.id" :value="`grupo:${g.id}`">{{ g.nome }}</option>
+        </optgroup>
+        <optgroup label="Linhas">
+          <option v-for="l in capitulo.capitulo.linhas" :key="l.id" :value="`linha:${l.id}`">
+            {{ l.coluna === null ? 'Bônus' : `Coluna ${l.coluna}` }} — {{ l.nome }}
+          </option>
+        </optgroup>
+      </select>
+    </label>
 
     <label class="campo">
-      <span>{{ revisaoAutomatica ? 'Cor das linhas novas' : 'Sua cor' }}</span>
-      <select v-model="config.cor">
+      <span>Sua cor</span>
+      <select v-model="corEscolhida">
         <option value="w">Brancas</option>
         <option value="b">Pretas</option>
         <option value="ambas">Ambas</option>
@@ -362,6 +385,11 @@ const pontos = computed(() =>
     <h1>Nada pendente</h1>
     <p>Não há revisões vencidas nem linhas novas disponíveis hoje neste escopo.</p>
     <div class="acoes">
+      <RouterLink
+        v-if="proximoCapitulo"
+        class="botao primario"
+        :to="{ name: 'treino', params: { cap: proximoCapitulo.capitulo.capitulo.id }, query: { auto: '1' } }"
+      >Revisar {{ proximoCapitulo.capitulo.capitulo.nome }} ({{ proximoCapitulo.fila.length }})</RouterLink>
       <button type="button" class="botao primario" @click="iniciarSessao(true)">Treinar mesmo assim</button>
       <RouterLink class="botao" to="/">Voltar ao início</RouterLink>
     </div>
@@ -442,6 +470,11 @@ const pontos = computed(() =>
           </button>
           <template v-else>
             <p class="concluido">Sessão concluída.</p>
+            <RouterLink
+              v-if="proximoCapitulo"
+              class="botao primario"
+              :to="{ name: 'treino', params: { cap: proximoCapitulo.capitulo.capitulo.id }, query: { auto: '1' } }"
+            >Revisar {{ proximoCapitulo.capitulo.capitulo.nome }} ({{ proximoCapitulo.fila.length }})</RouterLink>
             <button type="button" class="botao" @click="repetir">Treinar de novo</button>
           </template>
           <RouterLink class="botao" to="/">Início</RouterLink>

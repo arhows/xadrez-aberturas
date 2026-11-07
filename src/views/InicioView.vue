@@ -4,7 +4,7 @@ import Avaliacao from '../components/Avaliacao.vue'
 import { percorrer } from '../lib/arvore'
 import { buscarCapitulo, obterCapitulos, type CapituloCarregado } from '../lib/capitulos'
 import { baixarTexto } from '../lib/download'
-import { filaDeRevisao, linhasDoGrupo } from '../lib/escopo'
+import { linhasDoGrupo, planoDeRevisao } from '../lib/escopo'
 import { fmtLance } from '../lib/formato'
 import { exportarPgn } from '../lib/pgn'
 import { progresso } from '../lib/progresso'
@@ -45,16 +45,19 @@ function revisoesDaLinha(capitulo: CapituloCarregado, linha: Linha): string {
 }
 
 const filas = computed(() =>
-  capitulos.map((capitulo) => ({
-    id: capitulo.capitulo.id,
-    total: filaDeRevisao(capitulo, progresso.cartoes, hoje, {
-      cor: progresso.config.cor,
+  planoDeRevisao(
+    capitulos,
+    {
+      cartoes: progresso.cartoes,
+      notasConferidas: progresso.notasConferidas,
+      corPorCapitulo: progresso.corPorCapitulo,
       profundidade: progresso.config.profundidade,
-      limiteNovas: progresso.config.novasPorDia,
-      conferidas: progresso.notasConferidas,
-    }).fila.length,
-  })),
+      novasPorDia: progresso.config.novasPorDia,
+    },
+    hoje,
+  ).map((plano) => ({ id: plano.capitulo.capitulo.id, total: plano.fila.length })),
 )
+const filaDoCapitulo = (id: string) => filas.value.find((fila) => fila.id === id)?.total ?? 0
 const proximaFila = computed(() => filas.value.find((fila) => fila.total > 0))
 const totalRevisoes = computed(() => filas.value.reduce((soma, fila) => soma + fila.total, 0))
 
@@ -96,7 +99,10 @@ const maisErrados = computed(() =>
     <section v-for="capitulo in capitulos" :key="capitulo.capitulo.id" class="capitulo">
       <header>
         <h2>{{ capitulo.capitulo.nome }}</h2>
-        <p class="suave">{{ percentual(capitulo, capitulo.capitulo.linhas) }}% dominado</p>
+        <p class="suave">
+          {{ percentual(capitulo, capitulo.capitulo.linhas) }}% dominado
+          · {{ filaDoCapitulo(capitulo.capitulo.id) }} para hoje
+        </p>
         <div class="acoes">
           <RouterLink class="botao" :to="{ name: 'explorar', params: { cap: capitulo.capitulo.id } }">Explorar</RouterLink>
           <RouterLink class="botao" :to="{ name: 'treino', params: { cap: capitulo.capitulo.id } }">Treinar</RouterLink>

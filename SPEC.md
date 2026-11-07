@@ -20,6 +20,7 @@ Primeiro capítulo: **Defesa dos Dois Cavalos**, colunas 1–24 + linha bônus (
   "id": "two-knights",
   "nome": "Defesa dos Dois Cavalos",
   "base": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6",
+  "corPadrao": "b",                            // opcional: "w", "b" ou "ambas" (padrão: "ambas")
   "grupos": [{ "id": "...", "nome": "...", "colunas": [1,2,3] }],
   "linhas": [{
     "id": "c01", "coluna": 1, "grupo": "ng5-na5", "bonus": false,
@@ -98,7 +99,8 @@ Lista de erros de validação (seção 3.2) e estatísticas do arquivo (linhas, 
 - Unidade de revisão = **linha + cor treinada**.
 - Algoritmo SM-2 simplificado: nota 5 sem erros/pistas, 3 com pistas, 1 com erro. Intervalos 1d → 3d → 7d → … (fator de facilidade padrão 2.5, mínimo 1.3).
 - Registrar também erros por aresta, para mostrar "lances em que você mais erra" na tela inicial e priorizar essas linhas.
-- Linhas novas entram no máximo 5 por dia (configurável).
+- Linhas novas entram no máximo 5 por dia (configurável), somando todos os capítulos. No "Revisar agora", as vagas são repartidas em rodízio, começando pelos capítulos menos iniciados; treinar um capítulo diretamente pode usar todas as vagas restantes.
+- A cor treinada é guardada por capítulo; sem escolha do usuário, vale `corPadrao`.
 
 ## 6. Configurações
 - Notação: SAN em inglês (padrão) ou em português (R, D, T, B, C).

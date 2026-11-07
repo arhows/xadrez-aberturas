@@ -6,6 +6,8 @@ export type TipoProblema =
   | 'dica-sem-lance'
   | 'linha-base-inexistente'
   | 'desvio-inconsistente'
+  | 'grupo-inexistente'
+  | 'id-duplicado'
 
 export interface Problema {
   tipo: TipoProblema
@@ -86,7 +88,20 @@ export function validarCapitulo(capitulo: Capitulo): CapituloValidado {
   const desativadas: string[] = []
   const lancesPorId = new Map<string, LanceJogado[]>()
 
+  const idsVistos = new Set<string>()
+
   const jogar = (id: string, tipo: Unidade['tipo'], texto: string): LanceJogado[] | null => {
+    // A primeira ocorrência continua valendo; a repetida fica de fora e vai para o Diagnóstico.
+    if (idsVistos.has(id)) {
+      problemas.push({
+        tipo: 'id-duplicado',
+        linha: id,
+        mensagem: `O id "${id}" aparece mais de uma vez; só a primeira ocorrência foi usada.`,
+      })
+      return null
+    }
+    idsVistos.add(id)
+
     const { lances, erro } = jogarLances(texto)
     if (erro) {
       problemas.push({
@@ -104,8 +119,18 @@ export function validarCapitulo(capitulo: Capitulo): CapituloValidado {
     return lances
   }
 
+  const grupos = new Set(capitulo.grupos.map((grupo) => grupo.id))
   let totalDicas = 0
   for (const linha of capitulo.linhas) {
+    // Sem grupo válido, a linha não aparece na lista da tela inicial.
+    if (!grupos.has(linha.grupo)) {
+      problemas.push({
+        tipo: 'grupo-inexistente',
+        linha: linha.id,
+        mensagem: `O grupo "${linha.grupo}" não existe em "grupos"; a linha não aparece na tela inicial.`,
+      })
+    }
+
     const entradas = Object.keys(linha.dicas ?? {})
     totalDicas += entradas.length
 

@@ -4,7 +4,14 @@ import type { Capitulo } from '../src/lib/tipos'
 import { validarCapitulo } from '../src/lib/validacao'
 
 function capitulo(parcial: Partial<Capitulo>): Capitulo {
-  return { id: 't', nome: 't', base: '', grupos: [], linhas: [], ...parcial }
+  return {
+    id: 't',
+    nome: 't',
+    base: '',
+    grupos: [{ id: 'g', nome: 'g', colunas: [] }],
+    linhas: [],
+    ...parcial,
+  }
 }
 
 function linha(id: string, lances: string, dicas: Record<string, string> = {}) {
@@ -57,6 +64,24 @@ describe('validarCapitulo', () => {
       capitulo({ linhas: [linha('l', '1. e4 e5', { [chave]: 'dica' })] }),
     )
     expect(problemas.map((p) => [p.tipo, p.lance])).toEqual([['dica-sem-lance', chave]])
+  })
+
+  it('acusa linha com grupo inexistente, sem desativá-la', () => {
+    const resultado = validarCapitulo(
+      capitulo({ linhas: [{ ...linha('l', '1. e4 e5'), grupo: 'outro' }] }),
+    )
+    expect(resultado.problemas.map((p) => [p.tipo, p.linha])).toEqual([['grupo-inexistente', 'l']])
+    expect(resultado.unidades.map((u) => u.id)).toEqual(['l'])
+  })
+
+  it('acusa id repetido e mantém só a primeira ocorrência', () => {
+    const resultado = validarCapitulo(
+      capitulo({ linhas: [linha('l', '1. e4 e5'), linha('l', '1. d4 d5')] }),
+    )
+    expect(resultado.problemas.map((p) => [p.tipo, p.linha])).toEqual([['id-duplicado', 'l']])
+    expect(resultado.unidades).toHaveLength(1)
+    expect(resultado.unidades[0].lances[0].san).toBe('e4')
+    expect(resultado.desativadas).toEqual([])
   })
 
   it('acusa nota cujo desvio não bate com a linha base', () => {

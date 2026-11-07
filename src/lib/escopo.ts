@@ -1,6 +1,13 @@
 import type { CapituloCarregado } from './capitulos'
 import type { Cor } from './lances'
-import { filaDoDia, type Cartao, type UnidadeRevisao } from './srs'
+import {
+  filaDoDia,
+  idCartao,
+  repartirVagas,
+  vagasDoDia,
+  type Cartao,
+  type UnidadeRevisao,
+} from './srs'
 import type { Linha, Nota } from './tipos'
 
 export type EscolhaCor = Cor | 'ambas'
@@ -94,37 +101,77 @@ export function descreverUnidade(capitulo: CapituloCarregado, id: string): Descr
   }
 }
 
-/**
- * Fila de "Revisar agora": tudo o que venceu, de qualquer cor e profundidade,
- * mais as novas do dia conforme as últimas escolhas do Treino.
- */
-export function filaDeRevisao(
+export function corDoCapitulo(
   capitulo: CapituloCarregado,
-  cartoes: Record<string, Cartao>,
+  corPorCapitulo: Record<string, EscolhaCor>,
+): EscolhaCor {
+  return corPorCapitulo[capitulo.capitulo.id] ?? capitulo.capitulo.corPadrao ?? 'ambas'
+}
+
+export interface EstadoDaRevisao {
+  cartoes: Record<string, Cartao>
+  notasConferidas: string[]
+  corPorCapitulo: Record<string, EscolhaCor>
+  profundidade: Profundidade
+  novasPorDia: number
+}
+
+export interface PlanoDeRevisao {
+  capitulo: CapituloCarregado
+  fila: UnidadeRevisao[]
+  /** Tudo o que conta como lance do livro durante a revisão deste capítulo. */
+  ids: string[]
+}
+
+/**
+ * Fila de "Revisar agora" de cada capítulo: tudo o que venceu, de qualquer cor e
+ * profundidade, mais as linhas novas, com o limite diário repartido entre os capítulos.
+ */
+export function planoDeRevisao(
+  capitulos: CapituloCarregado[],
+  estado: EstadoDaRevisao,
   hoje: string,
-  opcoes: { cor: EscolhaCor; profundidade: Profundidade; limiteNovas: number; conferidas: string[] },
-): { fila: UnidadeRevisao[]; ids: string[] } {
-  const todos = idsDoEscopo(capitulo, { tipo: 'capitulo' }, 'notas', opcoes.conferidas)
-  const { pendentes } = filaDoDia(
-    unidadesDeRevisao(capitulo, todos, ['w', 'b']),
-    cartoes,
-    hoje,
-    0,
+): PlanoDeRevisao[] {
+  const { cartoes, notasConferidas } = estado
+
+  const bases = capitulos.map((capitulo) => {
+    const todos = idsDoEscopo(capitulo, { tipo: 'capitulo' }, 'notas', notasConferidas)
+    const { pendentes } = filaDoDia(unidadesDeRevisao(capitulo, todos, ['w', 'b']), cartoes, hoje, 0)
+
+    const escolhidos = idsDoEscopo(
+      capitulo,
+      { tipo: 'capitulo' },
+      estado.profundidade,
+      notasConferidas,
+    )
+    const cores = coresDaEscolha(corDoCapitulo(capitulo, estado.corPorCapitulo))
+    const novas = unidadesDeRevisao(capitulo, escolhidos, cores).filter(
+      (unidade) => !cartoes[idCartao(unidade)],
+    )
+    return { capitulo, pendentes, novas, escolhidos }
+  })
+
+  const vagas = repartirVagas(
+    bases.map(({ capitulo, novas }) => {
+      const doCapitulo = Object.entries(cartoes).filter(([id]) =>
+        id.startsWith(`${capitulo.capitulo.id}/`),
+      )
+      return {
+        id: capitulo.capitulo.id,
+        disponiveis: novas.length,
+        criadasHoje: doCapitulo.filter(([, cartao]) => cartao.criado === hoje).length,
+        iniciadas: doCapitulo.length,
+      }
+    }),
+    vagasDoDia(cartoes, hoje, estado.novasPorDia),
   )
 
-  const escolhidos = idsDoEscopo(
-    capitulo,
-    { tipo: 'capitulo' },
-    opcoes.profundidade,
-    opcoes.conferidas,
-  )
-  const { novas } = filaDoDia(
-    unidadesDeRevisao(capitulo, escolhidos, coresDaEscolha(opcoes.cor)),
-    cartoes,
-    hoje,
-    opcoes.limiteNovas,
-  )
-
-  const fila = [...pendentes, ...novas]
-  return { fila, ids: [...new Set([...escolhidos, ...fila.map((unidade) => unidade.linha)])] }
+  return bases.map(({ capitulo, pendentes, novas, escolhidos }) => {
+    const fila = [...pendentes, ...novas.slice(0, vagas.get(capitulo.capitulo.id) ?? 0)]
+    return {
+      capitulo,
+      fila,
+      ids: [...new Set([...escolhidos, ...fila.map((unidade) => unidade.linha)])],
+    }
+  })
 }

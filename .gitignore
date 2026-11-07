@@ -1,3 +1,5 @@
 node_modules
 dist
 *.local
+# Fotos do livro: têm direitos autorais e ficam só na máquina local.
+fotos/

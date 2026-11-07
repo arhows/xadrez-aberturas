@@ -12,8 +12,7 @@ export interface Configuracoes {
   orientacaoAutomatica: boolean
   novasPorDia: number
   tema: 'auto' | 'claro' | 'escuro'
-  /** Últimas escolhas da tela de Treino, usadas também por "Revisar agora". */
-  cor: EscolhaCor
+  /** Última escolha da tela de Treino, usada também por "Revisar agora". */
   profundidade: Profundidade
 }
 
@@ -30,6 +29,8 @@ export interface Progresso {
   cartoes: Record<string, Cartao>
   errosPorAresta: Record<string, ErroAresta>
   notasConferidas: string[]
+  /** Cor escolhida no Treino de cada capítulo; sem escolha, vale a cor padrão dele. */
+  corPorCapitulo: Record<string, EscolhaCor>
   config: Configuracoes
 }
 
@@ -43,12 +44,17 @@ export const CONFIG_PADRAO: Configuracoes = {
   orientacaoAutomatica: true,
   novasPorDia: 5,
   tema: 'auto',
-  cor: 'b',
   profundidade: 'colunas',
 }
 
 function progressoVazio(): Progresso {
-  return { cartoes: {}, errosPorAresta: {}, notasConferidas: [], config: { ...CONFIG_PADRAO } }
+  return {
+    cartoes: {},
+    errosPorAresta: {},
+    notasConferidas: [],
+    corPorCapitulo: {},
+    config: { ...CONFIG_PADRAO },
+  }
 }
 
 /** Aceita dados salvos ou importados, completando o que faltar com os padrões. */
@@ -61,6 +67,7 @@ export function normalizarProgresso(dados: unknown): Progresso | null {
     cartoes: parcial.cartoes!,
     errosPorAresta: ehObjeto(parcial.errosPorAresta) ? parcial.errosPorAresta! : {},
     notasConferidas: Array.isArray(parcial.notasConferidas) ? parcial.notasConferidas : [],
+    corPorCapitulo: ehObjeto(parcial.corPorCapitulo) ? parcial.corPorCapitulo! : {},
     config: { ...CONFIG_PADRAO, ...(ehObjeto(parcial.config) ? parcial.config : {}) },
   }
 }

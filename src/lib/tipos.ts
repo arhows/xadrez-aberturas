@@ -1,3 +1,5 @@
+import type { EscolhaCor } from './escopo'
+
 /** Formato dos arquivos em data/openings/*.json (SPEC 3.1 e 3.4). */
 
 export interface Grupo {
@@ -39,6 +41,8 @@ export interface Capitulo {
   nome: string
   fonte?: string
   base: string
+  /** Cor sugerida no Treino; sem ela, o capítulo treina as duas cores. */
+  corPadrao?: EscolhaCor
   grupos: Grupo[]
   linhas: Linha[]
   notas?: Nota[]

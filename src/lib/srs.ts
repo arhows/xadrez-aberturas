@@ -86,6 +86,43 @@ export function estaDominado(cartao: Cartao | undefined): boolean {
   return cartao !== undefined && cartao.repeticoes >= REPETICOES_DOMINADO
 }
 
+/** Quantas linhas novas ainda cabem hoje, somando todos os capítulos. */
+export function vagasDoDia(
+  cartoes: Record<string, Cartao>,
+  hoje: string,
+  limiteNovas: number,
+): number {
+  const criadasHoje = Object.values(cartoes).filter((cartao) => cartao.criado === hoje).length
+  return Math.max(0, limiteNovas - criadasHoje)
+}
+
+export interface CandidatoAVagas {
+  id: string
+  disponiveis: number
+  /** Linhas novas que o capítulo já começou hoje: contam como parte do que ele recebeu. */
+  criadasHoje: number
+  /** Unidades já iniciadas no capítulo: desempata a favor de quem tem menos. */
+  iniciadas: number
+}
+
+/**
+ * Cada vaga vai para o capítulo que menos usou o limite hoje, então a divisão
+ * continua justa ao longo do dia. Um capítulo sem novas deixa a vaga para os outros.
+ */
+export function repartirVagas(candidatos: CandidatoAVagas[], vagas: number): Map<string, number> {
+  const parte = new Map(candidatos.map((candidato) => [candidato.id, 0]))
+  const ordem = [...candidatos].sort((a, b) => a.iniciadas - b.iniciadas)
+  for (let restantes = vagas; restantes > 0; restantes--) {
+    const usado = (c: CandidatoAVagas) => c.criadasHoje + parte.get(c.id)!
+    const proximo = ordem
+      .filter((c) => parte.get(c.id)! < c.disponiveis)
+      .reduce<CandidatoAVagas | null>((a, c) => (!a || usado(c) < usado(a) ? c : a), null)
+    if (!proximo) break
+    parte.set(proximo.id, parte.get(proximo.id)! + 1)
+  }
+  return parte
+}
+
 export interface Fila {
   pendentes: UnidadeRevisao[]
   novas: UnidadeRevisao[]
@@ -98,8 +135,7 @@ export function filaDoDia(
   hoje: string,
   limiteNovas: number,
 ): Fila {
-  const criadasHoje = Object.values(cartoes).filter((cartao) => cartao.criado === hoje).length
-  const vagas = Math.max(0, limiteNovas - criadasHoje)
+  const vagas = vagasDoDia(cartoes, hoje, limiteNovas)
 
   const pendentes = unidades
     .filter((unidade) => estaPendente(cartoes[idCartao(unidade)], hoje))

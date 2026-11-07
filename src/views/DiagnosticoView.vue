@@ -10,6 +10,8 @@ const TITULOS: Record<TipoProblema, string> = {
   'dica-sem-lance': 'Dica sem lance',
   'linha-base-inexistente': 'Linha base inexistente',
   'desvio-inconsistente': 'Desvio inconsistente',
+  'grupo-inexistente': 'Grupo inexistente',
+  'id-duplicado': 'Id duplicado',
 }
 
 const secoes = computed(() =>
