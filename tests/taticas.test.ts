@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { jogarLances } from '../src/lib/lances'
-import { oportunidadeDaPosicao, taticaDoLance, taticasDaPosicao } from '../src/lib/taticas'
+import { oportunidadeDaPosicao, taticaDoLance, taticasDaPosicao, xequeDaPosicao } from '../src/lib/taticas'
 
 const depois = (lances: string) => jogarLances(lances).lances.at(-1)!.fenDepois
 const tipos = (fen: string) => taticasDaPosicao(fen).map((t) => t.tipo)
@@ -107,5 +107,36 @@ describe('táticas disponíveis no próximo lance', () => {
     expect(oportunidadeDaPosicao(fen, null)).toBeNull()
     // Vantagem das pretas não serve quando quem joga são as brancas.
     expect(oportunidadeDaPosicao(fen, { lance: 'Nc7+', cp: -900 })).toBeNull()
+  })
+})
+
+describe('xeques', () => {
+  it('posição sem xeque', () => {
+    expect(xequeDaPosicao('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')).toBeNull()
+  })
+
+  it('xeque simples: 6.Bb5+ nos Dois Cavalos', () => {
+    const lances = jogarLances('1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 d5 5. exd5 Na5 6. Bb5+').lances
+    const ultimo = lances.at(-1)!
+    const x = xequeDaPosicao(ultimo.fenDepois, [ultimo.from, ultimo.to])!
+    expect(x).toMatchObject({ tipo: 'xeque', atacantes: ['b5'], rei: 'e8' })
+    expect(x.texto).toBe('Xeque: o bispo branco de b5 ataca o rei de e8.')
+  })
+
+  it('xeque duplo: cavalo e torre atacam o rei', () => {
+    const x = xequeDaPosicao('4k3/8/5N2/8/8/8/8/4R1K1 b - - 0 1', ['d5', 'f6'])!
+    expect(x.tipo).toBe('xeque-duplo')
+    expect(x.atacantes.sort()).toEqual(['e1', 'f6'])
+    expect(x.texto).toContain('a única defesa é mover o rei')
+  })
+
+  it('xeque descoberto: o cavalo sai e a torre dá xeque', () => {
+    const x = xequeDaPosicao('4k3/8/8/2N5/8/8/8/4R1K1 b - - 0 1', ['e4', 'c5'])!
+    expect(x).toMatchObject({ tipo: 'xeque-descoberto', atacantes: ['e1'], rei: 'e8' })
+    expect(x.texto).toBe('Xeque descoberto: ao sair de e4, o cavalo abriu a linha da torre de e1 até o rei de e8.')
+  })
+
+  it('sem o último lance, um xeque de peça parada é só xeque', () => {
+    expect(xequeDaPosicao('4k3/8/8/2N5/8/8/8/4R1K1 b - - 0 1')?.tipo).toBe('xeque')
   })
 })

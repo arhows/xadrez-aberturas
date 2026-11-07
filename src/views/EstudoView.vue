@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
 import AvisosDoLance from '../components/AvisosDoLance.vue'
+import AvisoXeque from '../components/AvisoXeque.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import LinhaMotor from '../components/LinhaMotor.vue'
 import PlanoMeioJogo from '../components/PlanoMeioJogo.vue'
@@ -16,7 +17,7 @@ import { fmtLance, fmtTexto } from '../lib/formato'
 import { casasDoLance } from '../lib/lances'
 import { carregarMotor, type DadosMotor } from '../lib/motor'
 import { progresso } from '../lib/progresso'
-import { oportunidadeDaPosicao } from '../lib/taticas'
+import { oportunidadeDaPosicao, xequeDaPosicao } from '../lib/taticas'
 
 const route = useRoute()
 const router = useRouter()
@@ -53,6 +54,7 @@ const oportunidade = computed(() =>
 )
 
 const formasTatica = ref<Forma[]>([])
+const xeque = computed(() => xequeDaPosicao(fen.value, ultimoLance.value))
 
 const setaDaAmeaca = computed<Forma[]>(() => {
   const formas: Forma[] = [...formasTatica.value]
@@ -64,6 +66,7 @@ const setaDaAmeaca = computed<Forma[]>(() => {
   }
   const ameaca = arestaAtual.value?.ameaca
   if (ameaca) formas.push({ de: ameaca.from, para: ameaca.to, cor: 'red' })
+  for (const de of xeque.value?.atacantes ?? []) formas.push({ de, para: xeque.value!.rei, cor: 'red' })
   return formas
 })
 
@@ -136,6 +139,7 @@ function trocarLinha(evento: Event) {
         :texto="dica"
       />
       <CartaoDica v-else texto="Avance com ▶, com as setas do teclado ou deslizando no tabuleiro." />
+      <AvisoXeque :xeque="xeque" />
       <AvisosDoLance :aresta="arestaAtual" />
       <LinhaMotor :analise="analise" :lances-do-livro="proximoDoLivro ? [proximoDoLivro.san] : []" />
       <TaticasDoTabuleiro

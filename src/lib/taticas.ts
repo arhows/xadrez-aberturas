@@ -220,6 +220,56 @@ function todasAsTaticas(fen: string): Tatica[] {
   return taticas
 }
 
+export interface Xeque {
+  tipo: 'xeque' | 'xeque-descoberto' | 'xeque-duplo'
+  texto: string
+  /** Casas das peças que dão xeque. */
+  atacantes: string[]
+  rei: string
+}
+
+/**
+ * Descreve o xeque da posição, se houver. Com o último lance, sabe dizer quando
+ * o xeque foi descoberto (dado por uma peça que não se moveu).
+ */
+export function xequeDaPosicao(fen: string, ultimoLance?: [string, string] | null): Xeque | null {
+  const tab = lerTabuleiro(fen)
+  const vez: Cor = fen.split(' ')[1] === 'b' ? 'b' : 'w'
+  const rei = [...tab.entries()].find(([, p]) => p.tipo === 'k' && p.cor === vez)?.[0]
+  if (!rei) return null
+  const atacantesDoRei = atacantes(tab, rei, outra(vez))
+  if (!atacantesDoRei.length) return null
+
+  const quem = (casa: string) => nome(tab.get(casa)!, casa)
+  const reiTexto = `o rei de ${rei}`
+  if (atacantesDoRei.length >= 2) {
+    const lista = atacantesDoRei.map(quem)
+    return {
+      tipo: 'xeque-duplo',
+      atacantes: atacantesDoRei,
+      rei,
+      texto: `Xeque duplo: ${lista.slice(0, -1).join(', ')} e ${lista.at(-1)} atacam ${reiTexto} ao mesmo tempo. Não dá para bloquear nem capturar as duas peças: a única defesa é mover o rei.`,
+    }
+  }
+
+  const [atacante] = atacantesDoRei
+  if (ultimoLance && ultimoLance[1] !== atacante && tab.get(ultimoLance[1])?.cor === outra(vez)) {
+    const movida = tab.get(ultimoLance[1])!
+    return {
+      tipo: 'xeque-descoberto',
+      atacantes: [atacante],
+      rei,
+      texto: `Xeque descoberto: ao sair de ${ultimoLance[0]}, ${nomeCurto(movida)} abriu a linha ${contrair(nome(tab.get(atacante)!, atacante, false))} até ${reiTexto}.`,
+    }
+  }
+  return {
+    tipo: 'xeque',
+    atacantes: [atacante],
+    rei,
+    texto: `Xeque: ${quem(atacante)} ataca ${reiTexto}.`,
+  }
+}
+
 export type TipoOportunidade = 'garfo' | 'cravada' | 'espeto' | 'descoberto'
 
 /** Tática que um lance cria; só faz sentido quando o motor confirma que o lance ganha. */

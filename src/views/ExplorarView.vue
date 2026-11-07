@@ -3,6 +3,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, provide, reactive, ref,
 import { useRoute } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
 import AvisosDoLance from '../components/AvisosDoLance.vue'
+import AvisoXeque from '../components/AvisoXeque.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import LinhaMotor from '../components/LinhaMotor.vue'
 import TaticasDoTabuleiro from '../components/TaticasDoTabuleiro.vue'
@@ -16,7 +17,7 @@ import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
 import { casasDoLance } from '../lib/lances'
 import { carregarMotor, type DadosMotor } from '../lib/motor'
 import { progresso } from '../lib/progresso'
-import { oportunidadeDaPosicao } from '../lib/taticas'
+import { oportunidadeDaPosicao, xequeDaPosicao } from '../lib/taticas'
 
 const route = useRoute()
 const capitulo = buscarCapitulo(route.params.cap as string)!
@@ -87,8 +88,12 @@ const setas = computed<Forma[]>(() => {
     doLivro.push({ de: sugestao.from, para: sugestao.to, cor: 'blue' })
   }
   const ameaca = ultima.value?.ameaca
-  return ameaca ? [...doLivro, { de: ameaca.from, para: ameaca.to, cor: 'red' }] : doLivro
+  if (ameaca) doLivro.push({ de: ameaca.from, para: ameaca.to, cor: 'red' })
+  for (const de of xeque.value?.atacantes ?? []) doLivro.push({ de, para: xeque.value!.rei, cor: 'red' })
+  return doLivro
 })
+
+const xeque = computed(() => xequeDaPosicao(fen.value, ultimoLance.value))
 
 const dadosMotor = shallowRef<DadosMotor | null>(null)
 carregarMotor(capitulo.capitulo.id).then((dados) => (dadosMotor.value = dados))
@@ -187,6 +192,7 @@ if (inicial) selecionar(inicial)
 
       <LinhaMotor :analise="analise" :lances-do-livro="continuacoes.map((aresta) => aresta.san)" />
 
+      <AvisoXeque :xeque="xeque" />
       <AvisosDoLance :aresta="ultima" />
 
       <TaticasDoTabuleiro
