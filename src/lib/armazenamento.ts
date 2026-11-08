@@ -16,3 +16,11 @@ export function gravar(chave: string, valor: unknown): void {
     // Sem armazenamento, o estado dura só até recarregar a página.
   }
 }
+
+export function remover(chave: string): void {
+  try {
+    localStorage.removeItem(chave)
+  } catch {
+    // Sem armazenamento não há o que remover.
+  }
+}

@@ -1,10 +1,12 @@
 import { createRouter, createWebHashHistory, type RouteLocationNormalized } from 'vue-router'
 import { buscarCapitulo } from './lib/capitulos'
 import { buscarConjunto, carregarConjuntos } from './lib/exercicios'
+import { esperarSessao, nuvem } from './lib/nuvem'
 import AberturasView from './views/AberturasView.vue'
 import AberturaView from './views/AberturaView.vue'
 import ConfigView from './views/ConfigView.vue'
 import DiagnosticoView from './views/DiagnosticoView.vue'
+import EntrarView from './views/EntrarView.vue'
 import EstudoView from './views/EstudoView.vue'
 import ExercicioView from './views/ExercicioView.vue'
 import PartidasView from './views/PartidasView.vue'
@@ -20,6 +22,7 @@ const exigirCapitulo = (destino: RouteLocationNormalized) =>
 export const router = createRouter({
   history: createWebHashHistory(),
   routes: [
+    { path: '/entrar', name: 'entrar', component: EntrarView, meta: { publica: true } },
     { path: '/', name: 'inicio', component: InicioView },
     { path: '/aberturas', name: 'aberturas', component: AberturasView },
     { path: '/abertura/:cap', name: 'abertura', component: AberturaView, beforeEnter: exigirCapitulo },
@@ -41,4 +44,18 @@ export const router = createRouter({
     { path: '/config', name: 'config', component: ConfigView },
     { path: '/:resto(.*)', redirect: '/' },
   ],
+})
+
+// Só quem entrou na conta usa o app; cada conta tem o próprio progresso.
+router.beforeEach(async (destino) => {
+  await esperarSessao()
+  const conectado = nuvem.uid !== null
+  if (!conectado && !destino.meta.publica) {
+    return destino.fullPath === '/' ? { name: 'entrar' } : { name: 'entrar', query: { volta: destino.fullPath } }
+  }
+  if (conectado && destino.name === 'entrar') {
+    const volta = destino.query.volta
+    return typeof volta === 'string' && volta.startsWith('/') ? volta : { name: 'inicio' }
+  }
+  return true
 })

@@ -1,13 +1,24 @@
 /**
- * Acesso ao Firebase (login com Google e Firestore). Este módulo só é carregado
- * quando a pessoa entra na conta, para não pesar o site de quem não sincroniza.
+ * Acesso ao Firebase (login com Google ou e-mail/senha, e Firestore). Carregado
+ * à parte na abertura do app, para a primeira tela aparecer sem esperar por ele.
  *
  * A configuração abaixo é pública por natureza (vai no site de qualquer forma);
  * quem protege os dados são as regras do Firestore: cada conta só lê e grava
  * o documento usuarios/{uid}.
  */
 import { initializeApp } from 'firebase/app'
-import { GoogleAuthProvider, getAuth, onAuthStateChanged, signInWithPopup, signOut, type User } from 'firebase/auth'
+import {
+  GoogleAuthProvider,
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+  type User,
+} from 'firebase/auth'
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore/lite'
 
 const app = initializeApp({
@@ -20,6 +31,8 @@ const app = initializeApp({
 })
 
 const auth = getAuth(app)
+// E-mails de redefinição de senha em português.
+auth.languageCode = 'pt-BR'
 const banco = getFirestore(app)
 
 export type Usuario = Pick<User, 'uid' | 'displayName' | 'email'>
@@ -32,6 +45,21 @@ export async function entrarComGoogle(): Promise<void> {
   const provedor = new GoogleAuthProvider()
   provedor.setCustomParameters({ prompt: 'select_account' })
   await signInWithPopup(auth, provedor)
+}
+
+export async function entrarComEmail(email: string, senha: string): Promise<void> {
+  await signInWithEmailAndPassword(auth, email, senha)
+}
+
+/** Cria a conta e já entra nela. */
+export async function cadastrarComEmail(nome: string, email: string, senha: string): Promise<Usuario> {
+  const { user } = await createUserWithEmailAndPassword(auth, email, senha)
+  if (nome) await updateProfile(user, { displayName: nome })
+  return { uid: user.uid, displayName: nome || null, email: user.email }
+}
+
+export async function enviarRedefinicaoDeSenha(email: string): Promise<void> {
+  await sendPasswordResetEmail(auth, email)
 }
 
 export async function sairDaConta(): Promise<void> {

@@ -1,5 +1,5 @@
 import { reactive, watch } from 'vue'
-import { gravar, ler } from './armazenamento'
+import { gravar, ler, remover } from './armazenamento'
 import type { EscolhaCor, Profundidade } from './escopo'
 import type { Notacao } from './notacao'
 import type { PartidaAnalisada } from './partidas'
@@ -116,12 +116,65 @@ export function normalizarProgresso(dados: unknown): Progresso | null {
   }
 }
 
-/** Estado único do app; toda mudança é gravada no localStorage. */
-export const progresso = reactive<Progresso>(
-  normalizarProgresso(ler<unknown>(CHAVE, null)) ?? progressoVazio(),
+/**
+ * Progresso de antes do login (uma única chave por aparelho). Hoje cada conta tem a sua
+ * chave; este só é lido para oferecer juntá-lo à conta de quem entrar.
+ */
+const CHAVE_SEM_CONTA = CHAVE
+
+const chaveDaConta = (uid: string) => `${CHAVE}.${uid}`
+
+/** Conta cujo progresso está carregado; sem conta, nada é gravado. */
+let chaveAtual: string | null = null
+
+/** Estado único do app; com uma conta aberta, toda mudança é gravada no localStorage dela. */
+export const progresso = reactive<Progresso>(progressoVazio())
+
+watch(
+  progresso,
+  (valor) => {
+    if (chaveAtual) gravar(chaveAtual, valor)
+  },
+  { deep: true },
 )
 
-watch(progresso, (valor) => gravar(CHAVE, valor), { deep: true })
+/** Carrega o progresso desta conta guardado neste aparelho (ou começa do zero). */
+export function abrirProgressoDaConta(uid: string): void {
+  const salvo = normalizarProgresso(ler<unknown>(chaveDaConta(uid), null))
+  // Conta nova no aparelho: herda as preferências que já estavam em uso aqui (antes do login).
+  const configDoAparelho = normalizarProgresso(ler<unknown>(CHAVE_SEM_CONTA, null))?.config ?? progresso.config
+  const novo = salvo ?? { ...progressoVazio(), config: { ...configDoAparelho } }
+  chaveAtual = chaveDaConta(uid)
+  substituirProgresso(novo)
+  gravar(chaveAtual, progresso)
+}
+
+/** Ao sair da conta: a tela volta vazia e o progresso fica guardado na chave da conta. */
+export function fecharProgresso(): void {
+  chaveAtual = null
+  substituirProgresso({ ...progressoVazio(), config: { ...progresso.config } })
+}
+
+function temEstudo(dados: Progresso): boolean {
+  return (
+    Object.keys(dados.cartoes).length > 0 ||
+    Object.keys(dados.cartoesExercicios).length > 0 ||
+    Object.keys(dados.exercicios).length > 0 ||
+    Object.keys(dados.errosPorAresta).length > 0 ||
+    dados.notasConferidas.length > 0 ||
+    Object.keys(dados.partidas.analisadas).length > 0
+  )
+}
+
+/** Progresso feito neste aparelho antes de existir login, se houver algum estudo nele. */
+export function progressoSemConta(): Progresso | null {
+  const dados = normalizarProgresso(ler<unknown>(CHAVE_SEM_CONTA, null))
+  return dados && temEstudo(dados) ? dados : null
+}
+
+export function apagarProgressoSemConta(): void {
+  remover(CHAVE_SEM_CONTA)
+}
 
 function substituirProgresso({ config, ...resto }: Progresso): void {
   Object.assign(progresso, resto)

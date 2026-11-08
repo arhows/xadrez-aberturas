@@ -9,7 +9,7 @@ import {
 } from '../lib/progresso'
 import { dataLocal } from '../lib/srs'
 import { ehIos, instalar, pwa } from '../lib/pwa'
-import { entrar, nuvem, sair, sincronizar } from '../lib/nuvem'
+import { nuvem, sair, sincronizar } from '../lib/nuvem'
 
 const config = progresso.config
 const mensagem = ref<{ tipo: 'ok' | 'erro'; texto: string } | null>(null)
@@ -119,31 +119,23 @@ function resetar() {
       Virar o tabuleiro conforme a cor treinada
     </label>
 
-    <h2>Sincronizar entre aparelhos</h2>
-    <template v-if="nuvem.estado === 'desligada' || (nuvem.estado === 'erro' && !nuvem.email)">
-      <p class="suave">
-        Entre com a mesma conta Google no celular e no computador para juntar o progresso dos dois.
-        As configurações continuam separadas em cada aparelho.
-      </p>
-      <div class="acoes">
-        <button type="button" class="botao" @click="entrar">Entrar com Google</button>
-      </div>
-    </template>
-    <p v-else-if="nuvem.estado === 'carregando'" class="suave">Conectando…</p>
-    <template v-else>
-      <p class="suave">
-        Conectado como <strong>{{ nuvem.nome || nuvem.email }}</strong>
-        <template v-if="nuvem.nome && nuvem.email"> ({{ nuvem.email }})</template>.
-        <template v-if="nuvem.estado === 'sincronizando'"> Sincronizando…</template>
-        <template v-else-if="nuvem.ultima"> Sincronizado às {{ nuvem.ultima }}.</template>
-      </p>
-      <div class="acoes">
-        <button type="button" class="botao" :disabled="nuvem.estado === 'sincronizando'" @click="sincronizar()">
-          Sincronizar agora
-        </button>
-        <button type="button" class="botao" @click="sair">Sair</button>
-      </div>
-    </template>
+    <h2>Conta</h2>
+    <p class="suave">
+      Conectado como <strong>{{ nuvem.nome || nuvem.email }}</strong>
+      <template v-if="nuvem.nome && nuvem.email"> ({{ nuvem.email }})</template>.
+      Entre com a mesma conta no celular e no computador: o progresso sincroniza sozinho.
+      As configurações ficam separadas em cada aparelho.
+    </p>
+    <p class="suave">
+      <template v-if="nuvem.estado === 'sincronizando'">Sincronizando…</template>
+      <template v-else-if="nuvem.ultima">Sincronizado às {{ nuvem.ultima }}.</template>
+    </p>
+    <div class="acoes">
+      <button type="button" class="botao" :disabled="nuvem.estado === 'sincronizando'" @click="sincronizar()">
+        Sincronizar agora
+      </button>
+      <button type="button" class="botao" @click="sair">Sair da conta</button>
+    </div>
     <p v-if="nuvem.erro" class="erro" role="status">{{ nuvem.erro }}</p>
 
     <h2>App no aparelho</h2>
@@ -172,7 +164,7 @@ function resetar() {
       <button v-if="!confirmandoReset" type="button" class="botao" @click="confirmandoReset = true">Resetar</button>
       <template v-else>
         <button type="button" class="botao perigo" @click="resetar">
-          {{ nuvem.email ? 'Apagar todo o progresso (também na nuvem)' : 'Apagar todo o progresso' }}
+          Apagar todo o progresso desta conta
         </button>
         <button type="button" class="botao" @click="confirmandoReset = false">Cancelar</button>
       </template>
