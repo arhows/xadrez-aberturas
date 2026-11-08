@@ -17,6 +17,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { Chess } from 'chess.js'
+import { existeMate, forcaMate, melhorDefesa, solucoes } from './motor-mate.mjs'
 
 const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const arquivo =
@@ -160,77 +161,11 @@ function candidatas(tabuleiro, vez) {
   })
 }
 
-/** O lado da vez tem mate em 1 (o SAN do chess.js marca o mate com #). */
-const temMateEm1 = (jogo) => jogo.moves().some((san) => san.endsWith('#'))
-
-/** Lances que forçam mate em até `lances` lances (1 ou 2). */
-function solucoes(fen, lances) {
-  const jogo = new Chess(fen)
-  if (lances === 1) return jogo.moves().filter((san) => san.endsWith('#'))
-  return jogo.moves().filter((san) => {
-    jogo.move(san)
-    let forca = jogo.isCheckmate()
-    if (!forca && !jogo.isGameOver()) {
-      forca = jogo.moves().every((resposta) => {
-        jogo.move(resposta)
-        const mate = temMateEm1(jogo)
-        jogo.undo()
-        return mate
-      })
-    }
-    jogo.undo()
-    return forca
-  })
-}
-
 // ---------- Mate em 3 ----------
 //
 // Achar todas as chaves de um mate em 3 com o chess.js levaria horas; por isso só a chave do
 // livro é conferida (forçar mate em 3 contra qualquer defesa, sem mate mais curto). A tela
 // analisa na hora qualquer outro primeiro lance.
-
-/** Xeques primeiro, depois capturas: acelera achar o mate quando ele existe. */
-function ordenados(jogo) {
-  const peso = (san) => (san.includes('+') || san.includes('#') ? 0 : san.includes('x') ? 1 : 2)
-  return jogo.moves().sort((a, b) => peso(a) - peso(b))
-}
-
-/** O lado da vez dá mate em até `n` lances (n = 1 ou 2). */
-function existeMate(jogo, n) {
-  if (n === 1) return temMateEm1(jogo)
-  return ordenados(jogo).some((san) => forcaMate(jogo, san, n))
-}
-
-/** O lance força mate em até `n` lances contando com ele mesmo. */
-function forcaMate(jogo, san, n) {
-  jogo.move(san)
-  let forca = jogo.isCheckmate()
-  if (!forca && !jogo.isGameOver() && n > 1) {
-    forca = jogo.moves().every((resposta) => {
-      jogo.move(resposta)
-      const ok = existeMate(jogo, n - 1)
-      jogo.undo()
-      return ok
-    })
-  }
-  jogo.undo()
-  return forca
-}
-
-/**
- * Defesa mais resistente contra a chave: a que não permite mate imediato e deixa menos
- * lances que forçam o mate em 2. A tela usa esta resposta quando o usuário acha a chave.
- */
-function melhorDefesa(jogo) {
-  let melhor = null
-  for (const resposta of jogo.moves()) {
-    jogo.move(resposta)
-    const pontos = temMateEm1(jogo) ? 1000 : jogo.moves().filter((san) => forcaMate(jogo, san, 2)).length
-    jogo.undo()
-    if (!melhor || pontos < melhor.pontos) melhor = { resposta, pontos }
-  }
-  return melhor?.resposta
-}
 
 function gerarMate3(cap) {
   const problemas = []

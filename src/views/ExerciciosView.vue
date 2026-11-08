@@ -1,8 +1,15 @@
 <script setup lang="ts">
-import { obterConjuntos, type ConjuntoExercicios } from '../lib/exercicios'
+import { livroDoConjunto, obterConjuntos, type ConjuntoExercicios } from '../lib/exercicios'
 import { progresso } from '../lib/progresso'
 
-const conjuntos = obterConjuntos()
+/** Conjuntos agrupados por livro, na ordem em que foram carregados. */
+const livros: { nome: string; conjuntos: ConjuntoExercicios[] }[] = []
+for (const conjunto of obterConjuntos()) {
+  const nome = livroDoConjunto(conjunto)
+  const livro = livros.find((l) => l.nome === nome)
+  if (livro) livro.conjuntos.push(conjunto)
+  else livros.push({ nome, conjuntos: [conjunto] })
+}
 
 function contagem(conjunto: ConjuntoExercicios) {
   const estados = Object.values(progresso.exercicios[conjunto.id] ?? {})
@@ -16,15 +23,18 @@ function contagem(conjunto: ConjuntoExercicios) {
 <template>
   <div class="pagina">
     <h1>Exercícios</h1>
-    <section v-for="conjunto in conjuntos" :key="conjunto.id" class="conjunto">
-      <h2>{{ conjunto.nome }}</h2>
-      <p class="suave">{{ conjunto.fonte }} · {{ conjunto.problemas.length }} problemas</p>
-      <p class="suave">
-        ✓ {{ contagem(conjunto).primeira }} de primeira · {{ contagem(conjunto).ajuda }} com ajuda
-      </p>
-      <RouterLink class="botao primario" :to="{ name: 'exercicio', params: { conjunto: conjunto.id } }">
-        Resolver
-      </RouterLink>
+    <section v-for="livro in livros" :key="livro.nome" class="livro">
+      <h2>{{ livro.nome }}</h2>
+      <div v-for="conjunto in livro.conjuntos" :key="conjunto.id" class="conjunto">
+        <h3>{{ conjunto.nome }}</h3>
+        <p class="suave">{{ conjunto.fonte }} · {{ conjunto.problemas.length }} problemas</p>
+        <p class="suave">
+          ✓ {{ contagem(conjunto).primeira }} de primeira · {{ contagem(conjunto).ajuda }} com ajuda
+        </p>
+        <RouterLink class="botao primario" :to="{ name: 'exercicio', params: { conjunto: conjunto.id } }">
+          Resolver
+        </RouterLink>
+      </div>
     </section>
   </div>
 </template>
@@ -35,8 +45,15 @@ h1 {
   font-size: 1.25rem;
 }
 h2 {
-  margin: 0;
+  margin: 0 0 0.75rem;
   font-size: 1.125rem;
+}
+h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+.livro + .livro {
+  margin-top: 2rem;
 }
 .suave {
   margin: 0.25rem 0 0;

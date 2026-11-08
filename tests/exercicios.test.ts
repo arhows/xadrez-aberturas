@@ -6,8 +6,10 @@ import {
   casasDoLance,
   chaveDoMate,
   ehPromocao,
+  livroDoConjunto,
   responder,
   verificarLance,
+  vezDoProblema,
   type ConjuntoExercicios,
 } from '../src/lib/exercicios'
 
@@ -20,7 +22,14 @@ const problema = (id: string, n: number) => buscarConjunto(id)!.problemas.find((
 
 describe('exercícios', () => {
   it('carrega o Mate em 1 com os 306 problemas, o Mate em 2 e o Mate em 3', () => {
-    expect(conjuntos.map((c) => c.id)).toEqual(['polgar-mate-1', 'polgar-mate-2', 'polgar-mate-3'])
+    expect(conjuntos.map((c) => c.id)).toEqual([
+      'polgar-mate-1',
+      'polgar-mate-2',
+      'polgar-mate-3',
+      'cicero-mate-1',
+      'cicero-mate-2',
+      'cicero-mate-3',
+    ])
     expect(buscarConjunto('polgar-mate-1')!.problemas.map((p) => p.n)).toEqual(
       Array.from({ length: 306 }, (_, i) => i + 1),
     )
@@ -92,6 +101,33 @@ describe('exercícios', () => {
       // E a chave resiste a qualquer defesa no mate em 2 que sobra.
       expect(responder(depois, 2).tipo, `n.º ${p.n}`).toBe('defesa')
     }
+  })
+
+  it('no 1001 Checkmate, o lance anterior é legal e a chave força o mate depois dele', () => {
+    const erros: string[] = []
+    for (const id of ['cicero-mate-1', 'cicero-mate-2', 'cicero-mate-3']) {
+      const conjunto = buscarConjunto(id)!
+      expect(conjunto.livro).toBe('Sam Cicero, 1001 Checkmate Exercises')
+      conjunto.problemas.forEach((p, i) => {
+        const jogo = new Chess(p.fen)
+        if (p.previo) jogo.move(p.previo)
+        // Mate em 1: todas as soluções; nos outros, uma amostra (a busca é mais lenta).
+        if (conjunto.lances > 1 && i % 25) return
+        for (const san of p.solucoes) {
+          const lance = jogo.move(san)
+          const ok = conjunto.lances === 1 ? jogo.isCheckmate() : responder(jogo.fen(), conjunto.lances - 1).tipo === 'defesa'
+          if (!ok) erros.push(`${id} n.º ${p.n}: ${lance.san}`)
+          jogo.undo()
+        }
+      })
+    }
+    expect(erros).toEqual([])
+  })
+
+  it('quem resolve é o lado contrário ao do diagrama quando há lance anterior', () => {
+    const p = buscarConjunto('cicero-mate-1')!.problemas.find((x) => x.previo)!
+    expect(vezDoProblema(p)).not.toBe(p.fen.split(' ')[1])
+    expect(livroDoConjunto(buscarConjunto('polgar-mate-1')!)).toBe('László Polgár, 5334 Problems, Combinations & Games')
   })
 
   it('o defensor refuta um lance que não força o mate', () => {

@@ -45,13 +45,19 @@ const problema = (() => {
 const indice = conjunto.problemas.indexOf(problema)
 const vez = vezDoProblema(problema)
 const plyInicial = vez === 'w' ? 1 : 2
+/** Lance do adversário antes do exercício (só em alguns livros), jogado ao abrir. */
+const previo = problema.previo ? jogarSan(problema.fen, problema.previo) : null
+const fenInicial = previo?.fenDepois ?? problema.fen
+const TEMPO_PREVIO_MS = 900
 
 /** Lances já jogados no problema (do usuário e do defensor), com a posição depois de cada um. */
 const jogadas = ref<LanceVerificado[]>([])
-const fenDoPasso = computed(() => jogadas.value.at(-1)?.fenDepois ?? problema.fen)
+const fenDoPasso = computed(() => jogadas.value.at(-1)?.fenDepois ?? fenInicial)
 /** Posição na tela: pode mostrar por um instante um lance errado e a refutação dele. */
 const fen = ref(problema.fen)
 const ultimoLance = ref<[string, string] | null>(null)
+/** Último lance antes das jogadas do usuário: o do adversário, quando há. */
+const lanceDeAbertura: [string, string] | null = previo ? [previo.from, previo.to] : null
 const resolvido = ref(false)
 const erros = ref(0)
 /** Pista do lance atual: 0 = nenhuma, 1 = peça destacada, 2 = seta. */
@@ -123,7 +129,25 @@ const formas = computed<Forma[]>(() => {
   return pista.value === 1 ? [{ de: alvo.from, cor: 'yellow' }] : []
 })
 
-const enunciado = `${vez === 'w' ? 'Brancas' : 'Pretas'} jogam e dão mate em ${conjunto.lances} ${conjunto.lances === 1 ? 'lance' : 'lances'}.`
+const nomeDoLado = vez === 'w' ? 'Brancas' : 'Pretas'
+const nomeDoAdversario = vez === 'w' ? 'As pretas' : 'As brancas'
+/** Lance do adversário como no livro: "…Kg8" quando as pretas jogam. */
+const rotuloPrevio = previo ? `${vez === 'w' ? '…' : ''}${fmtSan(previo.san)}` : ''
+const prazo = `${conjunto.lances} ${conjunto.lances === 1 ? 'lance' : 'lances'}`
+const enunciado = previo
+  ? `Depois de ${rotuloPrevio}, ${nomeDoLado.toLowerCase()} dão mate em ${prazo}.`
+  : `${nomeDoLado} jogam e dão mate em ${prazo}.`
+
+// Com lance anterior, o diagrama aparece como no livro e o adversário joga logo depois.
+if (previo) {
+  aguardando.value = true
+  depois(TEMPO_PREVIO_MS, () => {
+    fen.value = fenInicial
+    ultimoLance.value = lanceDeAbertura
+    aguardando.value = false
+    aviso.value = { tipo: 'neutro', lance: rotuloPrevio, texto: `${nomeDoAdversario} jogaram. Sua vez.` }
+  })
+}
 
 function aoJogar(de: string, para: string) {
   if (ehPromocao(fen.value, de, para)) {
@@ -147,7 +171,7 @@ function voltarDepois(ms: number) {
     aguardando.value = false
     fen.value = fenDoPasso.value
     const anterior = jogadas.value.at(-1)
-    ultimoLance.value = anterior ? [anterior.from, anterior.to] : null
+    ultimoLance.value = anterior ? [anterior.from, anterior.to] : lanceDeAbertura
     tabuleiro.value?.sincronizar()
   })
 }
@@ -317,6 +341,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
         <span class="suave"> ({{ indice + 1 }} de {{ conjunto.problemas.length }})</span>
       </p>
       <p class="enunciado">{{ enunciado }}</p>
+      <p v-if="problema.partida" class="suave">{{ problema.partida }}</p>
       <p v-if="sequencia && !resolvido" class="sequencia">{{ sequencia }}</p>
 
       <div v-if="promocaoPendente" class="promocao">

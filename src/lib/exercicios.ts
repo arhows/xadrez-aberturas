@@ -11,6 +11,13 @@ export interface Problema {
   solucoes: string[]
   /** Defesa mais resistente contra a primeira solução, quando calculada pelo gerador. */
   defesa?: string
+  /**
+   * Lance do adversário antes do exercício ("Black now played ...Kg8"): o diagrama (`fen`) é a
+   * posição antes dele, e `solucoes` valem para a posição depois dele.
+   */
+  previo?: string
+  /** Jogadores e torneio, quando o problema vem de uma partida. */
+  partida?: string
 }
 
 export interface ConjuntoExercicios {
@@ -19,7 +26,20 @@ export interface ConjuntoExercicios {
   fonte: string
   /** Mate em quantos lances. */
   lances: number
+  /** Livro de origem, para agrupar os conjuntos; sem ele, vale a fonte sem o capítulo. */
+  livro?: string
   problemas: Problema[]
+}
+
+/** Ordem dos livros na tela: primeiro o Polgár, depois o Cicero. */
+const ORDEM_DOS_LIVROS = ['polgar', 'cicero']
+const posicaoDoArquivo = (caminho: string) => {
+  const i = ORDEM_DOS_LIVROS.findIndex((prefixo) => caminho.includes(`/${prefixo}-`))
+  return i < 0 ? ORDEM_DOS_LIVROS.length : i
+}
+
+export function livroDoConjunto(conjunto: ConjuntoExercicios): string {
+  return conjunto.livro ?? conjunto.fonte.replace(/, cap\. \d+$/, '')
 }
 
 export type PecaPromocao = 'q' | 'r' | 'b' | 'n'
@@ -35,7 +55,7 @@ let carregados: ConjuntoExercicios[] = []
 export function carregarConjuntos(): Promise<ConjuntoExercicios[]> {
   carregando ??= Promise.all(
     Object.keys(arquivos)
-      .sort()
+      .sort((a, b) => posicaoDoArquivo(a) - posicaoDoArquivo(b) || a.localeCompare(b))
       .map((caminho) => arquivos[caminho]()),
   ).then((lista) => (carregados = lista))
   return carregando
@@ -102,6 +122,9 @@ export function analisar(fenDepois: string, restantes: number): Promise<Resposta
   })
 }
 
+/** Lado de quem resolve: o da vez no diagrama, ou o outro se o adversário joga antes. */
 export function vezDoProblema(problema: Problema): 'w' | 'b' {
-  return problema.fen.split(' ')[1] === 'b' ? 'b' : 'w'
+  const doDiagrama = problema.fen.split(' ')[1] === 'b' ? 'b' : 'w'
+  if (!problema.previo) return doDiagrama
+  return doDiagrama === 'w' ? 'b' : 'w'
 }
