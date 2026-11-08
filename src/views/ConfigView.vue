@@ -9,6 +9,7 @@ import {
 } from '../lib/progresso'
 import { dataLocal } from '../lib/srs'
 import { ehIos, instalar, pwa } from '../lib/pwa'
+import { entrar, nuvem, sair, sincronizar } from '../lib/nuvem'
 
 const config = progresso.config
 const mensagem = ref<{ tipo: 'ok' | 'erro'; texto: string } | null>(null)
@@ -27,10 +28,13 @@ async function importar(evento: Event) {
     ? { tipo: 'ok', texto: 'Progresso importado.' }
     : { tipo: 'erro', texto: 'Este arquivo não é um progresso válido. Nada foi alterado.' }
   entrada.value = ''
+  // O arquivo importado passa a valer também na nuvem (senão a junção traria o antigo de volta).
+  if (certo) void sincronizar(true)
 }
 
 function resetar() {
   resetarProgresso()
+  void sincronizar(true)
   confirmandoReset.value = false
   mensagem.value = { tipo: 'ok', texto: 'Progresso apagado.' }
 }
@@ -115,6 +119,33 @@ function resetar() {
       Virar o tabuleiro conforme a cor treinada
     </label>
 
+    <h2>Sincronizar entre aparelhos</h2>
+    <template v-if="nuvem.estado === 'desligada' || (nuvem.estado === 'erro' && !nuvem.email)">
+      <p class="suave">
+        Entre com a mesma conta Google no celular e no computador para juntar o progresso dos dois.
+        As configurações continuam separadas em cada aparelho.
+      </p>
+      <div class="acoes">
+        <button type="button" class="botao" @click="entrar">Entrar com Google</button>
+      </div>
+    </template>
+    <p v-else-if="nuvem.estado === 'carregando'" class="suave">Conectando…</p>
+    <template v-else>
+      <p class="suave">
+        Conectado como <strong>{{ nuvem.nome || nuvem.email }}</strong>
+        <template v-if="nuvem.nome && nuvem.email"> ({{ nuvem.email }})</template>.
+        <template v-if="nuvem.estado === 'sincronizando'"> Sincronizando…</template>
+        <template v-else-if="nuvem.ultima"> Sincronizado às {{ nuvem.ultima }}.</template>
+      </p>
+      <div class="acoes">
+        <button type="button" class="botao" :disabled="nuvem.estado === 'sincronizando'" @click="sincronizar()">
+          Sincronizar agora
+        </button>
+        <button type="button" class="botao" @click="sair">Sair</button>
+      </div>
+    </template>
+    <p v-if="nuvem.erro" class="erro" role="status">{{ nuvem.erro }}</p>
+
     <h2>App no aparelho</h2>
     <p v-if="pwa.instalado" class="suave">O app está instalado e funciona sem internet.</p>
     <template v-else>
@@ -140,7 +171,9 @@ function resetar() {
       </label>
       <button v-if="!confirmandoReset" type="button" class="botao" @click="confirmandoReset = true">Resetar</button>
       <template v-else>
-        <button type="button" class="botao perigo" @click="resetar">Apagar todo o progresso</button>
+        <button type="button" class="botao perigo" @click="resetar">
+          {{ nuvem.email ? 'Apagar todo o progresso (também na nuvem)' : 'Apagar todo o progresso' }}
+        </button>
         <button type="button" class="botao" @click="confirmandoReset = false">Cancelar</button>
       </template>
     </div>

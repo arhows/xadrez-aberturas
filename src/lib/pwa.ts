@@ -50,9 +50,12 @@ export function iniciarPwa() {
 
   if (!import.meta.env.PROD || !('serviceWorker' in navigator)) return
 
+  // Na primeira visita o service worker assume a página sem precisar recarregar;
+  // só recarrega quando uma versão nova substitui a anterior.
+  const tinhaVersao = !!navigator.serviceWorker.controller
   let recarregando = false
   navigator.serviceWorker.addEventListener('controllerchange', () => {
-    if (recarregando) return
+    if (recarregando || !tinhaVersao) return
     recarregando = true
     window.location.reload()
   })
