@@ -152,7 +152,7 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com' } as const
             </div>
             <RouterLink
               class="botao"
-              :to="{ name: 'explorar', params: { cap: grupo.partidas[0].capitulo! }, query: { c: grupo.partidas[0].desvio!.caminho.join(' ') } }"
+              :to="{ name: 'explorar', params: { cap: grupo.partidas[0].capitulo! }, query: { c: [...grupo.partidas[0].desvio!.caminho, grupo.partidas[0].desvio!.jogado].join(' ') } }"
             >Ver no Explorar</RouterLink>
           </li>
         </ul>

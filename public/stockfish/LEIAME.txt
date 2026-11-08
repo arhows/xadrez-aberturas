@@ -1,0 +1,8 @@
+Stockfish.js 19.0.1, versão "lite single-threaded" (arquivos stockfish-19-lite-single.js e .wasm),
+copiados sem modificação do pacote npm "stockfish" 19.0.1.
+
+Licença: GNU GPL v3 (texto completo em COPYING.txt).
+Código-fonte: https://github.com/nmrugg/stockfish.js (tag v19.0.1)
+              https://github.com/official-stockfish/Stockfish
+
+O motor roda como um programa separado, num Web Worker, e conversa com o app pelo protocolo UCI.

@@ -17,6 +17,8 @@ export interface Configuracoes {
   tema: 'auto' | 'claro' | 'escuro'
   /** Seta azul e avaliação do Stockfish no Estudo e no Explorar. */
   mostrarMotor: boolean
+  /** Stockfish rodando no navegador no Explorar (baixa ≈1,9 MB na primeira vez). */
+  motorAoVivo: boolean
   /** Lista de cravadas, ataques duplos etc. no Estudo e no Explorar. */
   mostrarTaticas: boolean
   /** Setas de todas as táticas sem precisar tocar nos itens. */
@@ -70,6 +72,7 @@ export const CONFIG_PADRAO: Configuracoes = {
   novasPorDia: 5,
   tema: 'auto',
   mostrarMotor: true,
+  motorAoVivo: false,
   mostrarTaticas: true,
   taticasAutomaticas: false,
   profundidade: 'colunas',

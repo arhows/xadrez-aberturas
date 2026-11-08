@@ -3,6 +3,7 @@ import { computed, nextTick, onBeforeUnmount, onMounted, provide, reactive, ref,
 import { useRoute } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
 import AvisosDoLance from '../components/AvisosDoLance.vue'
+import AnaliseAoVivo from '../components/AnaliseAoVivo.vue'
 import AvisoXeque from '../components/AvisoXeque.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import HistoricoLances from '../components/HistoricoLances.vue'
@@ -15,6 +16,7 @@ import { percorrer, type Aresta } from '../lib/arvore'
 import { buscarCapitulo } from '../lib/capitulos'
 import { descreverUnidade } from '../lib/escopo'
 import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
+import { Chess } from 'chess.js'
 import { casasDoLance } from '../lib/lances'
 import { carregarMotor, type DadosMotor } from '../lib/motor'
 import { progresso } from '../lib/progresso'
@@ -34,6 +36,15 @@ const listaLances = ref<HTMLElement>()
 
 const chave = (sequencia: Aresta[]) => sequencia.map((aresta) => aresta.san).join(' ')
 
+/** Lances jogados depois de sair do livro (o tabuleiro aceita qualquer lance legal). */
+interface LanceFora {
+  san: string
+  from: string
+  to: string
+  fen: string
+}
+const fora = ref<LanceFora[]>([])
+
 function saidas(no: string): Aresta[] {
   const todas = arvore.nos.get(no)!.saidas
   if (mostrarNotas.value) return todas
@@ -41,6 +52,7 @@ function saidas(no: string): Aresta[] {
 }
 
 function selecionar(novo: Aresta[]) {
+  fora.value = []
   caminho.value = novo
   for (let i = 1; i <= novo.length; i++) abertos.add(chave(novo.slice(0, i)))
 }
@@ -67,18 +79,25 @@ provide(CONTEXTO_ARVORE, {
     }
     abertos.delete(id)
     // Recolher o ramo da posição atual volta a posição para antes dele.
-    if (ehPrefixoDoAtual(sequencia)) caminho.value = sequencia.slice(0, -1)
+    if (ehPrefixoDoAtual(sequencia)) {
+      fora.value = []
+      caminho.value = sequencia.slice(0, -1)
+    }
   },
   selecionar,
 })
 
 const noAtual = computed(() => caminho.value.at(-1)?.para ?? arvore.raiz)
-const fen = computed(() => arvore.nos.get(noAtual.value)!.fen)
-const ultima = computed(() => caminho.value.at(-1))
-const ultimoLance = computed<[string, string] | null>(() =>
-  ultima.value ? [ultima.value.from, ultima.value.to] : null,
-)
-const continuacoes = computed(() => saidas(noAtual.value))
+const foraDoLivro = computed(() => fora.value.length > 0)
+const fen = computed(() => fora.value.at(-1)?.fen ?? arvore.nos.get(noAtual.value)!.fen)
+/** Último lance do livro; fora do livro, as dicas e notas dele deixam de valer. */
+const ultima = computed(() => (foraDoLivro.value ? undefined : caminho.value.at(-1)))
+const ultimoLance = computed<[string, string] | null>(() => {
+  const lance = fora.value.at(-1) ?? caminho.value.at(-1)
+  return lance ? [lance.from, lance.to] : null
+})
+const continuacoes = computed(() => (foraDoLivro.value ? [] : saidas(noAtual.value)))
+const plyAtual = computed(() => caminho.value.length + fora.value.length)
 
 const formasTatica = ref<Forma[]>([])
 
@@ -91,8 +110,9 @@ const setas = computed<Forma[]>(() => {
     cor: 'green',
     largura: 3 + 11 * (aresta.linhas.length / maior),
   }))]
-  const sugestao = analise.value && casasDoLance(fen.value, analise.value.lance)
-  if (sugestao && !continuacoes.value.some((aresta) => aresta.san === analise.value!.lance)) {
+  const melhor = progresso.config.motorAoVivo ? melhorAoVivo.value : analise.value?.lance
+  const sugestao = melhor && casasDoLance(fen.value, melhor)
+  if (sugestao && !continuacoes.value.some((aresta) => aresta.san === melhor)) {
     doLivro.push({ de: sugestao.from, para: sugestao.to, cor: 'blue' })
   }
   const ameaca = ultima.value?.ameaca
@@ -106,11 +126,24 @@ const xeque = computed(() => xequeDaPosicao(fen.value, ultimoLance.value))
 const dadosMotor = shallowRef<DadosMotor | null>(null)
 carregarMotor(capitulo.capitulo.id).then((dados) => (dadosMotor.value = dados))
 const oportunidade = computed(() =>
-  oportunidadeDaPosicao(fen.value, dadosMotor.value?.posicoes[noAtual.value]),
+  oportunidadeDaPosicao(fen.value, foraDoLivro.value ? undefined : dadosMotor.value?.posicoes[noAtual.value]),
 )
+
+/** Histórico: fora do livro, o caminho do livro seguido dos lances novos. */
+const lancesDoHistorico = computed(() =>
+  foraDoLivro.value
+    ? [...caminho.value.map((a) => a.san), ...fora.value.map((l) => l.san)]
+    : linhaVista.value.map((a) => a.san),
+)
+function irNoHistorico(ply: number) {
+  if (foraDoLivro.value && ply > caminho.value.length) fora.value = fora.value.slice(0, ply - caminho.value.length)
+  else selecionar((foraDoLivro.value ? caminho.value : linhaVista.value).slice(0, ply))
+}
 const analise = computed(() =>
-  progresso.config.mostrarMotor ? (dadosMotor.value?.posicoes[noAtual.value] ?? null) : null,
+  progresso.config.mostrarMotor && !foraDoLivro.value ? (dadosMotor.value?.posicoes[noAtual.value] ?? null) : null,
 )
+/** Melhor lance da análise ao vivo, para a seta azul. */
+const melhorAoVivo = ref<string | null>(null)
 
 /** Com uma única linha ativa, mostra a ideia geral dela. */
 const unidadeAtiva = computed(() => {
@@ -124,13 +157,37 @@ function avancar() {
 }
 
 function voltar() {
-  caminho.value = caminho.value.slice(0, -1)
+  if (foraDoLivro.value) fora.value = fora.value.slice(0, -1)
+  else caminho.value = caminho.value.slice(0, -1)
+}
+
+function voltarAoLivro() {
+  fora.value = []
+}
+
+/** Joga um lance fora do livro; promoção vira dama (o Explorar não tem escolha de peça). */
+function jogarFora(lance: { from: string; to: string } | string): boolean {
+  const jogo = new Chess(fen.value)
+  try {
+    const feito = typeof lance === 'string' ? jogo.move(lance) : jogo.move({ ...lance, promotion: 'q' })
+    fora.value = [...fora.value, { san: feito.san, from: feito.from, to: feito.to, fen: jogo.fen() }]
+    return true
+  } catch {
+    return false
+  }
 }
 
 function aoJogar(de: string, para: string) {
   const aresta = continuacoes.value.find((s) => s.from === de && s.to === para)
   if (aresta) selecionar([...caminho.value, aresta])
-  else tabuleiro.value?.sincronizar()
+  else if (!jogarFora({ from: de, to: para })) tabuleiro.value?.sincronizar()
+}
+
+/** Toque numa linha do motor: segue o livro se o lance for dele, senão joga fora do livro. */
+function jogarSan(san: string) {
+  const aresta = continuacoes.value.find((s) => s.san === san)
+  if (aresta) selecionar([...caminho.value, aresta])
+  else jogarFora(san)
 }
 
 function aoTeclar(evento: KeyboardEvent) {
@@ -158,12 +215,20 @@ watch(mostrarNotas, () => {
   const visivel = caminho.value.findIndex(
     (aresta) => !saidas(aresta.de).includes(aresta),
   )
-  if (visivel !== -1) caminho.value = caminho.value.slice(0, visivel)
+  if (visivel !== -1) {
+    fora.value = []
+    caminho.value = caminho.value.slice(0, visivel)
+  }
 })
 
 // Permite abrir direto uma posição, como os lances mais errados da tela inicial.
-const inicial = percorrer(arvore, String(route.query.c ?? '').split(' ').filter(Boolean))
+// Os lances que não são do livro (o desvio de uma partida importada) entram fora do livro.
+const pedidos = String(route.query.c ?? '').split(' ').filter(Boolean)
+let noLivro = pedidos.length
+while (noLivro > 0 && !percorrer(arvore, pedidos.slice(0, noLivro))) noLivro--
+const inicial = percorrer(arvore, pedidos.slice(0, noLivro))
 if (inicial) selecionar(inicial)
+for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
 </script>
 
 <template>
@@ -182,30 +247,45 @@ if (inicial) selecionar(inicial)
 
     <div class="painel">
       <div class="controles">
-        <button type="button" class="botao" :disabled="!caminho.length" aria-label="Lance anterior" @click="voltar">◀</button>
+        <button type="button" class="botao" :disabled="!caminho.length && !foraDoLivro" aria-label="Lance anterior" @click="voltar">◀</button>
         <button type="button" class="botao" :disabled="!continuacoes.length" aria-label="Próximo lance" @click="avancar">▶</button>
         <button type="button" class="botao" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">Girar</button>
         <label class="marcar">
           <input v-model="mostrarNotas" type="checkbox" />
           Notas
         </label>
+        <label class="marcar ao-vivo">
+          <input v-model="progresso.config.motorAoVivo" type="checkbox" />
+          Stockfish ao vivo
+        </label>
       </div>
 
-      <HistoricoLances
-        :lances="linhaVista.map((aresta) => aresta.san)"
-        :atual="caminho.length"
-        clicavel
-        @ir="selecionar(linhaVista.slice(0, $event))"
-      />
+      <HistoricoLances :lances="lancesDoHistorico" :atual="plyAtual" clicavel @ir="irNoHistorico" />
 
       <CartaoDica
-        v-if="ultima"
+        v-if="foraDoLivro"
+        tipo="nota"
+        :lance="fmtLance(plyAtual, fora.at(-1)!.san)"
+        :texto="progresso.config.motorAoVivo
+          ? 'Fora do livro: o Stockfish avalia a posição logo abaixo.'
+          : 'Fora do livro. Ligue “Stockfish ao vivo” para avaliar a posição.'"
+      >
+        <button type="button" class="botao voltar-livro" @click="voltarAoLivro">Voltar ao livro</button>
+      </CartaoDica>
+      <CartaoDica
+        v-else-if="ultima"
         :lance="fmtLance(caminho.length, ultima.san)"
         :texto="ultima.dica"
       />
       <CartaoDica v-else texto="Escolha um lance na lista, nas setas ou movendo a peça no tabuleiro." />
 
       <LinhaMotor :analise="analise" :lances-do-livro="continuacoes.map((aresta) => aresta.san)" />
+      <AnaliseAoVivo
+        v-if="progresso.config.motorAoVivo"
+        :fen="fen"
+        @melhor="melhorAoVivo = $event"
+        @jogar="jogarSan"
+      />
 
       <AvisoXeque :xeque="xeque" />
       <AvisosDoLance :aresta="ultima" />
@@ -276,6 +356,12 @@ if (inicial) selecionar(inicial)
   gap: 0.375rem;
   min-height: 44px;
   margin-left: auto;
+}
+.marcar.ao-vivo {
+  margin-left: 0;
+}
+.voltar-livro {
+  margin-top: 0.5rem;
 }
 .texto {
   margin: 0.25rem 0 0;
