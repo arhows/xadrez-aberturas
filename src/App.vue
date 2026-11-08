@@ -10,6 +10,7 @@ watchEffect(() => {
 <template>
   <nav class="topo">
     <RouterLink to="/" class="marca">Aberturas</RouterLink>
+    <RouterLink to="/exercicios">Exercícios</RouterLink>
     <RouterLink to="/diagnostico">Diagnóstico</RouterLink>
     <RouterLink to="/config">Configurações</RouterLink>
   </nav>

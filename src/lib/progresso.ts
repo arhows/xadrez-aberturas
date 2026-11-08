@@ -33,12 +33,17 @@ export interface ErroAresta {
   linhas: string[]
 }
 
+/** Como o problema foi resolvido da última vez: sem ajuda ou depois de errar/pedir pista. */
+export type EstadoExercicio = 'primeira' | 'ajuda'
+
 export interface Progresso {
   cartoes: Record<string, Cartao>
   errosPorAresta: Record<string, ErroAresta>
   notasConferidas: string[]
   /** Cor escolhida no Treino de cada capítulo; sem escolha, vale a cor padrão dele. */
   corPorCapitulo: Record<string, EscolhaCor>
+  /** Por conjunto de exercícios, o estado de cada problema resolvido (chave = número). */
+  exercicios: Record<string, Record<string, EstadoExercicio>>
   config: Configuracoes
 }
 
@@ -65,6 +70,7 @@ function progressoVazio(): Progresso {
     errosPorAresta: {},
     notasConferidas: [],
     corPorCapitulo: {},
+    exercicios: {},
     config: { ...CONFIG_PADRAO },
   }
 }
@@ -80,6 +86,7 @@ export function normalizarProgresso(dados: unknown): Progresso | null {
     errosPorAresta: ehObjeto(parcial.errosPorAresta) ? parcial.errosPorAresta! : {},
     notasConferidas: Array.isArray(parcial.notasConferidas) ? parcial.notasConferidas : [],
     corPorCapitulo: ehObjeto(parcial.corPorCapitulo) ? parcial.corPorCapitulo! : {},
+    exercicios: ehObjeto(parcial.exercicios) ? parcial.exercicios! : {},
     config: { ...CONFIG_PADRAO, ...(ehObjeto(parcial.config) ? parcial.config : {}) },
   }
 }

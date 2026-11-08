@@ -26,8 +26,10 @@ const props = withDefaults(
     ultimoLance?: [string, string] | null
     formas?: Forma[]
     jogavel?: boolean
+    /** Peças capturadas acima e abaixo; nos exercícios a posição não vem de uma partida. */
+    capturadas?: boolean
   }>(),
-  { orientacao: 'white', ultimoLance: null, formas: () => [], jogavel: false },
+  { orientacao: 'white', ultimoLance: null, formas: () => [], jogavel: false, capturadas: true },
 )
 
 const emit = defineEmits<{ lance: [de: string, para: string] }>()
@@ -98,7 +100,7 @@ watch(() => props.formas, desenhar)
 
 <template>
   <div class="conjunto">
-    <PecasCapturadas :fen="fen" :lado="orientacao === 'white' ? 'b' : 'w'" />
+    <PecasCapturadas v-if="capturadas" :fen="fen" :lado="orientacao === 'white' ? 'b' : 'w'" />
     <div class="grade">
       <div class="fileiras" aria-hidden="true">
         <span v-for="f in fileiras" :key="f">{{ f }}</span>
@@ -110,7 +112,7 @@ watch(() => props.formas, desenhar)
         <span v-for="c in colunas" :key="c">{{ c }}</span>
       </div>
     </div>
-    <PecasCapturadas :fen="fen" :lado="orientacao === 'white' ? 'w' : 'b'" />
+    <PecasCapturadas v-if="capturadas" :fen="fen" :lado="orientacao === 'white' ? 'w' : 'b'" />
   </div>
 </template>
 

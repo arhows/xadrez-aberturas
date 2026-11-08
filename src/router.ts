@@ -1,8 +1,11 @@
 import { createRouter, createWebHashHistory, type RouteLocationNormalized } from 'vue-router'
 import { buscarCapitulo } from './lib/capitulos'
+import { buscarConjunto } from './lib/exercicios'
 import ConfigView from './views/ConfigView.vue'
 import DiagnosticoView from './views/DiagnosticoView.vue'
 import EstudoView from './views/EstudoView.vue'
+import ExercicioView from './views/ExercicioView.vue'
+import ExerciciosView from './views/ExerciciosView.vue'
 import ExplorarView from './views/ExplorarView.vue'
 import InicioView from './views/InicioView.vue'
 import TreinoView from './views/TreinoView.vue'
@@ -18,6 +21,13 @@ export const router = createRouter({
     { path: '/explorar/:cap', name: 'explorar', component: ExplorarView, beforeEnter: exigirCapitulo },
     { path: '/estudo/:cap/:linha', name: 'estudo', component: EstudoView, beforeEnter: exigirCapitulo },
     { path: '/treino/:cap', name: 'treino', component: TreinoView, beforeEnter: exigirCapitulo },
+    { path: '/exercicios', name: 'exercicios', component: ExerciciosView },
+    {
+      path: '/exercicios/:conjunto',
+      name: 'exercicio',
+      component: ExercicioView,
+      beforeEnter: (destino) => (buscarConjunto(destino.params.conjunto as string) ? true : { name: 'exercicios' }),
+    },
     { path: '/diagnostico', name: 'diagnostico', component: DiagnosticoView },
     { path: '/config', name: 'config', component: ConfigView },
     { path: '/:resto(.*)', redirect: '/' },
