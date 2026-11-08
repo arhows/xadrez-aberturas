@@ -1,11 +1,16 @@
 import { Chess } from 'chess.js'
+import { responder, type LanceVerificado, type Resposta } from './mate'
+
+export { chaveDoMate, jogarSan, matesEm1, responder, type LanceVerificado, type Resposta } from './mate'
 
 export interface Problema {
   /** Número do problema no livro. */
   n: number
   fen: string
-  /** Todos os lances que resolvem (SAN), conferidos pelo gerador. */
+  /** Lances que resolvem (SAN), conferidos pelo gerador; no Mate em 3, só a chave do livro. */
   solucoes: string[]
+  /** Defesa mais resistente contra a primeira solução, quando calculada pelo gerador. */
+  defesa?: string
 }
 
 export interface ConjuntoExercicios {
@@ -18,14 +23,6 @@ export interface ConjuntoExercicios {
 }
 
 export type PecaPromocao = 'q' | 'r' | 'b' | 'n'
-
-export interface LanceVerificado {
-  san: string
-  from: string
-  to: string
-  fenDepois: string
-  mate: boolean
-}
 
 // Os conjuntos são grandes (o Mate em 2 tem mais de 3 mil problemas): carregam só quando
 // uma tela de exercícios abre, fora do pacote inicial do app.
@@ -82,36 +79,27 @@ export function casasDoLance(fen: string, san: string): { from: string; to: stri
   return { from: lance.from, to: lance.to }
 }
 
-/** Lances que dão mate imediato (o SAN do chess.js marca o mate com #). */
-export function matesEm1(fen: string): string[] {
-  return new Chess(fen)
-    .moves()
-    .filter((san) => san.endsWith('#'))
-}
-
-export type Resposta =
-  /** Todas as respostas permitem mate: o lance é a chave, e esta é a defesa mais resistente. */
-  | { tipo: 'defesa'; lance: LanceVerificado }
-  /** A resposta escapa do mate no lance seguinte; sem `lance`, o lance afogou o rei. */
-  | { tipo: 'refutacao'; lance?: LanceVerificado }
+let worker: Worker | null | undefined
 
 /**
- * Responde pelo defensor depois do primeiro lance de um mate em 2. A defesa escolhida é a que
- * deixa menos lances de mate, para o exercício não ficar mais fácil do que o livro propõe.
+ * Resposta do defensor; com mate em 2 ainda por vir a busca é pesada e vai para um worker,
+ * para a tela não travar. Sem suporte a worker, calcula aqui mesmo.
  */
-export function responder(fenDepois: string): Resposta {
-  const jogo = new Chess(fenDepois)
-  let melhor: { lance: LanceVerificado; mates: number } | null = null
-  for (const resposta of jogo.moves({ verbose: true })) {
-    jogo.move(resposta)
-    const fen = jogo.fen()
-    const mates = jogo.moves().filter((san) => san.endsWith('#')).length
-    jogo.undo()
-    const lance = { san: resposta.san, from: resposta.from, to: resposta.to, fenDepois: fen, mate: false }
-    if (mates === 0) return { tipo: 'refutacao', lance }
-    if (!melhor || mates < melhor.mates) melhor = { lance, mates }
+export function analisar(fenDepois: string, restantes: number): Promise<Resposta> {
+  if (restantes <= 1) return Promise.resolve(responder(fenDepois, restantes))
+  if (worker === undefined) {
+    try {
+      worker = new Worker(new URL('./analise.worker.ts', import.meta.url), { type: 'module' })
+    } catch {
+      worker = null
+    }
   }
-  return melhor ? { tipo: 'defesa', lance: melhor.lance } : { tipo: 'refutacao' }
+  const atual = worker
+  if (!atual) return Promise.resolve(responder(fenDepois, restantes))
+  return new Promise((resolver) => {
+    atual.onmessage = (evento: MessageEvent<Resposta>) => resolver(evento.data)
+    atual.postMessage({ fen: fenDepois, restantes })
+  })
 }
 
 export function vezDoProblema(problema: Problema): 'w' | 'b' {

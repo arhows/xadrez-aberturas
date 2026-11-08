@@ -4,6 +4,7 @@ import {
   buscarConjunto,
   carregarConjuntos,
   casasDoLance,
+  chaveDoMate,
   ehPromocao,
   responder,
   verificarLance,
@@ -18,8 +19,8 @@ beforeAll(async () => {
 const problema = (id: string, n: number) => buscarConjunto(id)!.problemas.find((p) => p.n === n)!
 
 describe('exercícios', () => {
-  it('carrega o Mate em 1 com os 306 problemas e o Mate em 2 do mesmo livro', () => {
-    expect(conjuntos.map((c) => c.id)).toEqual(['polgar-mate-1', 'polgar-mate-2'])
+  it('carrega o Mate em 1 com os 306 problemas, o Mate em 2 e o Mate em 3', () => {
+    expect(conjuntos.map((c) => c.id)).toEqual(['polgar-mate-1', 'polgar-mate-2', 'polgar-mate-3'])
     expect(buscarConjunto('polgar-mate-1')!.problemas.map((p) => p.n)).toEqual(
       Array.from({ length: 306 }, (_, i) => i + 1),
     )
@@ -76,6 +77,21 @@ describe('exercícios', () => {
     expect(ehPromocao(p19.fen, from, to)).toBe(true)
     expect(verificarLance(p19.fen, from, to, 'q')?.mate).toBe(false)
     expect(verificarLance(p19.fen, from, to, 'n')?.mate).toBe(true)
+  })
+
+  it('no Mate em 3, a defesa gravada é legal e ainda permite o mate em 2 (amostra)', () => {
+    const lista = buscarConjunto('polgar-mate-3')!.problemas
+    expect(lista.length).toBeGreaterThan(700)
+    for (let i = 0; i < lista.length; i += 61) {
+      const p = lista[i]
+      const jogo = new Chess(p.fen)
+      jogo.move(p.solucoes[0])
+      const depois = jogo.fen()
+      jogo.move(p.defesa!)
+      expect(chaveDoMate(jogo.fen(), 2), `n.º ${p.n}`).toBeTruthy()
+      // E a chave resiste a qualquer defesa no mate em 2 que sobra.
+      expect(responder(depois, 2).tipo, `n.º ${p.n}`).toBe('defesa')
+    }
   })
 
   it('o defensor refuta um lance que não força o mate', () => {

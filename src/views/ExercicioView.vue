@@ -4,15 +4,17 @@ import { useRoute, useRouter } from 'vue-router'
 import CartaoDica from '../components/CartaoDica.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import {
+  analisar,
   buscarConjunto,
   casasDoLance,
+  chaveDoMate,
   ehPromocao,
-  matesEm1,
-  responder,
+  jogarSan,
   verificarLance,
   vezDoProblema,
   type LanceVerificado,
   type PecaPromocao,
+  type Resposta,
 } from '../lib/exercicios'
 import { fmtSan } from '../lib/formato'
 import { corDoPly, numeroDoPly } from '../lib/lances'
@@ -67,7 +69,11 @@ interface Aviso {
 const aviso = ref<Aviso | null>(null)
 
 let temporizador: ReturnType<typeof setTimeout> | undefined
-onBeforeUnmount(() => clearTimeout(temporizador))
+let ativo = true
+onBeforeUnmount(() => {
+  ativo = false
+  clearTimeout(temporizador)
+})
 function depois(ms: number, acao: () => void) {
   clearTimeout(temporizador)
   temporizador = setTimeout(acao, ms)
@@ -90,9 +96,13 @@ const sequencia = computed(() =>
     .join(' '),
 )
 
-/** Lance que a pista aponta: a chave no primeiro lance; depois, um mate em 1. */
+/** Lances que o usuário ainda tem para dar o mate, contando o da vez. */
+const restantes = computed(() => conjunto.lances - Math.ceil(jogadas.value.length / 2))
+
+/** Lance que a pista aponta: a chave do livro no primeiro lance; depois, a busca de mate. */
 const lanceDaPista = computed(() => {
-  const san = jogadas.value.length === 0 ? problema.solucoes[0] : matesEm1(fenDoPasso.value)[0]
+  const san =
+    jogadas.value.length === 0 ? problema.solucoes[0] : chaveDoMate(fenDoPasso.value, restantes.value)
   return san ? casasDoLance(fenDoPasso.value, san) : null
 })
 
@@ -105,6 +115,8 @@ const formas = computed<Forma[]>(() => {
   // O tabuleiro devolve o peão enquanto a peça não é escolhida; a seta mostra o lance pendente.
   const pendente = promocaoPendente.value
   if (pendente) return [{ de: pendente.de, para: pendente.para, cor: 'yellow' }]
+  // Só busca o lance da pista quando ela é pedida: no Mate em 3 a busca não é instantânea.
+  if (pista.value === 0) return []
   const alvo = lanceDaPista.value
   if (!alvo) return []
   if (pista.value >= 2) return [{ de: alvo.from, para: alvo.to, cor: 'green' }]
@@ -140,7 +152,7 @@ function voltarDepois(ms: number) {
   })
 }
 
-function conferir(de: string, para: string, promocao?: PecaPromocao) {
+async function conferir(de: string, para: string, promocao?: PecaPromocao) {
   const lance = verificarLance(fenDoPasso.value, de, para, promocao)
   if (!lance) {
     tabuleiro.value?.sincronizar()
@@ -150,14 +162,24 @@ function conferir(de: string, para: string, promocao?: PecaPromocao) {
 
   if (lance.mate) return concluir(lance)
 
-  const lancesDoUsuario = Math.ceil(jogadas.value.length / 2)
-  if (conjunto.lances - lancesDoUsuario === 1) {
+  if (restantes.value === 1) {
     errar(lance, ply, 'Não é mate. Tente de novo.')
     voltarDepois(TEMPO_DESFAZER_MS)
     return
   }
 
-  const resposta = responder(lance.fenDepois)
+  // Contra a chave do livro, a defesa já vem calculada; outros lances são analisados agora.
+  let resposta: Resposta
+  if (jogadas.value.length === 0 && problema.defesa && lance.san === problema.solucoes[0]) {
+    resposta = { tipo: 'defesa', lance: jogarSan(lance.fenDepois, problema.defesa) }
+  } else {
+    fen.value = lance.fenDepois
+    ultimoLance.value = [lance.from, lance.to]
+    aguardando.value = true
+    aviso.value = { tipo: 'neutro', lance: rotulo(ply, lance.san), texto: 'Analisando…' }
+    resposta = await analisar(lance.fenDepois, restantes.value - 1)
+    if (!ativo) return
+  }
   if (resposta.tipo === 'refutacao') {
     const defesa = resposta.lance
     if (!defesa) {

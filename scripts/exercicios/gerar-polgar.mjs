@@ -1,7 +1,8 @@
 // Gera os exercícios de mate de data/exercicios/ a partir do PDF do livro de László Polgár
 // (5334 Problems, Combinations & Games), que fica em fotos/exercicios/ (fora do git).
 //
-// Uso: node scripts/exercicios/gerar-polgar.mjs [caminho-do-pdf]
+// Uso: node scripts/exercicios/gerar-polgar.mjs [caminho-do-pdf] [--so=1,2,3]
+//   --so escolhe os capítulos (padrão: todos). O Mate em 2 leva uns 4 minutos.
 // Precisa do pdftotext (vem com o Git para Windows, em /mingw64/bin).
 //
 // O texto do PDF traz os diagramas numa fonte de xadrez: cada casa é uma letra. Casa vazia =
@@ -19,14 +20,17 @@ import { Chess } from 'chess.js'
 
 const raiz = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const arquivo =
-  process.argv[2] ??
+  process.argv.slice(2).find((a) => !a.startsWith('--')) ??
   path.join(raiz, 'fotos/exercicios/pdfcoffee.com_5334-problems-combinations-and-games-laszlo-polgar-pdf-free.pdf')
 
 const FONTE = 'László Polgár, 5334 Problems, Combinations & Games'
 const CAPITULOS = [
   { id: 'polgar-mate-1', nome: 'Mate em 1', capitulo: 1, lances: 1, primeiro: 1, ultimo: 306 },
   { id: 'polgar-mate-2', nome: 'Mate em 2', capitulo: 2, lances: 2, primeiro: 307, ultimo: 3718 },
+  { id: 'polgar-mate-3', nome: 'Mate em 3', capitulo: 3, lances: 3, primeiro: 3719, ultimo: 4462 },
 ]
+const argumentos = process.argv.slice(2)
+const so = argumentos.find((a) => a.startsWith('--so='))?.slice(5).split(',').map(Number)
 
 const PECAS = { p: 'p', o: 'p', n: 'n', m: 'n', b: 'b', a: 'b', r: 'r', s: 'r', q: 'q', l: 'q', k: 'k', j: 'k' }
 
@@ -179,8 +183,112 @@ function solucoes(fen, lances) {
   })
 }
 
-// ---------- Geração ----------
+// ---------- Mate em 3 ----------
+//
+// Achar todas as chaves de um mate em 3 com o chess.js levaria horas; por isso só a chave do
+// livro é conferida (forçar mate em 3 contra qualquer defesa, sem mate mais curto). A tela
+// analisa na hora qualquer outro primeiro lance.
 
+/** Xeques primeiro, depois capturas: acelera achar o mate quando ele existe. */
+function ordenados(jogo) {
+  const peso = (san) => (san.includes('+') || san.includes('#') ? 0 : san.includes('x') ? 1 : 2)
+  return jogo.moves().sort((a, b) => peso(a) - peso(b))
+}
+
+/** O lado da vez dá mate em até `n` lances (n = 1 ou 2). */
+function existeMate(jogo, n) {
+  if (n === 1) return temMateEm1(jogo)
+  return ordenados(jogo).some((san) => forcaMate(jogo, san, n))
+}
+
+/** O lance força mate em até `n` lances contando com ele mesmo. */
+function forcaMate(jogo, san, n) {
+  jogo.move(san)
+  let forca = jogo.isCheckmate()
+  if (!forca && !jogo.isGameOver() && n > 1) {
+    forca = jogo.moves().every((resposta) => {
+      jogo.move(resposta)
+      const ok = existeMate(jogo, n - 1)
+      jogo.undo()
+      return ok
+    })
+  }
+  jogo.undo()
+  return forca
+}
+
+/**
+ * Defesa mais resistente contra a chave: a que não permite mate imediato e deixa menos
+ * lances que forçam o mate em 2. A tela usa esta resposta quando o usuário acha a chave.
+ */
+function melhorDefesa(jogo) {
+  let melhor = null
+  for (const resposta of jogo.moves()) {
+    jogo.move(resposta)
+    const pontos = temMateEm1(jogo) ? 1000 : jogo.moves().filter((san) => forcaMate(jogo, san, 2)).length
+    jogo.undo()
+    if (!melhor || pontos < melhor.pontos) melhor = { resposta, pontos }
+  }
+  return melhor?.resposta
+}
+
+function gerarMate3(cap) {
+  const problemas = []
+  const motivos = { semDiagrama: 0, semLivro: 0, chaveIlegal: 0, naoForca: 0, mateCurto: 0 }
+  const divergencias = []
+  for (let n = cap.primeiro; n <= cap.ultimo; n++) {
+    const fileiras = todos.get(n)
+    const tabuleiro = fileiras && posicao(fileiras)
+    if (!tabuleiro) {
+      motivos.semDiagrama++
+      continue
+    }
+    const doLivro = livro.get(n)
+    if (!doLivro) {
+      motivos.semLivro++
+      continue
+    }
+    let achado = null
+    for (const fen of candidatas(tabuleiro, doLivro.pretas ? 'b' : 'w')) {
+      const jogo = new Chess(fen)
+      const chave = jogo.moves().find((san) => semSinais(san) === semSinais(doLivro.lance))
+      if (chave) {
+        achado = { jogo, fen, chave }
+        break
+      }
+    }
+    if (!achado) {
+      motivos.chaveIlegal++
+      divergencias.push(`n.º ${n}: livro ${doLivro.lance} não é lance legal`)
+      continue
+    }
+    const { jogo, fen, chave } = achado
+    if (existeMate(jogo, 2)) {
+      motivos.mateCurto++
+      continue
+    }
+    if (!forcaMate(jogo, chave, 3)) {
+      motivos.naoForca++
+      divergencias.push(`n.º ${n}: ${chave} não força mate em 3`)
+      continue
+    }
+    jogo.move(chave)
+    const defesa = melhorDefesa(jogo)
+    problemas.push({ n, fen, solucoes: [chave], defesa })
+  }
+  gravar(cap, problemas, motivos, divergencias)
+}
+
+function gravar(cap, problemas, motivos, divergencias) {
+  const saida = { id: cap.id, nome: cap.nome, fonte: `${FONTE}, cap. ${cap.capitulo}`, lances: cap.lances, problemas }
+  const destino = path.join(raiz, `data/exercicios/${cap.id}.json`)
+  fs.writeFileSync(destino, JSON.stringify(saida, null, 1) + '\n')
+  const total = cap.ultimo - cap.primeiro + 1
+  const pretas = problemas.filter((p) => p.fen.includes(' b ')).length
+  console.log(`${cap.nome}: ${problemas.length} de ${total} gravados em ${path.relative(raiz, destino)}`)
+  console.log(`  pretas jogam: ${pretas}; ${JSON.stringify(motivos)}`)
+  for (const d of divergencias.slice(0, 30)) console.log(`  ${d}`)
+}
 
 // ---------- Geração ----------
 
@@ -188,6 +296,11 @@ const livro = solucoesDoLivro()
 const todos = diagramas()
 
 for (const cap of CAPITULOS) {
+  if (so && !so.includes(cap.capitulo)) continue
+  if (cap.lances === 3) {
+    gerarMate3(cap)
+    continue
+  }
   const problemas = []
   const motivos = { semDiagrama: 0, semMate: 0, ambiguo: 0, mateEm1: 0, semLivro: 0, livroDiverge: 0 }
   const divergencias = []
@@ -235,14 +348,5 @@ for (const cap of CAPITULOS) {
     problemas.push({ n, fen, solucoes: lista })
   }
 
-  const saida = { id: cap.id, nome: cap.nome, fonte: `${FONTE}, cap. ${cap.capitulo}`, lances: cap.lances, problemas }
-  const destino = path.join(raiz, `data/exercicios/${cap.id}.json`)
-  fs.writeFileSync(destino, JSON.stringify(saida, null, 1) + '\n')
-
-  const total = cap.ultimo - cap.primeiro + 1
-  const pretas = problemas.filter((p) => p.fen.includes(' b ')).length
-  console.log(`${cap.nome}: ${problemas.length} de ${total} gravados em ${path.relative(raiz, destino)}`)
-  console.log(`  pretas jogam: ${pretas}; sem solução legível no livro (só conferidos pelo motor): ${motivos.semLivro}`)
-  console.log(`  ${JSON.stringify(motivos)}`)
-  for (const d of divergencias.slice(0, 30)) console.log(`  ${d}`)
+  gravar(cap, problemas, motivos, divergencias)
 }
