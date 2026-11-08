@@ -8,6 +8,7 @@ import {
   resetarProgresso,
 } from '../lib/progresso'
 import { dataLocal } from '../lib/srs'
+import { ehIos, instalar, pwa } from '../lib/pwa'
 
 const config = progresso.config
 const mensagem = ref<{ tipo: 'ok' | 'erro'; texto: string } | null>(null)
@@ -114,6 +115,20 @@ function resetar() {
       Virar o tabuleiro conforme a cor treinada
     </label>
 
+    <h2>App no aparelho</h2>
+    <p v-if="pwa.instalado" class="suave">O app está instalado e funciona sem internet.</p>
+    <template v-else>
+      <p class="suave">
+        Instalado, o app abre em tela cheia e funciona sem internet (só importar partidas precisa de conexão).
+        O progresso fica guardado neste aparelho.
+      </p>
+      <div v-if="pwa.podeInstalar" class="acoes">
+        <button type="button" class="botao" @click="instalar">Instalar o app</button>
+      </div>
+      <p v-else-if="ehIos()" class="suave">No iPhone/iPad: toque em Compartilhar e depois em “Adicionar à Tela de Início”.</p>
+      <p v-else class="suave">No Chrome do celular: menu ⋮ → “Instalar app” (ou “Adicionar à tela inicial”).</p>
+    </template>
+
     <h2>Progresso</h2>
     <p v-if="mensagem" :class="mensagem.tipo" role="status">{{ mensagem.texto }}</p>
 
@@ -172,5 +187,9 @@ h2 {
 .erro {
   margin: 0;
   color: var(--erro);
+}
+.suave {
+  margin: 0;
+  color: var(--texto-suave);
 }
 </style>
