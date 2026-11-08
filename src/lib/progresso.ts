@@ -2,6 +2,7 @@ import { reactive, watch } from 'vue'
 import { gravar, ler } from './armazenamento'
 import type { EscolhaCor, Profundidade } from './escopo'
 import type { Notacao } from './notacao'
+import type { PartidaAnalisada } from './partidas'
 import type { Cartao } from './srs'
 
 export interface Configuracoes {
@@ -48,6 +49,12 @@ export interface Progresso {
   cartoesExercicios: Record<string, Cartao>
   /** Último conjunto de exercícios aberto, para o "Continuar" da página inicial. */
   ultimoConjunto: string | null
+  /** Partidas importadas do lichess e do chess.com, já comparadas com o repertório. */
+  partidas: {
+    lichess: string
+    chesscom: string
+    analisadas: Record<string, PartidaAnalisada>
+  }
   config: Configuracoes
 }
 
@@ -77,6 +84,7 @@ function progressoVazio(): Progresso {
     exercicios: {},
     cartoesExercicios: {},
     ultimoConjunto: null,
+    partidas: { lichess: '', chesscom: '', analisadas: {} },
     config: { ...CONFIG_PADRAO },
   }
 }
@@ -95,6 +103,12 @@ export function normalizarProgresso(dados: unknown): Progresso | null {
     exercicios: ehObjeto(parcial.exercicios) ? parcial.exercicios! : {},
     cartoesExercicios: ehObjeto(parcial.cartoesExercicios) ? parcial.cartoesExercicios! : {},
     ultimoConjunto: typeof parcial.ultimoConjunto === 'string' ? parcial.ultimoConjunto : null,
+    partidas: {
+      lichess: '',
+      chesscom: '',
+      analisadas: {},
+      ...(ehObjeto(parcial.partidas) ? parcial.partidas : {}),
+    },
     config: { ...CONFIG_PADRAO, ...(ehObjeto(parcial.config) ? parcial.config : {}) },
   }
 }

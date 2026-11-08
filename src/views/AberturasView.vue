@@ -16,7 +16,10 @@ const linhasAtivas = (capitulo: CapituloCarregado) =>
 
 <template>
   <div class="pagina">
-    <h1>Aberturas</h1>
+    <div class="cabecalho">
+      <h1>Aberturas</h1>
+      <RouterLink class="botao" to="/partidas">Minhas partidas</RouterLink>
+    </div>
     <section v-for="familia in familias" :key="familia.id" class="familia">
       <h2>{{ familia.nome }} <span class="suave">{{ fmtTexto(familia.lances) }}</span></h2>
       <ul class="cartoes">
@@ -39,8 +42,16 @@ const linhasAtivas = (capitulo: CapituloCarregado) =>
 </template>
 
 <style scoped>
+.cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
 h1 {
-  margin: 0 0 1rem;
+  margin: 0;
   font-size: 1.25rem;
 }
 h2 {

@@ -7,6 +7,7 @@ import ConfigView from './views/ConfigView.vue'
 import DiagnosticoView from './views/DiagnosticoView.vue'
 import EstudoView from './views/EstudoView.vue'
 import ExercicioView from './views/ExercicioView.vue'
+import PartidasView from './views/PartidasView.vue'
 import ExerciciosView from './views/ExerciciosView.vue'
 import ExplorarView from './views/ExplorarView.vue'
 import InicioView from './views/InicioView.vue'
@@ -22,6 +23,7 @@ export const router = createRouter({
     { path: '/', name: 'inicio', component: InicioView },
     { path: '/aberturas', name: 'aberturas', component: AberturasView },
     { path: '/abertura/:cap', name: 'abertura', component: AberturaView, beforeEnter: exigirCapitulo },
+    { path: '/partidas', name: 'partidas', component: PartidasView },
     { path: '/explorar/:cap', name: 'explorar', component: ExplorarView, beforeEnter: exigirCapitulo },
     { path: '/estudo/:cap/:linha', name: 'estudo', component: EstudoView, beforeEnter: exigirCapitulo },
     { path: '/treino/:cap', name: 'treino', component: TreinoView, beforeEnter: exigirCapitulo },
