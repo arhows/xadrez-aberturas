@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, ref, shallowRef } from 'vue'
 import { useRoute } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
 import CartaoDica from '../components/CartaoDica.vue'
+import HistoricoLances from '../components/HistoricoLances.vue'
 import PlanoMeioJogo from '../components/PlanoMeioJogo.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
@@ -464,6 +465,12 @@ if (revisaoAutomatica) iniciarSessao()
           {{ partida?.cor === 'w' ? 'você joga de brancas' : 'você joga de pretas' }}
           <template v-if="revisando"> · revisão</template>
         </p>
+
+        <HistoricoLances
+          v-if="partida"
+          :lances="partida.jogadas.map((jogada) => jogada.san)"
+          :atual="partida.jogadas.length"
+        />
 
         <CartaoDica
           v-if="aviso"

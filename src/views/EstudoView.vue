@@ -5,6 +5,7 @@ import Avaliacao from '../components/Avaliacao.vue'
 import AvisosDoLance from '../components/AvisosDoLance.vue'
 import AvisoXeque from '../components/AvisoXeque.vue'
 import CartaoDica from '../components/CartaoDica.vue'
+import HistoricoLances from '../components/HistoricoLances.vue'
 import LinhaMotor from '../components/LinhaMotor.vue'
 import PlanoMeioJogo from '../components/PlanoMeioJogo.vue'
 import TaticasDoTabuleiro from '../components/TaticasDoTabuleiro.vue'
@@ -132,6 +133,8 @@ function trocarLinha(evento: Event) {
         <button type="button" class="botao" :disabled="noFim" aria-label="Próximo lance" @click="proximo">▶</button>
         <button type="button" class="botao" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">Girar</button>
       </div>
+
+      <HistoricoLances :lances="lances.map((l) => l.san)" :atual="ply" clicavel @ir="ply = $event" />
 
       <CartaoDica
         v-if="lanceAtual"

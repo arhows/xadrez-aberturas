@@ -5,6 +5,7 @@ import Avaliacao from '../components/Avaliacao.vue'
 import AvisosDoLance from '../components/AvisosDoLance.vue'
 import AvisoXeque from '../components/AvisoXeque.vue'
 import CartaoDica from '../components/CartaoDica.vue'
+import HistoricoLances from '../components/HistoricoLances.vue'
 import LinhaMotor from '../components/LinhaMotor.vue'
 import TaticasDoTabuleiro from '../components/TaticasDoTabuleiro.vue'
 import RamoLances from '../components/RamoLances.vue'
@@ -43,6 +44,13 @@ function selecionar(novo: Aresta[]) {
   caminho.value = novo
   for (let i = 1; i <= novo.length; i++) abertos.add(chave(novo.slice(0, i)))
 }
+
+/** Linha mostrada no histórico: ao voltar, os lances seguintes continuam visíveis. */
+const linhaVista = ref<Aresta[]>([])
+watch(caminho, (novo) => {
+  const prefixo = chave(linhaVista.value.slice(0, novo.length)) === chave(novo)
+  if (!prefixo) linhaVista.value = novo
+})
 
 const ehPrefixoDoAtual = (sequencia: Aresta[]) => chave(caminho.value.slice(0, sequencia.length)) === chave(sequencia)
 
@@ -182,6 +190,13 @@ if (inicial) selecionar(inicial)
           Notas
         </label>
       </div>
+
+      <HistoricoLances
+        :lances="linhaVista.map((aresta) => aresta.san)"
+        :atual="caminho.length"
+        clicavel
+        @ir="selecionar(linhaVista.slice(0, $event))"
+      />
 
       <CartaoDica
         v-if="ultima"
