@@ -53,6 +53,8 @@ export interface Nota {
   avaliacao?: string | null
   referencia?: string
   comentario?: string
+  /** Mesmo formato de `Linha.dicas`; em geral só o lance do desvio (texto do app). */
+  dicas?: Record<string, string>
   /** Trecho cortado na foto: a nota precisa ser conferida antes de entrar no Treino. */
   conferir?: string
 }

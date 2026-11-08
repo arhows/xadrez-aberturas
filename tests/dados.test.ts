@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { carregarCapitulos } from '../src/lib/capitulos'
+import { chaveDoLance } from '../src/lib/lances'
 
 const capitulos = carregarCapitulos()
 
@@ -41,6 +42,14 @@ describe('arquivos de abertura', () => {
 
     it('toda armadilha segue uma linha ou nota do capítulo', () => {
       expect(doTipo('armadilha-invalida')).toEqual([])
+    })
+
+    it('toda nota explica o lance do desvio e tem comentário', () => {
+      for (const nota of capitulo.capitulo.notas ?? []) {
+        const san = nota.lances.replace(/\d+\.(\.\.)?/g, ' ').trim().split(/\s+/)[nota.desvioNoLance - 1].replace(/[?!]+$/, '')
+        expect(nota.dicas?.[chaveDoLance(nota.desvioNoLance, san)], nota.id).toBeTruthy()
+        expect(nota.comentario, nota.id).toBeTruthy()
+      }
     })
 
     it('todo plano de meio-jogo tem texto para os dois lados', () => {

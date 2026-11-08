@@ -57,9 +57,11 @@ O JSON tem também o array `notas` (156 sublinhas — todas as notas do capítul
   "lances": "1. e4 e5 ... 18. Nc3 Rad8",
   "avaliacao": "∓", "referencia": "Ljubojević–van der Sterren, Wijk aan Zee 1988",
   "comentario": "texto curto em português",
+  "dicas": { "12... Qe7": "..." },        // opcional; mesmo formato das linhas
   "conferir": "trecho cortado na foto"   // opcional
 }
 ```
+- Toda nota tem dica no lance do desvio (por que aquela alternativa) e um comentário. Os dois textos são do app, conferidos com a posição e o Stockfish. Quando uma linha principal e uma nota passam pelo mesmo lance, vale a dica da linha.
 - Na árvore, a aresta onde a nota desvia recebe um selo **"Nota (b) A"**. Ao entrar nela, mostrar `comentario`, `referencia` e `avaliacao`.
 - Notas com `conferir` aparecem na tela Diagnóstico com aviso amarelo, e não entram no Treino até o usuário marcá-las como conferidas.
 - Se o JSON tiver `notasPendentes` (string), exibir no Diagnóstico como parte ainda não transcrita.

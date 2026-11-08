@@ -168,7 +168,23 @@ export function validarCapitulo(capitulo: Capitulo): CapituloValidado {
     }
   }
 
-  for (const nota of notas) jogar(nota.id, 'nota', nota.lances)
+  for (const nota of notas) {
+    const entradas = Object.keys(nota.dicas ?? {})
+    totalDicas += entradas.length
+    const lances = jogar(nota.id, 'nota', nota.lances)
+    if (!lances) continue
+    const chaves = new Set(lances.map((lance) => chaveDoLance(lance.ply, lance.san)))
+    for (const chave of entradas) {
+      if (!chaves.has(chave)) {
+        problemas.push({
+          tipo: 'dica-sem-lance',
+          linha: nota.id,
+          lance: chave,
+          mensagem: `A dica "${chave}" não corresponde a nenhum lance da nota.`,
+        })
+      }
+    }
+  }
 
   // Depois de jogar tudo, porque uma nota pode ter como base outra nota.
   for (const nota of notas) {

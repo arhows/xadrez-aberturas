@@ -86,7 +86,8 @@ describe('exportação em PGN', () => {
 
   it('numera as pretas depois de comentário ou variante', () => {
     expect(jogos[0]).toMatch(/^1\. e4 \{[^}]*\} 1\.\.\. e5 /m)
-    expect(jogos[0]).toContain('17. O-O Rad8')
+    // Sem comentário entre eles, o lance das pretas vem sem número.
+    expect(jogos[0]).toMatch(/ \d+\. [^\s{(]+ [a-hKQRBNO][^\s{(.]* \d+\. /)
   })
 
   it('não deixa chave solta nos comentários', () => {

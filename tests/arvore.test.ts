@@ -158,3 +158,14 @@ describe('critérios de aceite (SPEC 8)', () => {
     expect(respostas).toEqual(['Bc5'])
   })
 })
+
+describe('dicas das notas', () => {
+  it('a aresta do desvio de uma nota mostra a dica dela', () => {
+    for (const cap of carregarCapitulos()) {
+      const arestas = [...cap.arvore.nos.values()].flatMap((no) => no.saidas)
+      const nota = cap.capitulo.notas![0]
+      const desvio = arestas.find((a) => a.selos.some((s) => s.id === nota.id))
+      expect(desvio?.dica, nota.id).toBe(Object.values(nota.dicas!)[0])
+    }
+  })
+})

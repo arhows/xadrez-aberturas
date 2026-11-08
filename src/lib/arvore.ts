@@ -102,7 +102,10 @@ export function construirArvore(validado: CapituloValidado): Arvore {
   }
 
   const raiz = obterNo(FEN_INICIAL).chave
-  const dicasPorLinha = new Map(validado.capitulo.linhas.map((linha) => [linha.id, linha.dicas]))
+  const dicasPorLinha = new Map<string, Record<string, string> | undefined>([
+    ...validado.capitulo.linhas.map((linha) => [linha.id, linha.dicas] as const),
+    ...(validado.capitulo.notas ?? []).map((nota) => [nota.id, nota.dicas] as const),
+  ])
   const ameacasPorLinha = new Map(validado.capitulo.linhas.map((linha) => [linha.id, linha.ameacas]))
   const notasPorId = new Map<string, Nota>((validado.capitulo.notas ?? []).map((n) => [n.id, n]))
 
