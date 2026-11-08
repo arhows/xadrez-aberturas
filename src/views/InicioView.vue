@@ -6,6 +6,7 @@ import { carregarConjuntos, livroDoConjunto, type ConjuntoExercicios } from '../
 import { fmtLance } from '../lib/formato'
 import { progresso } from '../lib/progresso'
 import { proximaFila, totalRevisoes } from '../lib/resumoAberturas'
+import { revisoesPendentes } from '../lib/revisaoExercicios'
 
 const capitulos = obterCapitulos()
 const totalLinhas = capitulos.reduce(
@@ -24,6 +25,7 @@ const resolvidos = computed(() =>
   Object.values(progresso.exercicios).reduce((soma, estados) => soma + Object.keys(estados).length, 0),
 )
 const ultimo = computed(() => conjuntos.value.find((c) => c.id === progresso.ultimoConjunto))
+const revisoesExercicios = computed(() => revisoesPendentes(conjuntos.value))
 
 const maisErrados = computed(() =>
   Object.values(progresso.errosPorAresta)
@@ -64,13 +66,22 @@ const maisErrados = computed(() =>
           <template v-else>Problemas de mate dos livros de Polgár e Cicero</template>
         </p>
         <p class="suave">{{ resolvidos.toLocaleString('pt-BR') }} resolvidos</p>
+        <p v-if="revisoesExercicios.length" class="pendente">{{ revisoesExercicios.length }} para revisar hoje</p>
         <div class="acoes">
           <RouterLink
-            v-if="ultimo"
+            v-if="revisoesExercicios.length"
             class="botao primario"
+            :to="{ name: 'exercicio', params: { conjunto: revisoesExercicios[0].conjunto }, query: { n: String(revisoesExercicios[0].n), revisao: '1' } }"
+          >Revisar exercícios</RouterLink>
+          <RouterLink
+            v-if="ultimo"
+            class="botao"
+            :class="{ primario: !revisoesExercicios.length }"
             :to="{ name: 'exercicio', params: { conjunto: ultimo.id } }"
           >Continuar: {{ ultimo.nome }}</RouterLink>
-          <RouterLink class="botao" :class="{ primario: !ultimo }" to="/exercicios">Ver livros</RouterLink>
+          <RouterLink class="botao" :class="{ primario: !ultimo && !revisoesExercicios.length }" to="/exercicios">
+            Ver livros
+          </RouterLink>
         </div>
         <p v-if="ultimo" class="suave">{{ livroDoConjunto(ultimo) }}</p>
       </section>

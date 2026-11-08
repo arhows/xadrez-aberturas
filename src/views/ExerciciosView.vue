@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { livroDoConjunto, obterConjuntos, type ConjuntoExercicios } from '../lib/exercicios'
 import { progresso } from '../lib/progresso'
+import { revisoesPendentes } from '../lib/revisaoExercicios'
 
 interface Livro {
   autor: string
@@ -26,11 +27,27 @@ function contagem(conjuntos: ConjuntoExercicios[]) {
 }
 
 const numero = (n: number) => n.toLocaleString('pt-BR')
+
+const revisoes = revisoesPendentes(obterConjuntos())
+const primeiraRevisao = revisoes[0]
 </script>
 
 <template>
   <div class="pagina">
     <h1>Exercícios</h1>
+    <section class="revisao" :class="{ vazia: !primeiraRevisao }">
+      <div>
+        <strong>Revisão de hoje</strong>
+        <span class="suave">
+          {{ primeiraRevisao ? `${numero(revisoes.length)} problemas que você errou ou fez com pista` : 'Nada para revisar hoje. Os problemas errados voltam aqui com o tempo.' }}
+        </span>
+      </div>
+      <RouterLink
+        v-if="primeiraRevisao"
+        class="botao primario"
+        :to="{ name: 'exercicio', params: { conjunto: primeiraRevisao.conjunto }, query: { n: String(primeiraRevisao.n), revisao: '1' } }"
+      >Revisar</RouterLink>
+    </section>
     <section v-for="livro in livros" :key="livro.autor" class="livro">
       <header>
         <h2>{{ livro.autor }}</h2>
@@ -63,6 +80,22 @@ const numero = (n: number) => n.toLocaleString('pt-BR')
 h1 {
   margin: 0 0 1rem;
   font-size: 1.25rem;
+}
+.revisao {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--aviso);
+  border-radius: 12px;
+}
+.revisao.vazia {
+  border-color: var(--borda);
+}
+.revisao div {
+  display: grid;
 }
 .livro {
   border: 1px solid var(--borda);

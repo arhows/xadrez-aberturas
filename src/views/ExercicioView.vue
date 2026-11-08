@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import CartaoDica from '../components/CartaoDica.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import {
+  obterConjuntos,
   analisar,
   buscarChave,
   buscarConjunto,
@@ -19,6 +20,7 @@ import {
 import { fmtSan } from '../lib/formato'
 import { corDoPly, numeroDoPly } from '../lib/lances'
 import { progresso } from '../lib/progresso'
+import { notaDoExercicio, registrarResultado, revisoesPendentes } from '../lib/revisaoExercicios'
 import { tocar } from '../lib/som'
 
 const TEMPO_DESFAZER_MS = 350
@@ -266,6 +268,7 @@ function concluir(lance: LanceVerificado) {
   resolvido.value = true
   const dePrimeira = erros.value === 0 && !usouPista.value
   estados.value[problema.n] = dePrimeira ? 'primeira' : 'ajuda'
+  registrarResultado(conjunto.id, problema.n, notaDoExercicio(erros.value, usouPista.value))
   const chave = jogadas.value[0].san
   const outras = problema.solucoes.filter((san) => san !== chave).map(fmtSan)
   const rotuloOutras = conjunto.lances === 1 ? 'Também dava mate' : 'Outra chave possível'
@@ -304,6 +307,22 @@ async function pedirPista() {
 
 function irPara(n: number) {
   router.push({ name: 'exercicio', params: { conjunto: conjunto.id }, query: { n: String(n) } })
+}
+
+/** Modo revisão: depois de cada problema, segue para a próxima revisão vencida (de qualquer livro). */
+const revisando = route.query.revisao === '1'
+const proximaRevisao = computed(() => {
+  // Lê `resolvido` para recalcular depois que este problema sai da fila.
+  void resolvido.value
+  return revisoesPendentes(obterConjuntos()).find((r) => !(r.conjunto === conjunto.id && r.n === problema.n))
+})
+const restantesNaRevisao = computed(() => {
+  void resolvido.value
+  return revisoesPendentes(obterConjuntos()).filter((r) => !(r.conjunto === conjunto.id && r.n === problema.n)).length
+})
+function irParaRevisao() {
+  const r = proximaRevisao.value!
+  router.push({ name: 'exercicio', params: { conjunto: r.conjunto }, query: { n: String(r.n), revisao: '1' } })
 }
 
 const anterior = conjunto.problemas[indice - 1]
@@ -355,6 +374,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
     <div class="painel">
       <p class="situacao">
         <strong>{{ conjunto.nome }} · Problema {{ problema.n }}</strong>
+        <span v-if="revisando" class="etiqueta">revisão</span>
         <span class="suave"> ({{ indice + 1 }} de {{ conjunto.problemas.length }})</span>
       </p>
       <p class="enunciado">{{ enunciado }}</p>
@@ -375,13 +395,24 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
         <button v-if="!resolvido" type="button" class="botao" :disabled="pista >= 2 || aguardando" @click="pedirPista">
           {{ pista === 0 ? 'Pista: qual peça?' : 'Mostrar o lance' }}
         </button>
-        <button
-          v-if="resolvido && proximoPendente"
-          type="button"
-          class="botao primario"
-          @click="irPara(proximoPendente.n)"
-        >Próximo não resolvido ({{ proximoPendente.n }})</button>
-        <p v-else-if="resolvido" class="concluido">Todos os problemas resolvidos de primeira!</p>
+        <template v-if="resolvido && revisando">
+          <button v-if="proximaRevisao" type="button" class="botao primario" @click="irParaRevisao">
+            Próxima revisão ({{ restantesNaRevisao }})
+          </button>
+          <template v-else>
+            <p class="concluido">Revisões de hoje concluídas!</p>
+            <RouterLink class="botao primario" to="/exercicios">Voltar aos exercícios</RouterLink>
+          </template>
+        </template>
+        <template v-else-if="resolvido">
+          <button
+            v-if="proximoPendente"
+            type="button"
+            class="botao primario"
+            @click="irPara(proximoPendente.n)"
+          >Próximo não resolvido ({{ proximoPendente.n }})</button>
+          <p v-else class="concluido">Todos os problemas resolvidos de primeira!</p>
+        </template>
       </div>
 
       <div class="navegacao">
@@ -427,6 +458,15 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
 }
 .enunciado {
   font-size: 1.125rem;
+}
+.etiqueta {
+  margin-left: 0.5rem;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  background: var(--aviso);
+  color: var(--fundo);
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 .sequencia {
   font-weight: 600;
