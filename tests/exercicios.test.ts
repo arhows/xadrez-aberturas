@@ -29,6 +29,7 @@ describe('exercícios', () => {
       'cicero-mate-1',
       'cicero-mate-2',
       'cicero-mate-3',
+      'cicero-mate-4',
     ])
     expect(buscarConjunto('polgar-mate-1')!.problemas.map((p) => p.n)).toEqual(
       Array.from({ length: 306 }, (_, i) => i + 1),
@@ -122,6 +123,17 @@ describe('exercícios', () => {
       })
     }
     expect(erros).toEqual([])
+  })
+
+  it('no mate em 4, a defesa gravada contra a chave ainda permite o mate em 3 (amostra)', () => {
+    const lista = buscarConjunto('cicero-mate-4')!.problemas
+    expect(lista.length).toBe(51)
+    for (const p of [lista[0], lista[25], lista[50]]) {
+      const jogo = new Chess(p.fen)
+      jogo.move(p.solucoes[0])
+      jogo.move(p.defesa!)
+      expect(chaveDoMate(jogo.fen(), 3), `n.º ${p.n}`).toBeTruthy()
+    }
   })
 
   it('quem resolve é o lado contrário ao do diagrama quando há lance anterior', () => {

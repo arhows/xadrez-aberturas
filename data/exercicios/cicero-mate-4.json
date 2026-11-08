@@ -1,0 +1,468 @@
+{
+ "id": "cicero-mate-4",
+ "nome": "Mate em 4",
+ "livro": "Sam Cicero, 1001 Checkmate Exercises",
+ "fonte": "Sam Cicero, 1001 Checkmate Exercises (2018), exercícios 951–1001",
+ "lances": 4,
+ "problemas": [
+  {
+   "n": 951,
+   "fen": "r7/1q2krQp/p3pn2/1p2P3/6P1/2P5/P1P4P/2KR1R2 w - - 0 1",
+   "solucoes": [
+    "exf6+"
+   ],
+   "defesa": "Ke8",
+   "partida": "Bankmann (1917) – Malcher (2049), Berlin, 2014"
+  },
+  {
+   "n": 952,
+   "fen": "r6r/p4kpp/8/1B1pq3/1Q3pb1/5P2/P1P4P/1R1R1K2 b - - 0 1",
+   "solucoes": [
+    "Bh3+"
+   ],
+   "defesa": "Kg1",
+   "partida": "Bohlok (1854) – Kaouri (2072), Beirut, 2014"
+  },
+  {
+   "n": 953,
+   "fen": "r1bBk2r/1pp2pp1/p1np3p/3N4/P3n3/1N6/1PP1KbPP/R2Q1B1R b - - 0 1",
+   "solucoes": [
+    "Bg4+"
+   ],
+   "defesa": "Kd3",
+   "partida": "Boixader Arbo (1971) – Parayre Soguero (2107), Santa Eulalia de Roncana, 2014"
+  },
+  {
+   "n": 954,
+   "fen": "r4rk1/1p2pp1p/p2p1np1/8/2P1Pb2/1PN2K2/PBQ1BP1q/R4R2 b - - 0 1",
+   "solucoes": [
+    "Qh3+"
+   ],
+   "defesa": "Kxf4",
+   "partida": "Bria (1815) – Vesce (1984), Roseto, 2014"
+  },
+  {
+   "n": 955,
+   "fen": "r4rk1/5ppp/2p1b3/2Ppq3/1P6/4B1P1/P3Q2P/2KRR3 b - - 0 1",
+   "solucoes": [
+    "Qa1+"
+   ],
+   "defesa": "Kc2",
+   "partida": "Carmo (1746) – Merlo (1891), Foz do Iguacu, 2014"
+  },
+  {
+   "n": 956,
+   "fen": "r2qkr2/pb1n1p2/2pPp3/1p4QB/2pP3P/2P3B1/P5P1/R4RK1 w - - 0 1",
+   "solucoes": [
+    "Bxf7+"
+   ],
+   "defesa": "Rxf7",
+   "partida": "Chabot (2144) – Fan (1864), Montreal, 2016"
+  },
+  {
+   "n": 957,
+   "fen": "r1r5/1pp2R2/5Bkp/p5p1/4P1N1/7P/PP3PP1/6K1 w - - 0 1",
+   "solucoes": [
+    "Ne5+"
+   ],
+   "defesa": "Kh5",
+   "partida": "Da Cruz (1774) – Da Veiga (1617), Florianopolis, 2014"
+  },
+  {
+   "n": 958,
+   "fen": "r1bq1r1k/ppn1b3/4p1Qp/3pPp2/2p4P/2P1PN2/PPB2PP1/R3K2R w - - 0 1",
+   "solucoes": [
+    "Qxh6+"
+   ],
+   "defesa": "Kg8",
+   "partida": "Daneri (2097) – Quevedo (1623), Colonia del Sacramento, 2014"
+  },
+  {
+   "n": 959,
+   "fen": "3qrr1k/p4p2/1p2p1p1/1bp1P1Rp/5P1P/2P5/PPB1QP2/2K3R1 w - - 0 1",
+   "solucoes": [
+    "Qxh5+"
+   ],
+   "defesa": "Kg7",
+   "partida": "Deus Filho (2030) – De Oliveira (1701), Sao Paulo, 2016"
+  },
+  {
+   "n": 960,
+   "fen": "r1bq1r2/ppp2p1k/3ppn2/4N1Qp/2P1P1p1/2P3P1/P4PP1/R3KB1R w - - 0 1",
+   "solucoes": [
+    "Nxg4"
+   ],
+   "defesa": "Rb8",
+   "partida": "Diaz Nieto (2043) – Campoy Prades (1916), Barcelona, 2014"
+  },
+  {
+   "n": 961,
+   "fen": "r1bR4/1p3krR/p3q3/4ppB1/4p2Q/P3P3/1PP2PP1/2K5 w - - 0 1",
+   "solucoes": [
+    "Rxg7+"
+   ],
+   "defesa": "Kxg7",
+   "partida": "Drabble (2053) – Kay (2110), England, 2016"
+  },
+  {
+   "n": 962,
+   "fen": "4r3/p2n1Q2/4q1pk/1p6/2pP4/2P2R2/PPBRr2P/6K1 w - - 0 1",
+   "solucoes": [
+    "Rh3+"
+   ],
+   "defesa": "Kg5",
+   "partida": "Fabeta (2067) – Zilic (2058), Croatia, 2016"
+  },
+  {
+   "n": 963,
+   "fen": "r4rk1/3n2P1/p3R2p/1p1p4/3b4/P2Q2KP/1PP3P1/RN4q1 b - - 0 1",
+   "solucoes": [
+    "Bf2+"
+   ],
+   "defesa": "Kg4",
+   "partida": "Fadin (2113) – Gulko (1804), Voronezh, 2014"
+  },
+  {
+   "n": 964,
+   "fen": "r3k2r/1q3p2/p1b1pQ2/8/1p2P3/3B2pP/PPP2bP1/R4R1K b - - 0 1",
+   "solucoes": [
+    "Rxh3+"
+   ],
+   "defesa": "gxh3",
+   "partida": "Gkikas (1733) – Kouskoutis (2010), Greece, 2014"
+  },
+  {
+   "n": 965,
+   "fen": "r1b4q/pn1p2k1/2pP3p/1p2PQ2/1P6/P7/3N1P1P/RB5K w - - 0 1",
+   "solucoes": [
+    "Qf6+"
+   ],
+   "defesa": "Kg8",
+   "partida": "Glozar (1399) – Doskar (1703), Brno, 2014"
+  },
+  {
+   "n": 966,
+   "fen": "r1bQ4/pp4k1/3p2p1/2p2p2/2P2R2/2q5/P1P3PP/4R2K w - - 0 1",
+   "solucoes": [
+    "Re7+"
+   ],
+   "defesa": "Kf6",
+   "partida": "Gundogan (1770) – Yassibag (1499), Konya, 2014"
+  },
+  {
+   "n": 967,
+   "fen": "rn4q1/3n4/p1b1ppk1/1p1p4/3P1B2/2N1PQ2/PP1K1PP1/7R w - - 0 1",
+   "solucoes": [
+    "Qh5+"
+   ],
+   "defesa": "Kg7",
+   "partida": "Hallman (2171) – Hartio (2010), Jyvaskyla, 2016"
+  },
+  {
+   "n": 968,
+   "fen": "4r1k1/1QR2pp1/p2p3p/8/8/6K1/P3q2P/8 b - - 0 1",
+   "solucoes": [
+    "Re3+"
+   ],
+   "defesa": "Kf4",
+   "partida": "Ivekovic (1640) – Duda (1637), Kastel Stafilic, 2014"
+  },
+  {
+   "n": 969,
+   "fen": "6k1/1p3rp1/p3p1QB/4Pn2/2p1qP1P/1P2p3/P1P1K3/2R5 b - - 0 1",
+   "solucoes": [
+    "Nd4+"
+   ],
+   "defesa": "Kf1",
+   "partida": "Jagiela (1750) – Kucharska (1718), Wroclaw, 2014"
+  },
+  {
+   "n": 970,
+   "fen": "1r1qr3/1ppb2b1/p2ppnkp/8/2P1NP2/1P2Q1P1/P3P2P/1BR2RK1 w - - 0 1",
+   "solucoes": [
+    "Ng5+"
+   ],
+   "defesa": "Ne4",
+   "partida": "James (2054) – Willenberg (1843), Johannesburg, 2016"
+  },
+  {
+   "n": 971,
+   "fen": "r3r1k1/1bq2p1p/pp2p1p1/4n2n/2P1N3/1P1B1N2/P2BQ1PK/3R1R2 b - - 0 1",
+   "solucoes": [
+    "Nxf3+"
+   ],
+   "defesa": "Kh3",
+   "partida": "Loaiza (1957) – Herrera (2150), Medellin, 2014"
+  },
+  {
+   "n": 972,
+   "fen": "r5k1/p5pp/2p2r2/3p4/3Q4/P1N4q/1PPB2Rb/R6K b - - 0 1",
+   "solucoes": [
+    "Be5+"
+   ],
+   "defesa": "Kg1",
+   "partida": "Marceline (1945) – Ferrant (1858), Schoelcher, 2014"
+  },
+  {
+   "n": 973,
+   "fen": "3r1k1r/p4p2/b3pNpp/4P3/5P2/6Q1/p5PP/q5BK b - - 0 1",
+   "solucoes": [
+    "Qxg1+"
+   ],
+   "defesa": "Kxg1",
+   "partida": "Marino (1702) – Saito (2117), Registro, 2016"
+  },
+  {
+   "n": 974,
+   "fen": "r1b2k1r/pp1pbppp/1q1N4/n1p5/8/1B6/PPP2PPP/R1BQR1K1 w - - 0 1",
+   "solucoes": [
+    "Qd5"
+   ],
+   "defesa": "Qxb3",
+   "partida": "Martin Palau (1789) – Lopez Galiano (1736), Barcelona, 2014"
+  },
+  {
+   "n": 975,
+   "fen": "r7/1kpr2b1/1pNp2p1/1P1P1p1p/2P2q1P/Q7/P4PP1/1K1RR3 w - - 0 1",
+   "solucoes": [
+    "Qxa8+"
+   ],
+   "defesa": "Kxa8",
+   "partida": "Molano Lafuente (1940) – Arus Blanch (2052), Barbera del Valles, 2016"
+  },
+  {
+   "n": 976,
+   "fen": "r1b1kqQ1/p1pp1p1p/1p4p1/2b5/2B1P3/2N5/PP3PPP/n1BK2NR w - - 0 1",
+   "solucoes": [
+    "Bxf7+"
+   ],
+   "defesa": "Ke7",
+   "partida": "Munoz (2186) – Gomez Perdomo (1810), Mosquera, 2014"
+  },
+  {
+   "n": 977,
+   "fen": "2r2rk1/p4pb1/1n2b1pp/4p3/8/QNPqBN1P/PP3PP1/2KR3R b - - 0 1",
+   "solucoes": [
+    "Rxc3+"
+   ],
+   "defesa": "bxc3",
+   "partida": "Newey (1796) – Uzzaman (2086), San Francisco, 2014"
+  },
+  {
+   "n": 978,
+   "fen": "r1bq2nr/ppp2Qpp/1n6/2k1N1b1/2B1PB2/2N5/PPP2PPP/R3K2R w - - 0 1",
+   "solucoes": [
+    "Nd3+"
+   ],
+   "defesa": "Qxd3",
+   "partida": "Nurmela (1980) – Valkama (1923), Finland, 2014"
+  },
+  {
+   "n": 979,
+   "fen": "3r4/p1p1kppp/1nB1p3/4Pn2/1bP1N3/1P4P1/PB1r3P/1R3K1R b - - 0 1",
+   "solucoes": [
+    "Ne3+"
+   ],
+   "defesa": "Ke1",
+   "partida": "Odermatt (1883) – Joller (1967), Zuerich, 2014"
+  },
+  {
+   "n": 980,
+   "fen": "2r2bk1/3r4/p1q1pPp1/Pp1pP1P1/1P1P4/2p1PK1R/2Q5/1R6 w - - 0 1",
+   "solucoes": [
+    "Qxg6+"
+   ],
+   "defesa": "Bg7",
+   "partida": "Oz (1793) – Aksakal (1622), Konya, 2014"
+  },
+  {
+   "n": 981,
+   "fen": "3r1r2/1nq1k1pp/pp1p1p2/3RpP2/PP2P3/1Q3B2/2P3PP/3R2K1 w - - 0 1",
+   "solucoes": [
+    "Rxe5+"
+   ],
+   "defesa": "Kd7",
+   "partida": "Paredes Bustamante (2096) – Dongo (1741), Lima, 2016"
+  },
+  {
+   "n": 982,
+   "fen": "r1bq4/ppppkrQ1/3n4/n2P1pNP/8/2P5/P4PP1/R1B2RK1 w - - 0 1",
+   "solucoes": [
+    "Re1+"
+   ],
+   "defesa": "Ne4",
+   "partida": "Pegov (1669) – Mikeev (1784), Uljanovsk, 2014"
+  },
+  {
+   "n": 983,
+   "fen": "r7/pbp2p1Q/1p1q1k2/n7/2BP4/6P1/PP3PP1/4R1K1 w - - 0 1",
+   "solucoes": [
+    "Qh6+"
+   ],
+   "defesa": "Kf5",
+   "partida": "Plenca (2184) – Radenic (1667), Sveti Martin, 2014"
+  },
+  {
+   "n": 984,
+   "fen": "r7/p4pkp/6p1/2p1p3/6b1/1PnP4/PKPq2QP/5B1R b - - 0 1",
+   "solucoes": [
+    "Na4+"
+   ],
+   "defesa": "bxa4",
+   "partida": "Pocius (1765) – Vaitonis (1983), Palanga, 2014"
+  },
+  {
+   "n": 985,
+   "fen": "r5r1/ppp1kB2/2np3p/4p3/4P1b1/2PPPNPq/PP6/R2Q1RK1 b - - 0 1",
+   "solucoes": [
+    "Qxg3+"
+   ],
+   "defesa": "Kh1",
+   "partida": "Praggnanandhaa (1948) – Om (1690), Odisha, 2014"
+  },
+  {
+   "n": 986,
+   "fen": "r1bq3r/ppp2k1B/2n1p1pQ/3pPp2/3P4/2P5/P1PB1P1P/R4RK1 w - - 0 1",
+   "solucoes": [
+    "Qxg6+"
+   ],
+   "defesa": "Kf8",
+   "partida": "Reiss (2083) – Britschgi (1640), Flims, 2014"
+  },
+  {
+   "n": 987,
+   "fen": "2rr2k1/2q2pp1/p3p2p/1p2P1b1/4R3/3B2Q1/PPP3PP/1K1R4 b - - 0 1",
+   "solucoes": [
+    "Qxc2+"
+   ],
+   "defesa": "Ka1",
+   "partida": "Romagnoli (1708) – Scagliotti (1910), Bratto, 2014"
+  },
+  {
+   "n": 988,
+   "fen": "r1b1n1rk/ppqnb2p/2p1p3/3pNp2/2PP1P2/1PNB3R/P3Q1PP/R1B3K1 w - - 0 1",
+   "solucoes": [
+    "Rxh7+"
+   ],
+   "defesa": "Kxh7",
+   "partida": "Samaganova (2048) – Loboda (1701), Bishkek, 2016"
+  },
+  {
+   "n": 989,
+   "fen": "r6r/pp1Q2pp/1b2p1k1/2qpP3/3N4/2P1P3/PP4PP/R5K1 w - - 0 1",
+   "solucoes": [
+    "Qxe6+"
+   ],
+   "defesa": "Kh5",
+   "partida": "Senorano (1807) – Marquez (1963), Moron, 2016"
+  },
+  {
+   "n": 990,
+   "fen": "r1bq1b1N/ppppk3/5pQp/4p3/2BnP3/8/PPP2PPP/RNB1K2R w - - 0 1",
+   "solucoes": [
+    "Qf7+"
+   ],
+   "defesa": "Kd6",
+   "partida": "Sentis Baena (1740) – Rodriguez Lloret (1700), Santa Eulalia de Roncana, 2014"
+  },
+  {
+   "n": 991,
+   "fen": "r1q2r2/4p3/n1p1PkpQ/pp1p1p2/3P4/2N5/PPP2PP1/2KR3R w - - 0 1",
+   "solucoes": [
+    "Qh4+"
+   ],
+   "defesa": "Kxe6",
+   "partida": "Srija (2102) – Thomas (2049), Bhubaneswar, 2016"
+  },
+  {
+   "n": 992,
+   "fen": "rn2r3/pb2bQ1p/1p3npk/1P1q2N1/3P4/3B4/P4PPP/R1B2RK1 w - - 0 1",
+   "solucoes": [
+    "Nxh7+"
+   ],
+   "defesa": "Kh5",
+   "partida": "Troselj (2093) – Rajter (1910), Rijeka, 2014"
+  },
+  {
+   "n": 993,
+   "fen": "3r1rk1/1q2bp1p/2bpp1p1/8/1p1BnP2/3BR2Q/1PP1N1PP/3R3K w - - 0 1",
+   "solucoes": [
+    "Qxh7+"
+   ],
+   "defesa": "Kxh7",
+   "partida": "Valenti (2153) – Podini (2031), Bratto, 2014"
+  },
+  {
+   "n": 994,
+   "fen": "r4r2/pp1q2bQ/3pp1p1/2pP1k2/2P5/7R/PPP3PP/4R1K1 w - - 0 1",
+   "solucoes": [
+    "Rf3+"
+   ],
+   "defesa": "Kg5",
+   "partida": "Van der Merwe (2030) – Simeonov (1770), Albena, 2014"
+  },
+  {
+   "n": 995,
+   "fen": "rnk3b1/pp3p1r/4q2p/7Q/5B1P/8/PPP2PP1/2KR3R w - - 0 1",
+   "solucoes": [
+    "Qc5+"
+   ],
+   "defesa": "Nc6",
+   "partida": "Varacalli (1713) – Viera (1816), Rosario, 2014"
+  },
+  {
+   "n": 996,
+   "fen": "r2qr1k1/pp6/3p2p1/2pPnpN1/2Pb4/7Q/PP4PP/R1B2R1K w - - 0 1",
+   "solucoes": [
+    "Qh7+"
+   ],
+   "defesa": "Kf8",
+   "partida": "Vorackova (1933) – Rastocny (1607), Rakovnik, 2014"
+  },
+  {
+   "n": 997,
+   "fen": "6k1/pp4pp/2p3r1/3p4/5P2/1P1q4/P3R2P/2B1RK2 b - - 0 1",
+   "solucoes": [
+    "Qh3+"
+   ],
+   "defesa": "Kf2",
+   "partida": "Warneke (1236) – Behrensen Senfft (1535), Pinneberg, 2014"
+  },
+  {
+   "n": 998,
+   "fen": "3q1r2/pp2bkpB/2r5/2Nnp3/1P4b1/P3PN2/1BQP1PP1/R3K2R w - - 0 1",
+   "solucoes": [
+    "Nxe5+"
+   ],
+   "defesa": "Ke8",
+   "partida": "Wessel (1861) – Kunkel (1719), Leck, 2014"
+  },
+  {
+   "n": 999,
+   "fen": "r2q1k1r/pp2b2p/2p1Qnb1/4nN2/8/3P2N1/PPPB1PPP/R4RK1 w - - 0 1",
+   "solucoes": [
+    "Bh6+"
+   ],
+   "defesa": "Ke8",
+   "partida": "White (1933) – Parri (1707), Wales, 2014"
+  },
+  {
+   "n": 1000,
+   "fen": "r4rk1/5ppp/p2p4/q2N4/3R4/3Q4/2P3PP/3R3K w - - 0 1",
+   "solucoes": [
+    "Ne7+"
+   ],
+   "defesa": "Kh8",
+   "partida": "Yilmaz (1846) – Arig (1798), Cesme, 2016"
+  },
+  {
+   "n": 1001,
+   "fen": "4k3/p2r2p1/1bQ2pp1/q1B1p3/6P1/1P5P/5P2/2R3K1 w - - 0 1",
+   "solucoes": [
+    "Qe6+"
+   ],
+   "defesa": "Kd8",
+   "partida": "Zielinski (2111) – Siedlinski (2107), Jastrzebia Gora, 2016"
+  }
+ ]
+}

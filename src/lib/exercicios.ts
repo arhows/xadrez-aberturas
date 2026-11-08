@@ -1,5 +1,6 @@
 import { Chess } from 'chess.js'
-import { responder, type LanceVerificado, type Resposta } from './mate'
+import type { Pedido } from './analise.worker'
+import { chaveDoMate, responder, type LanceVerificado, type Resposta } from './mate'
 
 export { chaveDoMate, jogarSan, matesEm1, responder, type LanceVerificado, type Resposta } from './mate'
 
@@ -99,27 +100,45 @@ export function casasDoLance(fen: string, san: string): { from: string; to: stri
   return { from: lance.from, to: lance.to }
 }
 
-let worker: Worker | null | undefined
+/** Omit que respeita cada caso da união. */
+type SemId<T> = T extends unknown ? Omit<T, 'id'> : never
 
-/**
- * Resposta do defensor; com mate em 2 ainda por vir a busca é pesada e vai para um worker,
- * para a tela não travar. Sem suporte a worker, calcula aqui mesmo.
- */
-export function analisar(fenDepois: string, restantes: number): Promise<Resposta> {
-  if (restantes <= 1) return Promise.resolve(responder(fenDepois, restantes))
+let worker: Worker | null | undefined
+let proximoId = 0
+const pendentes = new Map<number, (resultado: unknown) => void>()
+
+/** Executa a busca no worker, para a tela não travar; sem suporte a worker, calcula aqui. */
+function noWorker<T>(pedido: SemId<Pedido>, local: () => T): Promise<T> {
   if (worker === undefined) {
     try {
       worker = new Worker(new URL('./analise.worker.ts', import.meta.url), { type: 'module' })
+      worker.onmessage = (evento: MessageEvent<{ id: number; resultado: unknown }>) => {
+        pendentes.get(evento.data.id)?.(evento.data.resultado)
+        pendentes.delete(evento.data.id)
+      }
     } catch {
       worker = null
     }
   }
   const atual = worker
-  if (!atual) return Promise.resolve(responder(fenDepois, restantes))
+  if (!atual) return Promise.resolve(local())
+  const id = ++proximoId
   return new Promise((resolver) => {
-    atual.onmessage = (evento: MessageEvent<Resposta>) => resolver(evento.data)
-    atual.postMessage({ fen: fenDepois, restantes })
+    pendentes.set(id, resolver as (resultado: unknown) => void)
+    atual.postMessage({ ...pedido, id })
   })
+}
+
+/** Resposta do defensor; com mate em 2 ou mais ainda por vir, a busca vai para o worker. */
+export function analisar(fenDepois: string, restantes: number): Promise<Resposta> {
+  if (restantes <= 1) return Promise.resolve(responder(fenDepois, restantes))
+  return noWorker({ tipo: 'responder', fen: fenDepois, restantes }, () => responder(fenDepois, restantes))
+}
+
+/** Um lance que força mate em até `lances` lances, para a pista; a partir de 3, no worker. */
+export function buscarChave(fen: string, lances: number): Promise<string | undefined> {
+  if (lances <= 2) return Promise.resolve(chaveDoMate(fen, lances))
+  return noWorker({ tipo: 'chave', fen, lances }, () => chaveDoMate(fen, lances))
 }
 
 /** Lado de quem resolve: o da vez no diagrama, ou o outro se o adversário joga antes. */

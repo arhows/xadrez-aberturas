@@ -30,7 +30,7 @@ export function ordenados(jogo) {
   return jogo.moves().sort((a, b) => peso(a) - peso(b))
 }
 
-/** O lado da vez dá mate em até `n` lances (n = 1 ou 2). */
+/** O lado da vez dá mate em até `n` lances. */
 export function existeMate(jogo, n) {
   if (n === 1) return temMateEm1(jogo)
   return ordenados(jogo).some((san) => forcaMate(jogo, san, n))
@@ -53,14 +53,17 @@ export function forcaMate(jogo, san, n) {
 }
 
 /**
- * Defesa mais resistente contra a chave: a que não permite mate imediato e deixa menos
- * lances que forçam o mate em 2. A tela usa esta resposta quando o usuário acha a chave.
+ * Defesa mais resistente contra a chave, quando o atacante ainda tem `restantes` lances: a
+ * que não permite mate mais curto e deixa menos lances que forçam o mate. A tela usa esta
+ * resposta quando o usuário acha a chave.
  */
-export function melhorDefesa(jogo) {
+export function melhorDefesa(jogo, restantes = 2) {
   let melhor = null
   for (const resposta of jogo.moves()) {
     jogo.move(resposta)
-    const pontos = temMateEm1(jogo) ? 1000 : jogo.moves().filter((san) => forcaMate(jogo, san, 2)).length
+    const pontos = existeMate(jogo, restantes - 1)
+      ? 1000
+      : jogo.moves().filter((san) => forcaMate(jogo, san, restantes)).length
     jogo.undo()
     if (!melhor || pontos < melhor.pontos) melhor = { resposta, pontos }
   }

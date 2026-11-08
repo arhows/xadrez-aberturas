@@ -1,6 +1,13 @@
-import { responder } from './mate'
+import { chaveDoMate, responder } from './mate'
 
-/** Análise pesada (defesa contra um lance com mate em 2 ainda por vir) fora da tela. */
-self.onmessage = (evento: MessageEvent<{ fen: string; restantes: number }>) => {
-  self.postMessage(responder(evento.data.fen, evento.data.restantes))
+/** Buscas pesadas dos exercícios (defesa e pista com mate longo por vir), fora da tela. */
+export type Pedido =
+  | { id: number; tipo: 'responder'; fen: string; restantes: number }
+  | { id: number; tipo: 'chave'; fen: string; lances: number }
+
+self.onmessage = (evento: MessageEvent<Pedido>) => {
+  const pedido = evento.data
+  const resultado =
+    pedido.tipo === 'responder' ? responder(pedido.fen, pedido.restantes) : chaveDoMate(pedido.fen, pedido.lances)
+  self.postMessage({ id: pedido.id, resultado })
 }

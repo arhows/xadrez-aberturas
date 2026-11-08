@@ -6,7 +6,10 @@
 //
 // Capítulos do livro: 1-200 mate em 1; 201-300 mate em 1 depois do lance do adversário
 // ("Black now played ...Kg8"); 301-600 e 601-800 o mesmo para o mate em 2; 801-900 e
-// 901-950 para o mate em 3; 951-1001 mate em 4 (fora daqui: busca funda demais para o app).
+// 901-950 para o mate em 3; 951-1001 mate em 4.
+//
+// No mate em 3 e em 4 só a chave do livro é conferida (o livro garante que o primeiro lance é
+// único) e a defesa mais resistente contra ela já vai no JSON. O mate em 4 leva alguns minutos.
 //
 // Cada posição reconhecida é conferida com o motor: o lance anterior (quando há) precisa ser
 // legal e a chave do livro precisa forçar o mate no número de lances do capítulo, sem mate
@@ -26,6 +29,7 @@ const CONJUNTOS = [
   { id: 'cicero-mate-1', nome: 'Mate em 1', lances: 1, primeiro: 1, ultimo: 300 },
   { id: 'cicero-mate-2', nome: 'Mate em 2', lances: 2, primeiro: 301, ultimo: 800 },
   { id: 'cicero-mate-3', nome: 'Mate em 3', lances: 3, primeiro: 801, ultimo: 950 },
+  { id: 'cicero-mate-4', nome: 'Mate em 4', lances: 4, primeiro: 951, ultimo: 1001 },
 ]
 
 /** Lance como o livro escreve ("R×e8#", "…Kg8??") em SAN comparável do chess.js. */
@@ -108,7 +112,7 @@ for (const conjunto of CONJUNTOS) {
       lista = solucoes(jogo.fen(), conjunto.lances)
       if (!lista.includes(chave)) lista = []
     } else {
-      lista = forcaMate(jogo, chave, 3) ? [chave] : []
+      lista = forcaMate(jogo, chave, conjunto.lances) ? [chave] : []
     }
     if (!lista.length) {
       motivos.naoForca++
@@ -117,9 +121,9 @@ for (const conjunto of CONJUNTOS) {
     }
     const problema = { n, fen, solucoes: lista }
     if (previo) problema.previo = previo
-    if (conjunto.lances === 3) {
+    if (conjunto.lances >= 3) {
       jogo.move(chave)
-      problema.defesa = melhorDefesa(jogo)
+      problema.defesa = melhorDefesa(jogo, conjunto.lances - 1)
     }
     problema.partida = e.partida
     problemas.push(problema)

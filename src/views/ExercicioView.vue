@@ -5,9 +5,9 @@ import CartaoDica from '../components/CartaoDica.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import {
   analisar,
+  buscarChave,
   buscarConjunto,
   casasDoLance,
-  chaveDoMate,
   ehPromocao,
   jogarSan,
   verificarLance,
@@ -105,12 +105,8 @@ const sequencia = computed(() =>
 /** Lances que o usuário ainda tem para dar o mate, contando o da vez. */
 const restantes = computed(() => conjunto.lances - Math.ceil(jogadas.value.length / 2))
 
-/** Lance que a pista aponta: a chave do livro no primeiro lance; depois, a busca de mate. */
-const lanceDaPista = computed(() => {
-  const san =
-    jogadas.value.length === 0 ? problema.solucoes[0] : chaveDoMate(fenDoPasso.value, restantes.value)
-  return san ? casasDoLance(fenDoPasso.value, san) : null
-})
+/** Lance que a pista aponta, buscado quando ela é pedida (no mate longo a busca demora). */
+const alvoDaPista = ref<{ from: string; to: string } | null>(null)
 
 const orientacao = computed<'white' | 'black'>(() =>
   config.orientacaoAutomatica && vez === 'b' ? 'black' : 'white',
@@ -121,10 +117,8 @@ const formas = computed<Forma[]>(() => {
   // O tabuleiro devolve o peão enquanto a peça não é escolhida; a seta mostra o lance pendente.
   const pendente = promocaoPendente.value
   if (pendente) return [{ de: pendente.de, para: pendente.para, cor: 'yellow' }]
-  // Só busca o lance da pista quando ela é pedida: no Mate em 3 a busca não é instantânea.
-  if (pista.value === 0) return []
-  const alvo = lanceDaPista.value
-  if (!alvo) return []
+  const alvo = alvoDaPista.value
+  if (pista.value === 0 || !alvo) return []
   if (pista.value >= 2) return [{ de: alvo.from, para: alvo.to, cor: 'green' }]
   return pista.value === 1 ? [{ de: alvo.from, cor: 'yellow' }] : []
 })
@@ -192,6 +186,13 @@ async function conferir(de: string, para: string, promocao?: PecaPromocao) {
     return
   }
 
+  // No mate em 4 o livro garante um único primeiro lance; conferir outro levaria minutos.
+  if (jogadas.value.length === 0 && conjunto.lances >= 4 && !problema.solucoes.includes(lance.san)) {
+    errar(lance, ply, 'Não é a solução: neste exercício só um primeiro lance força o mate. Tente de novo.')
+    voltarDepois(TEMPO_DESFAZER_MS)
+    return
+  }
+
   // Contra a chave do livro, a defesa já vem calculada; outros lances são analisados agora.
   let resposta: Resposta
   if (jogadas.value.length === 0 && problema.defesa && lance.san === problema.solucoes[0]) {
@@ -230,6 +231,7 @@ async function conferir(de: string, para: string, promocao?: PecaPromocao) {
   fen.value = lance.fenDepois
   ultimoLance.value = [lance.from, lance.to]
   pista.value = 0
+  alvoDaPista.value = null
   aviso.value = { tipo: 'certo', lance: rotulo(ply, lance.san), texto: 'Isso! Veja a defesa.' }
   aguardando.value = true
   const defesa = resposta.lance
@@ -241,7 +243,10 @@ async function conferir(de: string, para: string, promocao?: PecaPromocao) {
     aviso.value = {
       tipo: 'neutro',
       lance: rotulo(ply + 1, defesa.san),
-      texto: `${vez === 'w' ? 'As pretas' : 'As brancas'} se defenderam. Agora dê o mate.`,
+      texto:
+        restantes.value === 1
+          ? `${nomeDoAdversario} se defenderam. Agora dê o mate.`
+          : `${nomeDoAdversario} se defenderam. Mate em ${restantes.value} lances.`,
     }
   })
 }
@@ -272,14 +277,25 @@ function concluir(lance: LanceVerificado) {
   }
 }
 
-function pedirPista() {
-  pista.value++
+async function pedirPista() {
   usouPista.value = true
-  const primeiroDeVarios = jogadas.value.length === 0 && conjunto.lances > 1
+  if (!alvoDaPista.value) {
+    // Primeiro lance: a chave do livro; depois, a busca de um lance que mantém o mate.
+    let san: string | undefined = problema.solucoes[0]
+    if (jogadas.value.length > 0) {
+      aguardando.value = true
+      aviso.value = { tipo: 'neutro', texto: 'Procurando a pista…' }
+      san = await buscarChave(fenDoPasso.value, restantes.value)
+      if (!ativo) return
+      aguardando.value = false
+    }
+    alvoDaPista.value = san ? casasDoLance(fenDoPasso.value, san) : null
+  }
+  pista.value++
   const texto =
     pista.value === 1
-      ? primeiroDeVarios
-        ? 'A peça destacada faz o primeiro lance.'
+      ? restantes.value > 1
+        ? 'A peça destacada faz o próximo lance do mate.'
         : 'A peça destacada dá o mate.'
       : 'Jogue o lance da seta.'
   aviso.value = { tipo: 'neutro', texto }
