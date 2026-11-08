@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory, type RouteLocationNormalized } from 'vue-router'
 import { buscarCapitulo } from './lib/capitulos'
 import { buscarConjunto, carregarConjuntos } from './lib/exercicios'
+import AberturasView from './views/AberturasView.vue'
+import AberturaView from './views/AberturaView.vue'
 import ConfigView from './views/ConfigView.vue'
 import DiagnosticoView from './views/DiagnosticoView.vue'
 import EstudoView from './views/EstudoView.vue'
@@ -18,6 +20,8 @@ export const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     { path: '/', name: 'inicio', component: InicioView },
+    { path: '/aberturas', name: 'aberturas', component: AberturasView },
+    { path: '/abertura/:cap', name: 'abertura', component: AberturaView, beforeEnter: exigirCapitulo },
     { path: '/explorar/:cap', name: 'explorar', component: ExplorarView, beforeEnter: exigirCapitulo },
     { path: '/estudo/:cap/:linha', name: 'estudo', component: EstudoView, beforeEnter: exigirCapitulo },
     { path: '/treino/:cap', name: 'treino', component: TreinoView, beforeEnter: exigirCapitulo },

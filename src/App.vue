@@ -9,7 +9,8 @@ watchEffect(() => {
 
 <template>
   <nav class="topo">
-    <RouterLink to="/" class="marca">Aberturas</RouterLink>
+    <RouterLink to="/" class="marca">Xadrez</RouterLink>
+    <RouterLink to="/aberturas">Aberturas</RouterLink>
     <RouterLink to="/exercicios">Exercícios</RouterLink>
     <RouterLink to="/diagnostico">Diagnóstico</RouterLink>
     <RouterLink to="/config">Configurações</RouterLink>
@@ -22,8 +23,9 @@ watchEffect(() => {
 <style scoped>
 .topo {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
+  gap: 0 1rem;
   padding: 0 1rem;
   border-bottom: 1px solid var(--borda);
 }

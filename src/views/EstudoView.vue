@@ -178,7 +178,9 @@ function trocarLinha(evento: Event) {
             class="botao primario"
             :to="{ name: 'estudo', params: { cap: capitulo.capitulo.id, linha: proxima.id } }"
           >Próximo estudo: {{ tituloDaLinha(proxima) }}</RouterLink>
-          <RouterLink v-else class="botao primario" to="/">Último estudo do capítulo: voltar ao início</RouterLink>
+          <RouterLink v-else class="botao primario" :to="{ name: 'abertura', params: { cap: capitulo.capitulo.id } }">
+            Último estudo do capítulo: voltar à abertura
+          </RouterLink>
         </div>
       </CartaoDica>
     </div>

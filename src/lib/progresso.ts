@@ -44,6 +44,8 @@ export interface Progresso {
   corPorCapitulo: Record<string, EscolhaCor>
   /** Por conjunto de exercícios, o estado de cada problema resolvido (chave = número). */
   exercicios: Record<string, Record<string, EstadoExercicio>>
+  /** Último conjunto de exercícios aberto, para o "Continuar" da página inicial. */
+  ultimoConjunto: string | null
   config: Configuracoes
 }
 
@@ -71,6 +73,7 @@ function progressoVazio(): Progresso {
     notasConferidas: [],
     corPorCapitulo: {},
     exercicios: {},
+    ultimoConjunto: null,
     config: { ...CONFIG_PADRAO },
   }
 }
@@ -87,6 +90,7 @@ export function normalizarProgresso(dados: unknown): Progresso | null {
     notasConferidas: Array.isArray(parcial.notasConferidas) ? parcial.notasConferidas : [],
     corPorCapitulo: ehObjeto(parcial.corPorCapitulo) ? parcial.corPorCapitulo! : {},
     exercicios: ehObjeto(parcial.exercicios) ? parcial.exercicios! : {},
+    ultimoConjunto: typeof parcial.ultimoConjunto === 'string' ? parcial.ultimoConjunto : null,
     config: { ...CONFIG_PADRAO, ...(ehObjeto(parcial.config) ? parcial.config : {}) },
   }
 }

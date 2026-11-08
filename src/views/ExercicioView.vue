@@ -33,6 +33,7 @@ const conjunto = buscarConjunto(route.params.conjunto as string)!
 const config = progresso.config
 
 progresso.exercicios[conjunto.id] ??= {}
+progresso.ultimoConjunto = conjunto.id
 const estados = computed(() => progresso.exercicios[conjunto.id] ?? {})
 
 /** Sem número na URL, abre o primeiro problema ainda não resolvido de primeira. */
