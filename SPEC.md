@@ -132,6 +132,7 @@ Lista de erros de validação (seção 3.2) e estatísticas do arquivo (linhas, 
 - Cada linha pode ter `plano: { brancas, pretas }`: o que cada lado busca depois da última posição. Texto do app, conferido com a estrutura da posição e a continuação do Stockfish. Aparece no fim do Estudo e no fim de cada partida do Treino.
 
 ## 9.1 Análise do Stockfish (pré-calculada)
+- `scripts/italiana/gerar-italiana.cjs` gera `data/openings/italiana.json` a partir da transcrição e dos textos que ficam na mesma pasta; a Italiana é editada ali, não no JSON. Os Dois Cavalos são editados direto no JSON.
 - `scripts/motor.cjs` avalia cada posição dos capítulos com o Stockfish e grava `data/engine/<id>.json` (melhor lance e avaliação). Rode de novo quando um capítulo mudar; posições analisadas a fundo ficam marcadas com `profundo` e são mantidas.
 - No Estudo e no Explorar: seta verde para o lance do livro e azul para o do Stockfish quando divergem, com a avaliação em texto. Nunca no Treino. Pode ser desligado nas Configurações.
 

@@ -1,0 +1,264 @@
+{
+  "c14-e-1": {
+    "dica": "Roca, mas deixa e4 sem apoio extra e permite o truque 9...Nxe4 10.Nxe4 d5, garfando bispo e cavalo para recuperar a peça."
+  },
+  "c14-f": {
+    "dica": "Roca sem dar apoio extra a d4; 8...Bg4 crava o cavalo de f3 contra a dama e aumenta a pressão sobre d4.",
+    "obs": "Livro sem sinal ('bom para as pretas'); Stockfish dá +0.8 para as brancas no fim da nota."
+  },
+  "c14-g": {
+    "dica": "Roca com o bispo ainda em c4, o que permite o golpe 9...Nxe4 10.Nxe4 d5, com garfo de peão sobre bispo e cavalo.",
+    "obs": "Comentário diz bom para as pretas; Stockfish dá +0.3 no fim da nota."
+  },
+  "c14-h": {
+    "dica": "O cavalo ataca o bispo de b6 e o peão d6, mas 12...Nb4 ganha tempo contra a dama e prepara o golpe em e4.",
+    "comentario": "Depois das trocas em c4, as pretas aplicam o truque 14...Nxe4 15.Nxe4 d5, garfando bispo e cavalo e recuperando a peça; o jogo fica igual."
+  },
+  "c15-i": {
+    "dica": "Ganha espaço na ala da dama e ameaça a5, que expulsaria o bispo de b6.",
+    "comentario": "As pretas respondem 7...a6, dando casa ao bispo; ambos rocam e o cavalo preto segue a rota ...Ne7–g6, com posição equilibrada."
+  },
+  "c15-j": {
+    "dica": "Roca primeiro e adia a manobra ...Ne7–g6, que pode vir no lance seguinte.",
+    "comentario": "Por transposição, as pretas retomam o plano ...Ne7, ...c6 e ...Ng6, sem problemas na abertura; igualdade."
+  },
+  "c15-k": {
+    "dica": "Desenvolve o bispo contra f6, mas com o rei branco já rocado e o preto ainda no centro, as pretas podem usar ...Ng6 e ...g5 para abrir a coluna g."
+  },
+  "c15-l": {
+    "dica": "Recua o bispo preventivamente, antes que ...d5, apoiado por c6, ganhe tempo sobre ele.",
+    "comentario": "As pretas rocam, reposicionam o bispo em c7 e completam ...Ng6; após 12.d4 h6 13.Bxf6 ficam com o par de bispos e um jogo um pouco melhor."
+  },
+  "c15-l-1": {
+    "dica": "Avança logo no centro em vez de 10.Nc4, mas sem criar pressão real sobre e5.",
+    "comentario": "As pretas sustentam e5 com ...Ng6 e ...Re8 e levam o cavalo a h5, de olho em f4; ficam um pouco melhor."
+  },
+  "c15-m": {
+    "dica": "Recua o bispo antecipando ...d5, mas as pretas fazem esse avanço de qualquer maneira e ganham espaço no centro."
+  },
+  "c15-m-1": {
+    "dica": "Mantém a tensão central e reconduz o cavalo de d2 por f1, manobra típica da Italiana lenta."
+  },
+  "c15-m-1-1": {
+    "dica": "Lance útil de espera: controla g5, tirando essa casa do bispo e dos cavalos brancos.",
+    "comentario": "A estrutura é a mesma da linha principal: as pretas completam o desenvolvimento com ...Be6 e ...Qd7 e, com o centro sólido, ficam um pouco melhor."
+  },
+  "c16-n": {
+    "dica": "A dama ataca o peão de g2, mas deixa c7 sem defesa diante do cavalo de d5; um lance arriscado.",
+    "obs": "Stockfish dá +0.8/+1.1 após 8...Qg6 (9.Nh4 com Nxc7+ na linha); livro (Keres) avalia =."
+  },
+  "c16-o": {
+    "dica": "Prepara a casa a7 para o bispo, que ficará a salvo quando as brancas avançarem d4."
+  },
+  "c16-p": {
+    "dica": "Troca em d4 antes de eliminar o cavalo de d5, mas entrega às brancas o centro de peões.",
+    "comentario": "Após 11.cxd4 Bb6 12.Nxb6 axb6 as brancas ficam com o centro e4–d4 e mais espaço; vantagem leve."
+  },
+  "c16-q": {
+    "dica": "Expulsa o cavalo de f4, que mirava g2 e d3.",
+    "comentario": "O cavalo vai a h3, de onde controla g1 e f2 e incomoda o roque branco; após 14.Bb5+ Kf8 as pretas também perdem o roque, e o jogo fica igual."
+  },
+  "c17-r": {
+    "dica": "Ocupa d5 e aumenta a pressão sobre o cavalo cravado em f6, mas permite 7...Nxc4, que elimina o bispo italiano.",
+    "comentario": "Após 9.Nxf6+ gxf6 as pretas têm peões dobrados, mas ganham o par de bispos e a coluna g semiaberta para a torre; igualdade.",
+    "obs": "Stockfish dá -0.6 logo após 7.Nd5, mas o fim da nota fica perto de 0, coerente com o =."
+  },
+  "c17-r-1": {
+    "dica": "Recua o bispo para disputar a diagonal do bispo de c5, em vez de mantê-lo na diagonal h4–d8."
+  },
+  "c17-s": {
+    "dica": "Completa o desenvolvimento e põe o rei a salvo, deixando o bispo de h4 sujeito a ...g5."
+  },
+  "c18-t-A": {
+    "dica": "Mantém o bispo em c5 e recaptura com o peão; 6.e5 ataca então o cavalo de f6."
+  },
+  "c18-t-B": {
+    "dica": "O cavalo de c6 deixa de defender e5; o cavalo branco captura com tempo e ainda mira f7 junto com o bispo."
+  },
+  "c18-u": {
+    "dica": "Ataca e5 de imediato para abrir a coluna f contra as pretas, em vez de cravar com 7.Bg5.",
+    "comentario": "Com 8.fxe5 dxe5 e 9.Bg5, as brancas abrem a coluna f e pressionam f6, o que compensa o peão entregue; segundo o livro, o jogo fica igual.",
+    "obs": "Stockfish dá +1.8 para as brancas no fim da nota (após 11.Bxf6); livro avalia =."
+  },
+  "c18-u-1": {
+    "dica": "A dama protege o cavalo de f6, de modo que Bxf6 possa ser respondido com ...Qxf6 sem dobrar peões.",
+    "comentario": "11.c3 expulsa o cavalo de d4; as pretas trocam em c4 e levam o cavalo a e6, atacando o bispo de g5, num jogo pouco claro."
+  },
+  "c18-v": {
+    "dica": "Oferece a troca do bispo de c4, a peça branca mais perigosa contra f7, antes de reforçar e5."
+  },
+  "c18-w": {
+    "dica": "Lance profilático: tira o rei da diagonal g1–a7, evitando xeques como ...Qc5+.",
+    "obs": "Stockfish vê as pretas bem melhores (-2.0 antes, -3.3 no fim da nota); livro avalia =."
+  },
+  "c19-a": {
+    "dica": "Recua para c5, mas ali o bispo fica exposto ao avanço d4 com ganho de tempo; 5...Ba5 é mais preciso."
+  },
+  "c19-a-1": {
+    "dica": "Solidifica o centro e libera o bispo de c8, preferindo uma estrutura clássica ao agudo 7...d3.",
+    "comentario": "8.cxd4 restaura o centro e4–d4 atacando o bispo de c5; pelo peão do gambito, as brancas têm iniciativa e ficam um pouco melhor."
+  },
+  "c19-b-A": {
+    "dica": "Defende e5 com a dama, mas ela sai cedo demais e fica exposta a ganhos de tempo, como d4 e e5."
+  },
+  "c19-b-B": {
+    "dica": "Desenvolve o cavalo pensando em ...d5, mas tira a proteção natural de f7, alvo de Ng5 com o bispo de c4."
+  },
+  "c19-b-C": {
+    "dica": "Desenvolve atacando e4; depois de 7.d4 as pretas aceitam abrir o jogo capturando mais um peão com 7...Nxe4."
+  },
+  "c19-c": {
+    "dica": "Fica com o peão a mais, mas cede o centro: após 8.cxd4 as brancas formam a dupla e4–d4."
+  },
+  "c19-c-1": {
+    "dica": "Crava o cavalo de f3 contra a dama, aumentando a pressão sobre d4."
+  },
+  "c19-c-2": {
+    "dica": "Ataca o bispo de c4, buscando trocá-lo ou desviá-lo da diagonal contra f7."
+  },
+  "c19-c-3": {
+    "dica": "Ganha espaço e expulsa o cavalo de c6, mas desocupa d4 e abre a diagonal do bispo de b6 rumo a f2."
+  },
+  "c19-d": {
+    "dica": "Troca as damas e recupera o peão do gambito com 10.Nxe5, abrindo mão do ataque por um final equilibrado.",
+    "comentario": "Sem damas, as brancas restabelecem a igualdade material em e5; as pretas se desenvolvem rapidamente com ...Be6 e ...Ne7, e o final é igual."
+  },
+  "c19-e": {
+    "dica": "Desenvolve e protege o cavalo de c6, atacado pelo bispo de d5, mas permite 12.Bxe7, que tira o roque das pretas.",
+    "comentario": "Após as trocas em e7 e c6, as brancas recuperam o peão com 14.Nxe5; o rei preto fica no centro, mas as pretas têm o par de bispos e oferecem a troca de damas com 14...Qe6; igualdade.",
+    "obs": "Stockfish prefere a linha base 11...f6 (-1.4) a 11...Nge7 (-0.7), mas ambas favorecem as pretas na avaliação do motor; livro dá =."
+  },
+  "c19-f": {
+    "dica": "Recupera o peão de g5, mas 13...Kf8! prende o bispo de g8 e a investida do cavalo não compensa."
+  },
+  "c19-f-1": {
+    "dica": "Salva o bispo de g8, atacado pela torre de h8, e o alinha com a dama de b3 contra f7, mas não recupera o peão.",
+    "comentario": "Após 13...Qf6 as pretas mantêm o peão a mais; a dama pressiona o cavalo de f3 e o avanço ...g4 fica no ar, deixando as pretas melhor."
+  },
+  "c20-g": {
+    "dica": "Mira f7 de imediato em vez de recuperar o peão com 8.cxd4, mas 8...d5 corta a diagonal do bispo.",
+    "comentario": "As pretas fecham a diagonal com 8...d5 e, depois de ...Ne5 e ...Ng4, o cavalo fica muito ativo contra o roque branco; as pretas ficam um pouco melhor."
+  },
+  "c20-h": {
+    "dica": "Forma bateria com o bispo contra d5 e ataca b7, buscando material, mas a dama se afasta do centro e sofre ganhos de tempo.",
+    "comentario": "10...Be6 sustenta d5; após 11.Qxb7 as pretas ganham tempo contra a dama com ...Ndb4 e ...Rb8, e ficam um pouco melhor."
+  },
+  "c20-h-1": {
+    "dica": "Roca e tira o rei da cravada, deixando o cavalo de c6 provisoriamente entregue em troca de tempo contra a dama.",
+    "comentario": "Após 13.Bxc6 Rb8 a dama é expulsa de b7 e o cavalo de b4 recaptura em c6, recuperando a peça; posição pouco clara.",
+    "obs": "Stockfish dá cerca de -1.3/-1.5 (pretas melhores); livro avalia ∞."
+  },
+  "c20-h-2": {
+    "dica": "Defende o cavalo de c6, cravado pelo bispo de b5, mas abre a coluna e para 13.Re1+."
+  },
+  "c20-i": {
+    "dica": "Oferece a troca do bispo de a3, que controlava f8 e impedia o roque preto.",
+    "comentario": "Após 12.Bxc6+ bxc6 13.Bxb4 Nxb4 as pretas ficam com peões dobrados em c, mas podem rocar e o cavalo chega a d3; jogo igual."
+  },
+  "c20-j": {
+    "dica": "Recupera o peão do gambito desfazendo a estrutura preta, mas abre mão do bispo e o rei preto fica bem em f7."
+  },
+  "c21-k": {
+    "dica": "Também protege f7, mas, ao contrário de 8...Qf6, não pressiona c3, que as brancas recapturam com o cavalo e ganho de desenvolvimento.",
+    "comentario": "Após 9.Nxc3 a oferta de troca 9...Qb4 deixa f7 desguarnecido: 10.Bxf7+ Kd8 tira o roque das pretas e, com o par de bispos e melhor desenvolvimento, as brancas ficam melhor.",
+    "obs": "Stockfish dá +4.7 no fim da nota; livro avalia ±."
+  },
+  "c21-l": {
+    "dica": "Troca o bispo pelo cavalo de c3, mas entrega o par de bispos e enfraquece as casas escuras.",
+    "comentario": "Com o bispo de a3 dominando as casas escuras, a dama em c3 apoiando e5 e a torre ocupando a coluna d, as brancas têm clara vantagem."
+  },
+  "c21-m": {
+    "dica": "Ataca a dama de g6 com ganho de tempo e mira h7, preparando Bxh7+."
+  },
+  "c22-n": {
+    "dica": "Contragolpe que ataca a dama de b3, mas após 8.Nxd4 exd4 o desenvolvimento preto atrasa e f7 continua fraco."
+  },
+  "c22-n-1": {
+    "dica": "Recupera um peão com xeque e tira o roque das pretas, mas o bispo fica exposto em f7.",
+    "comentario": "Após 9...Kf8 10.O-O Qf6 a dama ataca o bispo de f7 e as pretas reorganizam a defesa; por isso o livro prefere 9.O-O, que mantém o ataque."
+  },
+  "c22-o": {
+    "dica": "Troca em e5 para abrir a coluna d, mas alivia a tensão central e facilita o jogo das pretas."
+  },
+  "c22-p-1": {
+    "dica": "Cede o centro: após 9.cxd4 as brancas ficam com a dupla e4–d4 e mais espaço."
+  },
+  "c22-p-2": {
+    "dica": "Desenvolve atacando e4, mas adia ...Bb6 e o bispo de a5 segue com pouca mobilidade.",
+    "obs": "Stockfish avalia cerca de 0.0; livro dá ±."
+  },
+  "c22-p-3": {
+    "dica": "O cavalo vai à borda para defender f7, mas fica mal colocado e o bispo de a5 continua sem ...Bb6."
+  },
+  "c22-q": {
+    "dica": "Captura em d6 e ameaça dxc7, ignorando a pressão do cavalo de g4 e do bispo sobre f2."
+  },
+  "c23-r": {
+    "dica": "Forma uma bateria com o bispo contra f7, tentando ganhar tempo antes de d4.",
+    "comentario": "6...Nh6 defende f7; com ...Na5 e ...Nxc4 as pretas eliminam o bispo italiano e, nas complicações seguintes, ficam um pouco melhor."
+  },
+  "c23-r-1": {
+    "dica": "Ganha espaço em vez de recuperar a peça com 12.Qxe4, mas o cavalo preto se retira para c5 em segurança."
+  },
+  "c23-s-1": {
+    "dica": "Captura e5, mas entrega o bispo de c4; as pretas ficam com o par de bispos e jogam ...d5 com tempo."
+  },
+  "c23-s-2": {
+    "dica": "Preserva o bispo e protege e4, mas o bispo em d3 obstrui a coluna d e não pressiona f7."
+  },
+  "c23-s-3": {
+    "dica": "Sacrifica o bispo em f7 para tirar o roque das pretas e capturar e5 em seguida, mas o ataque não compensa a peça."
+  },
+  "c23-t": {
+    "dica": "Sustenta e5 em vez de capturar em d4, mantendo o centro fechado e o rei mais seguro."
+  },
+  "c23-u": {
+    "dica": "Libera o bispo de c8, mas entrega o peão de g7, contando com ...Bf6 com tempo e a coluna g semiaberta.",
+    "comentario": "As pretas aceitam perder g7 em troca de desenvolvimento rápido: após ...Bf6, ...Qe7, ...Bd7 e o roque grande, a posição fica equilibrada."
+  },
+  "c23-u-1": {
+    "dica": "Roca antes de proteger e4, que fica sem defesa diante da dama de e7."
+  },
+  "c23-v": {
+    "dica": "Tira a casa d5 do cavalo de b6 e ameaça c5, ganhando espaço antes de completar o desenvolvimento.",
+    "comentario": "As pretas atacam e5 e acabam capturando o peão, mas 15.Bh6 impede o roque curto e, com Rd1 e Nc3, as brancas têm bom ataque."
+  },
+  "c23-v-1": {
+    "dica": "Contragolpe central que libera o bispo de c8, mas abre a coluna d com o rei preto ainda no centro.",
+    "comentario": "Após 14.cxd5 Qxd5 15.Nc3 a dama preta é atacada com ganho de tempo; as brancas se desenvolvem rápido e a posição fica pouco clara.",
+    "obs": "Stockfish dá +1.8 logo após 13...d5 (melhor 14.Rd1); no fim da nota, +0.3. Livro: ∞."
+  },
+  "c23-v-2": {
+    "dica": "Antecipa c5 e controla c3, dificultando o desenvolvimento do cavalo de b1."
+  },
+  "c24-w": {
+    "dica": "Ataca b4 de novo, mas 6.b5 expulsa o cavalo de c6 com ganho de espaço.",
+    "comentario": "Após 6.b5 o cavalo é trocado em d4 e as brancas ganham tempo com c3 e d4, montando um centro forte; vantagem branca."
+  },
+  "c24-w-1": {
+    "dica": "Defende e5 com a dama em vez de trocar em d4, mantendo o bispo de b6 ativo na diagonal.",
+    "comentario": "As brancas rocam e abrem a coluna f com f4, mas as pretas completam o desenvolvimento com ...d6 e ...Be6 e a posição fica igual."
+  },
+  "c24-x": {
+    "dica": "Desenvolve o bispo na grande diagonal, pressionando o peão de e5.",
+    "comentario": "Após 7.b5 e as trocas na coluna a, o bispo fica em a1 mirando e5; as brancas mantêm leve vantagem."
+  },
+  "c24-y": {
+    "dica": "Gambito central: entrega o peão de d4 para abrir linhas enquanto o rei preto ainda está no centro."
+  },
+  "c24-z": {
+    "dica": "Contra-ataca o cavalo de f3 em vez de salvar o seu; as peças se trocam, mas as brancas saem mais desenvolvidas.",
+    "comentario": "Após as trocas o material fica igual, mas as pretas ficam com peões dobrados em c e o rei no centro, enquanto 12.Re1 ativa as brancas; vantagem branca."
+  },
+  "c24-z-1": {
+    "dica": "Roca antes de recapturar em f3, evitando o xeque ...Qe7+ que obrigaria o rei a se mover.",
+    "comentario": "As brancas recapturam com 11.Qxf3 e, com 12.Bb2, o bispo na grande diagonal mira g7; vantagem branca."
+  },
+  "c24-aa": {
+    "dica": "Roque natural, mas perde o momento de 10.d6, que atrapalharia o desenvolvimento preto.",
+    "comentario": "As pretas trocam o cavalo em f3 e, com 11...d6, completam o desenvolvimento com conforto; ficam um pouco melhor."
+  },
+  "c24-bb": {
+    "dica": "Expulsa o bispo de d4 com ganho de tempo, preparando d4 para dominar o centro."
+  }
+}
