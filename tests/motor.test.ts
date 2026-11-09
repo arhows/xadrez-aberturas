@@ -3,8 +3,10 @@ import { carregarCapitulos } from '../src/lib/capitulos'
 import { casasDoLance } from '../src/lib/lances'
 import { carregarMotor, formatarAvaliacao } from '../src/lib/motor'
 
+const todosOsCapitulos = await carregarCapitulos()
+
 describe('análise do Stockfish', () => {
-  it.each(carregarCapitulos().map((c) => [c.capitulo.id, c] as const))(
+  it.each(todosOsCapitulos.map((c) => [c.capitulo.id, c] as const))(
     '%s: cobre as posições da árvore com lances legais',
     async (_id, capitulo) => {
       const dados = await carregarMotor(capitulo.capitulo.id)

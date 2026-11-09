@@ -5,6 +5,8 @@ import { separarLances } from '../src/lib/lances'
 import type { Capitulo } from '../src/lib/tipos'
 import { validarCapitulo } from '../src/lib/validacao'
 
+const todosOsCapitulos = await carregarCapitulos()
+
 function linha(id: string, lances: string, dicas: Record<string, string> = {}) {
   return { id, coluna: 1, grupo: 'g', nome: id, lances, avaliacao: null, resumo: '', dicas }
 }
@@ -91,7 +93,7 @@ describe('mesclagem', () => {
 })
 
 describe('critérios de aceite (SPEC 8)', () => {
-  const dois = carregarCapitulos().find((c) => c.capitulo.id === 'two-knights')!
+  const dois = todosOsCapitulos.find((c) => c.capitulo.id === 'two-knights')!
   const { arvore } = dois
   const colunas = (de: number, ate: number) =>
     dois.capitulo.linhas
@@ -161,7 +163,7 @@ describe('critérios de aceite (SPEC 8)', () => {
 
 describe('dicas das notas', () => {
   it('a aresta do desvio de uma nota mostra a dica dela', () => {
-    for (const cap of carregarCapitulos()) {
+    for (const cap of todosOsCapitulos) {
       const arestas = [...cap.arvore.nos.values()].flatMap((no) => no.saidas)
       const nota = cap.capitulo.notas![0]
       const desvio = arestas.find((a) => a.selos.some((s) => s.id === nota.id))

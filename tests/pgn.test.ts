@@ -3,7 +3,9 @@ import { describe, expect, it } from 'vitest'
 import { carregarCapitulos } from '../src/lib/capitulos'
 import { exportarPgn } from '../src/lib/pgn'
 
-const dois = carregarCapitulos().find((c) => c.capitulo.id === 'two-knights')!
+const todosOsCapitulos = await carregarCapitulos()
+
+const dois = todosOsCapitulos.find((c) => c.capitulo.id === 'two-knights')!
 const pgn = exportarPgn(dois)
 const jogos = pgn.split(/\n(?=\[Event)/)
 
@@ -61,7 +63,7 @@ describe('exportação em PGN', () => {
     }
   })
 
-  it.each(carregarCapitulos().map((c) => [c.capitulo.id, c] as const))(
+  it.each(todosOsCapitulos.map((c) => [c.capitulo.id, c] as const))(
     '%s: exporta todas as linhas e notas com lances legais',
     (_id, capitulo) => {
       const exportadas = exportarPgn(capitulo).split(/\n(?=\[Event)/).flatMap(linhasDoJogo)

@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { obterCapitulos } from '../src/lib/capitulos'
+import { carregarCapitulos } from '../src/lib/capitulos'
 import { jogarLances } from '../src/lib/lances'
 import { analisarPartida, corDoUsuario, detectarCor, lancesDoPgn, lerPgns, separarPgns, type PartidaBaixada } from '../src/lib/partidas'
 
-const capitulos = obterCapitulos()
+const todosOsCapitulos = await carregarCapitulos()
+
+const capitulos = todosOsCapitulos
 const italiana = capitulos.find((c) => c.capitulo.id === 'italian')!
 const linha = jogarLances(italiana.capitulo.linhas[0].lances).lances.map((l) => l.san)
 

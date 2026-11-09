@@ -15,7 +15,9 @@ import {
   type Partida,
 } from '../src/lib/treino'
 
-const dois = carregarCapitulos().find((c) => c.capitulo.id === 'two-knights')!
+const todosOsCapitulos = await carregarCapitulos()
+
+const dois = todosOsCapitulos.find((c) => c.capitulo.id === 'two-knights')!
 const { arvore } = dois
 
 /** Joga a linha alvo até chegar a vez do lance de número `plies`. */

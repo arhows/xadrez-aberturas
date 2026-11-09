@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { obterCapitulos } from '../src/lib/capitulos'
+import { carregarCapitulos } from '../src/lib/capitulos'
 import { familiaDaAbertura } from '../src/lib/familias'
+
+const todosOsCapitulos = await carregarCapitulos()
 
 describe('famílias de aberturas (divisão do MCO)', () => {
   it('classifica pelos dois primeiros lances da base', () => {
@@ -13,7 +15,7 @@ describe('famílias de aberturas (divisão do MCO)', () => {
   })
 
   it('Italiana e Dois Cavalos são jogos abertos', () => {
-    for (const capitulo of obterCapitulos()) {
+    for (const capitulo of todosOsCapitulos) {
       expect(familiaDaAbertura(capitulo.capitulo.base).id, capitulo.capitulo.id).toBe('abertos')
     }
   })

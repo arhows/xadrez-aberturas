@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest'
 import { carregarCapitulos } from '../src/lib/capitulos'
 import { chaveDoLance } from '../src/lib/lances'
 
-const capitulos = carregarCapitulos()
+const todosOsCapitulos = await carregarCapitulos()
+
+const capitulos = todosOsCapitulos
 
 describe('arquivos de abertura', () => {
   it('encontra o capítulo dos Dois Cavalos', () => {

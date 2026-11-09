@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory, type RouteLocationNormalized } from 'vue-router'
-import { buscarCapitulo } from './lib/capitulos'
+import { buscarCapitulo, carregarCapitulos } from './lib/capitulos'
 import { buscarConjunto, carregarConjuntos } from './lib/exercicios'
 import { esperarSessao, nuvem } from './lib/nuvem'
 import AberturasView from './views/AberturasView.vue'
@@ -68,5 +68,7 @@ router.beforeEach(async (destino) => {
     const volta = destino.query.volta
     return typeof volta === 'string' && volta.startsWith('/') ? volta : { name: 'inicio' }
   }
+  // As telas do app usam os capítulos de forma síncrona: baixa todos antes da primeira tela.
+  if (!destino.meta.publica) await carregarCapitulos()
   return true
 })
