@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { cadastrar, entrarComEmail, entrarComGoogle, esqueciASenha, nuvem } from '../lib/nuvem'
+import { ehAndroid, ehCelular, ehIos, instalar, pwa } from '../lib/pwa'
 
 type Modo = 'entrar' | 'cadastrar' | 'esqueci'
 
@@ -14,6 +15,18 @@ const confirmacao = ref('')
 const enviando = ref(false)
 const erro = ref('')
 const aviso = ref('')
+
+// Instalar: só no celular e se ainda não estiver aberto como app.
+const mostrarInstalar = computed(() => ehCelular() && !pwa.instalado)
+const iphone = ehIos()
+const android = ehAndroid()
+const instrucoes = ref(false)
+
+async function aoInstalar() {
+  // Android com o convite do navegador: instala direto. Sem convite (ou iPhone): mostra o passo a passo.
+  if (android && pwa.podeInstalar) await instalar()
+  else instrucoes.value = !instrucoes.value
+}
 
 const titulo = computed(
   () => ({ entrar: 'Entrar', cadastrar: 'Criar conta', esqueci: 'Redefinir a senha' })[modo.value],
@@ -66,6 +79,40 @@ function enviar() {
       <h1>Treinador de Xadrez</h1>
       <p class="suave">Aberturas do MCO e exercícios de mate. Cada conta tem o próprio progresso.</p>
     </header>
+
+    <section v-if="mostrarInstalar" class="instalar">
+      <button type="button" class="botao" :aria-expanded="instrucoes" @click="aoInstalar">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14" />
+        </svg>
+        Instalar App
+      </button>
+      <div v-if="instrucoes" class="passos" role="region" aria-label="Como instalar">
+        <template v-if="iphone">
+          <p><strong>No iPhone/iPad, pelo Safari:</strong></p>
+          <ol>
+            <li>
+              Toque em <strong>Compartilhar</strong>
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-label="ícone de compartilhar" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 15V3m0 0-4 4m4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1" />
+              </svg>
+              (na barra de baixo ou no topo).
+            </li>
+            <li>Role a lista e toque em <strong>Adicionar à Tela de Início</strong>.</li>
+            <li>Toque em <strong>Adicionar</strong>. O ícone do cavalo aparece na tela inicial.</li>
+          </ol>
+          <p class="suave">Se não aparecer a opção, abra este site no Safari.</p>
+        </template>
+        <template v-else>
+          <p><strong>No Android, pelo Chrome:</strong></p>
+          <ol>
+            <li>Toque no menu <strong>⋮</strong> (canto de cima, à direita).</li>
+            <li>Toque em <strong>Instalar app</strong> (ou <strong>Adicionar à tela inicial</strong>).</li>
+            <li>Confirme em <strong>Instalar</strong>.</li>
+          </ol>
+        </template>
+      </div>
+    </section>
 
     <section class="cartao">
       <h2>{{ titulo }}</h2>
@@ -155,6 +202,31 @@ h2 {
 .suave {
   margin: 0;
   color: var(--texto-suave);
+}
+.instalar {
+  display: grid;
+  gap: 0.75rem;
+}
+.instalar .botao {
+  gap: 0.5rem;
+}
+.passos {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  background: var(--superficie);
+}
+.passos p {
+  margin: 0;
+}
+.passos ol {
+  display: grid;
+  gap: 0.375rem;
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+}
+.passos svg {
+  vertical-align: -3px;
 }
 .cartao {
   display: grid;

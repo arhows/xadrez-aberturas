@@ -92,3 +92,12 @@ export async function instalar() {
 export function ehIos(): boolean {
   return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
 }
+
+export function ehAndroid(): boolean {
+  return /android/i.test(navigator.userAgent)
+}
+
+/** Celular ou tablet (onde faz sentido oferecer a instalação na tela de entrada). */
+export function ehCelular(): boolean {
+  return ehAndroid() || ehIos()
+}
