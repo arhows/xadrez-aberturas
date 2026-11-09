@@ -31,6 +31,7 @@ watchEffect(() => {
     <RouterLink to="/" class="marca">Xadrez</RouterLink>
     <RouterLink to="/aberturas">Aberturas</RouterLink>
     <RouterLink to="/exercicios">Exercícios</RouterLink>
+    <RouterLink to="/partidas">Partidas</RouterLink>
     <RouterLink to="/diagnostico">Diagnóstico</RouterLink>
     <RouterLink to="/config">Configurações</RouterLink>
   </nav>
