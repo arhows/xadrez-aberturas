@@ -78,7 +78,7 @@
    ]
   }
  ],
- "ordem": 1,
+ "ordem": 3,
  "linhas": [
   {
    "id": "c01",
@@ -967,7 +967,7 @@
     "5. d4": "Ocupa o centro.",
     "5... Nxf3+": "Troca os cavalos com xeque.",
     "6. Qxf3": "Retoma com a dama.",
-    "6... Qh4+": "Xeque que obriga a branca a bloquear com a dama ou mover o rei.",
+    "6... Qh4+": "Xeque que obriga as brancas a bloquear com a dama ou mover o rei.",
     "7. Qf2": "Bloqueia oferecendo a troca das damas.",
     "7... Qxf2+": "Troca as damas.",
     "8. Kxf2": "O rei retoma; sem damas, ele fica bem no centro.",

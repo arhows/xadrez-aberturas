@@ -312,7 +312,7 @@ const capitulo = {
   fonte: 'Modern Chess Openings — King’s Gambit, colunas 1–36 (pp. 3–17)',
   base: '1. e4 e5 2. f4',
   corPadrao: 'w',
-  ordem: 1,
+  ordem: 3,
   grupos: [
     { id: 'g5', nome: '3.Nf3 g5 — Kieseritzky, Philidor, Hanstein e Muzio', colunas: [1, 2, 3, 4, 5, 6] },
     { id: 'menos-usuais', nome: '3.Nf3 — Becker (3...d6), 3...Ne7 e 3...Nf6', colunas: [7, 8, 9, 10, 11, 12] },

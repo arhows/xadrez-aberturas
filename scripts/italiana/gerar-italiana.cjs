@@ -542,7 +542,7 @@ const capitulo = {
   fonte: 'Modern Chess Openings — Giuoco Piano, colunas 1–18 (pp. 18–25), e Gambito Evans, colunas 1–6 (pp. 26–29, aqui 19–24)',
   base: '1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5',
   corPadrao: 'w',
-  ordem: 2,
+  ordem: 18,
   grupos: [
     { id: 'moller', nome: '4.c3 Nf6 5.d4 exd4 — linhas de ação e Ataque Möller', colunas: [1, 2, 3, 4, 5, 6] },
     { id: 'pianissimo', nome: '4.c3 Nf6 5.d3 — Giuoco Pianissimo', colunas: [7, 8, 9, 10, 11, 12] },

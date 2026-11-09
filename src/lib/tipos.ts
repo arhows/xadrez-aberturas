@@ -64,7 +64,7 @@ export interface Capitulo {
   nome: string
   fonte?: string
   base: string
-  /** Posição do capítulo no MCO (1 = Gambito do Rei); define a ordem na lista de aberturas. */
+  /** Página do MCO em que o capítulo começa; define a ordem na lista de aberturas. */
   ordem?: number
   /** Cor sugerida no Treino; sem ela, o capítulo treina as duas cores. */
   corPadrao?: EscolhaCor

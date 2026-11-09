@@ -4,7 +4,7 @@
  "fonte": "Modern Chess Openings — Giuoco Piano, colunas 1–18 (pp. 18–25), e Gambito Evans, colunas 1–6 (pp. 26–29, aqui 19–24)",
  "base": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5",
  "corPadrao": "w",
- "ordem": 2,
+ "ordem": 18,
  "grupos": [
   {
    "id": "moller",
