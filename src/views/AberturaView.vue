@@ -109,7 +109,6 @@ function baixarPgn() {
 }
 h1 {
   margin: 0;
-  font-size: 1.25rem;
 }
 .suave {
   margin: 0.25rem 0 0;
@@ -125,9 +124,11 @@ header .acoes {
   gap: 0.5rem;
 }
 .grupo {
-  margin-top: 0.75rem;
+  margin-top: var(--espaco-3);
   border: 1px solid var(--borda);
-  border-radius: 8px;
+  border-radius: var(--raio-lg);
+  background: var(--superficie);
+  overflow: hidden;
 }
 summary {
   display: flex;

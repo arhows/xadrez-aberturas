@@ -312,11 +312,9 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
 }
 h1 {
   margin: 0;
-  font-size: 1.25rem;
 }
 h2 {
   margin: 0 0 0.5rem;
-  font-size: 1.125rem;
 }
 section {
   margin-top: 1.75rem;
@@ -330,35 +328,20 @@ p {
 }
 .importar {
   display: grid;
-  gap: 0.75rem;
-  margin-top: 1rem;
-  padding: 1rem;
+  gap: var(--espaco-3);
+  margin-top: var(--espaco-4);
+  padding: var(--espaco-4);
   border: 1px solid var(--borda);
-  border-radius: 12px;
+  border-radius: var(--raio-lg);
   background: var(--superficie);
-}
-.campo {
-  display: grid;
-  gap: 0.25rem;
+  box-shadow: var(--sombra-cartao);
 }
 .importar h2 {
   margin: 0;
 }
-.campo textarea,
-.campo select {
-  padding: 0.5rem 0.75rem;
-  border: 1px solid var(--borda);
-  border-radius: 8px;
-  background: var(--fundo);
-  color: var(--texto);
-  font: inherit;
-}
-.campo select {
-  min-height: 44px;
-}
 .campo textarea {
-  font-family: ui-monospace, monospace;
-  font-size: 0.8125rem;
+  font-family: var(--font-mono);
+  font-size: 13px;
   resize: vertical;
 }
 .acoes {
@@ -372,36 +355,24 @@ p {
   height: 1px;
   opacity: 0;
 }
-.campo input {
-  min-height: 44px;
-  padding: 0 0.75rem;
-  border: 1px solid var(--borda);
-  border-radius: 8px;
-  background: var(--fundo);
-  color: var(--texto);
-  font: inherit;
-}
 .aviso {
-  margin-top: 1rem;
-  padding: 0.75rem 1rem;
-  border-left: 4px solid var(--ok);
-  border-radius: 8px;
-  background: var(--superficie);
+  margin-top: var(--espaco-4);
+  padding: var(--espaco-3) var(--espaco-4);
+  border-radius: var(--raio-md);
+  background: var(--ok-suave);
 }
 .aviso.erro {
-  border-color: var(--erro);
-}
-.lista {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  background: var(--erro-suave);
 }
 .lista li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  padding: 0.75rem 0;
+  gap: var(--espaco-3);
+  min-height: 64px;
+  padding: var(--espaco-3) var(--espaco-4);
+}
+.lista li + li {
   border-top: 1px solid var(--borda);
 }
 .lista li div {

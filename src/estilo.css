@@ -173,6 +173,10 @@ code {
   }
 }
 
+/* Títulos das páginas em serifa (h1 = título da página, h2 = seção). */
+.pagina h1 { font-family: var(--font-titulo); font-size: 28px; line-height: 34px; font-weight: 600; }
+.pagina h2 { font-family: var(--font-titulo); font-size: 20px; line-height: 26px; font-weight: 600; }
+
 /* ---------- Botão ---------- */
 .botao {
   display: inline-flex;

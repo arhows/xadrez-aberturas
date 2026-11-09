@@ -56,14 +56,14 @@ const primeiraRevisao = revisoes[0]
           {{ numero(contagem(livro.conjuntos).total) }} problemas ·
           {{ contagem(livro.conjuntos).percentual }}% resolvidos
         </p>
-        <div class="barra" role="presentation">
-          <span :style="{ width: `${contagem(livro.conjuntos).percentual}%` }"></span>
+        <div class="progresso fino" role="presentation">
+          <span class="trilho"><span :style="{ width: `${contagem(livro.conjuntos).percentual}%` }"></span></span>
         </div>
       </header>
       <ul class="conjuntos">
         <li v-for="conjunto in livro.conjuntos" :key="conjunto.id">
           <div>
-            <strong>{{ conjunto.nome }}</strong>
+            <strong class="titulo-item">{{ conjunto.nome }}</strong>
             <span class="suave">
               {{ numero(conjunto.problemas.length) }} problemas ·
               ✓ {{ contagem([conjunto]).primeira }} de primeira · {{ contagem([conjunto]).ajuda }} com ajuda
@@ -79,7 +79,6 @@ const primeiraRevisao = revisoes[0]
 <style scoped>
 h1 {
   margin: 0 0 1rem;
-  font-size: 1.25rem;
 }
 .revisao {
   display: flex;
@@ -113,7 +112,6 @@ header {
 }
 h2 {
   margin: 0;
-  font-size: 1.125rem;
 }
 p {
   margin: 0;
@@ -125,17 +123,8 @@ p {
   color: var(--texto-suave);
   font-size: 0.875rem;
 }
-.barra {
-  height: 6px;
-  margin-top: 0.25rem;
-  border-radius: 3px;
-  background: var(--borda);
-  overflow: hidden;
-}
-.barra span {
-  display: block;
-  height: 100%;
-  background: var(--ok);
+.progresso {
+  margin-top: var(--espaco-2);
 }
 .conjuntos {
   margin: 0;

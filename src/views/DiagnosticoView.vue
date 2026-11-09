@@ -32,6 +32,7 @@ const secoes = computed(() =>
 
 <template>
   <div class="pagina">
+  <h1>Diagnóstico</h1>
   <section v-for="secao in secoes" :key="secao.id" class="secao">
     <h2>{{ secao.nome }}</h2>
     <p v-if="secao.fonte" class="fonte">{{ secao.fonte }}</p>
@@ -43,7 +44,7 @@ const secoes = computed(() =>
       <div><dt>Dicas</dt><dd>{{ secao.estatisticas.dicas }}</dd></div>
     </dl>
 
-    <h3>Erros de validação ({{ secao.problemas.length }})</h3>
+    <h3 class="titulo-item">Erros de validação ({{ secao.problemas.length }})</h3>
     <p v-if="secao.problemas.length === 0" class="ok">
       Todos os lances são legais e todas as dicas têm lance.
     </p>
@@ -56,14 +57,14 @@ const secoes = computed(() =>
       </li>
     </ul>
 
-    <h3>Notas a conferir ({{ secao.aConferir.length }})</h3>
+    <h3 class="titulo-item">Notas a conferir ({{ secao.aConferir.length }})</h3>
     <p class="ajuda">Só entram no Treino depois de marcadas como conferidas.</p>
     <ul class="cartoes">
       <li v-for="nota in secao.aConferir" :key="nota.id" class="cartao aviso">
         <strong>{{ nota.rotulo }}</strong> da coluna {{ nota.coluna }}
         (<code>{{ nota.id }}</code>)
         <p>{{ nota.conferir }}</p>
-        <label>
+        <label class="marcar">
           <input v-model="progresso.notasConferidas" type="checkbox" :value="nota.id" />
           Conferida
         </label>
@@ -71,7 +72,7 @@ const secoes = computed(() =>
     </ul>
 
     <template v-if="secao.pendentes">
-      <h3>Ainda não transcrito</h3>
+      <h3 class="titulo-item">Ainda não transcrito</h3>
       <p class="cartao aviso">{{ secao.pendentes }}</p>
     </template>
   </section>
@@ -79,8 +80,11 @@ const secoes = computed(() =>
 </template>
 
 <style scoped>
+h1 {
+  margin: 0 0 var(--espaco-5);
+}
 .secao {
-  margin-bottom: 2rem;
+  margin-bottom: var(--espaco-6);
 }
 h2 {
   margin: 0 0 0.25rem;
@@ -100,9 +104,10 @@ h3 {
   margin: 1rem 0 0;
 }
 .numeros div {
-  padding: 0.5rem;
+  padding: var(--espaco-3) var(--espaco-2);
   border: 1px solid var(--borda);
-  border-radius: 8px;
+  border-radius: var(--raio-md);
+  background: var(--superficie);
   text-align: center;
 }
 .numeros dt {
@@ -111,8 +116,7 @@ h3 {
 }
 .numeros dd {
   margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
+  font: 600 24px/30px var(--font-titulo);
   font-variant-numeric: tabular-nums;
 }
 .ok {
@@ -126,30 +130,24 @@ h3 {
   list-style: none;
 }
 .cartao {
+  display: block;
   margin: 0;
-  padding: 0.75rem;
-  border-radius: 8px;
-  border-left: 4px solid;
-  background: var(--superficie);
+  box-shadow: none;
 }
 .cartao p {
   margin: 0.25rem 0 0.5rem;
 }
-.erro {
-  border-color: var(--erro);
+.cartao.erro {
+  border-color: transparent;
+  background: var(--erro-suave);
 }
-.aviso {
-  border-color: var(--aviso);
+.cartao.aviso {
+  border-color: transparent;
+  background: var(--aviso-suave);
 }
 .fen {
   display: block;
   overflow-wrap: anywhere;
   font-size: 0.875rem;
-}
-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 44px;
 }
 </style>

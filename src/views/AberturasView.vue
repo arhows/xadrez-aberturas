@@ -25,15 +25,16 @@ const linhasAtivas = (capitulo: CapituloCarregado) =>
       <ul class="cartoes">
         <li v-for="capitulo in familia.capitulos" :key="capitulo.capitulo.id">
           <RouterLink class="cartao" :to="{ name: 'abertura', params: { cap: capitulo.capitulo.id } }">
-            <strong>{{ capitulo.capitulo.nome }}</strong>
-            <span class="suave">{{ fmtTexto(capitulo.capitulo.base) }}</span>
+            <strong class="titulo-item">{{ capitulo.capitulo.nome }}</strong>
+            <span class="lance suave">{{ fmtTexto(capitulo.capitulo.base) }}</span>
             <span class="suave">
               {{ linhasAtivas(capitulo) }} linhas · {{ percentual(capitulo) }}% dominado
             </span>
-            <span v-if="filaDoCapitulo(capitulo.capitulo.id)" class="pendente">
-              {{ filaDoCapitulo(capitulo.capitulo.id) }} para hoje
+            <span class="progresso fino"><span class="trilho"><span :style="{ width: `${percentual(capitulo)}%` }"></span></span></span>
+            <span class="rodape">
+              <span v-if="filaDoCapitulo(capitulo.capitulo.id)" class="selo">{{ filaDoCapitulo(capitulo.capitulo.id) }} PARA HOJE</span>
+              <span v-else class="selo ok">EM DIA</span>
             </span>
-            <span v-else class="em-dia">Em dia</span>
           </RouterLink>
         </li>
       </ul>
@@ -52,11 +53,9 @@ const linhasAtivas = (capitulo: CapituloCarregado) =>
 }
 h1 {
   margin: 0;
-  font-size: 1.25rem;
 }
 h2 {
   margin: 0 0 0.75rem;
-  font-size: 1.125rem;
 }
 h2 .suave {
   font-weight: 400;
@@ -77,27 +76,19 @@ h2 .suave {
   list-style: none;
 }
 .cartao {
-  display: grid;
-  gap: 0.25rem;
+  gap: var(--espaco-2);
   height: 100%;
-  padding: 1rem;
-  border: 1px solid var(--borda);
-  border-radius: 8px;
-  background: var(--superficie);
   color: var(--texto);
   text-decoration: none;
+}
+.cartao .lance {
+  font-size: 14px;
+}
+.rodape {
+  margin-top: var(--espaco-1);
 }
 .cartao:hover,
 .cartao:focus-visible {
   border-color: var(--destaque);
-}
-.pendente {
-  color: var(--aviso);
-  font-size: 0.875rem;
-  font-weight: 600;
-}
-.em-dia {
-  color: var(--ok);
-  font-size: 0.875rem;
 }
 </style>

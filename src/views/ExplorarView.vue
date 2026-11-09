@@ -97,6 +97,10 @@ const ultimoLance = computed<[string, string] | null>(() => {
   return lance ? [lance.from, lance.to] : null
 })
 const continuacoes = computed(() => (foraDoLivro.value ? [] : saidas(noAtual.value)))
+/** O lance do livro mais estudado nesta posição (o que aparece em mais linhas e notas). */
+const principal = computed(() =>
+  continuacoes.value.reduce<Aresta | null>((melhor, a) => (!melhor || a.linhas.length > melhor.linhas.length ? a : melhor), null),
+)
 const plyAtual = computed(() => caminho.value.length + fora.value.length)
 
 const formasTatica = ref<Forma[]>([])
@@ -319,7 +323,8 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
             v-for="aresta in continuacoes"
             :key="aresta.id"
             type="button"
-            class="botao"
+            class="chip-lance"
+            :class="{ livro: aresta === principal }"
             @click="selecionar([...caminho, aresta])"
           >
             {{ fmtSan(aresta.san) }}
