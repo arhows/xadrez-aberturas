@@ -1,11 +1,13 @@
 // Transcrição do MCO 15ª ed. — Ruy Lopez, linhas principais: Defesa Fechada e Ataque Marshall (pp. 79–95).
 // Gerar: node scripts/mco/gerar.cjs ruy-lopez-c
 // Formato: ver gambito-do-rei.cjs. Dicas em ruy-lopez-c-dicas.cjs.
-// Entregue em partes: colunas 1–18 (Fechada e Chigorin) primeiro; as demais (19–42) entram depois neste mesmo arquivo.
+// Entregue em partes: colunas 1–18 (Fechada e Chigorin), 19–30 (Breyer e Smyslov); as demais (31–42) entram depois.
 
 const CD = '1 e4 e5 2 Nf3 Nc6 3 Bb5 a6 4 Ba4 Nf6 5 O-O Be7 6 Re1 b5 7 Bb3 d6 8 c3 O-O'
 const CG = `${CD} 9 h3 Na5 10 Bc2 c5 11 d4`
 const CH = `${CG} Qc7 12 Nbd2 cxd4 13 cxd4`
+const BR = `${CD} 9 h3 Nb8`
+const SY = `${CD} 9 h3 h6 10 d4 Re8`
 
 const colunas = {
   c01: [`${CD} 9 h3 Nd7 10 d4 Bf6 11 a4 Bb7 12 Na3 exd4 13 cxd4 Na5 14 Bc2 b4 15 Nb1 Re8 16 Bf4 c5`, 'fechada', '9.h3 Nd7 10.d4 Bf6', '±',
@@ -44,6 +46,30 @@ const colunas = {
     'Com 12.dxc5 as brancas abrem a coluna d e mandam o cavalo para f5. As pretas se defendem e igualam.'],
   c18: [`${CG} Bb7 12 d5 Nc4 13 a4 Nb6 14 Nbd2 g6 15 a5 Nbd7 16 Nf1 Nh5 17 Bh6 Re8 18 Qd2 Bf8`, 'chigorin-2', 'Chigorin: 11...Bb7 12.d5', '⩲',
     'Com 11...Bb7 o bispo fica na diagonal longa, mas 12.d5 a fecha. As brancas ganham espaço e ficam um pouco melhor.'],
+  c19: [`${BR} 10 d4 Nbd7 11 Nbd2 Bb7 12 Bc2 Re8 13 Nf1 Bf8 14 Ng3 g6 15 a4 c5 16 d5 c4 17 Bg5 h6`, 'breyer', 'Breyer: 13.Nf1 Bf8 14.Ng3 g6', '⩲',
+    'Variante Breyer: o cavalo volta de c6 para b8 e vai para d7, reforçando e5 e liberando o peão c. As pretas ficam sólidas; as brancas precisam jogar nos dois flancos para conseguir vantagem.'],
+  c20: [`${BR} 10 d4 Nbd7 11 Nbd2 Bb7 12 Bc2 Re8 13 a4 Bf8 14 Bd3 c6 15 b3 g6 16 Bb2 Nh5 17 Qc2 Nf4`, 'breyer', 'Breyer: 13.a4', '=',
+    'Com 13.a4 as brancas atacam b5 de imediato. As pretas defendem com ...c6 e o cavalo vai para f4: o jogo fica igual.'],
+  c21: [`${BR} 10 d4 Nbd7 11 Nbd2 Bb7 12 Bc2 Re8 13 b4 Bf8 14 a4 Nb6 15 a5 Nbd7 16 Bb2 Rb8 17 Rb1 Ba8`, 'breyer', 'Breyer: 13.b4', '=',
+    'Com 13.b4 as brancas ganham espaço no flanco da dama, mas as pretas se reorganizam e igualam.'],
+  c22: [`${BR} 10 d4 Nbd7 11 Nh4 g6 12 Bh6 Re8 13 Nf3 c5 14 Nbd2 Bf8 15 Be3 Bb7 16 d5 Nb6 17 Bc2 Bc8`, 'breyer', 'Breyer: 11.Nh4', '=',
+    'O cavalo vai para h4 para provocar ...g6 e enfraquecer as casas pretas, mas as pretas igualam.'],
+  c23: [`${BR} 10 d4 Nbd7 11 c4 c6 12 c5 Qc7 13 cxd6 Bxd6 14 Bg5 exd4 15 Bxf6 gxf6 16 Qxd4 Ne5 17 Nbd2 Rd8`, 'breyer', 'Breyer: 11.c4', '∞',
+    '11.c4 é o lance mais enérgico: as brancas atacam o flanco da dama e a estrutura preta fica estragada, mas as pretas ganham atividade. Chances para os dois lados.'],
+  c24: [`${BR} 10 d3 Nbd7 11 Nbd2 Bb7 12 Nf1 Nc5 13 Bc2 Re8 14 Ng3 Bf8 15 b4 Ncd7 16 d4 g6 17 a4 Nb6`, 'breyer', 'Breyer: 10.d3', '⩲',
+    'Com o calmo 10.d3 as brancas adiam d4. Depois de b4 e d4 ficam um pouco melhor.'],
+  c25: [`${SY} 11 Nbd2 Bf8 12 Nf1 Bd7 13 Ng3 Na5 14 Bc2 c5 15 b3 Nc6 16 d5 Ne7 17 Be3 Ng6 18 Qd2 Nh7`, 'smyslov', 'Smyslov: 12.Nf1 Bd7 13.Ng3 Na5 14.Bc2 c5', '⩲',
+    'Variante Smyslov: com 9...h6 as pretas impedem Ng5 e Bg5 e preparam ...Re8 e ...Bf8. Depois de d5 as brancas ficam com vantagem de espaço.'],
+  c26: [`${SY} 11 Nbd2 Bf8 12 Nf1 Bd7 13 Ng3 Na5 14 Bc2 Nc4 15 b3 Nb6 16 Nh2 c5 17 f4 cxd4 18 cxd4 Rc8`, 'smyslov', 'Smyslov: 14...Nc4 15.b3!', '⩲',
+    'O cavalo vai para c4, mas 15.b3! o expulsa. As brancas jogam f4 e ficam com forte jogo no centro.'],
+  c27: [`${SY} 11 Nbd2 Bf8 12 Nf1 Bb7 13 Ng3 Na5 14 Bc2 Nc4 15 b3 Nb6 16 a4 bxa4 17 bxa4 a5 18 Bd3 Ba6`, 'smyslov', 'Smyslov: 12...Bb7 15.b3 16.a4', '±',
+    'Com 12...Bb7 o bispo vai para a diagonal longa. As brancas abrem o flanco da dama com a4 e ficam melhor.'],
+  c28: [`${SY} 11 Nbd2 Bf8 12 Nf1 Bb7 13 Ng3 Na5 14 Bc2 Nc4 15 Bd3 Nb6 16 Bd2 c5 17 d5 Bc8 18 Nh2 Nh7`, 'smyslov', 'Smyslov: 12...Bb7 15.Bd3', '=',
+    'Com 15.Bd3 as brancas defendem e4 e fecham o centro, mas as pretas igualam.'],
+  c29: [`${SY} 11 Nbd2 Bf8 12 Bc2 Bd7 13 b3 g6 14 Bb2 Bg7 15 d5 Ne7 16 c4 c6 17 b4 cxd5 18 cxd5 Nh5`, 'smyslov', 'Smyslov: 12.Bc2 Bd7 13.b3', '⩲',
+    'Com 12.Bc2 e 13.b3 as brancas fianquetam o bispo de c1 e fecham o centro. Ficam um pouco melhor. (O livro traz 13.Bd3, que tornaria impossível 14.Bb2 com o peão ainda em b2; o lance é 13.b3.)'],
+  c30: [`${SY} 11 Be3 Bf8 12 Nbd2 Bd7 13 a3 Rc8 14 Bc2 g6 15 b4 Bg7 16 Rc1 Nh5 17 Nb3 Qf6`, 'smyslov', 'Smyslov: 11.Be3', '=',
+    'Com 11.Be3 as brancas reforçam d4 antes de desenvolver o cavalo. As pretas igualam.'],
 }
 
 const notas = [
@@ -132,13 +158,60 @@ const notas = [
   ['c18', 'v', 'v', '(v)', '12 Nbd2 cxd4 13 cxd4 exd4 14 Nxd4 Re8 15 Nf1 Bf8 16 Ng3 g6 17 b3 Nd7 18 Bb2 Rc8 19 Qd2 Bg7 20 Rad1 Ne5', { a: '=', r: 'Wagner–Romanishin, Munique 1993', c: 'Com 12.Nbd2, 13...exd4! iguala.' }],
   ['c18', 'w', 'w', '(w)', '14 Qe2 Nxa4 15 Bxa4 bxa4 16 Rxa4 Nd7 17 c4 Nb6 18 Ra3 a5 19 Nc3 a4', { a: '=', r: 'Topalov–Piket, Groningen 1997', c: 'Com 14.Qe2 o jogo fica igual.' }],
   ['c18', 'x', 'x', '(x)', '19 Be3 c4 20 g4', { a: '⩲', r: 'de Firmian–Spangenberg, Olimpíada de Elista 1998', c: 'As brancas ficam um pouco melhor.' }],
+  // Colunas 19–24 (Breyer)
+  ['c19', 'a', 'a', '(a)', '10... Bb7 11 dxe5 dxe5 12 Qxd8 Bxd8 13 Nxe5 Nxe4 14 Be3 Bf6 15 Ng4 Nd7 16 Nd2 Nxd2 17 Bxd2 Rfe8 18 Bf4', { a: '±', r: 'Keres–Benko, Torneio de Candidatos de Bled 1959', c: 'Contra-atacar o peão de e4 com 10...Bb7?! funciona mal: 11.dxe5! deixa as brancas melhor.' }],
+  ['c19-a', '1', 'a', '(a) 11...Nxe4', '11... Nxe4 12 e6 fxe6 13 Bxe6+ Kh8 14 Bd5', { a: '±', r: 'Gligorić–Benko, Torneio de Candidatos de Bled 1959', c: 'Retomar com 11...Nxe4 também deixa as brancas melhor.' }],
+  ['c19', 'b', 'b', '(b)', '13... d5 14 Nxe5 Nxe5 15 dxe5 Nxe4 16 f3 Ng5 17 Ng3 Bc5+ 18 Kh2 f6 19 Bxg5 fxg5 20 Qb1 h6 21 Qd1', { a: '±', r: 'Lobron–Portisch, Wijk aan Zee 1985', c: 'Abrir o centro com 13...d5?! deixa as brancas melhor.' }],
+  ['c19-b', '1', 'b', '(b) 16...Nc5', '16... Nc5 17 b4', { a: '±', c: 'Com 16...Nc5 também.' }],
+  ['c19', 'c', 'c', '(c)', '15 b3 Bg7 16 d5 Nb6 17 Be3 Rc8 18 Qe2 c6 19 c4 cxd5 20 cxd5 Nbxd5 21 exd5 Nxd5', { a: '∞', r: 'Kamsky–van der Sterren, match 1994', c: 'As brancas precisam jogar nos dois flancos para ter vantagem. Com 15.b3, o sacrifício 20...Nbxd5! dá às pretas plena compensação pela peça.' }],
+  ['c19', 'd', 'd', '(d)', '15... Bg7 16 Bd3 c6 17 Bg5 h6 18 Bd2 Qc7 19 Qc2 Rad8 20 b4', { a: '⩲', r: 'Carlsen–Tallaksen, Noruega 2005', c: 'Com 15...Bg7 as brancas ficam um pouco melhor.' }],
+  ['c19-d', '1', 'd', '(d) 16...d5?!', '16... d5 17 Bg5', { a: '±', c: '16...d5?! deixa as brancas melhor.' }],
+  ['c19-d', '2', 'd', '(d) 17...Rb8', '17... Rb8 18 Qd2 Bc8 19 Red1 c5 20 b4', { a: '⩲', r: 'Popović–Abramović, Campeonato Iugoslavo 1996', c: 'Com 17...Rb8 também.' }],
+  ['c19', 'e', 'e', '(e)', '16... Nb6 17 Qe2 Nxa4 18 Bxa4 bxa4 19 Rxa4', { a: '⩲', c: 'Com 16...Nb6 as brancas ficam um pouco melhor, pela melhor estrutura de peões.' }],
+  ['c19', 'f', 'f', '(f)', '18 Be3 Nc5 19 Qd2 h5 20 Bg5 Be7 21 Ra3', { a: '⩲', r: 'Shirov–van der Sterren, Wijk aan Zee 1998', c: 'As brancas ficam um pouco melhor numa posição complexa, com jogo nos dois flancos.' }],
+  ['c20', 'g', 'g', '(g)', '14... b4 15 Qc2 d5 16 exd5 exd4 17 Rxe8 Qxe8 18 cxd4 Bxd5', { a: '=', r: 'Kasimdzhanov–Smirin, Copa Europeia de Clubes 2006', c: 'Com 14...b4 o jogo fica igual.' }],
+  ['c20', 'h', 'h', '(h)', '15 Nf1 d5 16 Bg5 dxe4 17 Rxe4 Be7 18 Re2 exd4 19 Nxd4 Bf8 20 Rd2 Qc7 21 Bf5 c5 22 Nf3 Ne5', { a: '⩲', r: 'Anand–Beliavsky, Linares 1992', c: 'Com 15.Nf1 as brancas ficam só com uma vantagem mínima.' }],
+  ['c20', 'i', 'i', '(i)', '18 Bf1 Bg7 19 b4 Rc8', { a: '=', r: 'Thipsay–Short, Campeonato da Commonwealth 2004', c: 'O jogo fica igual.' }],
+  ['c21', 'k', 'k', '(k)', '14... a5 15 bxa5 Rxa5 16 Rb1 Ba6 17 d5 Qa8 18 Ba3', { a: '⩲', r: 'Beliavsky–A. Petrosian, URSS 1973', c: 'Com 14...a5 as brancas ficam um pouco melhor.' }],
+  ['c21', 'l', 'l', '(l)', '18 Ba1 g6 19 c4 bxc4 20 dxe5 Nxe5 21 Nxe5 dxe5 22 Bc3 Bc6', { a: '=', r: 'Browne–Karpov, Amsterdã 1976', c: 'O jogo fica igual.' }],
+  ['c22', 'm-A', 'm', '(m) A', '11... Nxe4 12 Nf5 Ndf6 13 Nxe7+ Qxe7 14 Re2', { r: 'análise de Bronstein', c: 'Pegar o peão com 11...Nxe4 é arriscado: depois de 14.Re2!, as brancas planejam Qe1 e f3.' }],
+  ['c22', 'm-B', 'm', '(m) B', '11... Nb6 12 Nd2 c5 13 dxc5 dxc5 14 Nf5 c4', { a: '=', r: 'Browne–Ivkov, Amsterdã 1972', c: '11...Nb6 também dá às pretas chances razoáveis.' }],
+  ['c22', 'n', 'n', '(n)', '13 f4 c5 14 Nf3 c4 15 Bc2 Bb7 16 Nbd2 Bf8 17 Bxf8', { a: '=', r: 'R. Byrne–Portisch, Amsterdã 1969', c: 'Com 13.f4, 13...c5! iguala; nessa partida as partes empataram. A coluna segue R. Byrne–Unzicker, Liubliana 1969.' }],
+  ['c23', 'o', 'o', '(o)', '11 Bg5 Bb7 12 Nbd2 h6 13 Bh4 Re8 14 Bc2 c5 15 Bg3 Bf8', { a: '=', r: 'Zapata–Spassky, Salamanca 1991', c: 'Com 11.Bg5 o jogo fica igual.' }],
+  ['c23', 'p-A', 'p', '(p) A', '12 Qc2 Bb7 13 Nc3 b4 14 Ne2 exd4 15 Nexd4 Re8 16 Nf5', { a: '⩲', r: 'Hjartarson–Beliavsky, Linares 1989', c: '12.c5 é o mais enérgico, mas as brancas talvez se saiam melhor com o raro 12.Qc2.' }],
+  ['c23', 'p-B', 'p', '(p) B', '12 a3 bxc4 13 Bxc4 Nxe4', { a: '=', r: 'Howell–van der Sterren, Londres 1993', c: 'Com 12.a3, 13...Nxe4! iguala.' }],
+  ['c23', 'q', 'q', '(q)', '16 Nxd4 Nc5 17 Qh5 Bh2+ 18 Kh1 Nd3 19 Re2 Be5', { a: '∓', r: 'Milos–Timman, Olimpíada de Manila 1992', c: 'Retomar com o cavalo é pior.' }],
+  ['c23', 'r', 'r', '(r)', '18 Qe3 Nd3 19 Qh6 Bf4 20 Qxf6 Rd6 21 Qc3 Nxe1 22 Rxe1 Qd8', { a: '∞', r: 'Fischer–Portisch, Santa Monica 1966', c: 'Chances para os dois lados.' }],
+  ['c24', 's', 's', '(s)', '15 Nh2 Ne6 16 Nf5 h6 17 Ng4 Nxg4 18 Qxg4 Kh7', { a: '=', r: 'Matanović–Ivkov, Palma de Mallorca 1966', c: 'Com 15.Nh2 as partes empataram.' }],
+  ['c24', 't', 't', '(t)', '18 dxe5 dxe5 19 Qxd8 Raxd8 20 Bg5', { a: '⩲', r: 'Xie Jun–Short, Arrows Cup 2003', c: 'As brancas ficam um pouco melhor.' }],
+  // Colunas 25–30 (Smyslov)
+  ['c25', 'a', 'a', '(a)', '12... exd4 13 cxd4 Nxe4 14 Bd5', { a: '±', c: 'Não 12...exd4 13.cxd4 Nxe4?, porque 14.Bd5 ganha um cavalo.' }],
+  ['c25', 'b', 'b', '(b)', '13 dxe5 Nxe5 14 Nxe5 dxe5 15 Qf3 c5 16 Rd1 c4', { a: '=', r: 'Keres–Spassky, match 1965', c: 'Simplificar com 13.dxe5 leva à igualdade completa.' }],
+  ['c25', 'c', 'c', '(c)', '16 Be3 cxd4 17 cxd4 exd4 18 Nxd4 d5 19 exd5 Nb4 20 Nc6 Nxc6', { a: '=', r: 'Domínguez–I. Sokolov, Olimpíada de Bled 2002', c: 'Com 16.Be3 o jogo fica igual.' }],
+  ['c25', 'd-A', 'd', '(d) 18...Qc7', '18... Qc7 19 Nf5', { a: '⩲', c: 'Com 18...Qc7, 19.Nf5! deixa as brancas um pouco melhor.' }],
+  ['c25', 'd', 'd', '(d)', '19 a4 Nh4 20 Nxh4 Qxh4 21 Qe2 Qd8 22 b4 Qc7 23 Rec1 c4 24 Ra3 Rec8 25 Rca1', { a: '±', r: 'Deep Blue–Kasparov, match 1997', c: 'As brancas têm vantagem de espaço; depois de 19...Nh4?! a máquina venceu em 45 lances.' }],
+  ['c26', 'e', 'e', '(e)', '15 a4 c5 16 b3 Na5 17 axb5 axb5 18 d5 Qc7 19 Be3 Ra7 20 Nd2 Rea8 21 f4 Nb7', { a: '=', r: 'Kavalek–Reshevsky, Netanya 1969', c: 'Jogar no flanco da dama com 15.a4 não dá vantagem aqui.' }],
+  ['c26', 'f', 'f', '(f)', '16 Be3 c5 17 d5 a5 18 Nd2 Qc7 19 Qe2 a4', { a: '=', r: 'van der Doel–Xie Jun, Wijk aan Zee 1998', c: 'Com 16.Be3 o jogo fica igual.' }],
+  ['c26', 'g', 'g', '(g)', '19 Nf3 Qc7 20 Bd3 exd4 21 Bb2', { a: '⩲', r: 'Minić–Savon, Skopje × Ohrid 1968', c: 'As brancas têm forte jogo no centro.' }],
+  ['c27', 'h', 'h', '(h)', '14... c5 15 d5', { a: '⩲', c: '14...c5 15.d5! deixa o bispo de b7 e o cavalo de a5 mal colocados.' }],
+  ['c27', 'i', 'i', '(i)', '16 Bd2 c5 17 Rc1 a5 18 a4 bxa4 19 bxa4 Ba6', { a: '=', r: 'Short–Xie Jun, Buenos Aires 2001', c: 'Com 16.Bd2 o jogo fica igual.' }],
+  ['c27', 'j', 'j', '(j)', '16... d5 17 axb5 axb5 18 Rxa8 Bxa8 19 dxe5 Nxe4 20 Nxe4 dxe4 21 Qxd8 Rxd8 22 Bxe4 Bxe4 23 Rxe4 b4 24 Rd4', { a: '±', r: 'Kindermann–Lukacs, Áustria 1994 (até 23...b4)', c: 'Com 16...d5!? as brancas ficam melhor depois de 24.Rd4!' }],
+  ['c27', 'k', 'k', '(k)', '19 Bxa6 Rxa6 20 dxe5 dxe5 21 Qxd8 Rxd8 22 Nxe5 Bd6 23 Bf4 g5 24 Ng4', { a: '±', r: 'Rohit–Babu, Índia 2006', c: 'As brancas ficam melhor.' }],
+  ['c28', 'l', 'l', '(l)', '15 a4 d5 16 b3 dxe4 17 Nxe4 Nxe4 18 Rxe4 Bxe4 19 Bxe4 Nb6 20 Bxa8 Nxa8', { a: '=', r: 'Stein–Reshevsky, Los Angeles 1967', c: 'Com 15.a4, 15...d5! iguala.' }],
+  ['c28', 'm', 'm', '(m)', '19 Rf1 Be7 20 f4 exf4 21 Bxf4 Bg5', { a: '=', r: 'Mather–Davies, correspondência 1993', c: 'Chances iguais.' }],
+  ['c29', 'n', 'n', '(n)', '12 a3 Bd7 13 Ba2 a5 14 Nf1 a4 15 Ng3 Na5 16 Be3 c6 17 Rc1 Be6 18 Bxe6 Rxe6', { a: '=', r: 'Keres–Portisch, Moscou 1967', c: 'Com 12.a3 o jogo fica igual.' }],
+  ['c29', 'o', 'o', '(o)', '12... Bb7 13 d5 Ne7 14 c4 c6 15 b3', { a: '⩲', r: 'Topalov–Piket, Amsterdã 1995', c: 'Com 12...Bb7 13.d5 as brancas ficam um pouco melhor (13.a4 levaria à Variante Zaitsev); 13...Nb8 talvez seja melhor.' }],
+  ['c29', 'p', 'p', '(p)', '19 Nb3 Nf4 20 Na5 Rc8 21 Bb3', { a: '⩲', r: 'Svidler–Peng Xiaomin, Campeonato Mundial FIDE (KO) 2000', c: 'As brancas ficam um pouco melhor.' }],
+  ['c30', 'q', 'q', '(q)', '12... Bb7 13 Qb1 Qd7 14 a3 d5 15 dxe5 Nxe5 16 Nxe5 Rxe5 17 Bd4 Re6 18 e5 Rae8 19 f4 c5 20 Be3', { a: '±', r: 'Murey–Balashov, Moscou 1991', c: 'Com 12...Bb7, 13.Qb1! e o avanço 14...d5?! deixam as brancas melhor.' }],
+  ['c30-q', '1', 'q', '(q) 13...Nb8', '13... Nb8 14 a4', { a: '⩲', c: 'Com 13...Nb8 as brancas ficam um pouco melhor.' }],
+  ['c30', 'r', 'r', '(r)', '13... a5 14 d5 Na7 15 a4 c6 16 axb5 cxb5 17 c4', { a: '⩲', r: 'Tseshkovsky–Smyslov, URSS 1974', c: '13...a5?! deixa as brancas bem. A coluna segue Hort–Pietzsch, Olimpíada de Havana 1966.' }],
 ]
 
 const capitulo = {
   id: 'ruy-lopez-c',
   arquivo: 'ruy-lopez-c',
   nome: 'Ruy López — Fechada e Marshall',
-  fonte: 'Modern Chess Openings — Ruy Lopez, linhas principais: Defesa Fechada e Ataque Marshall (pp. 79–95), colunas 1–18',
+  fonte: 'Modern Chess Openings — Ruy Lopez, linhas principais: Defesa Fechada e Ataque Marshall (pp. 79–95), colunas 1–30',
   base: '1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3',
   corPadrao: 'w',
   ordem: 79,
@@ -146,6 +219,8 @@ const capitulo = {
     { id: 'fechada', nome: 'Fechada: 9.h3 Nd7/Be6, 9.d4 e 9.d3', colunas: [1, 2, 3, 4, 5, 6] },
     { id: 'chigorin', nome: 'Chigorin: 11...Qc7 12.Nbd2 cxd4 13.cxd4', colunas: [7, 8, 9, 10, 11, 12] },
     { id: 'chigorin-2', nome: 'Chigorin: 12...Nc6/Bd7 e outros 11º lances', colunas: [13, 14, 15, 16, 17, 18] },
+    { id: 'breyer', nome: 'Variante Breyer: 9.h3 Nb8', colunas: [19, 20, 21, 22, 23, 24] },
+    { id: 'smyslov', nome: 'Variante Smyslov: 9.h3 h6', colunas: [25, 26, 27, 28, 29, 30] },
   ],
 }
 
