@@ -1,7 +1,7 @@
 // Gera data/engine/<capítulo>.json com o melhor lance e a avaliação do Stockfish
 // para cada posição dos capítulos. Rode de novo sempre que um capítulo mudar.
 //
-// Uso: node scripts/motor.cjs <caminho do stockfish> [nós por posição]
+// Uso: node scripts/motor.cjs <caminho do stockfish> [nós por posição] [ids dos capítulos, separados por vírgula]
 // Entradas marcadas com "profundo" (análises longas feitas à parte) são mantidas
 // enquanto a posição continuar existindo no capítulo.
 const fs = require('fs')
@@ -9,7 +9,8 @@ const path = require('path')
 const { spawn } = require('child_process')
 const { Chess } = require('chess.js')
 
-const [binario, nosArg] = process.argv.slice(2)
+const [binario, nosArg, soArg] = process.argv.slice(2)
+const so = soArg ? soArg.split(',') : null
 if (!binario) {
   console.error('Uso: node scripts/motor.cjs <caminho do stockfish> [nós por posição]')
   process.exit(1)
@@ -60,6 +61,7 @@ async function principal() {
 
   for (const arquivo of fs.readdirSync(dirDados).filter((f) => f.endsWith('.json'))) {
     const d = JSON.parse(fs.readFileSync(path.join(dirDados, arquivo), 'utf8'))
+    if (so && !so.includes(d.id)) continue
     const destino = path.join(dirMotor, `${d.id}.json`)
     const anterior = fs.existsSync(destino) ? JSON.parse(fs.readFileSync(destino, 'utf8')).posicoes : {}
 

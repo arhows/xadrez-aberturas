@@ -22,9 +22,10 @@ export function buscarCapitulo(id: string): CapituloCarregado | undefined {
   return obterCapitulos().find((capitulo) => capitulo.capitulo.id === id)
 }
 
-/** Todos os capítulos de data/openings, já validados e com a árvore montada. */
+/** Todos os capítulos de data/openings, na ordem do livro, já validados e com a árvore montada. */
 export function carregarCapitulos(): CapituloCarregado[] {
-  return Object.values(arquivos).map((capitulo) => {
+  const ordenados = Object.values(arquivos).sort((a, b) => (a.ordem ?? 999) - (b.ordem ?? 999))
+  return ordenados.map((capitulo) => {
     const validado = validarCapitulo(capitulo)
     for (const problema of validado.problemas) {
       if (problema.tipo === 'lance-ilegal') {

@@ -4,6 +4,7 @@
   "fonte": "Modern Chess Openings — Two Knights' Defense, colunas 1–24 (pp. 30–41)",
   "base": "1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6",
   "corPadrao": "b",
+  "ordem": 4,
   "grupos": [
     {
       "id": "ng5-na5",
