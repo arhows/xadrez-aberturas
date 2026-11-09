@@ -10,6 +10,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@fontsource-variable/source-serif-4": "^5.3.1",
     "chess.js": "^1.4.0",
     "chessground": "^9.2.1",
     "firebase": "^12.19.0",

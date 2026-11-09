@@ -201,6 +201,12 @@ export function recusarProgressoSemConta(): void {
 
 /** Chamado na abertura do app: descobre a conta conectada e acompanha as mudanças. */
 export function iniciarNuvem(): void {
+  // Só no servidor de desenvolvimento: "?visual=1" entra numa conta local de teste, sem
+  // Firebase, para conferir as telas (capturas automáticas). Não existe no site publicado.
+  if (import.meta.env.DEV && new URLSearchParams(location.search).has('visual')) {
+    aoMudarUsuario({ uid: 'teste-visual', displayName: 'Teste visual', email: 'teste@local' })
+    return
+  }
   carregar().catch(() => {
     nuvem.estado = 'erro'
     nuvem.erro = 'Não foi possível carregar o login. Confira a internet e recarregue a página.'
