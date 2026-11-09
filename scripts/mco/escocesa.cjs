@@ -1,12 +1,13 @@
 // Transcrição do MCO 15ª ed. — Abertura Escocesa (pp. 104–113).
 // Gerar: node scripts/mco/gerar.cjs escocesa
 // Formato: ver gambito-do-rei.cjs. Dicas em escocesa-dicas.cjs.
-// Entregue em partes: colunas 1–12 primeiro; as demais (13–24) entram depois neste mesmo arquivo.
+// Entregue em partes: colunas 1–12 e 13–24.
 
 const S4 = '1 e4 e5 2 Nf3 Nc6 3 d4 exd4 4 Nxd4'
 const SC = `${S4} Nf6 5 Nc3 Bb4 6 Nxc6 bxc6 7 Bd3 d5 8 exd5`
 const MI = `${S4} Nf6 5 Nxc6 bxc6 6 e5 Qe7 7 Qe2 Nd5 8 c4`
 const BC = `${S4} Bc5 5 Nxc6 Qf6 6 Qd2`
+const BE = `${S4} Bc5 5 Be3 Qf6 6 c3 Nge7`
 
 const colunas = {
   c01: [`${SC} cxd5 9 O-O O-O 10 Bg5 c6 11 Qf3 Be7 12 Rae1 Re8 13 Ne2 Bg4 14 Qf4 Bxe2 15 Rxe2 Nh5`, 'quatro-cavalos', 'Quatro Cavalos: 10.Bg5 c6 11.Qf3 Be7', '=',
@@ -33,6 +34,30 @@ const colunas = {
     'Com 7...Ne7 as damas saem logo. A atividade das pretas compensa os peões dobrados.'],
   c12: [`${BC} Qxc6 7 Bd3 Nf6 8 O-O O-O 9 b4 Bd4 10 c3 Bb6 11 c4 a5 12 Nc3 axb4`, 'bc5', '4...Bc5: 6...Qxc6', '=',
     'Com 6...Qxc6 as pretas mantêm a estrutura intacta. As brancas ganham espaço no flanco da dama, mas o jogo fica igual.'],
+  c13: [`${BE} 7 Bc4 Ne5 8 Be2 Qg6 9 O-O d6 10 f3 O-O 11 Kh1 d5 12 Nd2 dxe4`, 'bc5-be3', '4...Bc5 5.Be3 Qf6 6.c3 Nge7 7.Bc4 Ne5', '=',
+    'Com 5.Be3 as brancas defendem o cavalo de d4; as pretas pressionam com ...Qf6 e ...Nge7. Com 7...Ne5 o cavalo ataca o bispo de c4, e o jogo fica igual.'],
+  c14: [`${BE} 7 Bc4 O-O 8 O-O Bb6 9 Nc2 d6 10 Nd2 Be6 11 Qh5 Ng6 12 g3 Rae8`, 'bc5-be3', '7.Bc4 O-O', '=',
+    'Rocando de imediato, as pretas recuam o bispo para b6 e igualam.'],
+  c15: [`${BE} 7 g3 d5 8 Bg2 dxe4 9 Nd2 Bxd4 10 cxd4 O-O 11 Nxe4 Qg6 12 O-O Be6`, 'bc5-be3', '7.g3 d5', '=',
+    'Com 7.g3 o bispo vai para g2, mas as pretas abrem o jogo com ...d5 e igualam.'],
+  c16: [`${S4} Bc5 5 Be3 Qf6 6 c3 Qg6 7 Nd2 Nge7 8 h4 Bxd4 9 cxd4 d5 10 h5 Qe6 11 h6 g6 12 Rh4 O-O`, 'bc5-be3', '6...Qg6', '=',
+    'Com 6...Qg6 a dama ataca e4 e g2. As brancas avançam o peão h, mas as chances ficam equilibradas.'],
+  c17: [`${S4} Bc5 5 Nb3 Bb6 6 a4 a6 7 Nc3 d6 8 Nd5 Ba7 9 Qe2 Nge7 10 Bg5 O-O 11 O-O-O f6 12 Bh4 Be6`, 'bc5-nb3', '4...Bc5 5.Nb3 Bb6', '=',
+    'Com 5.Nb3 o cavalo ataca o bispo de c5. As brancas ameaçam prender o bispo com a4-a5, mas as pretas igualam.'],
+  c18: [`${S4} Bc5 5 Nb3 Bb4+ 6 c3 Be7 7 c4 Nf6 8 Nc3 O-O 9 Be2 Re8 10 O-O a5 11 a4 d6 12 Be3 Nd7`, 'bc5-nb3', '5.Nb3 Bb4+', '=',
+    'Com 5...Bb4+ as pretas provocam c3 e recuam o bispo para e7. O jogo fica tranquilo e igual.'],
+  c19: [`${S4} Bc5 5 Nf5 d6 6 Nxg7+ Kf8 7 Nh5 Qh4 8 Ng3 Nf6 9 Be2 Ne5 10 Nc3 Neg4 11 Bxg4 Nxg4`, 'outros', '4...Bc5 5.Nf5', '=',
+    'Com 5.Nf5 o cavalo ataca g7. As pretas entregam o peão e, depois de ...Kf8, têm jogo ativo contra f2.'],
+  c20: [`${S4} Nge7 5 Bc4 Nxd4 6 Qxd4 Nc6 7 Qd5 Qf6 8 O-O Ne5 9 Be2 c6 10 Qb3 Ng6 11 f4 Bc5+`, 'outros', '4...Nge7', '=',
+    '4...Nge7 é pouco usual: o cavalo prepara ...Nxd4 e ...Nc6. O jogo fica igual.'],
+  c21: [`${S4} Qh4 5 Nb5 Bb4+ 6 Bd2 Qxe4+ 7 Be2 Kd8 8 O-O Bxd2 9 Nxd2 Qf4 10 g3 Qh6 11 Nc4 Nge7`, 'outros', 'Steinitz: 4...Qh4 5.Nb5 Bb4+', '=',
+    'Linha Steinitz: 4...Qh4 ataca e4 para ganhar um peão. Há mais de um século a posição preta parece duvidosa, mas não se conhece refutação clara; as brancas têm compensação suficiente.'],
+  c22: [`${S4} Qh4 5 Nb5 Bc5 6 Qe2 Bb6 7 Be3 Ba5+ 8 Nd2 a6 9 Nd4 Nxd4 10 Bxd4 Bxd2+ 11 Qxd2 Qxe4+`, 'outros', 'Steinitz: 5...Bc5', '⩲',
+    'Com 5...Bc5 as pretas ganham o peão, mas a iniciativa branca compensa com folga.'],
+  c23: [`1 e4 e5 2 Nf3 Nc6 3 d4 exd4 4 Bc4 Bc5 5 c3 dxc3 6 Bxf7+ Kxf7 7 Qd5+ Kf8 8 Qxc5+ Qe7 9 Qxe7+ Ngxe7 10 Nxc3 d5 11 exd5 Nb4`, 'gambito', 'Gambito Escocês: 4.Bc4 Bc5 5.c3 dxc3', '=',
+    'Gambito Escocês: com 4.Bc4 as brancas oferecem o peão de d4. Se as pretas aceitam com 5...dxc3, o sacrifício 6.Bxf7+ leva à troca das damas e à igualdade.'],
+  c24: [`1 e4 e5 2 Nf3 Nc6 3 d4 exd4 4 Bc4 Bc5 5 c3 d3 6 b4 Bb6 7 Qb3 Qf6 8 O-O d6 9 a4 a6 10 a5 Ba7 11 b5 axb5`, 'gambito', 'Gambito Escocês: 5...d3', '=',
+    'Com 5...d3 as pretas recusam o gambito e deixam um peão incômodo em d3. As brancas atacam no flanco da dama e o jogo fica mais ou menos igual.'],
 }
 
 const notas = [
@@ -111,13 +136,77 @@ const notas = [
   ['c12', 'x', 'x', '(x)', '7 Nc3 Nf6 8 Bd3 O-O 9 O-O Re8 10 Qd1 b6 11 Bf4 Bb7 12 Bb5 Qe6 13 e5 Nd5', { a: '=', r: 'Illescas–Korchnoi, Wijk aan Zee 1997', c: 'Com 7.Nc3 o jogo fica igual.' }],
   ['c12', 'y', 'y', '(y)', '7... Ne7 8 O-O O-O 9 b4 Bd4 10 c3 Bf6 11 Qe2 Qe6 12 f4 d6 13 Be3', { a: '⩲', r: 'Azmaiparashvili–Gómez Esteban, Pamplona 1996', c: 'Com 7...Ne7 as brancas ficam um pouco melhor.' }],
   ['c12', 'z', 'z', '(z)', '13 Nd5 Nxd5 14 exd5 Qf6 15 Bb2 Qh6 16 Qxh6 gxh6', { a: '=', r: 'Rublevsky–Grischuk, Liga Francesa 2004', c: 'O jogo fica igual.' }],
+  // Colunas 13–18 (4...Bc5 5.Be3 e 5.Nb3)
+  ['c13', 'a', 'a', '(a)', '5... Bb6 6 Nf5 Bxe3 7 Nxe3 Nf6 8 Nc3 O-O 9 Qd2', { a: '⩲', r: 'Smagin–Unzicker, Dortmund 1992', c: 'Contra 5...Bb6 o mais agudo é 6.Nf5; as brancas ficaram melhor.' }],
+  ['c13-a', '1', 'a', '(a) 6...d5', '6... d5 7 Nxg7+ Kf8 8 Bxb6', { a: '⩲', c: 'Com 6...d5 também.' }],
+  ['c13', 'b', 'b', '(b)', '6 Nb5 Bxe3 7 fxe3 Qh4+ 8 g3 Qd8 9 Qg4 Kf8 10 Qf4 d6', { a: '=', r: 'Mieses–Schelfout, Amsterdã 1946', c: '6.Nb5 é a Variante Blumenfeld; o jogo fica mais ou menos igual.' }],
+  ['c13-b', '1', 'b', '(b) 8...Qxe4', '8... Qxe4', { c: '8...Qxe4 é arriscado, mas talvez jogável.' }],
+  ['c13', 'c', 'c', '(c)', '7... b6 8 Qd2 Qg6 9 f3 Ne5 10 Bf1 d5 11 b4 Bd6 12 f4 Ng4 13 e5 Bxe5 14 fxe5 Qe4', { a: '∞', r: 'Handoko–Speelman, Moscou 1994', c: 'Uma posição selvagem, mas provavelmente com chances iguais.' }],
+  ['c13', 'd-A', 'd', '(d) A', '9... d5 10 Bh5 Bg4 11 Bxg6 Bxd1 12 Bxf7+ Kxf7 13 Rxd1 Nc4 14 b4 Bb6 15 Nd2 Nxe3 16 fxe3 Rhe8 17 c4 dxc4 18 Nxc4', { a: '±', r: 'Rublevsky–Grétarsson, Yerevan 1996', c: 'Com 9...d5 as brancas ficam melhor.' }],
+  ['c13', 'd-B', 'd', '(d) B', '9... O-O 10 Nd2 d6 11 Bh5 Qf6 12 f4 N5c6', { a: '=', r: 'Sveshnikov–Jandemirov, Rússia 1995', c: 'Com 9...O-O o jogo fica igual.' }],
+  ['c13', 'e', 'e', '(e)', '10 Kh1 Qxe4 11 Nd2 Qg6 12 Nb5 O-O 13 Nxc7 Rb8 14 Nc4 Nxc4 15 Bxc4 Bxe3 16 fxe3 Bf5 17 Nd5 Rbe8', { a: '=', r: 'Rublevsky–Svidler, Campeonato Russo 1998', c: 'Com 10.Kh1 o jogo fica igual.' }],
+  ['c13', 'f', 'f', '(f)', '13 fxe4 Bg4 14 h3 Bxe2', { a: '=', r: 'Charbonneau–Adams, Nottingham 2005', c: 'O jogo fica igual.' }],
+  ['c14', 'g', 'g', '(g)', '8... Qg6 9 Nd2 Bxd4 10 cxd4 d5 11 exd5 Nb4 12 Bf4 Nbxd5', { a: '=', r: 'J. Polgár–Piket, Tilburg 1996', c: 'Com 8...Qg6 as chances ficam mais ou menos iguais.' }],
+  ['c14', 'h-A', 'h', '(h) A', '9 Kh1 Rd8 10 Qh5 h6 11 Nd2 d5', { a: '=', r: 'Kasparov–Kamsky, Tilburg 1991', c: 'Com 9.Kh1 o jogo fica igual. A coluna segue Berg–Ivanchuk, Tallinn 2006.' }],
+  ['c14', 'h-B', 'h', '(h) B', '9 Na3 d6 10 Ndb5 a6 11 Nxd6 Bxe3', { a: '=', r: 'análise de Kuzman', c: 'Com 9.Na3 também.' }],
+  ['c14', 'h-C', 'h', '(h) C', '9 Bb3 Na5 10 Bc2 Nc4 11 Bc1 d5', { a: '=', r: 'J. Polgár–Granda Zúñiga, Madri 1992', c: 'Com 9.Bb3 também.' }],
+  ['c15', 'j-A', 'j', '(j) A', '7... b6 8 Bg2 Bb7 9 O-O O-O-O 10 Qa4', { a: '⩲', r: 'Sveshnikov–Kozyrev, Chelyabinsk 1975', c: 'Com 7...b6 as brancas ficam um pouco melhor. (Também se joga 7.Qd2, 7.Be2 e 7.Nc2.)' }],
+  ['c15', 'j-B', 'j', '(j) B', '7... d6 8 Bg2 O-O 9 O-O Ne5 10 h3 Nc4 11 Bc1 Nc6', { a: '⩲', r: 'Palosh–Spassky, Dubai 1986', c: 'Com 7...d6 também.' }],
+  ['c15', 'k', 'k', '(k)', '8... Nxd4 9 cxd4 Bb4+ 10 Nc3 Bxc3+ 11 bxc3 dxe4 12 Bxe4 O-O 13 O-O c6 14 Qb3', { a: '⩲', r: 'Shabalov–Cox, Ilha de Man 2006', c: 'Com 8...Nxd4 as brancas ficam um pouco melhor. A coluna segue Muhren–V. Georgiev, Wijk aan Zee 2005.' }],
+  ['c16', 'l', 'l', '(l)', '7 Qf3 Bxd4 8 cxd4 Nb4', { a: '=', r: 'Rublevsky–Romanishin, Varsóvia 2005', c: 'Com 7.Qf3, 8...Nb4! iguala.' }],
+  ['c16', 'm', 'm', '(m)', '7... Nf6 8 f3 d5 9 Bb5 Bxd4 10 Bxd4 dxe4', { a: '=', r: 'Berg–Hector, Reykjavík 1996', c: 'Com 7...Nf6 o jogo fica igual.' }],
+  ['c16', 'n', 'n', '(n)', '13 g3 dxe4 14 Rxe4', { a: '=', r: 'Pavasović–Skembris, Asti 1996 (até 13...dxe4)', c: 'Agora 14.Rxe4 manteria as chances equilibradas.' }],
+  ['c17', 'o', 'o', '(o)', '6 Nc3 d6 7 Nd5 Nf6', { a: '=', r: 'Kupreichik–Razuvaev, URSS 1977', c: '6.Nc3 também é jogado; com 7.Nd5 Nf6 as pretas ficam bem (7.a4 a6 transporia).' }],
+  ['c17', 'p-A', 'p', '(p) A', '6... a5 7 Nc3 d6 8 Nd5 Ba7 9 Bb5 Bd7 10 O-O Ne5 11 Bd2 Nf6 12 Bxa5 Nxd5 13 exd5', { a: '±', r: 'van der Wiel–Gulko, Amsterdã 1987', c: 'Com 6...a5 as brancas ficam melhor.' }],
+  ['c17', 'p-B', 'p', '(p) B', '6... Qf6 7 Qe2 a6 8 Nc3 Nge7 9 a5 Ba7 10 Be3 Bxe3 11 Qxe3 d6 12 O-O-O O-O', { a: '=', r: 'Ljubojević–Karpov, Bugojno 1980', c: 'Com 6...Qf6 o jogo fica igual.' }],
+  ['c17', 'q', 'q', '(q)', '8 Be2 h6 9 O-O Nf6 10 a5 Ba7 11 Kh1 O-O 12 f4 Be6 13 Ra4 Re8 14 h3 Qd7 15 Qd3', { a: '=', r: 'Ljubojević–Beliavsky, Tilburg 1981', c: 'Com 8.Be2 as chances ficam iguais.' }],
+  ['c17', 'r', 'r', '(r)', '9 Be3 Bxe3 10 Nxe3 Nf6 11 Bd3 O-O 12 O-O Re8 13 f3 Be6', { a: '=', r: 'van der Wiel–Gómez Esteban, Linares 1995', c: 'Com 9.Be3 o jogo fica igual.' }],
+  ['c17', 's', 's', '(s)', '13 f4 Qd7 14 h3 Rae8 15 Qd2', { a: '=', r: 'Shvertel–Leezan, correspondência 1982', c: 'O jogo fica igual.' }],
+  ['c18', 't', 't', '(t)', '6 Bd2 a5 7 a3 Bxd2+ 8 Qxd2 Nf6 9 Nc3 O-O 10 O-O-O d6 11 Be2 Bd7', { a: '=', r: 'Radulov–Smejkal, Vrbas 1977', c: 'Com 6.Bd2 o jogo fica igual.' }],
+  ['c18', 'u-A', 'u', '(u) A', '7 f4 d6 8 Bd3 Bh4+ 9 g3 Bf6 10 Be3 h5 11 h3 g5 12 Qd2 gxf4 13 gxf4 Nge7 14 Na3 Bh4+ 15 Bf2 Ng6', { a: '=', r: 'Hübner–Spassky, Linares 1985', c: 'Com 7.f4 a partida terminou empatada.' }],
+  ['c18', 'u-B', 'u', '(u) B', '7 Bf4 d6 8 c4 Nf6 9 Nc3 O-O 10 Be2', { a: '⩲', r: 'Baklan–Grischuk, Yerevan 2001', c: '7.Bf4 pode dar uma pequena vantagem às brancas.' }],
+  ['c18', 'v', 'v', '(v)', '9 a3 d6 10 Be2 Re8 11 O-O Nd7', { a: '=', r: 'S. García–Smejkal, Novi Sad 1976', c: 'Com 9.a3 o jogo fica igual.' }],
+  ['c18', 'w', 'w', '(w)', '10 f3 a5 11 a4 d6 12 O-O Nd7 13 Be3 Bf6', { a: '⩱', r: 'Ivanović–T. Petrosian, Tallinn 1979', c: 'Com 10.f3 as pretas ficam muito confortáveis.' }],
+  ['c18', 'x', 'x', '(x)', '13 Nb5 Bf6 14 Qc2 Nb4 15 Qd2 b6 16 Rad1 Bb7 17 f3 Nc5', { a: '=', r: 'Ljubojević–Gligorić, Nikšić 1978', c: 'Chances mais ou menos iguais.' }],
+  // Colunas 19–24 (5.Nf5, 4...Nge7, Steinitz e Gambito Escocês)
+  ['c19', 'a-A', 'a', '(a) A', '5... d5 6 Nxg7+ Kf8 7 Nh5 Qh4 8 Ng3 Nf6 9 Be2 dxe4', { a: '=', r: 'Putler–D’Amore, Olimpíada de Calvià 2004', c: 'O mais agudo é 5...d5!, com igualdade.' }],
+  ['c19', 'a-B', 'a', '(a) B', '5... Qf6 6 Nc3 Nge7 7 Ne3', { a: '⩲', r: 'Timman–Hübner, Sarajevo 1991', c: 'Com 5...Qf6 as brancas ficam um pouco melhor.' }],
+  ['c19', 'a-C', 'a', '(a) C', '5... g6 6 Ne3 Nf6 7 Nc3 O-O 8 Bd3', { a: '⩲', r: 'Timman–Smyslov, Bugojno 1986', c: 'Com 5...g6 também.' }],
+  ['c19', 'b-A', 'b', '(b) A', '10 f3 Rg8 11 Kd2 d5', { a: '∓', c: '10.f3?! deixa as pretas melhor.' }],
+  ['c19', 'b-B', 'b', '(b) B', '10 b4 Bxb4+ 11 c3 Bc5 12 Ba3 Nxe4 13 Bxc5 Nxc5', { a: '∓', r: 'Timman–Borm, Holanda 1985', c: 'Com 10.b4 também.' }],
+  ['c19', 'c', 'c', '(c)', '12 Qf3 Bxf2+ 13 Ke2 Bxg3 14 Qxg3 Qxg3', { a: '=', r: 'Kues–Homuth, Alemanha 1995', c: 'Com 12.Qf3 o jogo fica igual.' }],
+  ['c19', 'c-B', 'c', '(c) 12.Rf1', '12 Rf1 Rg8 13 Na4 Nxh2 14 Nxc5', { a: '=', r: 'Timman–Karpov, Bruxelas 1988', c: 'Com 12.Rf1 também.' }],
+  ['c20', 'e-A', 'e', '(e) A', '5 Be3 Nxd4 6 Bxd4 Nc6 7 Be3 Bb4+ 8 Nd2 Qe7 9 Bd3 Ne5', { a: '=', r: 'S. Arkell–Condie, Edimburgo 1988', c: 'Alternativa razoável: com 5.Be3 o jogo fica igual. (Outros lances incomuns aqui são 4...d6, 4...g6, 4...Qf6, 4...Bb4+ e 4...Nxd4.)' }],
+  ['c20', 'e-B', 'e', '(e) B', '5 Nc3 Nxd4 6 Qxd4 Nc6 7 Qe3 Nb4 8 Bd3 Be7 9 Nd5', { a: '⩲', r: 'Schmidt–Velimirović, Polanica Zdrój 1964', c: 'Com 5.Nc3 as brancas ficam um pouco melhor.' }],
+  ['c20', 'f', 'f', '(f)', '8... Bb4 9 a3 Ba5 10 Bd2 Bb6 11 Bc3 Qg6 12 Nd2 d6 13 Kh1 Be6', { a: '=', r: 'van der Wiel–Tkachiev, Wijk aan Zee 1995', c: 'Com 8...Bb4 as chances ficam iguais.' }],
+  ['c20', 'g', 'g', '(g)', '9 Bb3 c6 10 Qa5 d6 11 f4 Ng6', { a: '∞', c: 'Com 9.Bb3 as pretas têm contrajogo.' }],
+  ['c20', 'h', 'h', '(h)', '10... h5 11 Qc3 g5 12 Bxg5 Qxg5 13 f4', { r: 'van der Wiel–I. Sokolov, Groningen 1994', c: 'A partida seguiu com 10...h5. (O livro continua 13...Qe7 14.Qxc5 ±, mas não há peça preta em c5; a sequência exata não fecha.)' }],
+  ['c20', 'i', 'i', '(i)', '12 Kh1 d6', { a: '=', r: 'análise de I. Sokolov', c: 'O jogo fica igual.' }],
+  ['c21', 'j', 'j', '(j)', '5 Nc3 Bb4 6 Nb5 Qxe4+ 7 Be2 Bxc3+ 8 bxc3 Kd8 9 O-O Nf6 10 Be3 d6', { a: '=', r: 'Kulaots–Bach, Bergen 2002', c: 'Com 5.Nc3 o jogo fica mais ou menos igual. (O livro traz “6 Nbd5” e “9...Nf3”; os lances são 6.Nb5, com o cavalo de d4, e 9...Nf6.)' }],
+  ['c21', 'k', 'k', '(k)', '5... Qxe4+ 6 Be3 Qe5 7 Qe2 Kd8 8 N1c3 a6 9 Nxc7 Qxc7 10 Nd5 Qa5+ 11 c3', { a: '∞', r: 'S. Arkell–Hugue, Inglaterra 1989', c: 'O 5...Qxe4+ de Steinitz é pouco jogado hoje, porque as brancas têm compensação clara pelo peão; mesmo assim leva a chances para os dois lados.' }],
+  ['c21', 'l', 'l', '(l)', '6 c3 Ba5 7 Nd2 a6 8 Na3 Bb6', { a: '=', r: 'Radulov–Trapl, Děčín 1976', c: 'Com 6.c3 o jogo fica igual.' }],
+  ['c21', 'm', 'm', '(m)', '6... Bc5 7 Qe2 d6 8 g3 Qd8 9 Be3 Bxe3 10 Qxe3 Nf6', { a: '=', r: 'Barbero–Wells, Graz 1991', c: 'Com 6...Bc5 o jogo fica mais ou menos igual.' }],
+  ['c21', 'n-A', 'n', '(n) A', '7... Qxg2 8 Bf3 Bxd2+ 9 Nxd2 Qh3 10 Bxc6', { a: '±', r: 'Gallagher–Costa, Berna 1991', c: 'Pegar mais um peão com 7...Qxg2 deixa as brancas melhor.' }],
+  ['c21', 'n-B', 'n', '(n) B', '7... Qe5 8 O-O Nf6 9 Re1', { a: '±', r: 'análise de Steinitz', c: 'Com 7...Qe5 também.' }],
+  ['c21', 'o', 'o', '(o)', '9... Qe5 10 Re1 Nf6 11 Bc4 Qf5', { a: '±', r: 'Sveshnikov–Sermek, Bled 1994', c: 'Com 9...Qe5 as brancas ficam melhor. A coluna segue Botterill–Staples, Manchester 1974, em que as brancas têm compensação suficiente pelo peão.' }],
+  ['c22', 'p', 'p', '(p)', '6 Qf3 Nd4 7 Nxd4 Bxd4 8 c3 Bb6', { a: '=', r: 'Sibarević–Chiburdanidze, Banja Luka 1985', c: 'Com 6.Qf3 o jogo fica igual. Na coluna, a iniciativa branca compensa com folga o peão perdido.' }],
+  ['c23', 's', 's', '(s)', '6 Nxc3 d6 7 Bg5 Qd7', { a: '=', c: 'Retomar com 6.Nxc3 leva à igualdade. (4...Nf6 é estudado na Defesa dos Dois Cavalos, e 5...Nf6 no Giuoco Piano.)' }],
+  ['c23-s', '1', 's', '(s) 7...Nge7', '7... Nge7 8 Nd5 f6 9 Bxf6', { a: '±', r: 'análise de Keres', c: 'Mas 7...Nge7 permite 9.Bxf6!' }],
+  ['c23', 't', 't', '(t)', '8... d6 9 Qc4 Qe7 10 Nxc3 Nf6 11 O-O Bg4 12 Nd4', { a: '⩲', r: 'Samulevičius–Beekhuis, Campeonato Holandês 2000', c: 'Com 8...d6, 9.Qc4! deixa as brancas um pouco melhor.' }],
+  ['c23', 'u', 'u', '(u)', '9 Qxc3 Qb4', { a: '=', c: 'Com 9.Qxc3 Qb4 o final fica mais ou menos igual. A coluna segue Schlechter–Spielmann, Mannheim 1914.' }],
+  ['c24', 'v', 'v', '(v)', '7 O-O d6 8 Bg5 f6 9 Bh4 Nh6 10 a4 a5 11 b5 Ne5', { a: '=', r: 'V. Khenkin–Kholodkevich, URSS 1957', c: 'Outra forma de jogar é 7.O-O; o jogo fica igual.' }],
+  ['c24', 'w', 'w', '(w)', '7... Qe7 8 O-O d6 9 a4 a6 10 a5 Ba7 11 Bg5 Nf6 12 b5 axb5 13 a6', { a: '±', r: 'Schlechter–Janowski 1898 (até 11...Nf6)', c: 'Com 7...Qe7, 12.b5 axb5 13.a6 é muito bom para as brancas.' }],
+  ['c24', 'x', 'x', '(x)', '10 Bb2 Nge7 11 a5 Ba7 12 Bxd3 O-O 13 c4 Nd4 14 Nxd4 Bxd4 15 Nc3 Be6 16 Kh1', { a: '⩲', r: 'Domínguez–Valcárcel, Las Palmas 1972', c: 'Com 10.Bb2 as brancas ficam um pouco melhor. (O livro escreve 12.Bd3; o bispo captura o peão de d3.)' }],
+  ['c24', 'y-A', 'y', '(y) 11...Ne5', '11... Ne5 12 Nxe5 dxe5 13 bxa6 bxa6 14 Qa4+ Bd7 15 Qd1', { a: '⩲', r: 'Sveshnikov–A. Petrosian, URSS 1974', c: 'Com 11...Ne5 as brancas ficam com uma pequena vantagem.' }],
+  ['c24', 'y', 'y', '(y)', '12 a6 Nge7 13 Bd5 Bb6 14 Bg5 Qg6 15 Bxe7 Kxe7', { a: '=', r: 'análise de I. Zaitsev', c: 'Depois de 11...axb5 o jogo fica mais ou menos igual.' }],
+  ['c24-y', '1', 'y', '(y) 12...bxa6?!', '12... bxa6 13 Bd5 Nge7 14 Bg5', { a: '±', r: 'I. Zaitsev–Aronin, Moscou 1964', c: '12...bxa6?! deixa as brancas melhor.' }],
 ]
 
 const capitulo = {
   id: 'escocesa',
   arquivo: 'escocesa',
   nome: 'Abertura Escocesa',
-  fonte: 'Modern Chess Openings — Scotch Game (pp. 104–113), colunas 1–12',
+  fonte: 'Modern Chess Openings — Scotch Game (pp. 104–113), colunas 1–24',
   base: '1. e4 e5 2. Nf3 Nc6 3. d4',
   corPadrao: 'w',
   ordem: 104,
@@ -125,6 +214,10 @@ const capitulo = {
     { id: 'quatro-cavalos', nome: '4...Nf6 5.Nc3 Bb4 — Escocesa dos Quatro Cavalos', colunas: [1, 2, 3, 4, 5, 6] },
     { id: 'mieses', nome: '4...Nf6 5.Nxc6 bxc6 6.e5 — Variante Mieses', colunas: [7, 8, 9] },
     { id: 'bc5', nome: '4...Bc5 5.Nxc6 Qf6 6.Qd2', colunas: [10, 11, 12] },
+    { id: 'bc5-be3', nome: '4...Bc5 5.Be3 Qf6 6.c3', colunas: [13, 14, 15, 16] },
+    { id: 'bc5-nb3', nome: '4...Bc5 5.Nb3', colunas: [17, 18] },
+    { id: 'outros', nome: '5.Nf5, 4...Nge7 e Steinitz (4...Qh4)', colunas: [19, 20, 21, 22] },
+    { id: 'gambito', nome: 'Gambito Escocês: 4.Bc4', colunas: [23, 24] },
   ],
 }
 
