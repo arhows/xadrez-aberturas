@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto'
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join, relative, sep } from 'node:path'
 import type { Plugin } from 'vite'
+import { ARQUIVO_COMPARTILHADO, CACHE_COMPARTILHADO } from '../../src/lib/compartilhado.ts'
 
 /** Arquivos do dist que não entram no cache offline. */
 const IGNORAR = new Set(['sw.js'])
@@ -38,8 +39,26 @@ self.addEventListener('message', (evento) => {
   if (evento.data === 'atualizar') self.skipWaiting()
 })
 
+// "Compartilhar" do Android (share_target do manifest): guarda o PGN e abre Minhas partidas.
+async function receberCompartilhado(pedido) {
+  const formulario = await pedido.formData()
+  const texto = (nome) => String(formulario.get(nome) || '')
+  const arquivos = []
+  for (const arquivo of formulario.getAll('arquivos')) {
+    if (typeof arquivo !== 'string') arquivos.push(await arquivo.text())
+  }
+  const dados = { titulo: texto('titulo'), texto: texto('texto'), endereco: texto('endereco'), arquivos }
+  const cache = await caches.open('${CACHE_COMPARTILHADO}')
+  await cache.put('${ARQUIVO_COMPARTILHADO}', new Response(JSON.stringify(dados), { headers: { 'Content-Type': 'application/json' } }))
+  return Response.redirect(new URL('./#/partidas?compartilhado=1', self.registration.scope).href, 303)
+}
+
 self.addEventListener('fetch', (evento) => {
   const pedido = evento.request
+  if (pedido.method === 'POST' && new URL(pedido.url).pathname.endsWith('/compartilhar-pgn')) {
+    evento.respondWith(receberCompartilhado(pedido))
+    return
+  }
   if (pedido.method !== 'GET') return
   const url = new URL(pedido.url)
   if (url.origin !== self.location.origin) return

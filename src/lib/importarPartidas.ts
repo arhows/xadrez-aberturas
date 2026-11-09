@@ -1,5 +1,14 @@
 import type { CapituloCarregado } from './capitulos'
-import { analisarPartida, baixarChessCom, baixarLichess, type PartidaAnalisada, type PartidaBaixada } from './partidas'
+import type { Cor } from './lances'
+import {
+  analisarPartida,
+  baixarChessCom,
+  baixarLichess,
+  corDoUsuario,
+  lerPgns,
+  type PartidaAnalisada,
+  type PartidaBaixada,
+} from './partidas'
 import { progresso } from './progresso'
 
 export interface ResultadoImportacao {
@@ -43,18 +52,51 @@ export async function importarPartidas(
     }
   }
 
+  const { novas, desviosNovos } = guardar(
+    baixadas.map(({ partida, usuario }) => ({ partida, cor: corDoUsuario(partida, usuario) })),
+    capitulos,
+  )
+  return { baixadas: baixadas.length, novas, desviosNovos, erros }
+}
+
+/** Analisa e guarda as partidas; só as novas contam desvio para o Treino. */
+function guardar(lista: { partida: PartidaBaixada; cor: Cor }[], capitulos: CapituloCarregado[]) {
   let novas = 0
   let desviosNovos = 0
-  for (const { partida, usuario } of baixadas) {
+  for (const { partida, cor } of lista) {
     if (!partida.sans.length) continue
-    const analise = analisarPartida(partida, usuario, capitulos)
+    const analise = analisarPartida(partida, cor, capitulos)
     const jaExistia = partida.id in progresso.partidas.analisadas
     progresso.partidas.analisadas[partida.id] = analise
     if (jaExistia) continue
     novas++
     if (registrarDesvio(analise)) desviosNovos++
   }
-  return { baixadas: baixadas.length, novas, desviosNovos, erros }
+  return { novas, desviosNovos }
+}
+
+export interface ResultadoPgn {
+  lidas: number
+  novas: number
+  desviosNovos: number
+  erros: string[]
+  /** Partidas em que não deu para saber a cor do usuário (nada foi guardado delas). */
+  semCor: number
+}
+
+/**
+ * Importa partidas coladas em PGN (ex.: as offline do app do lichess, que não ficam no site).
+ * Com `cor` = 'auto', a cor vem dos nomes; as partidas sem cor detectada ficam de fora.
+ */
+export function importarPgn(texto: string, cor: Cor | 'auto', capitulos: CapituloCarregado[]): ResultadoPgn {
+  const { lichess, chesscom } = progresso.partidas
+  const { partidas, erros } = lerPgns(texto, [lichess, chesscom])
+  const comCor = partidas.flatMap(({ partida, cor: detectada }) => {
+    const escolhida = cor === 'auto' ? detectada : cor
+    return escolhida ? [{ partida, cor: escolhida }] : []
+  })
+  const { novas, desviosNovos } = guardar(comCor, capitulos)
+  return { lidas: partidas.length, novas, desviosNovos, erros, semCor: partidas.length - comCor.length }
 }
 
 function registrarDesvio(analise: PartidaAnalisada): boolean {

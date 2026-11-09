@@ -29,3 +29,20 @@ describe('manifest', () => {
     for (const icone of manifest.icons) expect(() => readFileSync(`public/${icone.src}`)).not.toThrow()
   })
 })
+
+describe('Compartilhar do Android', () => {
+  it('o manifest registra o app como destino de PGN (texto e arquivo)', () => {
+    const manifest = JSON.parse(readFileSync('public/manifest.webmanifest', 'utf-8'))
+    expect(manifest.share_target.action).toBe('./compartilhar-pgn')
+    expect(manifest.share_target.method).toBe('POST')
+    expect(manifest.share_target.params.text).toBe('texto')
+    expect(manifest.share_target.params.files[0].accept).toContain('.pgn')
+  })
+
+  it('o service worker recebe o envio e abre Minhas partidas', () => {
+    const texto = textoServiceWorker([], 'v1')
+    expect(texto).toContain("endsWith('/compartilhar-pgn')")
+    expect(texto).toContain("caches.open('compartilhado-pgn')")
+    expect(texto).toContain('#/partidas?compartilhado=1')
+  })
+})

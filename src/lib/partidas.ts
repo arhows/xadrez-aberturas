@@ -3,10 +3,11 @@ import type { Aresta } from './arvore'
 import type { CapituloCarregado } from './capitulos'
 import { separarLances, type Cor } from './lances'
 
-/** Partida baixada do lichess ou do chess.com, já com os lances em SAN. */
+/** Partida baixada do lichess ou do chess.com (ou colada como PGN), já com os lances em SAN. */
 export interface PartidaBaixada {
   id: string
-  site: 'lichess' | 'chesscom'
+  site: 'lichess' | 'chesscom' | 'pgn'
+  /** Vazio quando a partida não existe on-line (ex.: partida offline do app do lichess). */
   url: string
   /** AAAA-MM-DD */
   data: string
@@ -63,16 +64,16 @@ function seguir(capitulo: CapituloCarregado, sans: string[]) {
   return { ply, no }
 }
 
+/** Cor do usuário numa partida baixada pelo nome de usuário. */
+export function corDoUsuario(partida: PartidaBaixada, usuario: string): Cor {
+  return partida.brancas.toLowerCase() === usuario.toLowerCase() ? 'w' : 'b'
+}
+
 /**
  * Acha o capítulo que a partida seguiu por mais lances e onde ela saiu dele. Partidas que
  * não passam da sequência-base de nenhum capítulo ficam fora do repertório.
  */
-export function analisarPartida(
-  partida: PartidaBaixada,
-  usuario: string,
-  capitulos: CapituloCarregado[],
-): PartidaAnalisada {
-  const cor: Cor = partida.brancas.toLowerCase() === usuario.toLowerCase() ? 'w' : 'b'
+export function analisarPartida(partida: PartidaBaixada, cor: Cor, capitulos: CapituloCarregado[]): PartidaAnalisada {
   const base = {
     id: partida.id,
     site: partida.site,
@@ -218,4 +219,118 @@ export async function baixarLichess(usuario: string): Promise<PartidaBaixada[]> 
     })
   }
   return partidas
+}
+
+// ---------- PGN colado ----------
+
+/** Nomes que os apps dão ao computador (o usuário é o outro lado). */
+const MOTORES = /^(maia|stockfish|computer|computador|lichess ai|ai|komodo|leela|lc0|fairy-stockfish|bot|engine)(\b|\d)/i
+/** Nomes que os apps dão a quem jogou sem conta (é o próprio usuário). */
+const ANONIMOS = /^(anonymous|anônimo|anonimo|you|você|voce|player|jogador|\?)$/i
+
+/**
+ * Descobre a cor do usuário pelos nomes: o nome dele no lichess/chess.com, o lado do
+ * computador ou o lado "Anonymous". null quando não dá para saber.
+ */
+export function detectarCor(brancas: string, pretas: string, nomesDoUsuario: string[]): Cor | null {
+  const nomes = nomesDoUsuario.map((n) => n.trim().toLowerCase()).filter(Boolean)
+  const b = brancas.trim()
+  const p = pretas.trim()
+  if (nomes.includes(b.toLowerCase())) return 'w'
+  if (nomes.includes(p.toLowerCase())) return 'b'
+  const motorB = MOTORES.test(b)
+  const motorP = MOTORES.test(p)
+  if (motorB !== motorP) return motorB ? 'b' : 'w'
+  const anonimoB = ANONIMOS.test(b)
+  const anonimoP = ANONIMOS.test(p)
+  if (anonimoB !== anonimoP) return anonimoB ? 'w' : 'b'
+  return null
+}
+
+export interface PartidaDoPgn {
+  partida: PartidaBaixada
+  /** Cor detectada pelos nomes; null se for preciso perguntar. */
+  cor: Cor | null
+}
+
+/** Separa um texto com uma ou mais partidas em PGN (cada uma começa nos cabeçalhos). */
+export function separarPgns(texto: string): string[] {
+  const jogos: string[][] = []
+  let atual: string[] = []
+  let viuLances = false
+  for (const linha of texto.replace(/\r\n?/g, '\n').split('\n')) {
+    const ehCabecalho = /^\s*\[\w+\s+".*"\]\s*$/.test(linha)
+    // Um cabeçalho depois de lances abre a próxima partida.
+    if (ehCabecalho && viuLances) {
+      jogos.push(atual)
+      atual = []
+      viuLances = false
+    }
+    if (!ehCabecalho && linha.trim()) viuLances = true
+    atual.push(linha)
+  }
+  jogos.push(atual)
+  return jogos.map((linhas) => linhas.join('\n').trim()).filter(Boolean)
+}
+
+/** Identificador estável de uma partida sem endereço on-line. */
+function resumo(texto: string): string {
+  let h = 5381
+  for (let i = 0; i < texto.length; i++) h = ((h << 5) + h + texto.charCodeAt(i)) >>> 0
+  return h.toString(36)
+}
+
+function dataDoPgn(data: string | undefined): string {
+  const m = data?.match(/^(\d{4})[.-](\d{2})[.-](\d{2})$/)
+  return m ? `${m[1]}-${m[2]}-${m[3]}` : new Date().toISOString().slice(0, 10)
+}
+
+/**
+ * Lê as partidas de um texto PGN. As que não puderem ser lidas (variantes, posição
+ * inicial diferente, lances inválidos) vão para `erros` com o número da partida.
+ */
+export function lerPgns(texto: string, nomesDoUsuario: string[]): { partidas: PartidaDoPgn[]; erros: string[] } {
+  const partidas: PartidaDoPgn[] = []
+  const erros: string[] = []
+  for (const [i, pgn] of separarPgns(texto).entries()) {
+    const jogo = new Chess()
+    try {
+      jogo.loadPgn(pgn)
+    } catch {
+      erros.push(`Partida ${i + 1}: não foi possível ler os lances.`)
+      continue
+    }
+    const c = jogo.getHeaders()
+    if (c.SetUp === '1' || (c.Variant && !/^(standard|padrão|padrao)$/i.test(c.Variant))) {
+      erros.push(`Partida ${i + 1}: variante ou posição inicial diferente; só partidas normais são analisadas.`)
+      continue
+    }
+    const sans = jogo.history()
+    if (!sans.length) {
+      erros.push(`Partida ${i + 1}: sem lances.`)
+      continue
+    }
+    const brancas = c.White?.trim() || '?'
+    const pretas = c.Black?.trim() || '?'
+    const site = c.Site?.trim() ?? ''
+    const ehEndereco = /^https?:\/\//.test(site)
+    // Partidas offline do app do lichess ("ocg_...") não existem no site.
+    const online = ehEndereco && !/\/ocg_/.test(site)
+    const codigo = ehEndereco ? site.replace(/\/+$/, '').split('/').pop()! : ''
+    const data = dataDoPgn(c.Date)
+    partidas.push({
+      partida: {
+        id: `pgn:${codigo || resumo([brancas, pretas, data, sans.join(' ')].join('|'))}`,
+        site: 'pgn',
+        url: online ? site : '',
+        data,
+        brancas,
+        pretas,
+        resultado: c.Result === '1/2-1/2' ? '½-½' : c.Result === '1-0' || c.Result === '0-1' ? c.Result : '*',
+        sans,
+      },
+      cor: detectarCor(brancas, pretas, nomesDoUsuario),
+    })
+  }
+  return { partidas, erros }
 }

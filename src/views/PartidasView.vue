@@ -1,8 +1,11 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
+import { pgnDoCompartilhado, retirarCompartilhado } from '../lib/compartilhado'
 import { fmtLance } from '../lib/formato'
-import { importarPartidas, type ResultadoImportacao } from '../lib/importarPartidas'
+import { importarPartidas, importarPgn, type ResultadoImportacao, type ResultadoPgn } from '../lib/importarPartidas'
+import type { Cor } from '../lib/lances'
 import type { PartidaAnalisada } from '../lib/partidas'
 import { progresso } from '../lib/progresso'
 
@@ -20,6 +23,51 @@ async function importar() {
     importando.value = false
     situacao.value = ''
   }
+}
+
+const textoPgn = ref('')
+const corPgn = ref<Cor | 'auto'>('auto')
+const resultadoPgn = ref<ResultadoPgn | null>(null)
+
+function importarTextoPgn() {
+  resultadoPgn.value = importarPgn(textoPgn.value, corPgn.value, obterCapitulos())
+  // Some o texto só se tudo entrou; senão ele fica para trocar a cor e tentar de novo.
+  if (!resultadoPgn.value.semCor && !resultadoPgn.value.erros.length) textoPgn.value = ''
+}
+
+// Veio do "Compartilhar" do Android: importa direto o PGN recebido.
+const rota = useRoute()
+const roteador = useRouter()
+const recebendo = ref(false)
+const erroCompartilhado = ref('')
+onMounted(async () => {
+  if (!rota.query.compartilhado) return
+  void roteador.replace({ name: 'partidas' })
+  const dados = await retirarCompartilhado()
+  if (!dados) return
+  recebendo.value = true
+  try {
+    const pgn = await pgnDoCompartilhado(dados)
+    if (!pgn) {
+      erroCompartilhado.value = 'O que foi compartilhado não tem os lances da partida. Compartilhe o PGN.'
+      return
+    }
+    textoPgn.value = pgn
+    importarTextoPgn()
+  } catch (erro) {
+    erroCompartilhado.value = erro instanceof Error ? erro.message : 'Não foi possível ler a partida compartilhada.'
+  } finally {
+    recebendo.value = false
+  }
+})
+
+async function lerArquivos(evento: Event) {
+  const entrada = evento.target as HTMLInputElement
+  const textos = await Promise.all([...(entrada.files ?? [])].map((arquivo) => arquivo.text()))
+  entrada.value = ''
+  if (!textos.length) return
+  textoPgn.value = textos.join('\n\n')
+  importarTextoPgn()
 }
 
 /** "1.e4 e5 2.Nf3": a sequência com os números dos lances. */
@@ -83,7 +131,7 @@ function situacaoDaPartida(p: PartidaAnalisada): string {
     : `O adversário saiu do livro em ${lance}.`
 }
 
-const SITE = { lichess: 'lichess', chesscom: 'chess.com' } as const
+const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
 </script>
 
 <template>
@@ -113,6 +161,52 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com' } as const
       </button>
       <p v-if="situacao" class="suave">{{ situacao }}</p>
     </form>
+
+    <form class="importar" @submit.prevent="importarTextoPgn">
+      <h2>Importar PGN</h2>
+      <p class="suave">
+        Para partidas que não aparecem no site, como as jogadas offline contra o computador no app do lichess.
+        No fim da partida, use “Compartilhar PGN” e cole aqui (pode colar várias de uma vez). No Android, com o app
+        instalado, dá para escolher “Xadrez” direto na lista do Compartilhar.
+      </p>
+      <label class="campo">
+        <span>PGN</span>
+        <textarea v-model="textoPgn" rows="6" spellcheck="false" placeholder="[White &quot;Maia&quot;]&#10;[Black &quot;Anonymous&quot;]&#10;&#10;1. e4 e5 2. Nf3 …"></textarea>
+      </label>
+      <label class="campo">
+        <span>Você jogou com</span>
+        <select v-model="corPgn">
+          <option value="auto">Descobrir pelos nomes (o computador é o outro lado)</option>
+          <option value="w">Brancas</option>
+          <option value="b">Pretas</option>
+        </select>
+      </label>
+      <div class="acoes">
+        <button class="botao primario" :disabled="!textoPgn.trim()">Importar PGN</button>
+        <label class="botao">
+          Abrir arquivo .pgn
+          <input class="oculto" type="file" accept=".pgn,application/x-chess-pgn,text/plain" multiple @change="lerArquivos" />
+        </label>
+      </div>
+    </form>
+
+    <p v-if="recebendo" class="suave">Lendo a partida compartilhada…</p>
+    <div v-if="erroCompartilhado" class="aviso erro"><p>{{ erroCompartilhado }}</p></div>
+
+    <div v-if="resultadoPgn" class="aviso" :class="{ erro: !resultadoPgn.novas && (resultadoPgn.erros.length || resultadoPgn.semCor) }">
+      <p v-if="resultadoPgn.lidas">
+        {{ resultadoPgn.lidas }} {{ resultadoPgn.lidas === 1 ? 'partida lida' : 'partidas lidas' }}, {{ resultadoPgn.novas }}
+        {{ resultadoPgn.novas === 1 ? 'nova' : 'novas' }}.
+        <template v-if="resultadoPgn.desviosNovos">
+          {{ resultadoPgn.desviosNovos }} {{ resultadoPgn.desviosNovos === 1 ? 'desvio foi enviado' : 'desvios foram enviados' }} ao Treino.
+        </template>
+      </p>
+      <p v-if="resultadoPgn.semCor">
+        Não deu para saber com que cor você jogou em {{ resultadoPgn.semCor }}
+        {{ resultadoPgn.semCor === 1 ? 'partida' : 'partidas' }}: escolha Brancas ou Pretas e importe de novo.
+      </p>
+      <p v-for="erro in resultadoPgn.erros" :key="erro">{{ erro }}</p>
+    </div>
 
     <div v-if="resultado" class="aviso" :class="{ erro: resultado.erros.length && !resultado.baixadas }">
       <p v-if="resultado.baixadas">
@@ -190,7 +284,12 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com' } as const
               </span>
               <span>{{ situacaoDaPartida(p) }}</span>
             </div>
-            <a class="botao" :href="p.url" target="_blank" rel="noopener">Ver partida</a>
+            <a v-if="p.url" class="botao" :href="p.url" target="_blank" rel="noopener">Ver partida</a>
+            <RouterLink
+              v-else-if="p.desvio"
+              class="botao"
+              :to="{ name: 'explorar', params: { cap: p.capitulo! }, query: { c: [...p.desvio.caminho, p.desvio.jogado].join(' ') } }"
+            >Ver no Explorar</RouterLink>
           </li>
         </ul>
       </section>
@@ -241,6 +340,37 @@ p {
 .campo {
   display: grid;
   gap: 0.25rem;
+}
+.importar h2 {
+  margin: 0;
+}
+.campo textarea,
+.campo select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  background: var(--fundo);
+  color: var(--texto);
+  font: inherit;
+}
+.campo select {
+  min-height: 44px;
+}
+.campo textarea {
+  font-family: ui-monospace, monospace;
+  font-size: 0.8125rem;
+  resize: vertical;
+}
+.acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
 }
 .campo input {
   min-height: 44px;
