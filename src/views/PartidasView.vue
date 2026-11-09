@@ -136,11 +136,6 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
 
 <template>
   <div class="pagina">
-    <nav class="trilha" aria-label="Caminho">
-      <RouterLink to="/aberturas">Aberturas</RouterLink>
-      <span aria-hidden="true">›</span>
-      <span>Minhas partidas</span>
-    </nav>
     <h1>Minhas partidas</h1>
     <p class="suave">
       Importa suas partidas e mostra onde elas saíram do repertório. Cada vez que você sai do livro, aquele lance
@@ -298,18 +293,6 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
 </template>
 
 <style scoped>
-.trilha {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: var(--texto-suave);
-  font-size: 0.875rem;
-}
-.trilha a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-}
 h1 {
   margin: 0;
 }
