@@ -46,6 +46,11 @@ const problema = (() => {
   return conjunto.problemas.find((p) => estados.value[p.n] !== 'primeira') ?? conjunto.problemas[0]
 })()
 const indice = conjunto.problemas.indexOf(problema)
+/**
+ * Refazendo um problema já resolvido: é só treino, não muda o registro (de primeira / com
+ * ajuda) nem a revisão espaçada — senão rever a solução e acertar logo depois contaria como acerto.
+ */
+const refazendo = route.query.refazer !== undefined
 const vez = vezDoProblema(problema)
 const plyInicial = vez === 'w' ? 1 : 2
 /** Lance do adversário antes do exercício (só em alguns livros), jogado ao abrir. */
@@ -267,8 +272,10 @@ function concluir(lance: LanceVerificado) {
   ultimoLance.value = [lance.from, lance.to]
   resolvido.value = true
   const dePrimeira = erros.value === 0 && !usouPista.value
-  estados.value[problema.n] = dePrimeira ? 'primeira' : 'ajuda'
-  registrarResultado(conjunto.id, problema.n, notaDoExercicio(erros.value, usouPista.value))
+  if (!refazendo) {
+    estados.value[problema.n] = dePrimeira ? 'primeira' : 'ajuda'
+    registrarResultado(conjunto.id, problema.n, notaDoExercicio(erros.value, usouPista.value))
+  }
   const chave = jogadas.value[0].san
   const outras = problema.solucoes.filter((san) => san !== chave).map(fmtSan)
   const rotuloOutras = conjunto.lances === 1 ? 'Também dava mate' : 'Outra chave possível'
@@ -276,7 +283,7 @@ function concluir(lance: LanceVerificado) {
     tipo: 'certo',
     lance: sequencia.value,
     texto:
-      (dePrimeira ? 'Mate! Resolvido de primeira.' : 'Mate!') +
+      (dePrimeira ? (refazendo ? 'Mate! Sem erros.' : 'Mate! Resolvido de primeira.') : 'Mate!') +
       (outras.length ? ` ${rotuloOutras}: ${outras.join(', ')}.` : ''),
   }
 }
@@ -303,6 +310,12 @@ async function pedirPista() {
         : 'A peça destacada dá o mate.'
       : 'Jogue o lance da seta.'
   aviso.value = { tipo: 'neutro', texto }
+}
+
+/** Recomeça o mesmo problema do zero (a tela é montada de novo pela mudança na URL). */
+function refazer() {
+  const vez = Number(route.query.refazer ?? 0) + 1
+  router.replace({ name: 'exercicio', params: { conjunto: conjunto.id }, query: { ...route.query, n: String(problema.n), refazer: String(vez) } })
 }
 
 function irPara(n: number) {
@@ -375,6 +388,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
       <p class="situacao">
         <strong>{{ conjunto.nome }} · Problema {{ problema.n }}</strong>
         <span v-if="revisando" class="etiqueta">revisão</span>
+        <span v-if="refazendo" class="etiqueta">refazendo</span>
         <span class="suave"> ({{ indice + 1 }} de {{ conjunto.problemas.length }})</span>
       </p>
       <p class="enunciado">{{ enunciado }}</p>
@@ -395,6 +409,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
         <button v-if="!resolvido" type="button" class="botao" :disabled="pista >= 2 || aguardando" @click="pedirPista">
           {{ pista === 0 ? 'Pista: qual peça?' : 'Mostrar o lance' }}
         </button>
+        <button v-if="resolvido" type="button" class="botao" @click="refazer">↺ Refazer</button>
         <template v-if="resolvido && revisando">
           <button v-if="proximaRevisao" type="button" class="botao primario" @click="irParaRevisao">
             Próxima revisão ({{ restantesNaRevisao }})
