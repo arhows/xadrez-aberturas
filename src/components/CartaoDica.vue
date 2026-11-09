@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { fmtTexto } from '../lib/formato'
 
+/**
+ * Retorno de cada lance (Treino, Exercícios) e notas do livro. Certo e errado nunca dependem
+ * só da cor: têm ✓/✗ e a palavra. Notas e dicas usam o bloco de dica.
+ */
 withDefaults(
   defineProps<{
     lance?: string
@@ -12,34 +16,43 @@ withDefaults(
 </script>
 
 <template>
-  <article class="dica" :class="tipo">
+  <article v-if="tipo === 'nota'" class="bloco-dica">
     <strong v-if="lance" class="lance">{{ lance }}</strong>
     <p v-if="texto">{{ fmtTexto(texto) }}</p>
     <slot />
   </article>
+  <article v-else class="retorno" :class="[tipo, { 'sem-marca': tipo === 'neutro' }]" role="status">
+    <span v-if="tipo !== 'neutro'" class="marca-retorno" aria-hidden="true">{{ tipo === 'certo' ? '✓' : '✗' }}</span>
+    <span v-if="tipo !== 'neutro' || lance" class="titulo">
+      <template v-if="tipo === 'certo'">Certo<template v-if="lance">: </template></template>
+      <template v-else-if="tipo === 'errado'">Errado<template v-if="lance">: </template></template>
+      <span v-if="lance" class="lance">{{ lance }}</span>
+    </span>
+    <div v-if="texto || $slots.default" class="detalhe">
+      <template v-if="texto">{{ fmtTexto(texto) }}</template>
+      <slot />
+    </div>
+  </article>
 </template>
 
 <style scoped>
-.dica {
-  padding: 0.75rem 1rem;
-  border-left: 4px solid var(--borda);
-  border-radius: 8px;
-  background: var(--superficie);
+.retorno,
+.bloco-dica {
   overflow-wrap: anywhere;
 }
-.lance {
-  font-size: 1.125rem;
+.retorno.sem-marca {
+  grid-template-columns: minmax(0, 1fr);
+}
+.retorno .detalhe {
+  grid-column: -2;
+}
+.bloco-dica .lance {
+  display: block;
 }
 p {
   margin: 0.25rem 0 0;
 }
-.certo {
-  border-color: var(--ok);
-}
-.errado {
-  border-color: var(--erro);
-}
-.nota {
-  border-color: var(--aviso);
+.bloco-dica > :first-child {
+  margin-top: 0;
 }
 </style>

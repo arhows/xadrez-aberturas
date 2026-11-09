@@ -372,7 +372,7 @@ code {
   text-decoration: none;
 }
 .topo a:not(.marca):hover { color: var(--texto); background: var(--superficie-2); }
-.topo a[aria-current='page'] { color: var(--destaque); background: var(--destaque-suave); }
+.topo a:not(.marca)[aria-current='page'] { color: var(--destaque); background: var(--destaque-suave); }
 
 /* Cabeçalho do celular: só o título da tela (e voltar), sem menu. */
 .cabecalho-movel {

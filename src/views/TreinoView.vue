@@ -3,7 +3,6 @@ import { computed, onBeforeUnmount, ref, shallowRef } from 'vue'
 import { useRoute } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
 import CartaoDica from '../components/CartaoDica.vue'
-import HistoricoLances from '../components/HistoricoLances.vue'
 import PlanoMeioJogo from '../components/PlanoMeioJogo.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
@@ -375,6 +374,25 @@ const notaAoEntrar = computed(() => {
   return atual?.jogadas.at(-1)?.selos.find((selo) => selo.id === atual.alvo) ?? null
 })
 
+/** Tamanho da linha cobrada (em meios-lances), para "lance N de M". */
+const totalDaLinha = computed(() => {
+  const atual = partida.value
+  if (!atual) return 0
+  let total = atual.jogadas.length
+  let no = noAtual(arvore, atual)
+  for (;;) {
+    const aresta = no.saidas.find((s) => s.linhas.includes(atual.alvo))
+    if (!aresta) break
+    total++
+    no = arvore.nos.get(aresta.para)!
+  }
+  return total
+})
+const progressoDaLinha = computed(() =>
+  totalDaLinha.value ? Math.round(((partida.value?.jogadas.length ?? 0) / totalDaLinha.value) * 100) : 0,
+)
+const voltarPara = { name: 'abertura', params: { cap: idCapitulo } }
+
 const pontos = computed(() =>
   Math.max(0, placar.value.acertos * 2 - placar.value.erros * 2 - placar.value.pistas),
 )
@@ -384,55 +402,69 @@ if (revisaoAutomatica) iniciarSessao()
 </script>
 
 <template>
+  <header class="cabecalho-movel so-celular">
+    <RouterLink class="voltar" :to="voltarPara" aria-label="Voltar">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6" /></svg>
+    </RouterLink>
+    <h1>{{ capitulo.capitulo.nome }}</h1>
+    <div v-if="fase === 'jogando'" class="placar">
+      <span class="acertos">✓ {{ placar.acertos }}</span><span class="erros">✗ {{ placar.erros }}</span>
+    </div>
+  </header>
+
   <div v-if="fase === 'escolha'" class="pagina formulario">
-    <h1>Treino — {{ capitulo.capitulo.nome }}</h1>
+    <RouterLink :to="voltarPara" class="trilha so-computador">‹ {{ capitulo.capitulo.nome }}</RouterLink>
+    <h1 class="titulo-pagina">Treino</h1>
 
-    <label class="campo">
-      <span>O que treinar</span>
-      <select v-model="escolhaEscopo">
-        <option value="capitulo">Capítulo inteiro</option>
-        <optgroup label="Grupos">
-          <option v-for="g in capitulo.capitulo.grupos" :key="g.id" :value="`grupo:${g.id}`">{{ g.nome }}</option>
-        </optgroup>
-        <optgroup label="Linhas">
-          <option v-for="l in capitulo.capitulo.linhas" :key="l.id" :value="`linha:${l.id}`">
-            {{ l.coluna === null ? 'Bônus' : `Coluna ${l.coluna}` }} — {{ l.nome }}
-          </option>
-        </optgroup>
-      </select>
-    </label>
+    <div class="cartao">
+      <label class="campo">
+        <span>O que treinar</span>
+        <select v-model="escolhaEscopo">
+          <option value="capitulo">Capítulo inteiro</option>
+          <optgroup label="Grupos">
+            <option v-for="g in capitulo.capitulo.grupos" :key="g.id" :value="`grupo:${g.id}`">{{ g.nome }}</option>
+          </optgroup>
+          <optgroup label="Linhas">
+            <option v-for="l in capitulo.capitulo.linhas" :key="l.id" :value="`linha:${l.id}`">
+              {{ l.coluna === null ? 'Bônus' : `Coluna ${l.coluna}` }} — {{ l.nome }}
+            </option>
+          </optgroup>
+        </select>
+      </label>
 
-    <label class="campo">
-      <span>Sua cor</span>
-      <select v-model="corEscolhida">
-        <option value="w">Brancas</option>
-        <option value="b">Pretas</option>
-        <option value="ambas">Ambas</option>
-      </select>
-    </label>
+      <label class="campo">
+        <span>Sua cor</span>
+        <select v-model="corEscolhida">
+          <option value="w">Brancas</option>
+          <option value="b">Pretas</option>
+          <option value="ambas">Ambas</option>
+        </select>
+      </label>
 
-    <label class="campo">
-      <span>Profundidade</span>
-      <select v-model="config.profundidade">
-        <option value="colunas">Só colunas</option>
-        <option value="notas">Colunas + notas</option>
-      </select>
-    </label>
+      <label class="campo">
+        <span>Profundidade</span>
+        <select v-model="config.profundidade">
+          <option value="colunas">Só colunas</option>
+          <option value="notas">Colunas + notas</option>
+        </select>
+      </label>
 
-    <label class="campo">
-      <span>Tempo para ler a dica no Treino</span>
-      <select v-model="config.tempoDica">
-        <option value="normal">Normal (2 segundos)</option>
-        <option value="longo">Mais tempo (5 segundos)</option>
-        <option value="toque">Até eu tocar para continuar</option>
-      </select>
-    </label>
+      <label class="campo">
+        <span>Tempo para ler a dica no Treino</span>
+        <select v-model="config.tempoDica">
+          <option value="normal">Normal (2 segundos)</option>
+          <option value="longo">Mais tempo (5 segundos)</option>
+          <option value="toque">Até eu tocar para continuar</option>
+        </select>
+      </label>
+    </div>
 
-    <button type="button" class="botao primario" @click="iniciarSessao()">Começar</button>
+    <button type="button" class="botao primario grande largo-celular" @click="iniciarSessao()">Começar</button>
   </div>
 
-  <div v-else-if="fase === 'vazio'" class="pagina">
-    <h1>Nada pendente</h1>
+  <div v-else-if="fase === 'vazio'" class="pagina formulario">
+    <RouterLink :to="voltarPara" class="trilha so-computador">‹ {{ capitulo.capitulo.nome }}</RouterLink>
+    <h1 class="titulo-pagina">Nada pendente</h1>
     <p>Não há revisões vencidas nem linhas novas disponíveis hoje neste escopo.</p>
     <div class="acoes">
       <RouterLink
@@ -440,12 +472,20 @@ if (revisaoAutomatica) iniciarSessao()
         class="botao primario"
         :to="{ name: 'treino', params: { cap: proximoCapitulo.capitulo.capitulo.id }, query: { auto: '1' } }"
       >Revisar {{ proximoCapitulo.capitulo.capitulo.nome }} ({{ proximoCapitulo.fila.length }})</RouterLink>
-      <button type="button" class="botao primario" @click="iniciarSessao(true)">Treinar mesmo assim</button>
-      <RouterLink class="botao" to="/">Voltar ao início</RouterLink>
+      <button type="button" class="botao" :class="{ primario: !proximoCapitulo }" @click="iniciarSessao(true)">Treinar mesmo assim</button>
+      <RouterLink class="botao fantasma" to="/">Voltar ao início</RouterLink>
     </div>
   </div>
 
   <div v-else-if="noDoTabuleiro" class="tela">
+    <div v-if="fase === 'jogando'" class="progresso fino linha-progresso so-celular">
+      <div class="rotulos">
+        <span class="nome-linha">{{ titulo?.titulo }}</span>
+        <span>lance <strong>{{ partida?.jogadas.length ?? 0 }}</strong> de {{ totalDaLinha }}</span>
+      </div>
+      <div class="trilho"><span :style="{ width: `${progressoDaLinha}%` }"></span></div>
+    </div>
+
     <div class="area-tabuleiro">
       <Tabuleiro
         ref="tabuleiro"
@@ -460,17 +500,20 @@ if (revisaoAutomatica) iniciarSessao()
 
     <div class="painel">
       <template v-if="fase === 'jogando'">
-        <p class="situacao">
-          <strong>{{ titulo?.titulo }}</strong> ·
-          {{ partida?.cor === 'w' ? 'você joga de brancas' : 'você joga de pretas' }}
-          <template v-if="revisando"> · revisão</template>
-        </p>
-
-        <HistoricoLances
-          v-if="partida"
-          :lances="partida.jogadas.map((jogada) => jogada.san)"
-          :atual="partida.jogadas.length"
-        />
+        <div class="so-computador cabeca-painel">
+          <RouterLink :to="voltarPara" class="trilha">‹ {{ capitulo.capitulo.nome }}</RouterLink>
+          <h1 class="titulo-pagina">Treino</h1>
+          <p class="apoio suave">
+            {{ partida?.cor === 'w' ? 'Você joga de brancas' : 'Você joga de pretas' }}<template v-if="revisando"> · revisão</template>
+          </p>
+        </div>
+        <div class="progresso so-computador">
+          <div class="rotulos">
+            <span>{{ titulo?.titulo }}</span>
+            <span>lance <strong>{{ partida?.jogadas.length ?? 0 }}</strong> de {{ totalDaLinha }}</span>
+          </div>
+          <div class="trilho"><span :style="{ width: `${progressoDaLinha}%` }"></span></div>
+        </div>
 
         <CartaoDica
           v-if="aviso"
@@ -485,9 +528,7 @@ if (revisaoAutomatica) iniciarSessao()
             Continuar
           </button>
         </CartaoDica>
-        <p v-else class="suave">
-          {{ jogavel ? 'Sua vez.' : 'O adversário está jogando…' }}
-        </p>
+        <CartaoDica v-else :texto="jogavel ? 'Sua vez: jogue o lance do livro.' : 'O adversário está jogando…'" />
 
         <CartaoDica v-if="notaAoEntrar" tipo="nota">
           <strong>Nota {{ notaAoEntrar.rotulo }}</strong>
@@ -495,27 +536,49 @@ if (revisaoAutomatica) iniciarSessao()
           <p v-if="notaAoEntrar.referencia" class="suave">{{ notaAoEntrar.referencia }}</p>
         </CartaoDica>
 
-        <button
-          type="button"
-          class="botao"
-          :disabled="!jogavel || nivelPista >= 3"
-          @click="pedirPista"
-        >{{ textoBotaoPista }}</button>
+        <section class="cartao so-computador">
+          <div class="cabeca">
+            <h2 class="titulo-item">Lances da linha</h2>
+            <div class="placar">
+              <span class="acertos">✓ {{ placar.acertos }}</span>
+              <span class="erros">✗ {{ placar.erros }}</span>
+              <span class="pistas">pistas {{ placar.pistas }}</span>
+            </div>
+          </div>
+          <div v-if="partida?.jogadas.length" class="chips">
+            <span
+              v-for="(jogada, i) in partida.jogadas"
+              :key="i"
+              class="chip-lance"
+              :class="{ atual: i === partida.jogadas.length - 1 }"
+            >{{ fmtLance(i + 1, jogada.san) }}</span>
+          </div>
+          <p v-else class="apoio suave">Os lances aparecem aqui conforme a partida anda.</p>
+        </section>
 
-        <p class="placar-linha">
-          ✓ {{ placar.acertos }} · ✗ {{ placar.erros }} · pistas {{ placar.pistas }}
-        </p>
+        <div class="rodape-acoes">
+          <button
+            type="button"
+            class="botao grande largo-celular"
+            :disabled="!jogavel || nivelPista >= 3"
+            @click="pedirPista"
+          >{{ textoBotaoPista }}</button>
+        </div>
+        <p class="apoio suave so-celular">Pistas usadas: {{ placar.pistas }}</p>
       </template>
 
       <template v-else>
-        <h1>{{ titulo?.titulo }}</h1>
-        <p v-if="titulo?.nome" class="suave">{{ titulo.nome }}</p>
-        <p v-if="revisando" class="suave">Revisão: não altera a agenda de repetição.</p>
+        <div class="cabeca-painel">
+          <RouterLink :to="voltarPara" class="trilha so-computador">‹ {{ capitulo.capitulo.nome }}</RouterLink>
+          <h1 class="titulo-pagina">{{ titulo?.titulo }}</h1>
+          <p v-if="titulo?.nome" class="suave">{{ titulo.nome }}</p>
+          <p v-if="revisando" class="suave">Revisão: não altera a agenda de repetição.</p>
+        </div>
 
-        <dl class="placar">
-          <div><dt>Acertos</dt><dd>{{ placar.acertos }}</dd></div>
-          <div><dt>Erros</dt><dd>{{ placar.erros }}</dd></div>
-          <div><dt>Pistas</dt><dd>{{ placar.pistas }}</dd></div>
+        <dl class="placar-final">
+          <div><dt>Acertos</dt><dd class="ok">{{ placar.acertos }}</dd></div>
+          <div><dt>Erros</dt><dd class="erro">{{ placar.erros }}</dd></div>
+          <div><dt>Pistas</dt><dd class="aviso">{{ placar.pistas }}</dd></div>
           <div><dt>Pontos</dt><dd>{{ pontos }}</dd></div>
         </dl>
 
@@ -527,21 +590,21 @@ if (revisaoAutomatica) iniciarSessao()
         </CartaoDica>
 
         <div class="acoes">
-          <button type="button" class="botao" @click="revisarLinha">Revisar esta linha</button>
-          <RouterLink class="botao" :to="linkParaRever">Rever com dicas</RouterLink>
-          <button v-if="fila.length" type="button" class="botao primario" @click="proximaPartida">
+          <button v-if="fila.length" type="button" class="botao primario grande largo-celular" @click="proximaPartida">
             Próxima ({{ fila.length }})
           </button>
           <template v-else>
-            <p class="concluido">Sessão concluída.</p>
+            <p class="concluido">✓ Sessão concluída.</p>
             <RouterLink
               v-if="proximoCapitulo"
-              class="botao primario"
+              class="botao primario largo-celular"
               :to="{ name: 'treino', params: { cap: proximoCapitulo.capitulo.capitulo.id }, query: { auto: '1' } }"
             >Revisar {{ proximoCapitulo.capitulo.capitulo.nome }} ({{ proximoCapitulo.fila.length }})</RouterLink>
             <button type="button" class="botao" @click="repetir">Treinar de novo</button>
           </template>
-          <RouterLink class="botao" to="/">Início</RouterLink>
+          <button type="button" class="botao" @click="revisarLinha">Revisar esta linha</button>
+          <RouterLink class="botao" :to="linkParaRever">Rever com dicas</RouterLink>
+          <RouterLink class="botao fantasma" to="/">Início</RouterLink>
         </div>
       </template>
     </div>
@@ -551,13 +614,25 @@ if (revisaoAutomatica) iniciarSessao()
 <style scoped>
 .formulario {
   display: grid;
-  gap: 1rem;
+  gap: var(--espaco-4);
 }
-h1 {
+.titulo-pagina {
   margin: 0;
-  font-size: 1.25rem;
 }
-.situacao {
+.trilha {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alvo-toque);
+  color: var(--destaque);
+  font-size: 14px;
+  text-decoration: none;
+}
+.cabeca-painel {
+  display: grid;
+  gap: var(--espaco-1);
+}
+.cabeca-painel p,
+.formulario p {
   margin: 0;
 }
 .suave {
@@ -571,44 +646,79 @@ h1 {
   cursor: pointer;
 }
 .continuar {
-  margin-top: 0.75rem;
+  margin-top: var(--espaco-3);
 }
-.placar-linha {
+.linha-progresso {
+  padding: 0 var(--espaco-4);
+}
+.nome-linha {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cartao .titulo-item {
   margin: 0;
-  color: var(--texto-suave);
-  font-variant-numeric: tabular-nums;
 }
-.placar {
+.rodape-acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2);
+}
+.placar-final {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0.5rem;
+  gap: var(--espaco-2);
   margin: 0;
   text-align: center;
 }
-.placar div {
-  padding: 0.5rem;
+.placar-final div {
+  padding: var(--espaco-3) var(--espaco-2);
   border: 1px solid var(--borda);
-  border-radius: 8px;
+  border-radius: var(--raio-md);
+  background: var(--superficie);
 }
-.placar dt {
+.placar-final dt {
   color: var(--texto-suave);
-  font-size: 0.875rem;
+  font-size: 14px;
 }
-.placar dd {
+.placar-final dd {
   margin: 0;
-  font-size: 1.25rem;
-  font-weight: 600;
+  font: 600 28px/34px var(--font-titulo);
   font-variant-numeric: tabular-nums;
+}
+.placar-final .ok {
+  color: var(--ok);
+}
+.placar-final .erro {
+  color: var(--erro);
+}
+.placar-final .aviso {
+  color: var(--aviso);
 }
 .acoes {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--espaco-2);
 }
 .concluido {
   width: 100%;
   margin: 0;
   color: var(--ok);
+  font-weight: 600;
+}
+@media (max-width: 799.98px) {
+  .so-computador {
+    display: none;
+  }
+  .largo-celular {
+    width: 100%;
+  }
+}
+@media (min-width: 800px) {
+  .so-celular {
+    display: none;
+  }
 }
 </style>

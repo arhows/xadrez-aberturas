@@ -74,51 +74,19 @@ function enviar() {
 
 <template>
   <div class="entrar">
-    <header class="marca">
-      <img :src="icone" alt="" width="64" height="64" />
+    <header class="lado-marca">
+      <img :src="icone" alt="" width="72" height="72" />
       <h1>Treinador de Xadrez</h1>
-      <p class="suave">Aberturas do MCO e exercícios de mate. Cada conta tem o próprio progresso.</p>
+      <p>Aberturas do MCO e exercícios de mate, com treino de repetição espaçada. Cada conta tem o próprio progresso.</p>
     </header>
 
-    <section v-if="mostrarInstalar" class="instalar">
-      <button type="button" class="botao" :aria-expanded="instrucoes" @click="aoInstalar">
-        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14" />
-        </svg>
-        Instalar App
-      </button>
-      <div v-if="instrucoes" class="passos" role="region" aria-label="Como instalar">
-        <template v-if="iphone">
-          <p><strong>No iPhone/iPad, pelo Safari:</strong></p>
-          <ol>
-            <li>
-              Toque em <strong>Compartilhar</strong>
-              <svg viewBox="0 0 24 24" width="16" height="16" aria-label="ícone de compartilhar" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 15V3m0 0-4 4m4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1" />
-              </svg>
-              (na barra de baixo ou no topo).
-            </li>
-            <li>Role a lista e toque em <strong>Adicionar à Tela de Início</strong>.</li>
-            <li>Toque em <strong>Adicionar</strong>. O ícone do cavalo aparece na tela inicial.</li>
-          </ol>
-          <p class="suave">Se não aparecer a opção, abra este site no Safari.</p>
-        </template>
-        <template v-else>
-          <p><strong>No Android, pelo Chrome:</strong></p>
-          <ol>
-            <li>Toque no menu <strong>⋮</strong> (canto de cima, à direita).</li>
-            <li>Toque em <strong>Instalar app</strong> (ou <strong>Adicionar à tela inicial</strong>).</li>
-            <li>Confirme em <strong>Instalar</strong>.</li>
-          </ol>
-        </template>
-      </div>
-    </section>
 
-    <section class="cartao">
-      <h2>{{ titulo }}</h2>
+    <section class="lado-form">
+      <div class="miolo">
+      <h2 class="titulo-pagina" :class="{ 'so-computador': modo === 'entrar' }">{{ titulo }}</h2>
 
       <template v-if="modo !== 'esqueci'">
-        <button type="button" class="botao google" :disabled="enviando" @click="google">
+        <button type="button" class="botao largo google" :disabled="enviando" @click="google">
           <svg viewBox="0 0 48 48" width="18" height="18" aria-hidden="true">
             <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z" />
             <path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z" />
@@ -158,18 +126,52 @@ function enviar() {
         <p v-if="aviso" class="ok" role="status">{{ aviso }}</p>
         <p v-if="nuvem.estado === 'erro' && nuvem.erro" class="erro" role="alert">{{ nuvem.erro }}</p>
 
-        <button type="submit" class="botao primario" :disabled="enviando">
+        <button type="submit" class="botao primario largo grande-celular" :disabled="enviando">
           {{ enviando ? 'Aguarde…' : modo === 'cadastrar' ? 'Criar conta' : modo === 'entrar' ? 'Entrar' : 'Enviar link' }}
         </button>
       </form>
 
       <nav class="trocas">
         <template v-if="modo === 'entrar'">
-          <button type="button" class="link" @click="trocar('cadastrar')">Não tem conta? Criar conta</button>
-          <button type="button" class="link" @click="trocar('esqueci')">Esqueci a senha</button>
+          <button type="button" class="botao fantasma" @click="trocar('cadastrar')">Criar conta</button>
+          <button type="button" class="botao fantasma" @click="trocar('esqueci')">Esqueci a senha</button>
         </template>
-        <button v-else type="button" class="link" @click="trocar('entrar')">Já tenho conta: entrar</button>
+        <button v-else type="button" class="botao fantasma" @click="trocar('entrar')">Já tenho conta: entrar</button>
       </nav>
+      </div>
+    <section v-if="mostrarInstalar" class="instalar">
+      <button type="button" class="botao largo" :aria-expanded="instrucoes" @click="aoInstalar">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 3v12m0 0-4-4m4 4 4-4M5 21h14" />
+        </svg>
+        Instalar o app
+      </button>
+      <div v-if="instrucoes" class="passos bloco-dica" role="region" aria-label="Como instalar">
+        <template v-if="iphone">
+          <p><strong>No iPhone/iPad, pelo Safari:</strong></p>
+          <ol>
+            <li>
+              Toque em <strong>Compartilhar</strong>
+              <svg viewBox="0 0 24 24" width="16" height="16" aria-label="ícone de compartilhar" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 15V3m0 0-4 4m4-4 4 4M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1" />
+              </svg>
+              (na barra de baixo ou no topo).
+            </li>
+            <li>Role a lista e toque em <strong>Adicionar à Tela de Início</strong>.</li>
+            <li>Toque em <strong>Adicionar</strong>. O ícone do cavalo aparece na tela inicial.</li>
+          </ol>
+          <p class="suave">Se não aparecer a opção, abra este site no Safari.</p>
+        </template>
+        <template v-else>
+          <p><strong>No Android, pelo Chrome:</strong></p>
+          <ol>
+            <li>Toque no menu <strong>⋮</strong> (canto de cima, à direita).</li>
+            <li>Toque em <strong>Instalar app</strong> (ou <strong>Adicionar à tela inicial</strong>).</li>
+            <li>Confirme em <strong>Instalar</strong>.</li>
+          </ol>
+        </template>
+      </div>
+    </section>
     </section>
   </div>
 </template>
@@ -177,44 +179,93 @@ function enviar() {
 <style scoped>
 .entrar {
   display: grid;
-  gap: 1.5rem;
-  max-width: 24rem;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+  min-height: 100vh;
+  min-height: 100dvh;
 }
-.marca {
+.lado-marca {
   display: grid;
-  justify-items: center;
-  gap: 0.5rem;
-  text-align: center;
+  align-content: start;
+  gap: var(--espaco-3);
+  padding: var(--espaco-7) var(--espaco-5) var(--espaco-5);
 }
-.marca img {
-  border-radius: 14px;
+.lado-marca img {
+  border-radius: 18px;
 }
-h1 {
-  margin: 0;
-  font-size: 1.375rem;
+.lado-marca h1 {
+  margin: var(--espaco-1) 0 0;
+  font: 600 34px/38px var(--font-titulo);
 }
-h2 {
-  margin: 0;
-  font-size: 1.125rem;
-}
-.suave {
+.lado-marca p {
   margin: 0;
   color: var(--texto-suave);
 }
+.lado-form {
+  display: grid;
+  align-content: start;
+  gap: var(--espaco-5);
+  padding: 0 var(--espaco-5) var(--espaco-6);
+}
+.miolo {
+  display: grid;
+  gap: var(--espaco-4);
+  width: 100%;
+  max-width: 380px;
+}
+.titulo-pagina {
+  margin: 0;
+}
+.google {
+  border-color: var(--borda-controle);
+  background: var(--superficie);
+}
+.google:hover {
+  background: var(--superficie-2);
+}
+.ou {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 14px;
+}
+.ou::before,
+.ou::after {
+  content: '';
+  flex: 1;
+  border-top: 1px solid var(--borda);
+}
+.formulario {
+  display: grid;
+  gap: var(--espaco-4);
+}
+.erro,
+.ok {
+  margin: 0;
+  padding: var(--espaco-3) var(--espaco-4);
+  border-radius: var(--raio-md);
+}
+.erro {
+  background: var(--erro-suave);
+  color: var(--erro);
+}
+.ok {
+  background: var(--ok-suave);
+  color: var(--ok);
+}
+.trocas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--espaco-2);
+}
+.trocas .botao {
+  padding: 0 var(--espaco-1);
+}
 .instalar {
   display: grid;
-  gap: 0.75rem;
-}
-.instalar .botao {
-  gap: 0.5rem;
-}
-.passos {
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--borda);
-  border-radius: 12px;
-  background: var(--superficie);
+  gap: var(--espaco-3);
+  max-width: 380px;
 }
 .passos p {
   margin: 0;
@@ -228,64 +279,53 @@ h2 {
 .passos svg {
   vertical-align: -3px;
 }
-.cartao {
-  display: grid;
-  gap: 1rem;
-  padding: 1.25rem;
-  border: 1px solid var(--borda);
-  border-radius: 12px;
-  background: var(--superficie);
-}
-.google {
-  gap: 0.5rem;
-  background: var(--fundo);
-}
-.ou {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin: 0;
+.suave {
   color: var(--texto-suave);
-  font-size: 0.875rem;
 }
-.ou::before,
-.ou::after {
-  content: '';
-  flex: 1;
-  border-top: 1px solid var(--borda);
+@media (max-width: 799.98px) {
+  .so-computador {
+    display: none;
+  }
+  .grande-celular {
+    min-height: 52px;
+    font-size: 17px;
+  }
+  .lado-form {
+    grid-template-rows: auto 1fr;
+  }
+  .instalar {
+    align-self: end;
+  }
 }
-.formulario {
-  display: grid;
-  gap: 0.75rem;
-}
-.campo input {
-  background: var(--fundo);
-}
-.erro,
-.ok {
-  margin: 0;
-}
-.erro {
-  color: var(--erro);
-}
-.ok {
-  color: var(--ok);
-}
-.trocas {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-.link {
-  min-height: 44px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--destaque);
-  font: inherit;
-  font-size: 0.875rem;
-  text-decoration: underline;
-  cursor: pointer;
+/* Computador: duas metades, a da marca em verde. */
+@media (min-width: 800px) {
+  .entrar {
+    grid-template-columns: 1fr 1fr;
+  }
+  .lado-marca {
+    align-content: end;
+    gap: var(--espaco-4);
+    padding: var(--espaco-7);
+    background: var(--destaque);
+    color: var(--sobre-destaque);
+  }
+  .lado-marca img {
+    box-shadow: 0 0 0 2px var(--sobre-destaque);
+  }
+  .lado-marca h1 {
+    max-width: 440px;
+    font-size: 56px;
+    line-height: 0.95;
+  }
+  .lado-marca p {
+    max-width: 420px;
+    color: inherit;
+    opacity: 0.9;
+  }
+  .lado-form {
+    align-content: center;
+    justify-items: center;
+    padding: var(--espaco-7) var(--espaco-5);
+  }
 }
 </style>

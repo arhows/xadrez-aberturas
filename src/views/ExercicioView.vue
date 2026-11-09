@@ -8,6 +8,7 @@ import {
   analisar,
   buscarChave,
   buscarConjunto,
+  livroDoConjunto,
   casasDoLance,
   ehPromocao,
   jogarSan,
@@ -338,6 +339,9 @@ function irParaRevisao() {
   router.push({ name: 'exercicio', params: { conjunto: r.conjunto }, query: { n: String(r.n), revisao: '1' } })
 }
 
+const livro = livroDoConjunto(conjunto)
+const resolvidosPct = computed(() => ((contagem.value.primeira + contagem.value.ajuda) / conjunto.problemas.length) * 100)
+
 const anterior = conjunto.problemas[indice - 1]
 const proximo = conjunto.problemas[indice + 1]
 /** Próximo problema (dando a volta) que ainda não foi resolvido de primeira. */
@@ -370,7 +374,18 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
 </script>
 
 <template>
+  <header class="cabecalho-movel so-celular">
+    <RouterLink class="voltar" to="/exercicios" aria-label="Voltar">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6" /></svg>
+    </RouterLink>
+    <h1>{{ conjunto.nome }}</h1>
+    <span class="apoio suave">{{ indice + 1 }} de {{ conjunto.problemas.length }}</span>
+  </header>
+
   <div class="tela">
+    <p class="enunciado corpo-forte so-celular">
+      <span class="marcador" :class="vez" aria-hidden="true"></span>{{ enunciado }}
+    </p>
     <div class="area-tabuleiro">
       <Tabuleiro
         ref="tabuleiro"
@@ -385,13 +400,18 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
     </div>
 
     <div class="painel">
-      <p class="situacao">
-        <strong>{{ conjunto.nome }} · Problema {{ problema.n }}</strong>
-        <span v-if="revisando" class="etiqueta">revisão</span>
-        <span v-if="refazendo" class="etiqueta">refazendo</span>
-        <span class="suave"> ({{ indice + 1 }} de {{ conjunto.problemas.length }})</span>
+      <div class="cabeca-painel so-computador">
+        <RouterLink to="/exercicios" class="trilha">‹ {{ livro }}</RouterLink>
+        <h1 class="titulo-pagina">{{ conjunto.nome }} · problema {{ problema.n }}</h1>
+        <p class="apoio suave">{{ indice + 1 }} de {{ conjunto.problemas.length }}</p>
+      </div>
+      <p v-if="revisando || refazendo" class="selos">
+        <span v-if="revisando" class="selo">REVISÃO</span>
+        <span v-if="refazendo" class="selo neutro">REFAZENDO</span>
       </p>
-      <p class="enunciado">{{ enunciado }}</p>
+      <p class="enunciado corpo-forte so-computador">
+        <span class="marcador" :class="vez" aria-hidden="true"></span>{{ enunciado }}
+      </p>
       <p v-if="problema.partida" class="suave">{{ problema.partida }}</p>
       <p v-if="sequencia && !resolvido" class="sequencia">{{ sequencia }}</p>
 
@@ -406,7 +426,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
       <CartaoDica v-if="aviso" :tipo="aviso.tipo" :lance="aviso.lance" :texto="aviso.texto" />
 
       <div class="acoes">
-        <button v-if="!resolvido" type="button" class="botao" :disabled="pista >= 2 || aguardando" @click="pedirPista">
+        <button v-if="!resolvido" type="button" class="botao grande largo-celular" :disabled="pista >= 2 || aguardando" @click="pedirPista">
           {{ pista === 0 ? 'Pista: qual peça?' : 'Mostrar o lance' }}
         </button>
         <button v-if="resolvido" type="button" class="botao" @click="refazer">↺ Refazer</button>
@@ -435,10 +455,20 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
         <button type="button" class="botao" :disabled="!proximo" @click="irPara(proximo.n)">Próximo →</button>
       </div>
 
-      <p class="suave">
-        ✓ {{ contagem.primeira }} de primeira · {{ contagem.ajuda }} com ajuda
-        · {{ conjunto.problemas.length - contagem.primeira - contagem.ajuda }} por fazer
-      </p>
+      <section class="cartao">
+        <div class="progresso">
+          <div class="rotulos">
+            <span>{{ conjunto.nome }}</span>
+            <span><strong>{{ (contagem.primeira + contagem.ajuda).toLocaleString('pt-BR') }}</strong> de {{ conjunto.problemas.length.toLocaleString('pt-BR') }} resolvidos</span>
+          </div>
+          <div class="trilho"><span :style="{ width: `${resolvidosPct}%` }"></span></div>
+        </div>
+        <div class="placar">
+          <span class="acertos">✓ {{ contagem.primeira }} de primeira</span>
+          <span class="pistas">{{ contagem.ajuda }} com ajuda</span>
+          <span class="suave">{{ conjunto.problemas.length - contagem.primeira - contagem.ajuda }} por fazer</span>
+        </div>
+      </section>
 
       <details class="escolha">
         <summary>Escolher problema</summary>
@@ -472,16 +502,60 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
   margin: 0;
 }
 .enunciado {
-  font-size: 1.125rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.etiqueta {
-  margin-left: 0.5rem;
-  padding: 0.1rem 0.5rem;
-  border-radius: 999px;
-  background: var(--aviso);
-  color: var(--fundo);
-  font-size: 0.75rem;
-  font-weight: 600;
+.tela > .enunciado {
+  padding: 0 var(--espaco-4);
+}
+.marcador {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--borda-controle);
+  border-radius: 50%;
+  background: #ffffff;
+}
+.marcador.b {
+  background: #1c1d1a;
+}
+.selos {
+  display: flex;
+  gap: var(--espaco-2);
+  margin: 0;
+}
+.cabeca-painel {
+  display: grid;
+  gap: var(--espaco-1);
+}
+.cabeca-painel .titulo-pagina,
+.cabeca-painel p {
+  margin: 0;
+}
+.trilha {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alvo-toque);
+  color: var(--destaque);
+  font-size: 14px;
+  text-decoration: none;
+}
+.placar .suave {
+  font-weight: 400;
+}
+@media (max-width: 799.98px) {
+  .so-computador {
+    display: none;
+  }
+  .largo-celular {
+    width: 100%;
+  }
+}
+@media (min-width: 800px) {
+  .so-celular {
+    display: none;
+  }
 }
 .sequencia {
   font-weight: 600;
@@ -523,6 +597,11 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
 }
 .campo-bloco select {
   min-height: 44px;
+  padding: 0 var(--espaco-3);
+  border: 1px solid var(--borda-controle);
+  border-radius: var(--raio-md);
+  background: var(--superficie);
+  color: var(--texto);
   font: inherit;
 }
 .grade-problemas {
@@ -534,7 +613,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
 .grade-problemas button {
   min-height: 44px;
   border: 1px solid var(--borda);
-  border-radius: 6px;
+  border-radius: var(--raio-sm);
   background: var(--superficie);
   color: var(--texto);
   font: inherit;
