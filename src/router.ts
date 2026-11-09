@@ -18,30 +18,41 @@ import TreinoView from './views/TreinoView.vue'
 const exigirCapitulo = (destino: RouteLocationNormalized) =>
   buscarCapitulo(destino.params.cap as string) ? true : { name: 'inicio' }
 
+declare module 'vue-router' {
+  interface RouteMeta {
+    /** Item do menu que fica marcado nesta tela. */
+    secao?: 'inicio' | 'aberturas' | 'exercicios' | 'partidas' | 'diagnostico' | 'config'
+    /** Tela de foco (Treino, Exercício): no celular some a barra inferior. */
+    foco?: boolean
+    publica?: boolean
+  }
+}
+
 // Rotas com hash funcionam em qualquer hospedagem estática, sem regra de reescrita.
 export const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     { path: '/entrar', name: 'entrar', component: EntrarView, meta: { publica: true } },
-    { path: '/', name: 'inicio', component: InicioView },
-    { path: '/aberturas', name: 'aberturas', component: AberturasView },
-    { path: '/abertura/:cap', name: 'abertura', component: AberturaView, beforeEnter: exigirCapitulo },
-    { path: '/partidas', name: 'partidas', component: PartidasView },
-    { path: '/explorar/:cap', name: 'explorar', component: ExplorarView, beforeEnter: exigirCapitulo },
-    { path: '/estudo/:cap/:linha', name: 'estudo', component: EstudoView, beforeEnter: exigirCapitulo },
-    { path: '/treino/:cap', name: 'treino', component: TreinoView, beforeEnter: exigirCapitulo },
-    { path: '/exercicios', name: 'exercicios', component: ExerciciosView, beforeEnter: () => carregarConjuntos().then(() => true) },
+    { path: '/', name: 'inicio', component: InicioView, meta: { secao: 'inicio' } },
+    { path: '/aberturas', name: 'aberturas', component: AberturasView, meta: { secao: 'aberturas' } },
+    { path: '/abertura/:cap', name: 'abertura', component: AberturaView, beforeEnter: exigirCapitulo, meta: { secao: 'aberturas' } },
+    { path: '/partidas', name: 'partidas', component: PartidasView, meta: { secao: 'partidas' } },
+    { path: '/explorar/:cap', name: 'explorar', component: ExplorarView, beforeEnter: exigirCapitulo, meta: { secao: 'aberturas' } },
+    { path: '/estudo/:cap/:linha', name: 'estudo', component: EstudoView, beforeEnter: exigirCapitulo, meta: { secao: 'aberturas' } },
+    { path: '/treino/:cap', name: 'treino', component: TreinoView, beforeEnter: exigirCapitulo, meta: { secao: 'aberturas', foco: true } },
+    { path: '/exercicios', name: 'exercicios', component: ExerciciosView, beforeEnter: () => carregarConjuntos().then(() => true), meta: { secao: 'exercicios' } },
     {
       path: '/exercicios/:conjunto',
       name: 'exercicio',
       component: ExercicioView,
+      meta: { secao: 'exercicios', foco: true },
       beforeEnter: async (destino) => {
         await carregarConjuntos()
         return buscarConjunto(destino.params.conjunto as string) ? true : { name: 'exercicios' }
       },
     },
-    { path: '/diagnostico', name: 'diagnostico', component: DiagnosticoView },
-    { path: '/config', name: 'config', component: ConfigView },
+    { path: '/diagnostico', name: 'diagnostico', component: DiagnosticoView, meta: { secao: 'diagnostico' } },
+    { path: '/config', name: 'config', component: ConfigView, meta: { secao: 'config' } },
     { path: '/:resto(.*)', redirect: '/' },
   ],
 })
