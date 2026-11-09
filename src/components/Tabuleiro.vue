@@ -7,7 +7,7 @@ import type { Key } from 'chessground/types'
 import 'chessground/assets/chessground.base.css'
 import 'chessground/assets/chessground.brown.css'
 import 'chessground/assets/chessground.cburnett.css'
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import PecasCapturadas from './PecasCapturadas.vue'
 import { corDaPosicao, destinosLegais, estaEmXeque } from '../lib/lances'
 import { progresso } from '../lib/progresso'
@@ -38,6 +38,18 @@ const elemento = ref<HTMLElement>()
 let api: Api | undefined
 let observador: ResizeObserver | undefined
 
+/** Cores das setas pelos tokens do tema: verde = livro, azul = Stockfish, amarelo = pista. */
+function pinceis() {
+  const estilo = getComputedStyle(document.documentElement)
+  const cor = (nome: string, reserva: string) => estilo.getPropertyValue(nome).trim() || reserva
+  return {
+    green: { key: 'g', color: cor('--seta-livro', '#2f8a57'), opacity: 0.8, lineWidth: 10 },
+    blue: { key: 'b', color: cor('--seta-motor', '#2463a8'), opacity: 0.8, lineWidth: 10 },
+    yellow: { key: 'y', color: cor('--seta-pista', '#c9a227'), opacity: 0.85, lineWidth: 10 },
+    red: { key: 'r', color: cor('--erro', '#b3322a'), opacity: 0.8, lineWidth: 10 },
+  }
+}
+
 function configuracao(): Config {
   const vez = corDaPosicao(props.fen) === 'w' ? 'white' : 'black'
   return {
@@ -57,7 +69,7 @@ function configuracao(): Config {
     premovable: { enabled: false },
     // As coordenadas ficam fora do tabuleiro (ver template), para não ficarem sob as peças.
     coordinates: false,
-    drawable: { enabled: false, visible: true },
+    drawable: { enabled: false, visible: true, brushes: pinceis() },
   }
 }
 
@@ -96,19 +108,30 @@ onBeforeUnmount(() => {
 
 watch(() => [props.fen, props.orientacao, props.ultimoLance, props.jogavel], sincronizar)
 watch(() => props.formas, desenhar)
+
+// Trocou o tema (em Configurações ou no sistema): relê as cores das setas.
+const temaEscuro = window.matchMedia('(prefers-color-scheme: dark)')
+async function trocarPinceis() {
+  await nextTick()
+  api?.set({ drawable: { brushes: pinceis() } })
+  desenhar()
+}
+watch(() => progresso.config.tema, trocarPinceis)
+temaEscuro.addEventListener('change', trocarPinceis)
+onBeforeUnmount(() => temaEscuro.removeEventListener('change', trocarPinceis))
 </script>
 
 <template>
-  <div class="conjunto">
+  <div class="conjunto tabuleiro-tema">
     <PecasCapturadas v-if="capturadas" :fen="fen" :lado="orientacao === 'white' ? 'b' : 'w'" />
     <div class="grade">
-      <div class="fileiras" aria-hidden="true">
+      <div class="fileiras coordenadas" aria-hidden="true">
         <span v-for="f in fileiras" :key="f">{{ f }}</span>
       </div>
       <div class="moldura">
         <div ref="elemento" class="tabuleiro"></div>
       </div>
-      <div class="colunas" aria-hidden="true">
+      <div class="colunas coordenadas" aria-hidden="true">
         <span v-for="c in colunas" :key="c">{{ c }}</span>
       </div>
     </div>
@@ -129,10 +152,7 @@ watch(() => props.formas, desenhar)
 .fileiras,
 .colunas {
   display: flex;
-  color: var(--texto);
-  font-size: 0.8125rem;
-  font-weight: 600;
-  line-height: 1;
+  font-size: 12px;
   user-select: none;
 }
 .fileiras {
@@ -155,5 +175,12 @@ watch(() => props.formas, desenhar)
 .tabuleiro {
   width: 100%;
   height: 100%;
+}
+/* No computador o tabuleiro ganha cantos arredondados; no celular vai de ponta a ponta. */
+@media (min-width: 800px) {
+  .moldura {
+    overflow: hidden;
+    border-radius: var(--raio-sm);
+  }
 }
 </style>
