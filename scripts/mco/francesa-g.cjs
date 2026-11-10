@@ -76,7 +76,7 @@ const notas = [
   ['c66', 'v-B', 'v', '(v) B', '7 f4 Ba6 8 Bb1 cxd4 9 cxd4 Nc6 10 Ndf3 Qc7 11 Be3 Bb4+ 12 Kf2 Rc8 13 f5', { a: '⩲', r: 'Licina–Horvath, Moscou 1994', c: 'Com 7.f4!? as brancas evitam a troca dos bispos e ganham iniciativa no flanco do rei.' }],
   ['c66', 'w', 'w', '(w)', '9... Nc7 10 Nf4 Be7 11 Qg4 g6 12 Re1 Qc8 13 c4 dxc4 14 Nxc4 O-O 15 dxc5', { a: '±', r: 'Kestler–Keene, Mannheim 1975', c: 'Com 9...Nc7 as brancas também ficam melhor.' }],
   ['c66', 'x', 'x', '(x)', '10 Nf4 Be7 11 Qg4 g6 12 Nf3 c4 13 h4 h5 14 Qg3', { a: '±', r: 'Rublevsky–Kosyrev, Rússia 2005', c: 'As brancas também mantêm vantagem com 10.Nf4.' }],
-  ['c66', 'y', 'y', '(y)', '15 Nb3 O-O 16 Be3 N5e6 17 Nxe6 Nxe6 18 f4 g6 19 f5', { a: '±', r: 'Rozentalis–Shabalov, Nova York 1997', c: 'Depois de 15.Nb3 e f4–f5 as brancas ficam melhor. A coluna é Robatsch–Spassky, Beverwijk 1967.' }],
+  ['c66', 'y', 'y', '(y)', '15 Nb3 O-O 16 Be3 N5e6 17 Nxe6 Nxe6 18 f4 g6 19 f5', { a: '±', r: 'Rozentalis–Shabalov, Nova York 1997', c: 'Depois de 15.Nb3 e f4–f5 as brancas ficam melhor.' }],
   // Coluna 67
   ['c67', 'a', 'a', '(a)', '4 Bd3 c5 5 exd5 Qxd5', { a: '=', c: 'Com 4.Bd3 c5 5.exd5 Qxd5 fica igual.' }],
   ['c67-a', '1', 'a', '(a) 5.dxc5', '5 dxc5 dxe4', { a: '=', c: 'Com 5.dxc5 dxe4 também.' }],
