@@ -14,9 +14,11 @@ describe('famílias de aberturas (divisão do MCO)', () => {
     expect(familiaDaAbertura('1. Nf3 d5').id).toBe('flanco')
   })
 
-  it('Italiana e Dois Cavalos são jogos abertos', () => {
+  it('capítulos de 1.e4 e5 são jogos abertos; a Alekhine é semiaberta', () => {
     for (const capitulo of todosOsCapitulos) {
-      expect(familiaDaAbertura(capitulo.capitulo.base).id, capitulo.capitulo.id).toBe('abertos')
+      const { base, id } = capitulo.capitulo
+      if (base.startsWith('1. e4 e5')) expect(familiaDaAbertura(base).id, id).toBe('abertos')
+      if (id.startsWith('alekhine')) expect(familiaDaAbertura(base).id, id).toBe('semiabertos')
     }
   })
 })
