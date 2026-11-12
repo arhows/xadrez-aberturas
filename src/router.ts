@@ -25,6 +25,7 @@ import PreparacaoView from './views/PreparacaoView.vue'
 import JogadorView from './views/JogadorView.vue'
 import TaticaView from './views/TaticaView.vue'
 import { buscarEstrutura, carregarEstrategia } from './lib/estrategia'
+import { buscarQuiz, carregarQuizzes } from './lib/quizzes'
 import ExerciciosView from './views/ExerciciosView.vue'
 import ExplorarView from './views/ExplorarView.vue'
 import InicioView from './views/InicioView.vue'
@@ -100,7 +101,23 @@ export const router = createRouter({
     { path: '/online', name: 'online', component: () => import('./views/OnlineView.vue'), meta: { secao: 'inicio' } },
     { path: '/online/:id', name: 'partida-online', component: () => import('./views/PartidaOnlineView.vue'), meta: { secao: 'inicio', foco: true } },
     { path: '/ranking', name: 'ranking', component: () => import('./views/RankingView.vue'), meta: { secao: 'inicio' } },
-    { path: '/estrategia', name: 'estrategia', component: () => import('./views/EstrategiaView.vue'), beforeEnter: () => carregarEstrategia().then(() => true), meta: { secao: 'exercicios' } },
+    {
+      path: '/estrategia',
+      name: 'estrategia',
+      component: () => import('./views/EstrategiaView.vue'),
+      beforeEnter: () => Promise.all([carregarEstrategia(), carregarQuizzes()]).then(() => true),
+      meta: { secao: 'exercicios' },
+    },
+    {
+      path: '/estrategia/quiz/:id',
+      name: 'quiz',
+      component: () => import('./views/QuizView.vue'),
+      meta: { secao: 'exercicios', foco: true },
+      beforeEnter: async (destino) => {
+        await carregarQuizzes()
+        return buscarQuiz(destino.params.id as string) ? true : { name: 'estrategia' }
+      },
+    },
     {
       path: '/estrategia/:id',
       name: 'estrutura',

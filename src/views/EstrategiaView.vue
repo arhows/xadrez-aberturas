@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { chaveDaPartidaModelo, obterEstrategia, type Estrutura } from '../lib/estrategia'
 import { progresso } from '../lib/progresso'
+import { chaveDoQuiz, obterQuizzes, totalDePerguntas } from '../lib/quizzes'
 
 /** Estratégia por estruturas de peões: famílias e estruturas, com o progresso do quiz. */
 
@@ -13,6 +14,8 @@ const grupos = computed(() =>
 )
 const feitas = (e: Estrutura) => e.partidas.filter((p) => progresso.estrategia[chaveDaPartidaModelo(e.id, p.n)]).length
 const totalPartidas = livro.estruturas.reduce((s, e) => s + e.partidas.length, 0)
+const quizzes = obterQuizzes()?.quizzes ?? []
+const resultadoDoQuiz = (id: string) => progresso.estrategia[chaveDoQuiz(id)]
 const totalFeitas = computed(() => livro.estruturas.reduce((s, e) => s + feitas(e), 0))
 </script>
 
@@ -25,6 +28,24 @@ const totalFeitas = computed(() => livro.estruturas.reduce((s, e) => s + feitas(
       partidas-modelo de grandes mestres para estudar lance a lance ou adivinhar os lances do vencedor.
     </p>
     <p class="suave">{{ totalFeitas }} de {{ totalPartidas }} partidas-modelo estudadas no quiz.</p>
+
+    <section v-if="quizzes.length" class="familia">
+      <header>
+        <h2>Quizzes de estratégia</h2>
+        <p class="suave">Partidas comentadas do livro de Herman Grooten que param em perguntas: ache o lance ou escolha o plano certo.</p>
+      </header>
+      <ul class="estruturas">
+        <li v-for="q in quizzes" :key="q.id">
+          <RouterLink :to="{ name: 'quiz', params: { id: q.id } }" class="estrutura">
+            <span class="textos">
+              <strong>{{ q.nome }}</strong>
+              <span class="suave">{{ q.partidas[0].brancas }} – {{ q.partidas[0].pretas }} · {{ totalDePerguntas(q) }} perguntas</span>
+            </span>
+            <span class="contagem suave">{{ resultadoDoQuiz(q.id) ? `${resultadoDoQuiz(q.id).acertos}/${resultadoDoQuiz(q.id).total}` : '—' }}</span>
+          </RouterLink>
+        </li>
+      </ul>
+    </section>
 
     <section v-for="g in grupos" :key="g.id" class="familia">
       <header>
