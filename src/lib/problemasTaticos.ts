@@ -26,6 +26,8 @@ export const NOMES_DAS_FAIXAS: Record<NonNullable<Problema['faixa']>, string> = 
 
 /** Explicação curta de cada tema, mostrada antes dos problemas. */
 export const EXPLICACOES: Record<string, string> = {
+  koblenz:
+    'Exercícios de finais e estudos do livro de estratégia de Alexander Koblenz (treinador de Mikhail Tal). Em cada um, encontre o plano: muitas vezes a ideia é empatar com afogamento, oposição ou xeques pelo flanco, e não só ganhar material.',
   hangingPiece:
     'Uma peça desprotegida (ou mal protegida) pode ser capturada de graça. Antes de qualquer plano, olhe o que o adversário deixou sem defesa — e o que você deixou.',
   fork: 'Garfo: uma peça ataca duas (ou mais) peças ao mesmo tempo, e o adversário só consegue salvar uma. O cavalo é o rei dos garfos, mas peões, damas e até o rei também garfam.',

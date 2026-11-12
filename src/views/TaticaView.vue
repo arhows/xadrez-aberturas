@@ -41,34 +41,38 @@ const estados = computed(() => progresso.exercicios[conjunto.id] ?? {})
 
 /** Faixa escolhida (na URL); sem ela, a do problema pedido ou a fácil. */
 const faixaPedida = (FAIXAS as string[]).includes(String(route.query.faixa)) ? (route.query.faixa as Faixa) : null
+/** Conjuntos de livro (Koblenz) não têm faixas de dificuldade: todos os problemas juntos. */
+const temFaixas = conjunto.problemas.some((p) => p.faixa)
 const problema: Problema = (() => {
   const pedido = conjunto.problemas.find((p) => p.n === Number(route.query.n))
   if (pedido) return pedido
-  const daFaixa = conjunto.problemas.filter((p) => p.faixa === (faixaPedida ?? 'facil'))
+  const daFaixa = temFaixas ? conjunto.problemas.filter((p) => p.faixa === (faixaPedida ?? 'facil')) : conjunto.problemas
   return daFaixa.find((p) => estados.value[p.n] !== 'primeira') ?? daFaixa[0] ?? conjunto.problemas[0]
 })()
 const faixa = ref<Faixa>(problema.faixa ?? 'facil')
-const daFaixa = computed(() => conjunto.problemas.filter((p) => p.faixa === faixa.value))
+const daFaixa = computed(() => (temFaixas ? conjunto.problemas.filter((p) => p.faixa === faixa.value) : conjunto.problemas))
 
 const refazendo = route.query.refazer !== undefined
 const revisando = route.query.revisao === '1'
 const vez = vezDoProblema(problema)
-const previo = jogarSan(problema.fen, problema.previo!)
+/** Lance do adversário que cria o problema; sem ele, o problema começa direto na posição. */
+const previo = problema.previo ? jogarSan(problema.fen, problema.previo) : null
+const fenDeInicio = previo?.fenDepois ?? problema.fen
 const linha = problema.linha ?? []
 const plyInicial = (() => {
-  const [, lado, , , , numero] = previo.fenDepois.split(' ')
+  const [, lado, , , , numero] = fenDeInicio.split(' ')
   return ((Number(numero) || 1) - 1) * 2 + (lado === 'b' ? 2 : 1)
 })()
 
 const jogadas = ref<LanceVerificado[]>([])
-const fenDoPasso = computed(() => jogadas.value.at(-1)?.fenDepois ?? previo.fenDepois)
+const fenDoPasso = computed(() => jogadas.value.at(-1)?.fenDepois ?? fenDeInicio)
 const fen = ref(problema.fen)
 const ultimoLance = ref<[string, string] | null>(null)
 const resolvido = ref(false)
 const erros = ref(0)
 const pista = ref(0)
 const usouPista = ref(false)
-const aguardando = ref(true)
+const aguardando = ref(!!previo)
 const promocaoPendente = ref<{ de: string; para: string } | null>(null)
 const tabuleiro = ref<InstanceType<typeof Tabuleiro>>()
 const aviso = ref<{ tipo: 'certo' | 'errado' | 'neutro'; lance?: string; texto?: string } | null>(null)
@@ -87,12 +91,14 @@ const orientacao = computed<'white' | 'black'>(() => (config.orientacaoAutomatic
 const jogavel = computed(() => !resolvido.value && !aguardando.value && !promocaoPendente.value)
 
 // O adversário joga o lance que cria a combinação; depois é a vez da pessoa.
-depois(TEMPO_PREVIO_MS, () => {
-  fen.value = previo.fenDepois
-  ultimoLance.value = [previo.from, previo.to]
-  aguardando.value = false
-  aviso.value = { tipo: 'neutro', lance: rotulo(plyInicial - 1, previo.san), texto: `${nomeDoAdversario} jogaram. Ache o melhor lance das ${nomeDoLado}.` }
-})
+if (previo) {
+  depois(TEMPO_PREVIO_MS, () => {
+    fen.value = previo.fenDepois
+    ultimoLance.value = [previo.from, previo.to]
+    aguardando.value = false
+    aviso.value = { tipo: 'neutro', lance: rotulo(plyInicial - 1, previo.san), texto: `${nomeDoAdversario} jogaram. Ache o melhor lance das ${nomeDoLado}.` }
+  })
+}
 
 const alvoDaPista = computed(() => {
   const san = linha[jogadas.value.length]
@@ -139,7 +145,7 @@ function conferir(de: string, para: string, promocao?: PecaPromocao) {
     depois(TEMPO_DESFAZER_MS, () => {
       fen.value = fenDoPasso.value
       const anterior = jogadas.value.at(-1)
-      ultimoLance.value = anterior ? [anterior.from, anterior.to] : [previo.from, previo.to]
+      ultimoLance.value = anterior ? [anterior.from, anterior.to] : previo ? [previo.from, previo.to] : null
       aguardando.value = false
       tabuleiro.value?.sincronizar()
     })
@@ -176,7 +182,7 @@ function concluir(ply: number, lance: LanceVerificado) {
   aviso.value = {
     tipo: 'certo',
     lance: rotulo(ply, lance.san),
-    texto: dePrimeira ? 'Resolvido de primeira!' : 'Resolvido.',
+    texto: (dePrimeira ? 'Resolvido de primeira!' : 'Resolvido.') + (problema.explicacao ? ` ${problema.explicacao}` : ''),
   }
 }
 
@@ -238,7 +244,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6" /></svg>
     </RouterLink>
     <h1>{{ conjunto.nome }}</h1>
-    <span class="apoio suave">{{ NOMES_DAS_FAIXAS[faixa] }} · {{ indiceNaFaixa }}/{{ daFaixa.length }}</span>
+    <span class="apoio suave">{{ temFaixas ? NOMES_DAS_FAIXAS[faixa] : "Exercício" }} · {{ indiceNaFaixa }}/{{ daFaixa.length }}</span>
   </header>
 
   <div class="tela">
@@ -258,10 +264,10 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
     <div class="painel">
       <div class="cabeca-painel so-computador">
         <RouterLink to="/exercicios" class="trilha">‹ Exercícios</RouterLink>
-        <h1 class="titulo-pagina">Táticas · {{ conjunto.nome }}</h1>
+        <h1 class="titulo-pagina">{{ conjunto.tema === "koblenz" ? "Koblenz" : "Táticas" }} · {{ conjunto.nome }}</h1>
       </div>
 
-      <div class="faixas" role="tablist" aria-label="Dificuldade">
+      <div v-if="temFaixas" class="faixas" role="tablist" aria-label="Dificuldade">
         <button
           v-for="f in FAIXAS"
           :key="f"
@@ -275,13 +281,13 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
       </div>
 
       <details class="explicacao" :open="mostrarExplicacao">
-        <summary>O que é {{ conjunto.nome.toLowerCase() }}?</summary>
+        <summary>{{ conjunto.tema === 'koblenz' ? 'Sobre estes exercícios' : `O que é ${conjunto.nome.toLowerCase()}?` }}</summary>
         <p>{{ explicacao }}</p>
       </details>
 
       <p class="enunciado corpo-forte">
         <span class="marcador" :class="vez" aria-hidden="true"></span>
-        {{ resolvido ? 'Combinação completa.' : `As ${nomeDoLado} jogam e ganham.` }}
+        {{ resolvido ? (problema.tarefa ? 'Resolvido.' : 'Combinação completa.') : (problema.tarefa ?? `As ${nomeDoLado} jogam e ganham.`) }}
       </p>
       <p v-if="revisando || refazendo" class="selos">
         <span v-if="revisando" class="selo">REVISÃO</span>
@@ -312,7 +318,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
       <section class="cartao">
         <div class="progresso">
           <div class="rotulos">
-            <span>{{ NOMES_DAS_FAIXAS[faixa] }}</span>
+            <span>{{ temFaixas ? NOMES_DAS_FAIXAS[faixa] : conjunto.nome }}</span>
             <span><strong>{{ contagem.primeira + contagem.ajuda }}</strong> de {{ contagem.total }} resolvidos</span>
           </div>
           <div class="trilho"><span :style="{ width: `${((contagem.primeira + contagem.ajuda) / Math.max(1, contagem.total)) * 100}%` }"></span></div>

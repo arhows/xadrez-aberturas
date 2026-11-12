@@ -26,6 +26,10 @@ export interface Problema {
   faixa?: 'facil' | 'medio' | 'dificil'
   /** Id do problema no lichess (lichess.org/training/<id>). */
   lichess?: string
+  /** Enunciado próprio (exercícios de livro: "As brancas empatam"). */
+  tarefa?: string
+  /** Explicação mostrada depois de resolver. */
+  explicacao?: string
 }
 
 export interface ConjuntoExercicios {

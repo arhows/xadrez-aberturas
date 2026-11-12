@@ -5,19 +5,29 @@ import type { ConjuntoExercicios } from '../src/lib/exercicios'
 import { ORDEM_DOS_TEMAS } from '../src/lib/exercicios'
 import { conferirLanceTatico, EXPLICACOES } from '../src/lib/problemasTaticos'
 
-const conjuntos: ConjuntoExercicios[] = readdirSync('data/taticas').map((f) => JSON.parse(readFileSync(`data/taticas/${f}`, 'utf-8')))
+const todos: ConjuntoExercicios[] = readdirSync('data/taticas').map((f) => JSON.parse(readFileSync(`data/taticas/${f}`, 'utf-8')))
+const conjuntos = todos.filter((c) => c.id.startsWith('tatica-'))
 
 describe('problemas táticos', () => {
+  it('exercícios do Koblenz: tarefa e explicação em todos', () => {
+    const koblenz = todos.find((c) => c.id === 'koblenz-finais')!
+    expect(koblenz.problemas.length).toBeGreaterThanOrEqual(25)
+    for (const p of koblenz.problemas) {
+      expect(p.tarefa).toBeTruthy()
+      expect(p.explicacao).toBeTruthy()
+    }
+  })
+
   it('um conjunto por tema, com explicação', () => {
     expect(conjuntos.map((c) => c.id.replace('tatica-', '')).sort()).toEqual([...ORDEM_DOS_TEMAS].sort())
     for (const c of conjuntos) expect(EXPLICACOES[c.tema!]).toBeTruthy()
   })
 
   it('todas as linhas são legais a partir do lance prévio', () => {
-    for (const c of conjuntos) {
+    for (const c of todos) {
       for (const p of c.problemas) {
         const jogo = new Chess(p.fen)
-        jogo.move(p.previo!)
+        if (p.previo) jogo.move(p.previo)
         for (const san of p.linha!) jogo.move(san)
         expect(p.linha!.length % 2).toBe(1)
       }
