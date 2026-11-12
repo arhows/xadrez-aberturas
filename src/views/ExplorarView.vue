@@ -151,6 +151,15 @@ const analise = computed(() =>
 )
 /** Melhor lance da análise ao vivo, para a seta azul. */
 const melhorAoVivo = ref<string | null>(null)
+const avaliacaoAoVivo = ref<number | null>(null)
+/** Barra de chance: análise pré-calculada no livro; fora dele, a do Stockfish ao vivo (se ligado). */
+const avaliacaoDaBarra = computed(() => {
+  if (!foraDoLivro.value) {
+    const pre = dadosMotor.value?.posicoes[noAtual.value]?.cp
+    if (pre !== undefined) return pre
+  }
+  return progresso.config.motorAoVivo ? avaliacaoAoVivo.value : null
+})
 
 /** Com uma única linha ativa, mostra a ideia geral dela. */
 const unidadeAtiva = computed(() => {
@@ -281,6 +290,7 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
         :orientacao="orientacao"
         :ultimo-lance="ultimoLance"
         :formas="setas"
+        :avaliacao="avaliacaoDaBarra"
         jogavel
         @lance="aoJogar"
       />
@@ -338,6 +348,7 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
         v-if="progresso.config.motorAoVivo"
         :fen="fen"
         @melhor="melhorAoVivo = $event"
+        @avaliacao="avaliacaoAoVivo = $event"
         @jogar="jogarSan"
       />
 

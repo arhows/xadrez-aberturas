@@ -19,6 +19,7 @@ import {
   type PlanoDeRevisao,
 } from '../lib/escopo'
 import { fmtLance, fmtTexto } from '../lib/formato'
+import { carregarMotor, type DadosMotor } from '../lib/motor'
 import { somarAtividade } from '../lib/painel'
 import { progresso } from '../lib/progresso'
 import { tocar } from '../lib/som'
@@ -358,6 +359,8 @@ function repetir() {
 }
 
 // Tabuleiro
+const dadosMotor = shallowRef<DadosMotor | null>(null)
+carregarMotor(idCapitulo).then((dados) => (dadosMotor.value = dados))
 const noDoTabuleiro = computed(() => (partida.value ? noAtual(arvore, partida.value) : null))
 const orientacao = computed<'white' | 'black'>(() =>
   config.orientacaoAutomatica && partida.value?.cor === 'b' ? 'black' : 'white',
@@ -524,6 +527,7 @@ if (revisaoAutomatica) iniciarSessao()
         :orientacao="orientacao"
         :ultimo-lance="ultimoLance"
         :formas="formas"
+        :avaliacao="noDoTabuleiro ? (dadosMotor?.posicoes[noDoTabuleiro.chave]?.cp ?? null) : null"
         :jogavel="jogavel"
         @lance="aoJogar"
       />

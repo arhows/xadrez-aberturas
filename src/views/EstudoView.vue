@@ -146,6 +146,7 @@ function trocarLinha(evento: Event) {
         :orientacao="orientacao"
         :ultimo-lance="ultimoLance"
         :formas="setaDaAmeaca"
+        :avaliacao="dadosMotor?.posicoes[chaveAtual]?.cp ?? null"
         :jogavel="!noFim"
         @lance="aoJogar"
       />

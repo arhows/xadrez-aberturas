@@ -125,6 +125,10 @@ function resetar() {
           Mostrar as setas das táticas automaticamente, sem tocar nos itens
         </label>
         <label class="marcar">
+          <input v-model="config.barraAvaliacao" type="checkbox" />
+          Barra de chance de vitória ao lado do tabuleiro (Treino, Estudo e Explorar)
+        </label>
+        <label class="marcar">
           <input v-model="config.adivinhar" type="checkbox" />
           Adivinhar: esconder as setas e os lances do livro até eu tentar o lance
         </label>

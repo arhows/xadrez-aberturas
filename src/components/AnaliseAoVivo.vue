@@ -10,7 +10,12 @@ const emit = defineEmits<{
   melhor: [san: string | null]
   /** O usuário tocou numa linha: jogar o primeiro lance dela. */
   jogar: [san: string]
+  /** Avaliação da melhor linha em centipeões (mate = ±20000), para a barra; null sem análise. */
+  avaliacao: [cp: number | null]
 }>()
+
+const centipeoes = (linha: LinhaAoVivo | undefined): number | null =>
+  !linha ? null : linha.mate !== undefined ? Math.sign(linha.mate || 1) * 20000 : (linha.cp ?? null)
 
 const analise = ref<AnaliseAoVivo | null>(null)
 const erro = ref('')
@@ -24,6 +29,7 @@ function aoAtualizar(nova: AnaliseAoVivo) {
   ultimaAtualizacao = agora
   analise.value = nova
   emit('melhor', nova.linhas[0]?.sans[0] ?? null)
+  emit('avaliacao', centipeoes(nova.linhas[0]))
 }
 
 watch(
@@ -31,6 +37,7 @@ watch(
   (fen) => {
     analise.value = null
     emit('melhor', null)
+    emit('avaliacao', null)
     analisarAoVivo(fen, aoAtualizar).catch(() => (erro.value = 'Não foi possível carregar o Stockfish neste navegador.'))
   },
   { immediate: true },

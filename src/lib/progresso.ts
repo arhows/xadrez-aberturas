@@ -23,6 +23,8 @@ export interface Configuracoes {
   mostrarTaticas: boolean
   /** Setas de todas as táticas sem precisar tocar nos itens. */
   taticasAutomaticas: boolean
+  /** Barra de chance de vitória ao lado do tabuleiro (Treino, Estudo e Explorar). */
+  barraAvaliacao: boolean
   /** Explorador do lichess no Explorar: partidas de mestres ou do lichess, e a faixa de rating. */
   fonteExplorador: 'masters' | 'lichess'
   ratingExplorador: number
@@ -102,6 +104,7 @@ export const CONFIG_PADRAO: Configuracoes = {
   mostrarTaticas: true,
   taticasAutomaticas: false,
   adivinhar: false,
+  barraAvaliacao: true,
   jogo: { adversario: 'motor', cor: 'sorteio', nivel: 3 },
   fonteExplorador: 'lichess',
   ratingExplorador: 1400,

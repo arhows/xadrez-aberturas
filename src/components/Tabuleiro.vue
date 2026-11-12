@@ -11,6 +11,8 @@ import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import PecasCapturadas from './PecasCapturadas.vue'
 import { corDaPosicao, destinosLegais, estaEmXeque } from '../lib/lances'
 import { progresso } from '../lib/progresso'
+import { formatarAvaliacao } from '../lib/motor'
+import { chanceDasBrancas } from '../lib/probabilidade'
 
 export interface Forma {
   de: string
@@ -28,9 +30,28 @@ const props = withDefaults(
     jogavel?: boolean
     /** Peças capturadas acima e abaixo; nos exercícios a posição não vem de uma partida. */
     capturadas?: boolean
+    /**
+     * Barra de chance de vitória ao lado do tabuleiro (centipeões, ponto de vista das brancas).
+     * undefined = sem barra; null = posição sem análise (a barra fica apagada no meio).
+     */
+    avaliacao?: number | null
   }>(),
-  { orientacao: 'white', ultimoLance: null, formas: () => [], jogavel: false, capturadas: true },
+  { orientacao: 'white', ultimoLance: null, formas: () => [], jogavel: false, capturadas: true, avaliacao: undefined },
 )
+
+const comBarra = computed(() => props.avaliacao !== undefined && progresso.config.barraAvaliacao)
+const chance = computed(() => (props.avaliacao == null ? 50 : chanceDasBrancas(props.avaliacao)))
+const textoBarra = computed(() => {
+  if (props.avaliacao == null) return 'Sem análise desta posição'
+  const brancas = Math.round(chance.value)
+  return `Chance estimada: brancas ${brancas}%, pretas ${100 - brancas}% (Stockfish ${formatarAvaliacao(props.avaliacao)})`
+})
+/** Número curto na ponta de quem está melhor, como no lichess. */
+const rotuloBarra = computed(() => {
+  if (props.avaliacao == null) return ''
+  if (Math.abs(props.avaliacao) >= 15000) return 'M'
+  return Math.abs(props.avaliacao / 100).toFixed(1).replace('.', ',')
+})
 
 const emit = defineEmits<{ lance: [de: string, para: string] }>()
 
@@ -124,7 +145,18 @@ onBeforeUnmount(() => temaEscuro.removeEventListener('change', trocarPinceis))
 <template>
   <div class="conjunto tabuleiro-tema">
     <PecasCapturadas v-if="capturadas" :fen="fen" :lado="orientacao === 'white' ? 'b' : 'w'" />
-    <div class="grade">
+    <div class="grade" :class="{ 'com-barra': comBarra }">
+      <div
+        v-if="comBarra"
+        class="barra-avaliacao"
+        :class="{ invertida: orientacao === 'black', vazia: avaliacao == null }"
+        role="img"
+        :aria-label="textoBarra"
+        :title="textoBarra"
+      >
+        <span class="brancas" :style="{ height: `${chance}%` }"></span>
+        <span class="rotulo" :class="chance >= 50 ? 'lado-brancas' : 'lado-pretas'">{{ rotuloBarra }}</span>
+      </div>
       <div class="fileiras coordenadas" aria-hidden="true">
         <span v-for="f in fileiras" :key="f">{{ f }}</span>
       </div>
@@ -166,6 +198,51 @@ onBeforeUnmount(() => temaEscuro.removeEventListener('change', trocarPinceis))
 .colunas {
   grid-column: 2;
 }
+/* Com a barra de avaliação: barra | números das fileiras | tabuleiro. */
+.grade.com-barra {
+  grid-template-columns: 14px 1rem minmax(0, 1fr);
+  column-gap: 2px;
+}
+.grade.com-barra .colunas {
+  grid-column: 3;
+}
+.barra-avaliacao {
+  position: relative;
+  grid-row: 1;
+  overflow: hidden;
+  border: 1px solid var(--borda-controle);
+  border-radius: 4px;
+  /* Cores das peças (não do tema), como no lichess. */
+  background: #403f3a;
+}
+.barra-avaliacao .brancas {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #f4f4f1;
+  transition: height 0.5s ease;
+}
+.barra-avaliacao.invertida .brancas {
+  top: 0;
+  bottom: auto;
+}
+.barra-avaliacao.vazia {
+  opacity: 0.35;
+}
+.barra-avaliacao .rotulo {
+  position: absolute;
+  left: 0;
+  right: 0;
+  font: 600 9px/12px var(--font-texto);
+  text-align: center;
+  letter-spacing: -0.02em;
+}
+/* O número fica na ponta de quem está melhor, na cor que contrasta com aquele lado. */
+.barra-avaliacao .rotulo.lado-brancas { bottom: 2px; color: #403f3a; }
+.barra-avaliacao .rotulo.lado-pretas { top: 2px; color: #f4f4f1; }
+.barra-avaliacao.invertida .rotulo.lado-brancas { top: 2px; bottom: auto; }
+.barra-avaliacao.invertida .rotulo.lado-pretas { bottom: 2px; top: auto; }
 .colunas span {
   flex: 1;
   display: flex;
