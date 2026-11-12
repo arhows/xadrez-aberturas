@@ -19,6 +19,7 @@ import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
 import { Chess } from 'chess.js'
 import { casasDoLance } from '../lib/lances'
 import { carregarMotor, type DadosMotor } from '../lib/motor'
+import { aproveitamento, indiceDePosicoes } from '../lib/partidasRepertorio'
 import { progresso } from '../lib/progresso'
 import { oportunidadeDaPosicao, xequeDaPosicao } from '../lib/taticas'
 
@@ -181,6 +182,23 @@ function jogarFora(lance: { from: string; to: string } | string): boolean {
   }
 }
 
+// Suas partidas importadas: o que foi jogado a partir desta posição (pela sequência de lances).
+const indicePartidas = computed(() => indiceDePosicoes(Object.values(progresso.partidas.analisadas)))
+const nasPartidas = computed(() => {
+  const chave = [...caminho.value.map((aresta) => aresta.san), ...fora.value.map((lance) => lance.san)].join(' ')
+  const doLivro = foraDoLivro.value ? [] : arvore.nos.get(noAtual.value)!.saidas
+  return (indicePartidas.value.get(chave) ?? []).map((lance) => ({
+    ...lance,
+    aresta: doLivro.find((aresta) => aresta.san === lance.san),
+  }))
+})
+const totalNasPartidas = computed(() => nasPartidas.value.reduce((soma, lance) => soma + lance.total, 0))
+
+function jogarDasPartidas(lance: { san: string; aresta?: Aresta }) {
+  if (lance.aresta) selecionar([...caminho.value, lance.aresta])
+  else jogarFora(lance.san)
+}
+
 function aoJogar(de: string, para: string) {
   const aresta = continuacoes.value.find((s) => s.from === de && s.to === para)
   if (aresta) selecionar([...caminho.value, aresta])
@@ -333,6 +351,28 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
         </div>
       </section>
 
+      <section v-if="nasPartidas.length">
+        <h2>Nas suas partidas</h2>
+        <p class="apoio-partidas">
+          {{ totalNasPartidas }} {{ totalNasPartidas === 1 ? 'partida passou' : 'partidas passaram' }} por aqui. Lances jogados em seguida:
+        </p>
+        <div class="proximos">
+          <button
+            v-for="lance in nasPartidas"
+            :key="lance.san"
+            type="button"
+            class="chip-lance"
+            :class="{ livro: lance.aresta }"
+            :title="`${lance.total}× · ${lance.placar.vitorias} V, ${lance.placar.empates} E, ${lance.placar.derrotas} D${lance.aresta ? '' : ' · fora do livro'}`"
+            @click="jogarDasPartidas(lance)"
+          >
+            {{ fmtSan(lance.san) }}
+            <small>{{ lance.total }}× · {{ aproveitamento(lance.placar) }}%</small>
+          </button>
+        </div>
+        <p class="apoio-partidas">Verde = lance do livro. A porcentagem é o seu aproveitamento nessas partidas.</p>
+      </section>
+
       <section>
         <h2>Árvore</h2>
         <div ref="listaLances" class="lista">
@@ -349,6 +389,14 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
 </template>
 
 <style scoped>
+.apoio-partidas {
+  margin: 0 0 0.5rem;
+  color: var(--texto-suave);
+  font-size: 14px;
+}
+.proximos + .apoio-partidas {
+  margin: 0.5rem 0 0;
+}
 .controles {
   display: flex;
   align-items: center;

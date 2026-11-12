@@ -7,6 +7,7 @@ import { fmtLance } from '../lib/formato'
 import { importarPartidas, importarPgn, type ResultadoImportacao, type ResultadoPgn } from '../lib/importarPartidas'
 import type { Cor } from '../lib/lances'
 import type { PartidaAnalisada } from '../lib/partidas'
+import { aproveitamento, resumoPorAbertura } from '../lib/partidasRepertorio'
 import { progresso } from '../lib/progresso'
 
 const usuarios = progresso.partidas
@@ -84,11 +85,9 @@ const todas = computed(() =>
   Object.values(progresso.partidas.analisadas).sort((a, b) => b.data.localeCompare(a.data)),
 )
 const noRepertorio = computed(() => todas.value.filter((p) => p.capitulo))
-const porCapitulo = computed(() => {
-  const contagem = new Map<string, number>()
-  for (const p of noRepertorio.value) contagem.set(p.capitulo!, (contagem.get(p.capitulo!) ?? 0) + 1)
-  return [...contagem].map(([id, total]) => ({ nome: nomeDoCapitulo(id), total }))
-})
+const porAbertura = computed(() => resumoPorAbertura(noRepertorio.value))
+/** Importadas antes de guardar os lances: não dá para analisar de novo quando o repertório cresce. */
+const semLances = computed(() => todas.value.filter((p) => !p.lances && p.site !== 'pgn').length)
 
 interface Grupo {
   chave: string
@@ -218,10 +217,34 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
         <h2>Resumo</h2>
         <p>
           {{ todas.length }} partidas · <strong>{{ noRepertorio.length }}</strong> no seu repertório
-          <template v-if="porCapitulo.length">
-            ({{ porCapitulo.map((c) => `${c.nome}: ${c.total}`).join(', ') }})
-          </template>
         </p>
+        <p v-if="semLances" class="aviso">
+          {{ semLances }} {{ semLances === 1 ? 'partida foi importada' : 'partidas foram importadas' }} antes desta versão e não
+          {{ semLances === 1 ? 'é analisada' : 'são analisadas' }} de novo quando entra uma abertura nova.
+          Toque em “Importar partidas” uma vez para atualizar.
+        </p>
+        <div v-if="porAbertura.length" class="tabela-rolagem">
+          <table class="tabela">
+            <thead>
+              <tr>
+                <th scope="col">Abertura</th>
+                <th scope="col" class="num">Partidas</th>
+                <th scope="col" class="num">V · E · D</th>
+                <th scope="col" class="num">Pontos</th>
+                <th scope="col" class="num" title="Média de lances seguindo o livro">No livro</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="r in porAbertura" :key="r.capitulo">
+                <th scope="row"><RouterLink :to="{ name: 'abertura', params: { cap: r.capitulo } }">{{ nomeDoCapitulo(r.capitulo) }}</RouterLink></th>
+                <td class="num">{{ r.partidas.length }}</td>
+                <td class="num">{{ r.placar.vitorias }} · {{ r.placar.empates }} · {{ r.placar.derrotas }}</td>
+                <td class="num">{{ aproveitamento(r.placar) }}%</td>
+                <td class="num">{{ Math.ceil(r.mediaNoLivro / 2) }} lances</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
 
       <section v-if="desviosSeus.length">
@@ -293,6 +316,33 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
 </template>
 
 <style scoped>
+.tabela-rolagem {
+  overflow-x: auto;
+}
+.tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.tabela th,
+.tabela td {
+  padding: var(--espaco-2);
+  border-bottom: 1px solid var(--borda);
+  text-align: left;
+  white-space: nowrap;
+}
+.tabela thead th {
+  color: var(--texto-suave);
+  font-weight: 600;
+}
+.tabela tbody th {
+  font-weight: 400;
+  white-space: normal;
+}
+.tabela .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
 h1 {
   margin: 0;
 }

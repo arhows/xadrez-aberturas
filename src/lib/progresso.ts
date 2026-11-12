@@ -62,6 +62,8 @@ export interface Progresso {
     lichess: string
     chesscom: string
     analisadas: Record<string, PartidaAnalisada>
+    /** Repertório usado na última análise; quando muda, as partidas são analisadas de novo. */
+    assinatura?: string
   }
   /** Atividade por dia (AAAA-MM-DD), para a sequência de dias e o calendário do painel. */
   atividade: Record<string, Atividade>

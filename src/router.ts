@@ -2,6 +2,8 @@ import { createRouter, createWebHashHistory, type RouteLocationNormalized } from
 import { buscarCapitulo, carregarCapitulos } from './lib/capitulos'
 import { buscarConjunto, carregarConjuntos } from './lib/exercicios'
 import { esperarSessao, nuvem } from './lib/nuvem'
+import { atualizarAnalises } from './lib/partidasRepertorio'
+import { progresso } from './lib/progresso'
 import AberturasView from './views/AberturasView.vue'
 import AberturaView from './views/AberturaView.vue'
 import ConfigView from './views/ConfigView.vue'
@@ -71,6 +73,9 @@ router.beforeEach(async (destino) => {
     return typeof volta === 'string' && volta.startsWith('/') ? volta : { name: 'inicio' }
   }
   // As telas do app usam os capítulos de forma síncrona: baixa todos antes da primeira tela.
-  if (!destino.meta.publica) await carregarCapitulos()
+  if (!destino.meta.publica) {
+    // Partidas importadas antes de uma abertura nova entrar no app passam a contar nela.
+    atualizarAnalises(progresso.partidas, await carregarCapitulos())
+  }
   return true
 })

@@ -48,7 +48,16 @@ export interface PartidaAnalisada {
    * que a tirou de todas elas, para mostrar as posições que mais aparecem sem preparo.
    */
   fora?: { caminho: string[]; jogado: string }
+  /**
+   * Os primeiros lances da partida (SAN separados por espaço), para analisar de novo quando
+   * o repertório crescer e para contar as partidas por posição no Explorar. Partidas
+   * importadas antes desta versão não têm.
+   */
+  lances?: string
 }
+
+/** Meios-lances guardados de cada partida: cobre as linhas mais longas do livro. */
+export const LANCES_GUARDADOS = 50
 
 /** Segue a partida pela árvore do capítulo enquanto os lances forem do livro. */
 function seguir(capitulo: CapituloCarregado, sans: string[]) {
@@ -82,6 +91,7 @@ export function analisarPartida(partida: PartidaBaixada, cor: Cor, capitulos: Ca
     adversario: cor === 'w' ? partida.pretas : partida.brancas,
     cor,
     resultado: partida.resultado,
+    lances: partida.sans.slice(0, LANCES_GUARDADOS).join(' '),
   }
 
   let melhor: { capitulo: CapituloCarregado; ply: number; no: ReturnType<typeof seguir>['no'] } | null = null

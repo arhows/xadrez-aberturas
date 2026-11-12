@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
 import { caminhoDaArmadilha } from '../lib/arvore'
@@ -6,7 +7,9 @@ import { buscarCapitulo } from '../lib/capitulos'
 import { baixarTexto } from '../lib/download'
 import { linhasDoGrupo } from '../lib/escopo'
 import { familiaDaAbertura } from '../lib/familias'
-import { fmtTexto } from '../lib/formato'
+import { fmtLance, fmtTexto } from '../lib/formato'
+import { aproveitamento, resumoPorAbertura } from '../lib/partidasRepertorio'
+import { progresso } from '../lib/progresso'
 import { exportarPgn } from '../lib/pgn'
 import { filaDoCapitulo, percentual, percentualLinha, revisoesDaLinha } from '../lib/resumoAberturas'
 
@@ -14,6 +17,23 @@ const route = useRoute()
 const capitulo = buscarCapitulo(route.params.cap as string)!
 const id = capitulo.capitulo.id
 const familia = familiaDaAbertura(capitulo.capitulo.base)
+
+// Suas partidas que seguiram esta abertura (importadas em Minhas partidas).
+const partidas = computed(() =>
+  resumoPorAbertura(Object.values(progresso.partidas.analisadas).filter((p) => p.capitulo === id))[0],
+)
+/** Onde você saiu do livro nesta abertura, do desvio mais repetido ao menos (até 3). */
+const seusDesvios = computed(() => {
+  const grupos = new Map<string, { caminho: string[]; jogado: string; livro: string; total: number }>()
+  for (const p of partidas.value?.partidas ?? []) {
+    if (p.desvio?.quem !== 'voce') continue
+    const chave = `${p.desvio.caminho.join(' ')}|${p.desvio.jogado}`
+    const grupo = grupos.get(chave) ?? { caminho: p.desvio.caminho, jogado: p.desvio.jogado, livro: p.desvio.livro[0], total: 0 }
+    grupo.total++
+    grupos.set(chave, grupo)
+  }
+  return [...grupos.values()].sort((a, b) => b.total - a.total).slice(0, 3)
+})
 
 function baixarPgn() {
   baixarTexto(`${id}.pgn`, exportarPgn(capitulo), 'application/x-chess-pgn')
@@ -40,6 +60,41 @@ function baixarPgn() {
         <button type="button" class="botao" @click="baixarPgn">Exportar PGN</button>
       </div>
     </header>
+
+    <details v-if="partidas" class="grupo">
+      <summary>
+        <span>Suas partidas</span>
+        <span class="suave">{{ partidas.partidas.length }}</span>
+      </summary>
+      <div class="suas-partidas">
+        <p>
+          {{ partidas.placar.vitorias }} {{ partidas.placar.vitorias === 1 ? 'vitória' : 'vitórias' }},
+          {{ partidas.placar.empates }} {{ partidas.placar.empates === 1 ? 'empate' : 'empates' }},
+          {{ partidas.placar.derrotas }} {{ partidas.placar.derrotas === 1 ? 'derrota' : 'derrotas' }}
+          · {{ aproveitamento(partidas.placar) }}% dos pontos
+          · em média {{ Math.ceil(partidas.mediaNoLivro / 2) }} lances no livro
+        </p>
+        <template v-if="seusDesvios.length">
+          <p class="suave">Onde você mais sai do livro:</p>
+          <ul class="linhas">
+            <li v-for="d in seusDesvios" :key="`${d.caminho.join(' ')}|${d.jogado}`">
+              <div class="info">
+                <span>
+                  Você jogou <strong>{{ fmtLance(d.caminho.length + 1, d.jogado) }}</strong>; o livro indica
+                  <strong>{{ fmtLance(d.caminho.length + 1, d.livro) }}</strong>
+                </span>
+                <span class="suave">{{ d.total }} {{ d.total === 1 ? 'partida' : 'partidas' }}</span>
+              </div>
+              <div class="acoes">
+                <RouterLink class="botao" :to="{ name: 'explorar', params: { cap: id }, query: { c: d.caminho.join(' ') } }">Ver no Explorar</RouterLink>
+              </div>
+            </li>
+          </ul>
+        </template>
+        <p v-else class="suave">Você não saiu do livro em nenhuma delas.</p>
+        <RouterLink to="/partidas">Ver todas em Minhas partidas</RouterLink>
+      </div>
+    </details>
 
     <details v-if="capitulo.capitulo.armadilhas?.length" class="grupo">
       <summary>
@@ -93,6 +148,16 @@ function baixarPgn() {
 </template>
 
 <style scoped>
+.suas-partidas {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0 0 0.75rem;
+}
+.suas-partidas > p,
+.suas-partidas > a {
+  margin: 0;
+  padding: 0 1rem;
+}
 .trilha {
   display: flex;
   flex-wrap: wrap;
