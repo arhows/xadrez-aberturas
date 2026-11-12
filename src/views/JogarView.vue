@@ -14,6 +14,7 @@ import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
 import { jogoDosLances, pgnDoJogo, situacaoDoJogo } from '../lib/jogo'
 import { separarLances, type Cor } from '../lib/lances'
 import { progresso } from '../lib/progresso'
+import { aposLance, formatarRelogio, relogioInicial, semMaterialParaMate, tempoPorId, TEMPOS, type Restante } from '../lib/relogio'
 import { classificarLance, marcaNaSequencia, type MarcaLivro, type QualidadeMotor } from '../lib/qualidade'
 import { Chess } from 'chess.js'
 import { dataLocal } from '../lib/srs'
@@ -46,6 +47,62 @@ const promocaoPendente = ref<{ de: string; para: string } | null>(null)
 const tabuleiro = ref<InstanceType<typeof Tabuleiro>>()
 /** Muda a cada lance ou desfazer, para ignorar a resposta atrasada do computador. */
 let versao = 0
+
+// ---------- Relógio (só no modo Partida) ----------
+const relogioAtivo = ref(false)
+const tempo = computed(() => tempoPorId(escolhas.tempo))
+const restante = ref<Restante>({ w: 0, b: 0 })
+const agora = ref(0)
+const tempoEsgotado = ref<Cor | null>(null)
+let turnoDesde = 0
+let tiquetaque: ReturnType<typeof setInterval> | undefined
+
+/** Como nos apps, o relógio só começa a correr depois do primeiro lance da partida. */
+const relogioCorrendo = computed(() => relogioAtivo.value && fase.value === 'jogando' && sans.value.length > inicio.length)
+
+/** Tempo na tela: o de quem está na vez desconta o que já passou neste lance. */
+function mostrado(cor: Cor): number {
+  const correndo = relogioCorrendo.value && vez.value === cor
+  return correndo ? restante.value[cor] - (agora.value - turnoDesde) : restante.value[cor]
+}
+
+function ligarRelogio() {
+  pararRelogio()
+  turnoDesde = agora.value = performance.now()
+  tiquetaque = setInterval(() => {
+    agora.value = performance.now()
+    if (relogioCorrendo.value && mostrado(vez.value) <= 0) esgotar(vez.value)
+  }, 100)
+}
+
+function pararRelogio() {
+  clearInterval(tiquetaque)
+  tiquetaque = undefined
+}
+
+function esgotar(cor: Cor) {
+  pararRelogio()
+  pararComputador()
+  pensando.value = false
+  restante.value = { ...restante.value, [cor]: 0 }
+  tempoEsgotado.value = cor
+  fase.value = 'fim'
+}
+
+/** Desconta o tempo de quem acabou de jogar (chamado antes de o lance entrar). */
+function marcarLanceNoRelogio(quemJogou: Cor) {
+  if (!relogioAtivo.value) return
+  const instante = performance.now()
+  // O primeiro lance só dispara o relógio: nada é descontado nem somado.
+  if (sans.value.length > inicio.length) restante.value = aposLance(restante.value, quemJogou, instante - turnoDesde, tempo.value)
+  turnoDesde = agora.value = instante
+}
+
+const nomeNoRelogio = (cor: Cor) =>
+  contraMotor.value ? (cor === minhaCor.value ? 'Você' : 'Stockfish') : cor === 'w' ? 'Brancas' : 'Pretas'
+/** Relógio de cima e de baixo, conforme a orientação do tabuleiro. */
+const corEmCima = computed<Cor>(() => (orientacao.value === 'white' ? 'b' : 'w'))
+const corEmBaixo = computed<Cor>(() => (corEmCima.value === 'w' ? 'b' : 'w'))
 
 // ---------- Modo treino: voltar lance, dica e qualidade de cada lance ----------
 /** Fixado ao começar: a partida comum não volta lance, não dá dica nem classifica. */
@@ -173,18 +230,25 @@ function comecar() {
   abandono.value = null
   erroMotor.value = null
   treinoAtivo.value = escolhas.modo === 'treino'
+  relogioAtivo.value = !treinoAtivo.value && tempo.value.minutos > 0
+  restante.value = relogioInicial(tempo.value)
+  tempoEsgotado.value = null
   qualidades.value = {}
   nivelDica.value = 0
   dicaLance.value = null
   versao++
   fase.value = 'jogando'
+  if (relogioAtivo.value) ligarRelogio()
+  else pararRelogio()
   if (contraMotor.value && vez.value !== minhaCor.value) void vezDoComputador()
 }
 
 function fazer(lance: LanceUci): boolean {
   const copia = jogoDosLances(sans.value)
+  const quemJoga = copia.turn()
   try {
     const feito = copia.move(lance)
+    marcarLanceNoRelogio(quemJoga)
     sans.value = [...sans.value, feito.san]
     versao++
     nivelDica.value = 0
@@ -192,7 +256,10 @@ function fazer(lance: LanceUci): boolean {
   } catch {
     return false
   }
-  if (situacao.value.fim) fase.value = 'fim'
+  if (situacao.value.fim) {
+    fase.value = 'fim'
+    pararRelogio()
+  }
   return true
 }
 
@@ -267,6 +334,7 @@ function desfazer() {
 }
 
 function abandonar() {
+  pararRelogio()
   pararComputador()
   pensando.value = false
   const quem = contraMotor.value ? 'Você abandonou' : `As ${vez.value === 'w' ? 'brancas' : 'pretas'} abandonaram`
@@ -274,7 +342,11 @@ function abandonar() {
   fase.value = 'fim'
 }
 
+/** Acabou o tempo: perde quem ficou sem tempo, a não ser que o outro não tenha como dar mate. */
+const empateSemMaterial = computed(() => tempoEsgotado.value !== null && semMaterialParaMate(fen.value, tempoEsgotado.value === 'w' ? 'b' : 'w'))
+
 const resultado = computed(() => {
+  if (tempoEsgotado.value) return empateSemMaterial.value ? '1/2-1/2' : tempoEsgotado.value === 'w' ? '0-1' : '1-0'
   if (abandono.value) {
     const perdeu = contraMotor.value ? minhaCor.value : vez.value
     return perdeu === 'w' ? '0-1' : '1-0'
@@ -283,6 +355,13 @@ const resultado = computed(() => {
 })
 
 const textoFim = computed(() => {
+  if (tempoEsgotado.value) {
+    const cor = tempoEsgotado.value === 'w' ? 'brancas' : 'pretas'
+    const acabou = !contraMotor.value ? `O tempo das ${cor} acabou` : tempoEsgotado.value === minhaCor.value ? 'Seu tempo acabou' : 'O tempo do computador acabou'
+    if (empateSemMaterial.value) return `${acabou}, mas o outro lado não tem material para dar mate. Empate.`
+    if (!contraMotor.value) return `Acabou o tempo das ${tempoEsgotado.value === 'w' ? 'brancas' : 'pretas'}.`
+    return tempoEsgotado.value === minhaCor.value ? 'Seu tempo acabou. O computador venceu.' : 'O tempo do computador acabou. Você venceu!'
+  }
   if (abandono.value) return abandono.value
   if (!contraMotor.value) return situacao.value.texto
   if (resultado.value === '1/2-1/2') return situacao.value.texto
@@ -302,7 +381,10 @@ function exportarPgn() {
   )
 }
 
-onBeforeUnmount(pararComputador)
+onBeforeUnmount(() => {
+  pararComputador()
+  pararRelogio()
+})
 </script>
 
 <template>
@@ -334,6 +416,16 @@ onBeforeUnmount(pararComputador)
         </label>
       </fieldset>
 
+      <label v-if="escolhas.modo === 'partida'" class="campo">
+        <span>Tempo</span>
+        <select v-model="escolhas.tempo">
+          <option v-for="t in TEMPOS" :key="t.id" :value="t.id">
+            {{ t.minutos ? `${t.id} · ${t.ritmo}` : t.ritmo }}
+          </option>
+        </select>
+        <span class="ajuda">Minutos de cada jogador + segundos ganhos a cada lance. No modo Treino não há relógio.</span>
+      </label>
+
       <template v-if="escolhas.adversario === 'motor'">
         <fieldset class="opcoes">
           <legend>Sua cor</legend>
@@ -358,6 +450,10 @@ onBeforeUnmount(pararComputador)
 
   <div v-else class="tela">
     <div class="area-tabuleiro">
+      <div v-if="relogioAtivo" class="relogio" :class="{ ativo: relogioCorrendo && vez === corEmCima, pouco: mostrado(corEmCima) < 20_000 }">
+        <span class="nome">{{ nomeNoRelogio(corEmCima) }}</span>
+        <span class="tempo" role="timer">{{ formatarRelogio(mostrado(corEmCima)) }}</span>
+      </div>
       <Tabuleiro
         ref="tabuleiro"
         :fen="fen"
@@ -367,6 +463,10 @@ onBeforeUnmount(pararComputador)
         :jogavel="jogavel"
         @lance="aoJogar"
       />
+      <div v-if="relogioAtivo" class="relogio" :class="{ ativo: relogioCorrendo && vez === corEmBaixo, pouco: mostrado(corEmBaixo) < 20_000 }">
+        <span class="nome">{{ nomeNoRelogio(corEmBaixo) }}</span>
+        <span class="tempo" role="timer">{{ formatarRelogio(mostrado(corEmBaixo)) }}</span>
+      </div>
     </div>
 
     <div class="painel">
@@ -375,7 +475,7 @@ onBeforeUnmount(pararComputador)
         <p class="suave">
           <template v-if="contraMotor">Você de {{ minhaCor === 'w' ? 'brancas' : 'pretas' }} contra {{ nomeDoMotor }}</template>
           <template v-else>Amigo, neste aparelho</template>
-          · {{ treinoAtivo ? 'modo treino' : 'partida' }}
+          · {{ treinoAtivo ? 'modo treino' : relogioAtivo ? tempo.id : 'partida sem relógio' }}
         </p>
       </div>
 
@@ -421,6 +521,7 @@ onBeforeUnmount(pararComputador)
           <button type="button" class="botao" @click="fase = 'escolha'">Mudar opções</button>
           <button v-if="treinoAtivo" type="button" class="botao" :disabled="sans.length <= inicio.length" @click="desfazer">Voltar lance</button>
           <RouterLink
+            v-if="sans.length > inicio.length"
             class="botao"
             :to="{ name: 'analise', query: { c: sans.join(' '), cor: contraMotor ? minhaCor : undefined, titulo: 'Análise da partida', volta: '/jogar' } }"
           >Analisar partida</RouterLink>
@@ -474,6 +575,34 @@ onBeforeUnmount(pararComputador)
 }
 .cabeca-painel p {
   margin: 0;
+}
+.relogio {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-2);
+  margin: var(--espaco-1) 0;
+  padding: 2px var(--espaco-3);
+  border-radius: var(--raio-md);
+  background: var(--superficie-2);
+  color: var(--texto-suave);
+}
+.relogio .tempo {
+  font: 600 24px/32px var(--font-texto);
+  font-variant-numeric: tabular-nums;
+}
+.relogio.ativo {
+  background: var(--destaque);
+  color: var(--sobre-destaque);
+}
+.relogio.pouco .tempo {
+  color: var(--erro);
+}
+.relogio.ativo.pouco {
+  background: var(--erro);
+}
+.relogio.ativo.pouco .tempo {
+  color: var(--sobre-destaque);
 }
 .avaliacao-lance {
   display: flex;

@@ -29,7 +29,7 @@ export interface Configuracoes {
   fonteExplorador: 'masters' | 'lichess'
   ratingExplorador: number
   /** Últimas escolhas da tela Jogar. */
-  jogo: { adversario: 'motor' | 'amigo'; cor: 'w' | 'b' | 'sorteio'; nivel: number; modo: 'partida' | 'treino' }
+  jogo: { adversario: 'motor' | 'amigo'; cor: 'w' | 'b' | 'sorteio'; nivel: number; modo: 'partida' | 'treino'; tempo: string }
   /** Duração do modo relâmpago, em minutos. */
   minutosRelampago: number
   /** De onde saem as posições do relâmpago. */
@@ -118,7 +118,7 @@ export const CONFIG_PADRAO: Configuracoes = {
   minutosRelampago: 3,
   fonteRelampago: 'treinadas',
   barraAvaliacao: true,
-  jogo: { adversario: 'motor', cor: 'sorteio', nivel: 3, modo: 'partida' },
+  jogo: { adversario: 'motor', cor: 'sorteio', nivel: 3, modo: 'partida', tempo: 'livre' },
   fonteExplorador: 'lichess',
   ratingExplorador: 1400,
   profundidade: 'colunas',
