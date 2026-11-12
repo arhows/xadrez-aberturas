@@ -23,6 +23,9 @@ export interface Configuracoes {
   mostrarTaticas: boolean
   /** Setas de todas as táticas sem precisar tocar nos itens. */
   taticasAutomaticas: boolean
+  /** Explorador do lichess no Explorar: partidas de mestres ou do lichess, e a faixa de rating. */
+  fonteExplorador: 'masters' | 'lichess'
+  ratingExplorador: number
   /** Estudo e Explorar: esconde as setas e os lances do livro até a pessoa tentar o lance. */
   adivinhar: boolean
   /** Última escolha da tela de Treino, usada também por "Revisar agora". */
@@ -97,6 +100,8 @@ export const CONFIG_PADRAO: Configuracoes = {
   mostrarTaticas: true,
   taticasAutomaticas: false,
   adivinhar: false,
+  fonteExplorador: 'lichess',
+  ratingExplorador: 1400,
   profundidade: 'colunas',
 }
 

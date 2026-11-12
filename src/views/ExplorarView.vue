@@ -6,6 +6,7 @@ import AvisosDoLance from '../components/AvisosDoLance.vue'
 import AnaliseAoVivo from '../components/AnaliseAoVivo.vue'
 import AvisoXeque from '../components/AvisoXeque.vue'
 import CartaoDica from '../components/CartaoDica.vue'
+import ExploradorLichess from '../components/ExploradorLichess.vue'
 import HistoricoLances from '../components/HistoricoLances.vue'
 import LinhaMotor from '../components/LinhaMotor.vue'
 import TaticasDoTabuleiro from '../components/TaticasDoTabuleiro.vue'
@@ -399,6 +400,13 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
         </div>
         <p class="apoio-partidas">Verde = lance do livro. A porcentagem é o seu aproveitamento nessas partidas.</p>
       </section>
+
+      <ExploradorLichess
+        v-show="!escondido"
+        :fen="fen"
+        :lances-do-livro="continuacoes.map((aresta) => aresta.san)"
+        @jogar="jogarSan"
+      />
 
       <section v-show="!escondido">
         <h2>Árvore</h2>

@@ -10,6 +10,7 @@ import {
 import { dataLocal } from '../lib/srs'
 import { ehIos, instalar, pwa } from '../lib/pwa'
 import { nuvem, sair, sincronizar } from '../lib/nuvem'
+import { conectarLichess, conexaoLichess, desconectarLichess } from '../lib/lichessConta'
 
 const config = progresso.config
 const mensagem = ref<{ tipo: 'ok' | 'erro'; texto: string } | null>(null)
@@ -123,6 +124,31 @@ function resetar() {
           <input v-model="config.taticasAutomaticas" type="checkbox" :disabled="!config.mostrarTaticas" />
           Mostrar as setas das táticas automaticamente, sem tocar nos itens
         </label>
+        <label class="marcar">
+          <input v-model="config.adivinhar" type="checkbox" />
+          Adivinhar: esconder as setas e os lances do livro até eu tentar o lance
+        </label>
+      </div>
+    </section>
+
+    <section class="grupo">
+      <h3>Explorador do lichess</h3>
+      <div class="cartao">
+        <div class="linha">
+          <p v-if="conexaoLichess">
+            Conectado ao lichess neste aparelho até
+            {{ new Date(conexaoLichess.expira).toLocaleDateString('pt-BR') }}.
+          </p>
+          <p v-else>Não conectado.</p>
+          <p class="suave">
+            Usado só para mostrar no Explorar quantas partidas tiveram cada lance. O app não pede nenhuma
+            permissão na sua conta, e a conexão não vai para a nuvem.
+          </p>
+        </div>
+        <div class="linha acoes">
+          <button v-if="conexaoLichess" type="button" class="botao fantasma" @click="desconectarLichess">Desconectar</button>
+          <button v-else type="button" class="botao" @click="conectarLichess">Conectar ao lichess</button>
+        </div>
       </div>
     </section>
 
