@@ -1,0 +1,30 @@
+// Regras do Firestore (cole no console: Firestore Database → Regras → Publicar).
+// Este arquivo é só a cópia de referência; quem vale é o que está publicado no console.
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Progresso de cada conta: só o dono lê e grava.
+    match /usuarios/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // Partidas on-line: qualquer conta lê (o convite é por link); só os jogadores alteram,
+    // e quem tem o link (ou o convidado do desafio) pode entrar enquanto ela espera.
+    match /partidas/{id} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.criador == request.auth.uid;
+      allow update: if request.auth != null && (
+        request.auth.uid in resource.data.jogadores ||
+        (resource.data.estado == 'aguardando' &&
+          (resource.data.convidado == null || resource.data.convidado == request.auth.uid))
+      );
+      allow delete: if request.auth != null && request.auth.uid == resource.data.criador;
+    }
+
+    // Ranking: qualquer conta lê; o fim de cada partida atualiza o rating dos dois jogadores.
+    match /jogadores/{uid} {
+      allow read: if request.auth != null;
+      allow create, update: if request.auth != null;
+    }
+  }
+}

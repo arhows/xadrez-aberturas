@@ -21,7 +21,7 @@ import {
 } from 'firebase/auth'
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore/lite'
 
-const app = initializeApp({
+export const app = initializeApp({
   apiKey: 'AIzaSyBfJMwoRy1GBlDHCrOQSSfrvRdQMd0clzM',
   authDomain: 'xadrez-aberturas.firebaseapp.com',
   projectId: 'xadrez-aberturas',

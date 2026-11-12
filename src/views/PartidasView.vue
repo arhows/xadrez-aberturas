@@ -95,14 +95,14 @@ const porAbertura = computed(() => resumoPorAbertura(noRepertorio.value))
 const jogos = computed(() => jogosVisiveis(progresso.jogos))
 const confirmandoApagar = ref<string | null>(null)
 const nomeDoAdversario = (j: JogoSalvo) =>
-  j.adversario === 'amigo' ? 'amigo' : `Stockfish nível ${j.nivel} (${NIVEIS.find((n) => n.nivel === j.nivel)?.nome ?? ''})`
+  j.adversario === 'online' ? (j.oponente ?? 'amigo on-line') : `Stockfish nível ${j.nivel} (${NIVEIS.find((n) => n.nivel === j.nivel)?.nome ?? ''})`
 const dataCurta = (iso: string) => new Date(iso).toLocaleDateString('pt-BR')
 const numeroDeLances = (j: JogoSalvo) => Math.ceil((j.lances.split(' ').length - j.inicio) / 2)
 function exportarJogo(j: JogoSalvo) {
   const voce = 'Você'
-  const outro = j.adversario === 'amigo' ? 'Amigo' : nomeDoAdversario(j)
-  const brancas = j.adversario === 'amigo' ? 'Brancas' : j.cor === 'w' ? voce : outro
-  const pretas = j.adversario === 'amigo' ? 'Pretas' : j.cor === 'b' ? voce : outro
+  const outro = nomeDoAdversario(j)
+  const brancas = j.cor === 'w' ? voce : outro
+  const pretas = j.cor === 'b' ? voce : outro
   baixarTexto(`partida-${j.data.slice(0, 10)}.pgn`, pgnDoJogo(j.lances.split(' '), { brancas, pretas, resultado: j.resultado, data: j.data.slice(0, 10) }, j.fen), 'application/x-chess-pgn')
 }
 /** Apagar pede um segundo toque (sem janela de confirmação do navegador). */
@@ -172,7 +172,7 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
       <ul class="lista">
         <li v-for="j in jogos" :key="j.id">
           <div>
-            <strong>{{ textoDoResultado(j) }} {{ j.adversario === 'amigo' ? 'contra amigo' : `contra ${nomeDoAdversario(j)}` }}</strong>
+            <strong>{{ textoDoResultado(j) }} contra {{ nomeDoAdversario(j) }}</strong>
             <span class="suave">
               {{ dataCurta(j.data) }}<template v-if="j.cor"> · {{ j.cor === 'w' ? 'brancas' : 'pretas' }}</template>
               · {{ j.tempo === 'livre' ? 'sem relógio' : j.tempo }} · {{ numeroDeLances(j) }} lances
@@ -182,7 +182,7 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
           <div class="acoes-jogo">
             <RouterLink
               class="botao"
-              :to="{ name: 'analise', query: { c: j.lances, fen: j.fen, cor: j.cor, titulo: `${textoDoResultado(j)} ${j.adversario === 'amigo' ? 'contra amigo' : `contra ${nomeDoAdversario(j)}`}`, volta: '/partidas' } }"
+              :to="{ name: 'analise', query: { c: j.lances, fen: j.fen, cor: j.cor, titulo: `${textoDoResultado(j)} contra ${nomeDoAdversario(j)}`, volta: '/partidas' } }"
             >Analisar</RouterLink>
             <button type="button" class="botao" @click="exportarJogo(j)">PGN</button>
             <button type="button" class="botao fantasma" :class="{ perigo: confirmandoApagar === j.id }" @click="apagarJogo(j.id)">

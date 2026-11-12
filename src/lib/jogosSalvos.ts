@@ -18,7 +18,10 @@ export interface JogoSalvo {
   inicio: number
   /** Posição de partida montada no editor; sem ela, a posição inicial. */
   fen?: string
-  adversario: 'motor' | 'amigo'
+  /** Computador (tela Jogar) ou amigo on-line. */
+  adversario: 'motor' | 'online'
+  /** Nome do amigo, nas partidas on-line. */
+  oponente?: string
   nivel?: number
   /** Cor da pessoa contra o computador. */
   cor?: Cor
@@ -64,9 +67,9 @@ export function jogosVisiveis(jogos: Record<string, JogoSalvo>): JogoSalvo[] {
     .sort((a, b) => b.data.localeCompare(a.data))
 }
 
-/** Resultado do ponto de vista da pessoa (contra o computador) ou só o placar (contra amigo). */
+/** Resultado do ponto de vista da pessoa (ou só o placar, se a cor não ficou registrada). */
 export function textoDoResultado(jogo: JogoSalvo): string {
-  if (jogo.adversario === 'amigo' || !jogo.cor) return jogo.resultado.replace('1/2-1/2', '½-½')
+  if (!jogo.cor) return jogo.resultado.replace('1/2-1/2', '½-½')
   if (jogo.resultado === '1/2-1/2') return 'Empate'
   return (jogo.resultado === '1-0') === (jogo.cor === 'w') ? 'Vitória' : 'Derrota'
 }

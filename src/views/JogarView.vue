@@ -23,6 +23,8 @@ import { dataLocal } from '../lib/srs'
 
 const route = useRoute()
 const escolhas = progresso.config.jogo
+// Jogar contra amigo agora é on-line (tela própria); aqui é sempre contra o computador.
+escolhas.adversario = 'motor'
 
 /** Posição montada no Editor de posição (FEN); a partida começa dela. */
 const fenInicio = (() => {
@@ -459,13 +461,17 @@ onBeforeUnmount(() => {
       A partida começa depois de <span class="lance">{{ textoInicio }}</span>.
     </p>
 
-    <div class="cartao">
-      <fieldset class="opcoes">
-        <legend>Adversário</legend>
-        <label class="marcar"><input v-model="escolhas.adversario" type="radio" value="motor" /> Computador (Stockfish)</label>
-        <label class="marcar"><input v-model="escolhas.adversario" type="radio" value="amigo" /> Amigo, neste aparelho</label>
-      </fieldset>
+    <RouterLink v-if="!fenInicio && !inicio.length" to="/online" class="cartao cartao-online">
+      <span class="icone-online" aria-hidden="true">♞</span>
+      <span class="textos-online">
+        <strong>Jogar com um amigo on-line</strong>
+        <span class="suave">Mande um convite, jogue em tempo real e suba no ranking.</span>
+      </span>
+      <span class="botao">Abrir</span>
+    </RouterLink>
 
+    <h2 class="subtitulo">Contra o computador</h2>
+    <div class="cartao">
       <fieldset class="opcoes">
         <legend>Modo</legend>
         <label class="marcar">
@@ -538,8 +544,7 @@ onBeforeUnmount(() => {
       <div class="cabeca-painel">
         <h1 class="titulo-pagina">Jogar</h1>
         <p class="suave">
-          <template v-if="contraMotor">Você de {{ minhaCor === 'w' ? 'brancas' : 'pretas' }} contra {{ nomeDoMotor }}</template>
-          <template v-else>Amigo, neste aparelho</template>
+          Você de {{ minhaCor === 'w' ? 'brancas' : 'pretas' }} contra {{ nomeDoMotor }}
           · {{ treinoAtivo ? 'modo treino' : relogioAtivo ? tempo.id : 'partida sem relógio' }}
         </p>
       </div>
@@ -579,7 +584,6 @@ onBeforeUnmount(() => {
             </button>
             <button type="button" class="botao" :disabled="sans.length <= inicio.length" @click="desfazer">Voltar lance</button>
           </template>
-          <button v-if="!contraMotor" type="button" class="botao" @click="orientacaoAmigo = orientacaoAmigo === 'white' ? 'black' : 'white'">Girar</button>
           <button type="button" class="botao fantasma" @click="abandonar">Abandonar</button>
         </template>
         <template v-else>
@@ -685,5 +689,25 @@ onBeforeUnmount(() => {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--espaco-2);
+}
+.cartao-online {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--texto);
+  text-decoration: none;
+}
+.icone-online {
+  font-size: 2rem;
+  line-height: 1;
+}
+.textos-online {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+.subtitulo {
+  margin: var(--espaco-2) 0 0;
+  font-size: 1.1rem;
 }
 </style>

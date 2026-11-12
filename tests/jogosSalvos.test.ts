@@ -34,6 +34,7 @@ describe('partidas salvas do Jogar', () => {
     expect(textoDoResultado(jogo('a', 'x'))).toBe('Vitória')
     expect(textoDoResultado(jogo('a', 'x', { cor: 'b' }))).toBe('Derrota')
     expect(textoDoResultado(jogo('a', 'x', { resultado: '1/2-1/2' }))).toBe('Empate')
-    expect(textoDoResultado(jogo('a', 'x', { adversario: 'amigo', cor: undefined, resultado: '0-1' }))).toBe('0-1')
+    expect(textoDoResultado(jogo('a', 'x', { adversario: 'online', cor: undefined, resultado: '0-1' }))).toBe('0-1')
+    expect(textoDoResultado(jogo('a', 'x', { adversario: 'online', oponente: 'Bia', cor: 'b', resultado: '0-1' }))).toBe('Vitória')
   })
 })
