@@ -58,3 +58,22 @@ export function registrarFalha(erro: ErroAresta, agora = new Date()): void {
   erro.erros++
   erro.atualizado = agora.toISOString()
 }
+
+/** Soma um erro no lance do livro que devia ter sido jogado (o mesmo registro do Treino). */
+export function registrarErroNoLance(
+  erros: Record<string, ErroAresta>,
+  capitulo: string,
+  caminho: string[],
+  aresta: Pick<Aresta, 'id' | 'san' | 'linhas'>,
+  agora = new Date(),
+): void {
+  const chave = `${capitulo}|${aresta.id}`
+  erros[chave] = {
+    capitulo,
+    erros: (erros[chave]?.erros ?? 0) + 1,
+    caminho: [...caminho, aresta.san],
+    linhas: aresta.linhas,
+    seguidos: 0,
+    atualizado: agora.toISOString(),
+  }
+}

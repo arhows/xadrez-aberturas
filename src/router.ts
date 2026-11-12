@@ -14,6 +14,7 @@ import EstudoView from './views/EstudoView.vue'
 import ExercicioView from './views/ExercicioView.vue'
 import PartidasView from './views/PartidasView.vue'
 import ProgressoView from './views/ProgressoView.vue'
+import RelampagoView from './views/RelampagoView.vue'
 import ExerciciosView from './views/ExerciciosView.vue'
 import ExplorarView from './views/ExplorarView.vue'
 import InicioView from './views/InicioView.vue'
@@ -42,6 +43,7 @@ export const router = createRouter({
     { path: '/aberturas', name: 'aberturas', component: AberturasView, meta: { secao: 'aberturas' } },
     { path: '/abertura/:cap', name: 'abertura', component: AberturaView, beforeEnter: exigirCapitulo, meta: { secao: 'aberturas' } },
     { path: '/jogar', name: 'jogar', component: JogarView, meta: { secao: 'inicio', foco: true } },
+    { path: '/relampago', name: 'relampago', component: RelampagoView, meta: { secao: 'inicio', foco: true } },
     { path: '/erros', name: 'erros', component: ErrosView, meta: { secao: 'inicio', foco: true } },
     { path: '/partidas', name: 'partidas', component: PartidasView, meta: { secao: 'partidas' } },
     { path: '/progresso', name: 'progresso', component: ProgressoView, beforeEnter: () => carregarConjuntos().then(() => true), meta: { secao: 'progresso' } },

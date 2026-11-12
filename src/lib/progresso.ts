@@ -30,6 +30,8 @@ export interface Configuracoes {
   ratingExplorador: number
   /** Últimas escolhas da tela Jogar. */
   jogo: { adversario: 'motor' | 'amigo'; cor: 'w' | 'b' | 'sorteio'; nivel: number }
+  /** Duração do modo relâmpago, em minutos. */
+  minutosRelampago: number
   /** Estudo e Explorar: esconde as setas e os lances do livro até a pessoa tentar o lance. */
   adivinhar: boolean
   /** Última escolha da tela de Treino, usada também por "Revisar agora". */
@@ -88,6 +90,8 @@ export interface Progresso {
    * apagada (fica guardada para a sincronização saber); vale a editada por último.
    */
   anotacoes: Record<string, { texto: string; atualizado: string }>
+  /** Recorde do modo relâmpago por duração em minutos (chave "1", "3", "5"). */
+  relampago: Record<string, number>
   /** Atividade por dia (AAAA-MM-DD), para a sequência de dias e o calendário do painel. */
   atividade: Record<string, Atividade>
   config: Configuracoes
@@ -109,6 +113,7 @@ export const CONFIG_PADRAO: Configuracoes = {
   mostrarTaticas: true,
   taticasAutomaticas: false,
   adivinhar: false,
+  minutosRelampago: 3,
   barraAvaliacao: true,
   jogo: { adversario: 'motor', cor: 'sorteio', nivel: 3 },
   fonteExplorador: 'lichess',
@@ -128,6 +133,7 @@ function progressoVazio(): Progresso {
     partidas: { lichess: '', chesscom: '', analisadas: {} },
     atividade: {},
     anotacoes: {},
+    relampago: {},
     repertorio: { capitulos: [], atualizado: '' },
     config: { ...CONFIG_PADRAO },
   }
@@ -155,6 +161,7 @@ export function normalizarProgresso(dados: unknown): Progresso | null {
     },
     atividade: ehObjeto(parcial.atividade) ? parcial.atividade! : {},
     anotacoes: ehObjeto(parcial.anotacoes) ? parcial.anotacoes! : {},
+    relampago: ehObjeto(parcial.relampago) ? parcial.relampago! : {},
     repertorio:
       ehObjeto(parcial.repertorio) && Array.isArray(parcial.repertorio!.capitulos)
         ? { capitulos: parcial.repertorio!.capitulos, atualizado: String(parcial.repertorio!.atualizado ?? '') }

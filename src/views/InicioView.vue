@@ -63,6 +63,7 @@ const maisErrados = computed(() =>
     <div class="topo-inicio">
       <h1 class="titulo-pagina">Hoje</h1>
       <span class="atalhos">
+        <RouterLink class="botao fantasma" to="/relampago">Relâmpago</RouterLink>
         <RouterLink class="botao fantasma" to="/jogar">Jogar</RouterLink>
         <RouterLink class="botao fantasma" to="/progresso">Ver progresso</RouterLink>
       </span>
@@ -193,6 +194,8 @@ const maisErrados = computed(() =>
 }
 .atalhos {
   display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
   gap: var(--espaco-1);
 }
 .topo-inicio {
