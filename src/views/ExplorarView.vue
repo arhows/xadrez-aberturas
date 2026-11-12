@@ -20,6 +20,7 @@ import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
 import { Chess } from 'chess.js'
 import { casasDoLance } from '../lib/lances'
 import { carregarMotor, type DadosMotor } from '../lib/motor'
+import { compartilharPosicao, linkDaPosicao } from '../lib/compartilharPosicao'
 import { aproveitamento, indiceDePosicoes } from '../lib/partidasRepertorio'
 import { progresso } from '../lib/progresso'
 import { tocar } from '../lib/som'
@@ -177,6 +178,16 @@ function voltar() {
   else caminho.value = caminho.value.slice(0, -1)
 }
 
+const avisoCompartilhar = ref('')
+async function compartilhar() {
+  const sans = [...caminho.value.map((a) => a.san), ...fora.value.map((l) => l.san)]
+  const link = linkDaPosicao(`${location.origin}${location.pathname}`, capitulo.capitulo.id, sans)
+  const titulo = sans.length ? `${capitulo.capitulo.nome}: ${sans.map((san, i) => fmtLance(i + 1, san)).join(' ')}` : capitulo.capitulo.nome
+  const resultado = await compartilharPosicao(titulo, link)
+  avisoCompartilhar.value = resultado === 'copiado' ? 'Link copiado.' : resultado === 'falhou' ? 'Não deu para copiar o link.' : ''
+  if (avisoCompartilhar.value) setTimeout(() => (avisoCompartilhar.value = ''), 2500)
+}
+
 /** Volta à posição inicial para praticar a linha de novo do começo. */
 function voltarAoInicio() {
   fora.value = []
@@ -313,6 +324,8 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
           class="botao"
           :to="{ name: 'jogar', query: { c: [...caminho.map((a) => a.san), ...fora.map((l) => l.san)].join(' '), cap: capitulo.capitulo.id } }"
         >Jogar daqui</RouterLink>
+        <button type="button" class="botao" title="Compartilhar o link desta posição" @click="compartilhar">Compartilhar</button>
+        <span v-if="avisoCompartilhar" class="aviso-compartilhar" role="status">{{ avisoCompartilhar }}</span>
         <label class="marcar">
           <input v-model="mostrarNotas" type="checkbox" />
           Notas
@@ -447,6 +460,10 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
 </template>
 
 <style scoped>
+.aviso-compartilhar {
+  color: var(--texto-suave);
+  font-size: 14px;
+}
 .adivinhe {
   display: flex;
   flex-wrap: wrap;
