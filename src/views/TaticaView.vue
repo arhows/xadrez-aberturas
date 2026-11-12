@@ -18,7 +18,7 @@ import {
 import { fmtSan } from '../lib/formato'
 import { corDoPly, numeroDoPly } from '../lib/lances'
 import { somarAtividade } from '../lib/painel'
-import { conferirLanceTatico, EXPLICACOES, NOMES_DAS_FAIXAS } from '../lib/problemasTaticos'
+import { AUTORES_DOS_LIVROS, conferirLanceTatico, EXPLICACOES, NOMES_DAS_FAIXAS } from '../lib/problemasTaticos'
 import { progresso } from '../lib/progresso'
 import { notaDoExercicio, registrarResultado, revisoesPendentes } from '../lib/revisaoExercicios'
 import { tocar } from '../lib/som'
@@ -228,6 +228,7 @@ const contagem = computed(() => {
 })
 const indiceNaFaixa = computed(() => daFaixa.value.findIndex((p) => p.n === problema.n) + 1)
 const explicacao = EXPLICACOES[conjunto.tema ?? ''] ?? ''
+const autorDoLivro = AUTORES_DOS_LIVROS[conjunto.tema ?? '']
 const mostrarExplicacao = Object.keys(estados.value).length === 0
 
 const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
@@ -264,7 +265,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
     <div class="painel">
       <div class="cabeca-painel so-computador">
         <RouterLink to="/exercicios" class="trilha">‹ Exercícios</RouterLink>
-        <h1 class="titulo-pagina">{{ conjunto.tema === "koblenz" ? "Koblenz" : "Táticas" }} · {{ conjunto.nome }}</h1>
+        <h1 class="titulo-pagina">{{ autorDoLivro ?? "Táticas" }} · {{ conjunto.nome }}</h1>
       </div>
 
       <div v-if="temFaixas" class="faixas" role="tablist" aria-label="Dificuldade">
@@ -281,7 +282,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
       </div>
 
       <details class="explicacao" :open="mostrarExplicacao">
-        <summary>{{ conjunto.tema === 'koblenz' ? 'Sobre estes exercícios' : `O que é ${conjunto.nome.toLowerCase()}?` }}</summary>
+        <summary>{{ autorDoLivro ? 'Sobre estes exercícios' : `O que é ${conjunto.nome.toLowerCase()}?` }}</summary>
         <p>{{ explicacao }}</p>
       </details>
 

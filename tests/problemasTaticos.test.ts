@@ -20,6 +20,16 @@ describe('problemas táticos', () => {
     }
   })
 
+  it('exercícios do Grooten: um conjunto por capítulo, com tarefa e explicação', () => {
+    const grooten = todos.filter((c) => c.tema === 'grooten')
+    expect(grooten.length).toBeGreaterThanOrEqual(16)
+    expect(EXPLICACOES.grooten).toBeTruthy()
+    for (const c of grooten) for (const p of c.problemas) {
+      expect(p.tarefa).toBeTruthy()
+      expect(p.explicacao).toBeTruthy()
+    }
+  })
+
   it('um conjunto por tema, com explicação', () => {
     expect(conjuntos.map((c) => c.id.replace('tatica-', '')).sort()).toEqual([...ORDEM_DOS_TEMAS].sort())
     for (const c of conjuntos) expect(EXPLICACOES[c.tema!]).toBeTruthy()

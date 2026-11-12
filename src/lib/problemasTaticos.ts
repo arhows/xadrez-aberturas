@@ -24,10 +24,18 @@ export const NOMES_DAS_FAIXAS: Record<NonNullable<Problema['faixa']>, string> = 
   dificil: 'Difícil',
 }
 
+/** Temas que são exercícios de livro (título da página = autor, em vez de "Táticas"). */
+export const AUTORES_DOS_LIVROS: Record<string, string> = {
+  koblenz: 'Koblenz',
+  grooten: 'Grooten',
+}
+
 /** Explicação curta de cada tema, mostrada antes dos problemas. */
 export const EXPLICACOES: Record<string, string> = {
   koblenz:
     'Exercícios do livro de estratégia de Alexander Koblenz (treinador de Mikhail Tal): finais, estudos e posições de partidas de mestres. Em cada um, encontre o plano. Nos finais, muitas vezes a ideia é empatar com afogamento, oposição ou xeques pelo flanco; no meio-jogo, nem sempre há combinação: às vezes o certo é um lance de manobra que prepara o ataque.',
+  grooten:
+    'Exercícios de estratégia do livro de Herman Grooten, organizados pelos temas do livro (peões fracos, casas fortes, coluna aberta, par de bispos…). Quase nunca há combinação: procure o plano certo para a posição, e a linha mostra como o livro o executa.',
   hangingPiece:
     'Uma peça desprotegida (ou mal protegida) pode ser capturada de graça. Antes de qualquer plano, olhe o que o adversário deixou sem defesa — e o que você deixou.',
   fork: 'Garfo: uma peça ataca duas (ou mais) peças ao mesmo tempo, e o adversário só consegue salvar uma. O cavalo é o rei dos garfos, mas peões, damas e até o rei também garfam.',
