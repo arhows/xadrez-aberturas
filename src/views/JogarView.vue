@@ -277,7 +277,7 @@ function fazer(lance: LanceUci): boolean {
 const PAUSA_MINIMA_MS = 1500
 const PAUSA_VARIACAO_MS = 1000
 /** A peça do computador desliza mais devagar que a da pessoa, para dar para acompanhar. */
-const ANIMACAO_COMPUTADOR_MS = 650
+const ANIMACAO_COMPUTADOR_MS = 400
 const ultimoDoComputador = ref(false)
 const animacaoTabuleiro = computed(() => (ultimoDoComputador.value ? ANIMACAO_COMPUTADOR_MS : undefined))
 
