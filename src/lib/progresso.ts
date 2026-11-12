@@ -83,6 +83,11 @@ export interface Progresso {
    * `atualizado` (ISO) decide qual aparelho vence na sincronização.
    */
   repertorio: { capitulos: string[]; atualizado: string }
+  /**
+   * Notas pessoais por lance do livro (chave "capítulo|id da aresta"). Texto vazio = nota
+   * apagada (fica guardada para a sincronização saber); vale a editada por último.
+   */
+  anotacoes: Record<string, { texto: string; atualizado: string }>
   /** Atividade por dia (AAAA-MM-DD), para a sequência de dias e o calendário do painel. */
   atividade: Record<string, Atividade>
   config: Configuracoes
@@ -122,6 +127,7 @@ function progressoVazio(): Progresso {
     ultimoConjunto: null,
     partidas: { lichess: '', chesscom: '', analisadas: {} },
     atividade: {},
+    anotacoes: {},
     repertorio: { capitulos: [], atualizado: '' },
     config: { ...CONFIG_PADRAO },
   }
@@ -148,6 +154,7 @@ export function normalizarProgresso(dados: unknown): Progresso | null {
       ...(ehObjeto(parcial.partidas) ? parcial.partidas : {}),
     },
     atividade: ehObjeto(parcial.atividade) ? parcial.atividade! : {},
+    anotacoes: ehObjeto(parcial.anotacoes) ? parcial.anotacoes! : {},
     repertorio:
       ehObjeto(parcial.repertorio) && Array.isArray(parcial.repertorio!.capitulos)
         ? { capitulos: parcial.repertorio!.capitulos, atualizado: String(parcial.repertorio!.atualizado ?? '') }

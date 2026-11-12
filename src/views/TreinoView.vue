@@ -21,6 +21,7 @@ import {
 import { fmtLance, fmtTexto } from '../lib/formato'
 import { carregarMotor, type DadosMotor } from '../lib/motor'
 import { somarAtividade } from '../lib/painel'
+import { chaveDaNota, lerNota } from '../lib/anotacoes'
 import { progresso } from '../lib/progresso'
 import { tocar } from '../lib/som'
 import {
@@ -118,6 +119,8 @@ interface Aviso {
   lance?: string
   texto?: string | null
   fechavel?: boolean
+  /** Nota pessoal do lance (escrita no Estudo ou no Explorar). */
+  nota?: string
 }
 const aviso = ref<Aviso | null>(null)
 
@@ -315,6 +318,7 @@ function aoJogar(de: string, para: string) {
       tipo: 'errado',
       lance: fmtLance(plyDaJogada.value, certo.san),
       texto: dicaVisivel('errado') ? certo.dica : null,
+      nota: lerNota(chaveDaNota(idCapitulo, certo.id)),
     }
     // Desfaz o lance e espera o usuário jogar o certo, com a seta na tela.
     aguardando.value = true
@@ -329,12 +333,15 @@ function aoJogar(de: string, para: string) {
   tocar('certo')
 
   const ply = plyDaJogada.value
-  const mostrarDica = dicaVisivel('certo') && !!aceito.dica
+  const nota = lerNota(chaveDaNota(idCapitulo, aceito.id))
+  // A nota pessoal também dá tempo de leitura, como a dica.
+  const mostrarDica = (dicaVisivel('certo') && !!aceito.dica) || !!nota
   aviso.value = {
     tipo: 'certo',
     lance: fmtLance(ply, aceito.san),
-    texto: mostrarDica ? aceito.dica : null,
+    texto: dicaVisivel('certo') ? aceito.dica : null,
     fechavel: mostrarDica,
+    nota,
   }
   partida.value = avancar(atual, aceito, escopoDaPartida, (id) => pesoDaLinha(id, atual.cor))
   prepararJogada(mostrarDica ? TEMPO_DICA_MS[config.tempoDica] : TEMPO_ADVERSARIO_MS)
@@ -574,6 +581,7 @@ if (revisaoAutomatica) iniciarSessao()
           :class="{ tocavel: aviso.fechavel }"
           @click="aviso.fechavel && pularEspera()"
         >
+          <p v-if="aviso.nota" class="instrucao minha-nota">Minha nota: {{ aviso.nota }}</p>
           <p v-if="aviso.tipo === 'errado'" class="instrucao">Esse não é o lance do livro. Jogue o lance da seta.</p>
           <button v-if="esperandoToque" type="button" class="botao primario continuar" @click.stop="pularEspera">
             Continuar
@@ -683,6 +691,11 @@ if (revisaoAutomatica) iniciarSessao()
 </template>
 
 <style scoped>
+.minha-nota {
+  padding-left: var(--espaco-2);
+  border-left: 3px solid var(--aviso);
+  white-space: pre-wrap;
+}
 .formulario {
   display: grid;
   gap: var(--espaco-4);

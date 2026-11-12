@@ -7,6 +7,8 @@ import AvisoXeque from '../components/AvisoXeque.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import HistoricoLances from '../components/HistoricoLances.vue'
 import LinhaMotor from '../components/LinhaMotor.vue'
+import MinhaNota from '../components/MinhaNota.vue'
+import { chaveDaNota } from '../lib/anotacoes'
 import PlanoMeioJogo from '../components/PlanoMeioJogo.vue'
 import TaticasDoTabuleiro from '../components/TaticasDoTabuleiro.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
@@ -194,7 +196,12 @@ function trocarLinha(evento: Event) {
         :lance="fmtLance(lanceAtual.ply, lanceAtual.san)"
         :texto="dica"
       />
-      <CartaoDica v-else texto="Jogue o lance no tabuleiro, ou avance com ▶, com as setas do teclado ou deslizando no tabuleiro." />
+      <MinhaNota
+        v-if="lanceAtual && arestaAtual"
+        :chave="chaveDaNota(capitulo.capitulo.id, arestaAtual.id)"
+        :lance="fmtLance(lanceAtual.ply, lanceAtual.san)"
+      />
+      <CartaoDica v-if="!lanceAtual" texto="Jogue o lance no tabuleiro, ou avance com ▶, com as setas do teclado ou deslizando no tabuleiro." />
       <AvisoXeque :xeque="xeque" />
       <AvisosDoLance :aresta="arestaAtual" />
       <LinhaMotor v-if="!escondido" :analise="analise" :lances-do-livro="proximoDoLivro ? [proximoDoLivro.san] : []" />

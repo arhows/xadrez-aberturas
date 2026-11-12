@@ -7,6 +7,8 @@ import AnaliseAoVivo from '../components/AnaliseAoVivo.vue'
 import AvisoXeque from '../components/AvisoXeque.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import ExploradorLichess from '../components/ExploradorLichess.vue'
+import MinhaNota from '../components/MinhaNota.vue'
+import { chaveDaNota } from '../lib/anotacoes'
 import HistoricoLances from '../components/HistoricoLances.vue'
 import LinhaMotor from '../components/LinhaMotor.vue'
 import TaticasDoTabuleiro from '../components/TaticasDoTabuleiro.vue'
@@ -358,6 +360,11 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
         :texto="ultima.dica"
       />
       <CartaoDica v-else texto="Escolha um lance na lista, nas setas ou movendo a peça no tabuleiro." />
+      <MinhaNota
+        v-if="ultima"
+        :chave="chaveDaNota(capitulo.capitulo.id, ultima.id)"
+        :lance="fmtLance(caminho.length, ultima.san)"
+      />
 
       <div v-if="escondido || (errouAqui && progresso.config.adivinhar)" class="adivinhe">
         <p v-if="errouAqui">Esse lance não é do livro aqui. Veja as setas verdes.</p>
