@@ -291,6 +291,10 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
         <button type="button" class="botao" :disabled="!caminho.length && !foraDoLivro" aria-label="Lance anterior" @click="voltar">◀</button>
         <button type="button" class="botao" :disabled="!continuacoes.length" aria-label="Próximo lance" @click="avancar">▶</button>
         <button type="button" class="botao" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">Girar</button>
+        <RouterLink
+          class="botao"
+          :to="{ name: 'jogar', query: { c: [...caminho.map((a) => a.san), ...fora.map((l) => l.san)].join(' '), cap: capitulo.capitulo.id } }"
+        >Jogar daqui</RouterLink>
         <label class="marcar">
           <input v-model="mostrarNotas" type="checkbox" />
           Notas

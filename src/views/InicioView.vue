@@ -62,7 +62,10 @@ const maisErrados = computed(() =>
   <div class="pagina inicio">
     <div class="topo-inicio">
       <h1 class="titulo-pagina">Hoje</h1>
-      <RouterLink class="botao fantasma" to="/progresso">Ver progresso</RouterLink>
+      <span class="atalhos">
+        <RouterLink class="botao fantasma" to="/jogar">Jogar</RouterLink>
+        <RouterLink class="botao fantasma" to="/progresso">Ver progresso</RouterLink>
+      </span>
     </div>
 
     <div class="areas">
@@ -187,6 +190,10 @@ const maisErrados = computed(() =>
   align-items: center;
   justify-content: space-between;
   gap: var(--espaco-2);
+}
+.atalhos {
+  display: inline-flex;
+  gap: var(--espaco-1);
 }
 .topo-inicio {
   display: flex;

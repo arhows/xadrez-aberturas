@@ -26,6 +26,8 @@ export interface Configuracoes {
   /** Explorador do lichess no Explorar: partidas de mestres ou do lichess, e a faixa de rating. */
   fonteExplorador: 'masters' | 'lichess'
   ratingExplorador: number
+  /** Últimas escolhas da tela Jogar. */
+  jogo: { adversario: 'motor' | 'amigo'; cor: 'w' | 'b' | 'sorteio'; nivel: number }
   /** Estudo e Explorar: esconde as setas e os lances do livro até a pessoa tentar o lance. */
   adivinhar: boolean
   /** Última escolha da tela de Treino, usada também por "Revisar agora". */
@@ -100,6 +102,7 @@ export const CONFIG_PADRAO: Configuracoes = {
   mostrarTaticas: true,
   taticasAutomaticas: false,
   adivinhar: false,
+  jogo: { adversario: 'motor', cor: 'sorteio', nivel: 3 },
   fonteExplorador: 'lichess',
   ratingExplorador: 1400,
   profundidade: 'colunas',

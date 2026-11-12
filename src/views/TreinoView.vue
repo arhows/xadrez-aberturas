@@ -642,6 +642,11 @@ if (revisaoAutomatica) iniciarSessao()
             <button type="button" class="botao" @click="repetir">Treinar de novo</button>
           </template>
           <button type="button" class="botao" @click="revisarLinha">Revisar esta linha</button>
+          <RouterLink
+            v-if="partida"
+            class="botao"
+            :to="{ name: 'jogar', query: { c: partida.jogadas.map((j) => j.san).join(' '), cor: partida.cor, cap: idCapitulo } }"
+          >Jogar daqui</RouterLink>
           <RouterLink class="botao" :to="linkParaRever">Rever com dicas</RouterLink>
           <RouterLink class="botao fantasma" to="/">Início</RouterLink>
         </div>
