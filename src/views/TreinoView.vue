@@ -5,6 +5,7 @@ import Avaliacao from '../components/Avaliacao.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import PlanoMeioJogo from '../components/PlanoMeioJogo.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
+import { aberturasVizinhas } from '../lib/aberturasVizinhas'
 import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
 import {
   buscarLinha,
@@ -110,6 +111,9 @@ const proximoCapitulo = computed(() =>
     ? planos().find((plano) => plano.capitulo !== capitulo && plano.fila.length > 0)
     : undefined,
 )
+
+/** Abertura anterior e seguinte (só as do repertório, se esta estiver nele), para o fim da sessão. */
+const vizinhas = aberturasVizinhas(obterCapitulos(), capitulo.capitulo.id, progresso.repertorio.capitulos)
 
 // Estado da partida
 const partida = shallowRef<Partida | null>(null)
@@ -537,6 +541,14 @@ if (revisaoAutomatica) iniciarSessao()
       <button type="button" class="botao" :class="{ primario: !proximoCapitulo }" @click="iniciarSessao(true)">Treinar mesmo assim</button>
       <RouterLink class="botao fantasma" to="/">Voltar ao início</RouterLink>
     </div>
+    <nav v-if="vizinhas.anterior || vizinhas.proxima" class="outras-aberturas" aria-label="Outras aberturas">
+      <RouterLink v-if="vizinhas.anterior" class="botao" :to="{ name: 'treino', params: { cap: vizinhas.anterior.capitulo.id } }">
+        ← {{ vizinhas.anterior.capitulo.nome }}
+      </RouterLink>
+      <RouterLink v-if="vizinhas.proxima" class="botao proxima" :to="{ name: 'treino', params: { cap: vizinhas.proxima.capitulo.id } }">
+        {{ vizinhas.proxima.capitulo.nome }} →
+      </RouterLink>
+    </nav>
   </div>
 
   <div v-else-if="noDoTabuleiro" class="tela">
@@ -690,6 +702,14 @@ if (revisaoAutomatica) iniciarSessao()
           <RouterLink class="botao" :to="linkParaRever">Rever com dicas</RouterLink>
           <RouterLink class="botao fantasma" to="/">Início</RouterLink>
         </div>
+        <nav v-if="!fila.length && (vizinhas.anterior || vizinhas.proxima)" class="outras-aberturas" aria-label="Outras aberturas">
+          <RouterLink v-if="vizinhas.anterior" class="botao" :to="{ name: 'treino', params: { cap: vizinhas.anterior.capitulo.id } }">
+            ← {{ vizinhas.anterior.capitulo.nome }}
+          </RouterLink>
+          <RouterLink v-if="vizinhas.proxima" class="botao proxima" :to="{ name: 'treino', params: { cap: vizinhas.proxima.capitulo.id } }">
+            {{ vizinhas.proxima.capitulo.nome }} →
+          </RouterLink>
+        </nav>
       </template>
     </div>
   </div>
@@ -790,6 +810,17 @@ if (revisaoAutomatica) iniciarSessao()
   flex-wrap: wrap;
   align-items: center;
   gap: var(--espaco-2);
+}
+.outras-aberturas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: var(--espaco-3);
+  padding-top: var(--espaco-3);
+  border-top: 1px solid var(--borda);
+}
+.outras-aberturas .proxima {
+  margin-left: auto;
 }
 .concluido {
   width: 100%;
