@@ -24,6 +24,7 @@ import AnalisarView from './views/AnalisarView.vue'
 import PreparacaoView from './views/PreparacaoView.vue'
 import JogadorView from './views/JogadorView.vue'
 import TaticaView from './views/TaticaView.vue'
+import { buscarEstrutura, carregarEstrategia } from './lib/estrategia'
 import ExerciciosView from './views/ExerciciosView.vue'
 import ExplorarView from './views/ExplorarView.vue'
 import InicioView from './views/InicioView.vue'
@@ -99,6 +100,28 @@ export const router = createRouter({
     { path: '/online', name: 'online', component: () => import('./views/OnlineView.vue'), meta: { secao: 'inicio' } },
     { path: '/online/:id', name: 'partida-online', component: () => import('./views/PartidaOnlineView.vue'), meta: { secao: 'inicio', foco: true } },
     { path: '/ranking', name: 'ranking', component: () => import('./views/RankingView.vue'), meta: { secao: 'inicio' } },
+    { path: '/estrategia', name: 'estrategia', component: () => import('./views/EstrategiaView.vue'), beforeEnter: () => carregarEstrategia().then(() => true), meta: { secao: 'exercicios' } },
+    {
+      path: '/estrategia/:id',
+      name: 'estrutura',
+      component: () => import('./views/EstruturaView.vue'),
+      meta: { secao: 'exercicios' },
+      beforeEnter: async (destino) => {
+        await carregarEstrategia()
+        return buscarEstrutura(destino.params.id as string) ? true : { name: 'estrategia' }
+      },
+    },
+    {
+      path: '/estrategia/:id/:n',
+      name: 'partida-modelo',
+      component: () => import('./views/PartidaModeloView.vue'),
+      meta: { secao: 'exercicios', foco: true },
+      beforeEnter: async (destino) => {
+        await carregarEstrategia()
+        const estrutura = buscarEstrutura(destino.params.id as string)
+        return estrutura?.partidas.some((p) => p.n === Number(destino.params.n)) ? true : { name: 'estrategia' }
+      },
+    },
     { path: '/diagnostico', name: 'diagnostico', component: DiagnosticoView, meta: { secao: 'diagnostico' } },
     { path: '/config', name: 'config', component: ConfigView, meta: { secao: 'config' } },
     { path: '/:resto(.*)', redirect: '/' },

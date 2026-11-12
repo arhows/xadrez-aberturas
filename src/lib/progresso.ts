@@ -5,6 +5,7 @@ import type { Notacao } from './notacao'
 import type { PartidaAnalisada } from './partidas'
 import type { Cartao } from './srs'
 import type { JogoSalvo } from './jogosSalvos'
+import type { ResultadoQuiz } from './estrategia'
 
 export interface Configuracoes {
   notacao: Notacao
@@ -99,6 +100,8 @@ export interface Progresso {
   jogos: Record<string, JogoSalvo>
   /** Exercícios de Fundamentos do xadrez já feitos (id → data ISO da primeira vez). */
   fundamentos: Record<string, string>
+  /** Quiz das partidas-modelo de estratégia ("estrutura/n" → melhor resultado). */
+  estrategia: Record<string, ResultadoQuiz>
   /** Atividade por dia (AAAA-MM-DD), para a sequência de dias e o calendário do painel. */
   atividade: Record<string, Atividade>
   config: Configuracoes
@@ -144,6 +147,7 @@ function progressoVazio(): Progresso {
     relampago: {},
     jogos: {},
     fundamentos: {},
+    estrategia: {},
     repertorio: { capitulos: [], atualizado: '' },
     config: { ...CONFIG_PADRAO },
   }
@@ -174,6 +178,7 @@ export function normalizarProgresso(dados: unknown): Progresso | null {
     relampago: ehObjeto(parcial.relampago) ? parcial.relampago! : {},
     jogos: ehObjeto(parcial.jogos) ? parcial.jogos! : {},
     fundamentos: ehObjeto(parcial.fundamentos) ? parcial.fundamentos! : {},
+    estrategia: ehObjeto(parcial.estrategia) ? parcial.estrategia! : {},
     repertorio:
       ehObjeto(parcial.repertorio) && Array.isArray(parcial.repertorio!.capitulos)
         ? { capitulos: parcial.repertorio!.capitulos, atualizado: String(parcial.repertorio!.atualizado ?? '') }

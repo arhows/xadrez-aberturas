@@ -51,6 +51,14 @@ const primeiraRevisao = revisoes[0]
       </span>
       <span class="botao">{{ feitosFundamentos ? 'Continuar' : 'Começar' }}</span>
     </RouterLink>
+    <RouterLink to="/estrategia" class="fundamentos">
+      <span class="icone" aria-hidden="true">♜</span>
+      <span class="textos">
+        <strong>Estratégia por estruturas</strong>
+        <span class="suave">Planos de cada estrutura de peões (isolado, Carlsbad, Índia do Rei, Francesa…) e 114 partidas-modelo para adivinhar os lances</span>
+      </span>
+      <span class="botao">Estudar</span>
+    </RouterLink>
     <section class="revisao" :class="{ vazia: !primeiraRevisao }">
       <div>
         <strong>Revisão de hoje</strong>

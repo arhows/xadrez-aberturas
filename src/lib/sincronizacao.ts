@@ -1,5 +1,6 @@
 import type { Atividade, ErroAresta, EstadoExercicio, Progresso } from './progresso'
 import { somarDias, type Cartao } from './srs'
+import { juntarEstrategia } from './estrategia'
 import { juntarFundamentos } from './fundamentos'
 import { juntarJogos } from './jogosSalvos'
 
@@ -84,6 +85,7 @@ export function juntarProgresso(local: ProgressoSincronizado, nuvem: ProgressoSi
     atividade: juntarPorChave(nuvem.atividade ?? {}, local.atividade ?? {}, juntarAtividade),
     jogos: juntarJogos(nuvem.jogos ?? {}, local.jogos ?? {}),
     fundamentos: juntarFundamentos(nuvem.fundamentos ?? {}, local.fundamentos ?? {}),
+    estrategia: juntarEstrategia(nuvem.estrategia ?? {}, local.estrategia ?? {}),
     relampago: juntarPorChave(nuvem.relampago ?? {}, local.relampago ?? {}, (a, b) => Math.max(a, b)),
     anotacoes: juntarPorChave(nuvem.anotacoes ?? {}, local.anotacoes ?? {}, (a, b) => (b.atualizado > a.atualizado ? b : a)),
     // A escolha do repertório é uma lista inteira: vale a mudada por último.
