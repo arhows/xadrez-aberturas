@@ -41,6 +41,7 @@ export const filasDeHoje = computed(() =>
       corPorCapitulo: progresso.corPorCapitulo,
       profundidade: progresso.config.profundidade,
       novasPorDia: progresso.config.novasPorDia,
+      repertorio: progresso.repertorio.capitulos,
     },
     dataLocal(),
   ).map((plano) => ({ id: plano.capitulo.capitulo.id, total: plano.fila.length })),

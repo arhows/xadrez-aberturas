@@ -72,5 +72,10 @@ export function juntarProgresso(local: ProgressoSincronizado, nuvem: ProgressoSi
       analisadas: { ...nuvem.partidas.analisadas, ...local.partidas.analisadas },
     },
     atividade: juntarPorChave(nuvem.atividade ?? {}, local.atividade ?? {}, juntarAtividade),
+    // A escolha do repertório é uma lista inteira: vale a mudada por último.
+    repertorio:
+      (nuvem.repertorio?.atualizado ?? '') > (local.repertorio?.atualizado ?? '')
+        ? nuvem.repertorio
+        : (local.repertorio ?? { capitulos: [], atualizado: '' }),
   }
 }

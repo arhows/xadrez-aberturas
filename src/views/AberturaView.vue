@@ -5,11 +5,12 @@ import Avaliacao from '../components/Avaliacao.vue'
 import { caminhoDaArmadilha } from '../lib/arvore'
 import { buscarCapitulo } from '../lib/capitulos'
 import { baixarTexto } from '../lib/download'
-import { linhasDoGrupo } from '../lib/escopo'
+import { corDoCapitulo, linhasDoGrupo, type EscolhaCor } from '../lib/escopo'
 import { familiaDaAbertura } from '../lib/familias'
 import { fmtLance, fmtTexto } from '../lib/formato'
 import { aproveitamento, resumoPorAbertura } from '../lib/partidasRepertorio'
 import { progresso } from '../lib/progresso'
+import { alternarRepertorio, estaNoRepertorio, repertorioEscolhido } from '../lib/repertorio'
 import { exportarPgn } from '../lib/pgn'
 import { filaDoCapitulo, percentual, percentualLinha, revisoesDaLinha } from '../lib/resumoAberturas'
 
@@ -17,6 +18,15 @@ const route = useRoute()
 const capitulo = buscarCapitulo(route.params.cap as string)!
 const id = capitulo.capitulo.id
 const familia = familiaDaAbertura(capitulo.capitulo.base)
+
+const noRepertorio = computed(() => estaNoRepertorio(id))
+/** A mesma cor da tela de Treino: as revisões e linhas novas deste capítulo usam esta escolha. */
+const cor = computed<EscolhaCor>({
+  get: () => corDoCapitulo(capitulo, progresso.corPorCapitulo),
+  set: (valor) => {
+    progresso.corPorCapitulo[id] = valor
+  },
+})
 
 // Suas partidas que seguiram esta abertura (importadas em Minhas partidas).
 const partidas = computed(() =>
@@ -58,6 +68,26 @@ function baixarPgn() {
         <RouterLink class="botao primario" :to="{ name: 'treino', params: { cap: id } }">Treinar</RouterLink>
         <RouterLink class="botao" :to="{ name: 'explorar', params: { cap: id } }">Explorar</RouterLink>
         <button type="button" class="botao" @click="baixarPgn">Exportar PGN</button>
+      </div>
+      <div class="repertorio">
+        <button
+          type="button"
+          class="botao"
+          :class="{ primario: noRepertorio }"
+          :aria-pressed="noRepertorio"
+          @click="alternarRepertorio(id)"
+        >{{ noRepertorio ? '★ No meu repertório' : '☆ Adicionar ao meu repertório' }}</button>
+        <label v-if="noRepertorio" class="cor">
+          Jogo com
+          <select v-model="cor">
+            <option value="w">Brancas</option>
+            <option value="b">Pretas</option>
+            <option value="ambas">Ambas</option>
+          </select>
+        </label>
+        <p v-if="!noRepertorio && repertorioEscolhido" class="suave">
+          Fora do repertório: não entra nas revisões nem nas linhas novas do dia, mas dá para estudar e treinar à vontade.
+        </p>
       </div>
     </header>
 
@@ -148,6 +178,32 @@ function baixarPgn() {
 </template>
 
 <style scoped>
+.repertorio {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-top: 0.75rem;
+}
+.repertorio .suave {
+  flex-basis: 100%;
+  margin: 0;
+}
+.cor {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 14px;
+}
+.cor select {
+  min-height: 40px;
+  padding: 0 0.5rem;
+  border: 1px solid var(--borda-controle);
+  border-radius: var(--raio-md);
+  background: var(--superficie);
+  color: var(--texto);
+  font: inherit;
+}
 .suas-partidas {
   display: grid;
   gap: 0.5rem;

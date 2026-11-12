@@ -124,6 +124,8 @@ export interface EstadoDaRevisao {
   corPorCapitulo: Record<string, EscolhaCor>
   profundidade: Profundidade
   novasPorDia: number
+  /** Aberturas do repertório; vazio ou ausente = todas. As de fora não entram na revisão automática. */
+  repertorio?: string[]
 }
 
 export interface PlanoDeRevisao {
@@ -144,7 +146,13 @@ export function planoDeRevisao(
 ): PlanoDeRevisao[] {
   const { cartoes, notasConferidas } = estado
 
+  const repertorio = new Set(estado.repertorio ?? [])
   const bases = capitulos.map((capitulo) => {
+    if (repertorio.size && !repertorio.has(capitulo.capitulo.id)) {
+      // Fora do repertório: continua treinável à mão, mas sem revisões nem linhas novas.
+      const escolhidos = idsDoEscopo(capitulo, { tipo: 'capitulo' }, estado.profundidade, notasConferidas)
+      return { capitulo, pendentes: [] as UnidadeRevisao[], novas: [] as UnidadeRevisao[], escolhidos }
+    }
     const todos = idsDoEscopo(capitulo, { tipo: 'capitulo' }, 'notas', notasConferidas)
     const { pendentes } = filaDoDia(unidadesDeRevisao(capitulo, todos, ['w', 'b']), cartoes, hoje, 0)
 

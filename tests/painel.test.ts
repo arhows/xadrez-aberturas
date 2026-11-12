@@ -129,3 +129,19 @@ describe('repertório e revisões', () => {
     ])
   })
 })
+
+describe('repertório na sincronização', () => {
+  it('vale a escolha mudada por último, mesmo que tire aberturas', () => {
+    const vazio = () => paraNuvem(normalizarProgresso({ cartoes: {} })!)
+    const celular = vazio()
+    celular.repertorio = { capitulos: ['petrov'], atualizado: '2026-11-11T10:00:00.000Z' }
+    const computador = vazio()
+    computador.repertorio = { capitulos: ['petrov', 'italian'], atualizado: '2026-11-10T10:00:00.000Z' }
+    expect(juntarProgresso(celular, computador).repertorio.capitulos).toEqual(['petrov'])
+    expect(juntarProgresso(computador, celular).repertorio.capitulos).toEqual(['petrov'])
+  })
+
+  it('progresso antigo carrega sem repertório (todas as aberturas contam)', () => {
+    expect(normalizarProgresso({ cartoes: {} })!.repertorio).toEqual({ capitulos: [], atualizado: '' })
+  })
+})

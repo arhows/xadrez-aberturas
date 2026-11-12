@@ -5,10 +5,12 @@ import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
 import { carregarConjuntos, livroDoConjunto, type ConjuntoExercicios } from '../lib/exercicios'
 import { fmtLance } from '../lib/formato'
 import { progresso } from '../lib/progresso'
+import { capitulosDoRepertorio, repertorioEscolhido } from '../lib/repertorio'
 import { filaDoCapitulo, percentual, proximaFila, totalRevisoes } from '../lib/resumoAberturas'
 import { revisoesPendentes } from '../lib/revisaoExercicios'
 
-const capitulos = obterCapitulos()
+// Com repertório escolhido, os totais e a lista mostram só as aberturas dele.
+const capitulos = capitulosDoRepertorio(obterCapitulos())
 const totalLinhas = capitulos.reduce(
   (soma, c) => soma + c.capitulo.linhas.filter((linha) => !c.desativadas.includes(linha.id)).length,
   0,
@@ -153,7 +155,7 @@ const maisErrados = computed(() =>
       </section>
 
       <section class="secao">
-        <h2 class="titulo-secao">Suas aberturas</h2>
+        <h2 class="titulo-secao">{{ repertorioEscolhido ? 'Seu repertório' : 'Suas aberturas' }}</h2>
         <div class="lista">
           <RouterLink
             v-for="a in suasAberturas"

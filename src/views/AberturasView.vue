@@ -5,14 +5,23 @@ import { buscarAberturas } from '../lib/busca'
 import { obterCapitulos, type CapituloCarregado } from '../lib/capitulos'
 import { FAMILIAS, familiaDaAbertura } from '../lib/familias'
 import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
+import { alternarRepertorio, estaNoRepertorio, repertorioEscolhido } from '../lib/repertorio'
 import { filaDoCapitulo, percentual } from '../lib/resumoAberturas'
 import type { Linha } from '../lib/tipos'
 
-/** Famílias do MCO que têm alguma abertura no app, na ordem do livro. */
-const familias = FAMILIAS.map((familia) => ({
-  ...familia,
-  capitulos: obterCapitulos().filter((c) => familiaDaAbertura(c.capitulo.base).id === familia.id),
-})).filter((familia) => familia.capitulos.length)
+/** "Meu repertório" abre por padrão quando a pessoa já escolheu alguma abertura. */
+const aba = ref<'meu' | 'todas'>(repertorioEscolhido.value ? 'meu' : 'todas')
+
+/** Famílias do MCO que têm alguma abertura no app (ou no repertório), na ordem do livro. */
+const familias = computed(() =>
+  FAMILIAS.map((familia) => ({
+    ...familia,
+    capitulos: obterCapitulos().filter(
+      (c) => familiaDaAbertura(c.capitulo.base).id === familia.id && (aba.value === 'todas' || estaNoRepertorio(c.capitulo.id)),
+    ),
+  })).filter((familia) => familia.capitulos.length),
+)
+const totalNoRepertorio = computed(() => obterCapitulos().filter((c) => estaNoRepertorio(c.capitulo.id)).length)
 
 const linhasAtivas = (capitulo: CapituloCarregado) =>
   capitulo.capitulo.linhas.filter((linha) => !capitulo.desativadas.includes(linha.id)).length
@@ -112,10 +121,31 @@ const plural = (n: number, palavra: string) => `${n} ${palavra}${n === 1 ? '' : 
     </template>
 
     <template v-else>
+      <div class="abas" role="tablist" aria-label="Quais aberturas mostrar">
+        <button type="button" role="tab" class="aba" :aria-selected="aba === 'meu'" @click="aba = 'meu'">
+          Meu repertório <span class="suave">{{ totalNoRepertorio }}</span>
+        </button>
+        <button type="button" role="tab" class="aba" :aria-selected="aba === 'todas'" @click="aba = 'todas'">
+          Todas <span class="suave">{{ obterCapitulos().length }}</span>
+        </button>
+      </div>
+      <p v-if="aba === 'meu' && !totalNoRepertorio" class="aviso">
+        Você ainda não escolheu o seu repertório, então todas as aberturas entram nas revisões e linhas novas do dia.
+        Toque na ☆ das aberturas que você joga (em “Todas”) para focar só nelas.
+      </p>
       <section v-for="familia in familias" :key="familia.id" class="familia">
         <h2>{{ familia.nome }} <span class="suave">{{ fmtTexto(familia.lances) }}</span></h2>
         <ul class="cartoes">
-          <li v-for="capitulo in familia.capitulos" :key="capitulo.capitulo.id">
+          <li v-for="capitulo in familia.capitulos" :key="capitulo.capitulo.id" class="com-estrela">
+            <button
+              type="button"
+              class="estrela"
+              :class="{ ativa: estaNoRepertorio(capitulo.capitulo.id) }"
+              :aria-pressed="estaNoRepertorio(capitulo.capitulo.id)"
+              :aria-label="`${estaNoRepertorio(capitulo.capitulo.id) ? 'Tirar do' : 'Pôr no'} meu repertório: ${capitulo.capitulo.nome}`"
+              :title="estaNoRepertorio(capitulo.capitulo.id) ? 'No meu repertório' : 'Adicionar ao meu repertório'"
+              @click="alternarRepertorio(capitulo.capitulo.id)"
+            >{{ estaNoRepertorio(capitulo.capitulo.id) ? '★' : '☆' }}</button>
             <RouterLink class="cartao" :to="{ name: 'abertura', params: { cap: capitulo.capitulo.id } }">
               <strong class="titulo-item">{{ capitulo.capitulo.nome }}</strong>
               <span class="lance suave">{{ fmtTexto(capitulo.capitulo.base) }}</span>
@@ -123,7 +153,7 @@ const plural = (n: number, palavra: string) => `${n} ${palavra}${n === 1 ? '' : 
                 {{ linhasAtivas(capitulo) }} linhas · {{ percentual(capitulo) }}% dominado
               </span>
               <span class="progresso fino"><span class="trilho"><span :style="{ width: `${percentual(capitulo)}%` }"></span></span></span>
-              <span class="rodape">
+              <span v-if="!repertorioEscolhido || estaNoRepertorio(capitulo.capitulo.id)" class="rodape">
                 <span v-if="filaDoCapitulo(capitulo.capitulo.id)" class="selo">{{ filaDoCapitulo(capitulo.capitulo.id) }} PARA HOJE</span>
                 <span v-else class="selo ok">EM DIA</span>
               </span>
@@ -161,6 +191,54 @@ h2 .suave {
 }
 .aviso {
   margin: 0 0 1rem;
+}
+.abas {
+  display: flex;
+  gap: var(--espaco-1);
+  margin: 0 0 1rem;
+  border-bottom: 1px solid var(--borda);
+}
+.aba {
+  min-height: var(--alvo-toque);
+  padding: 0 var(--espaco-3);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  background: none;
+  color: var(--texto-suave);
+  font: 600 15px/20px var(--font-texto);
+  cursor: pointer;
+}
+.aba[aria-selected='true'] {
+  color: var(--texto);
+  border-bottom-color: var(--destaque);
+}
+.com-estrela {
+  position: relative;
+}
+.com-estrela .titulo-item {
+  padding-right: 2rem;
+}
+.estrela {
+  position: absolute;
+  top: var(--espaco-2);
+  right: var(--espaco-2);
+  z-index: 1;
+  width: var(--alvo-toque);
+  height: var(--alvo-toque);
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--texto-suave);
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+}
+.estrela:hover {
+  background: var(--superficie-2);
+}
+.estrela.ativa {
+  color: var(--aviso);
 }
 .familia + .familia {
   margin-top: 2rem;

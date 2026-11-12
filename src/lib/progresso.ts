@@ -67,6 +67,11 @@ export interface Progresso {
     /** Repertório usado na última análise; quando muda, as partidas são analisadas de novo. */
     assinatura?: string
   }
+  /**
+   * Aberturas que a pessoa joga. Vazio = ainda não escolheu, e todas entram na revisão.
+   * `atualizado` (ISO) decide qual aparelho vence na sincronização.
+   */
+  repertorio: { capitulos: string[]; atualizado: string }
   /** Atividade por dia (AAAA-MM-DD), para a sequência de dias e o calendário do painel. */
   atividade: Record<string, Atividade>
   config: Configuracoes
@@ -102,6 +107,7 @@ function progressoVazio(): Progresso {
     ultimoConjunto: null,
     partidas: { lichess: '', chesscom: '', analisadas: {} },
     atividade: {},
+    repertorio: { capitulos: [], atualizado: '' },
     config: { ...CONFIG_PADRAO },
   }
 }
@@ -127,6 +133,10 @@ export function normalizarProgresso(dados: unknown): Progresso | null {
       ...(ehObjeto(parcial.partidas) ? parcial.partidas : {}),
     },
     atividade: ehObjeto(parcial.atividade) ? parcial.atividade! : {},
+    repertorio:
+      ehObjeto(parcial.repertorio) && Array.isArray(parcial.repertorio!.capitulos)
+        ? { capitulos: parcial.repertorio!.capitulos, atualizado: String(parcial.repertorio!.atualizado ?? '') }
+        : { capitulos: [], atualizado: '' },
     config: { ...CONFIG_PADRAO, ...(ehObjeto(parcial.config) ? parcial.config : {}) },
   }
 }

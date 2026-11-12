@@ -156,3 +156,25 @@ describe('plano de revisão com vários capítulos', () => {
     expect(planos[1].fila).toEqual([])
   })
 })
+
+describe('planoDeRevisao com repertório escolhido', () => {
+  const a = capitulo('a', 10)
+  const b = capitulo('b', 10)
+  const vencido = { [idCartao({ capitulo: 'b', linha: 'l0', cor: 'w' })]: cartao({ proxima: '2026-11-01' }) }
+
+  it('sem repertório, todas as aberturas recebem linhas novas', () => {
+    const planos = planoDeRevisao([a, b], estado(), HOJE)
+    expect(planos.every((p) => p.fila.length > 0)).toBe(true)
+  })
+
+  it('as linhas novas do dia vão todas para o repertório', () => {
+    expect(tamanhos(planoDeRevisao([a, b], estado({ repertorio: ['a'] }), HOJE))).toEqual({ a: 5, b: 0 })
+  })
+
+  it('fora do repertório nem as revisões vencidas entram, mas o capítulo continua no plano', () => {
+    const planos = planoDeRevisao([a, b], estado({ cartoes: vencido, repertorio: ['a'] }), HOJE)
+    const deB = planos.find((p) => p.capitulo === b)!
+    expect(deB.fila).toEqual([])
+    expect(deB.ids.length).toBeGreaterThan(0)
+  })
+})

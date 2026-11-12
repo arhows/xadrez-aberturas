@@ -91,6 +91,7 @@ function planos(): PlanoDeRevisao[] {
       corPorCapitulo: progresso.corPorCapitulo,
       profundidade: config.profundidade,
       novasPorDia: config.novasPorDia,
+      repertorio: progresso.repertorio.capitulos,
     },
     dataLocal(),
   )

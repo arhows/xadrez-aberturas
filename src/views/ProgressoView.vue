@@ -17,10 +17,11 @@ import {
   type Estagios,
 } from '../lib/painel'
 import { progresso } from '../lib/progresso'
+import { capitulosDoRepertorio, repertorioEscolhido } from '../lib/repertorio'
 import { dataLocal } from '../lib/srs'
 
 const hoje = dataLocal()
-const capitulos = obterCapitulos()
+const capitulos = capitulosDoRepertorio(obterCapitulos())
 
 // ---------- Constância ----------
 const dias = computed(() => atividadePorDia(progresso.atividade, progresso.cartoes, progresso.cartoesExercicios))
@@ -63,7 +64,9 @@ const pctTexto = (parte: number, todo: number) => `${Math.round(pct(parte, todo)
 
 // ---------- Próximas revisões ----------
 const DIAS_PREVISAO = 14
-const capituloExiste = (id: string) => buscarCapitulo(id.split('/')[0]) !== undefined
+// Só as aberturas que entram na revisão (as do repertório, se houver).
+const idsRevisados = new Set(capitulos.map((c) => c.capitulo.id))
+const capituloExiste = (id: string) => idsRevisados.has(id.split('/')[0])
 const previsao = computed(() => previsaoDeRevisoes(progresso.cartoes, DIAS_PREVISAO, hoje, capituloExiste))
 const maiorPrevisao = computed(() => Math.max(1, ...previsao.value.map((dia) => dia.total)))
 const totalPrevisao = computed(() => previsao.value.reduce((soma, dia) => soma + dia.total, 0))
@@ -148,7 +151,9 @@ const livros = computed(() => {
     <!-- Repertório -->
     <section class="cartao">
       <h2 class="titulo-secao">Repertório</h2>
-      <p class="apoio suave">Colunas de todas as aberturas, nas cores que você treina em cada uma.</p>
+      <p class="apoio suave">
+        Colunas {{ repertorioEscolhido ? 'das aberturas do seu repertório' : 'de todas as aberturas' }}, nas cores que você treina em cada uma.
+      </p>
       <div class="barra-estagios grande" role="img" :aria-label="`${geral.dominadas} dominadas, ${geral.aprendendo} aprendendo, ${geral.novas} novas`">
         <span class="dominadas" :style="{ width: `${pct(geral.dominadas, totalDe(geral))}%` }"></span>
         <span class="aprendendo" :style="{ width: `${pct(geral.aprendendo, totalDe(geral))}%` }"></span>
@@ -220,7 +225,7 @@ const livros = computed(() => {
         </li>
       </ul>
       <p v-if="naoIniciados" class="apoio suave">
-        <RouterLink to="/aberturas">{{ plural(naoIniciados, 'abertura ainda não começada', 'aberturas ainda não começadas') }}</RouterLink>
+        <RouterLink to="/aberturas">{{ plural(naoIniciados, repertorioEscolhido ? 'abertura do repertório ainda não começada' : 'abertura ainda não começada', repertorioEscolhido ? 'aberturas do repertório ainda não começadas' : 'aberturas ainda não começadas') }}</RouterLink>
       </p>
     </section>
 
