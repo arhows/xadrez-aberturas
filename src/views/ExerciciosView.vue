@@ -85,7 +85,7 @@ const primeiraRevisao = revisoes[0]
               ✓ {{ contagem([conjunto]).primeira }} de primeira · {{ contagem([conjunto]).ajuda }} com ajuda
             </span>
           </div>
-          <RouterLink class="botao" :to="{ name: 'exercicio', params: { conjunto: conjunto.id } }">Resolver</RouterLink>
+          <RouterLink class="botao" :to="{ name: conjunto.tipo === 'tatica' ? 'tatica' : 'exercicio', params: { conjunto: conjunto.id } }">Resolver</RouterLink>
         </li>
       </ul>
     </section>

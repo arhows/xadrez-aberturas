@@ -19,6 +19,13 @@ export interface Problema {
   previo?: string
   /** Jogadores e torneio, quando o problema vem de uma partida. */
   partida?: string
+  /** Problemas táticos: a linha inteira depois do `previo` (lances seus e respostas, em SAN). */
+  linha?: string[]
+  /** Dificuldade do problema no lichess. */
+  rating?: number
+  faixa?: 'facil' | 'medio' | 'dificil'
+  /** Id do problema no lichess (lichess.org/training/<id>). */
+  lichess?: string
 }
 
 export interface ConjuntoExercicios {
@@ -29,6 +36,10 @@ export interface ConjuntoExercicios {
   lances: number
   /** Livro de origem, para agrupar os conjuntos; sem ele, vale a fonte sem o capítulo. */
   livro?: string
+  /** 'tatica' = problemas do lichess por tema (tela própria); sem ele, problemas de mate. */
+  tipo?: 'mate' | 'tatica'
+  /** Tema do lichess (fork, pin…), nos conjuntos táticos. */
+  tema?: string
   problemas: Problema[]
 }
 
@@ -48,17 +59,30 @@ export type PecaPromocao = 'q' | 'r' | 'b' | 'n'
 // Os conjuntos são grandes (o Mate em 2 tem mais de 3 mil problemas): carregam só quando
 // uma tela de exercícios abre, fora do pacote inicial do app.
 const arquivos = import.meta.glob<ConjuntoExercicios>('../../data/exercicios/*.json', { import: 'default' })
+/** Táticas por tema (gerado por scripts/taticas/gerar.mjs), na ordem dos temas. */
+const arquivosTaticos = import.meta.glob<ConjuntoExercicios>('../../data/taticas/*.json', { import: 'default' })
+export const ORDEM_DOS_TEMAS = [
+  'peca-desprotegida', 'garfo', 'cravada', 'espeto', 'ataque-descoberto', 'xeque-duplo', 'remocao-do-defensor',
+  'desvio', 'atracao', 'peca-presa', 'mate-do-corredor', 'mate-sufocado', 'peao-avancado', 'lance-intermediario',
+  'interferencia', 'liberacao', 'raio-x', 'lance-silencioso', 'sacrificio', 'zugzwang',
+]
+const posicaoDoTema = (caminho: string) => {
+  const i = ORDEM_DOS_TEMAS.findIndex((tema) => caminho.endsWith(`/${tema}.json`))
+  return i < 0 ? ORDEM_DOS_TEMAS.length : i
+}
 
 let carregando: Promise<ConjuntoExercicios[]> | undefined
 let carregados: ConjuntoExercicios[] = []
 
-/** Carrega todos os conjuntos uma única vez, na ordem dos nomes de arquivo. */
+/** Carrega todos os conjuntos uma única vez: primeiro as táticas por tema, depois os de mate. */
 export function carregarConjuntos(): Promise<ConjuntoExercicios[]> {
-  carregando ??= Promise.all(
-    Object.keys(arquivos)
-      .sort((a, b) => posicaoDoArquivo(a) - posicaoDoArquivo(b) || a.localeCompare(b))
-      .map((caminho) => arquivos[caminho]()),
-  ).then((lista) => (carregados = lista))
+  const taticos = Object.keys(arquivosTaticos)
+    .sort((a, b) => posicaoDoTema(a) - posicaoDoTema(b))
+    .map((caminho) => arquivosTaticos[caminho]())
+  const deMate = Object.keys(arquivos)
+    .sort((a, b) => posicaoDoArquivo(a) - posicaoDoArquivo(b) || a.localeCompare(b))
+    .map((caminho) => arquivos[caminho]())
+  carregando ??= Promise.all([...taticos, ...deMate]).then((lista) => (carregados = lista))
   return carregando
 }
 

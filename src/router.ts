@@ -23,6 +23,7 @@ import EditorView from './views/EditorView.vue'
 import AnalisarView from './views/AnalisarView.vue'
 import PreparacaoView from './views/PreparacaoView.vue'
 import JogadorView from './views/JogadorView.vue'
+import TaticaView from './views/TaticaView.vue'
 import ExerciciosView from './views/ExerciciosView.vue'
 import ExplorarView from './views/ExplorarView.vue'
 import InicioView from './views/InicioView.vue'
@@ -67,7 +68,20 @@ export const router = createRouter({
       meta: { secao: 'exercicios', foco: true },
       beforeEnter: async (destino) => {
         await carregarConjuntos()
-        return buscarConjunto(destino.params.conjunto as string) ? true : { name: 'exercicios' }
+        const conjunto = buscarConjunto(destino.params.conjunto as string)
+        if (!conjunto) return { name: 'exercicios' }
+        // Os conjuntos de táticas têm tela própria (a revisão de hoje chega por aqui também).
+        return conjunto.tipo === 'tatica' ? { name: 'tatica', params: destino.params, query: destino.query } : true
+      },
+    },
+    {
+      path: '/taticas/:conjunto',
+      name: 'tatica',
+      component: TaticaView,
+      meta: { secao: 'exercicios', foco: true },
+      beforeEnter: async (destino) => {
+        await carregarConjuntos()
+        return buscarConjunto(destino.params.conjunto as string)?.tipo === 'tatica' ? true : { name: 'exercicios' }
       },
     },
     { path: '/fundamentos', name: 'fundamentos', component: FundamentosView, meta: { secao: 'exercicios' } },

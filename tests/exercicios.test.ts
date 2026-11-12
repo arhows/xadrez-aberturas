@@ -22,7 +22,9 @@ const problema = (id: string, n: number) => buscarConjunto(id)!.problemas.find((
 
 describe('exercícios', () => {
   it('carrega o Mate em 1 com os 306 problemas, o Mate em 2 e o Mate em 3', () => {
-    expect(conjuntos.map((c) => c.id)).toEqual([
+    // As táticas por tema vêm primeiro; depois os livros de mate.
+    expect(conjuntos.slice(0, 20).every((c) => c.tipo === 'tatica')).toBe(true)
+    expect(conjuntos.filter((c) => c.tipo !== 'tatica').map((c) => c.id)).toEqual([
       'polgar-mate-1',
       'polgar-mate-2',
       'polgar-mate-3',
