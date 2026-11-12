@@ -35,6 +35,7 @@ const router = useRouter()
 const licao = buscarLicao(route.params.licao as string)!
 const indiceLicao = LICOES.indexOf(licao)
 const proximaLicao = LICOES[indiceLicao + 1]
+const licaoAnterior = LICOES[indiceLicao - 1]
 const feitos = computed(() => progresso.fundamentos)
 
 /** Sem número na URL, abre o primeiro exercício ainda não feito da lição. */
@@ -303,6 +304,15 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
           </template>
         </template>
       </div>
+
+      <nav class="navegacao-licoes" aria-label="Outras lições">
+        <RouterLink v-if="licaoAnterior" class="botao" :to="{ name: 'licao', params: { licao: licaoAnterior.id } }">
+          ← {{ licaoAnterior.titulo }}
+        </RouterLink>
+        <RouterLink v-if="proximaLicao" class="botao proxima" :to="{ name: 'licao', params: { licao: proximaLicao.id } }">
+          {{ proximaLicao.titulo }} →
+        </RouterLink>
+      </nav>
     </div>
   </div>
 </template>
@@ -398,6 +408,16 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
+}
+.navegacao-licoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding-top: var(--espaco-3);
+  border-top: 1px solid var(--borda);
+}
+.navegacao-licoes .proxima {
+  margin-left: auto;
 }
 .parabens {
   margin: 0;
