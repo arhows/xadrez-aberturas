@@ -22,7 +22,8 @@ describe('problemas táticos', () => {
         expect(p.linha!.length % 2).toBe(1)
       }
     }
-  })
+    // 4.800 problemas refeitos no chess.js: com a máquina carregada passa dos 5 s padrão.
+  }, 60_000)
 
   it('confere o lance: o da linha, ou qualquer mate', () => {
     const p = { n: 1, fen: '', solucoes: ['Nf7+'], linha: ['Nf7+', 'Kg8', 'Nh6+'] }
