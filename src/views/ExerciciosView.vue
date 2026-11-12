@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { livroDoConjunto, obterConjuntos, type ConjuntoExercicios } from '../lib/exercicios'
+import { feitosNaLicao } from '../lib/fundamentos'
+import { LICOES } from '../lib/licoes'
 import { progresso } from '../lib/progresso'
 import { revisoesPendentes } from '../lib/revisaoExercicios'
 
@@ -26,6 +28,9 @@ function contagem(conjuntos: ConjuntoExercicios[]) {
   return { total, primeira, ajuda, percentual: total ? Math.round(((primeira + ajuda) / total) * 100) : 0 }
 }
 
+const totalFundamentos = LICOES.reduce((soma, l) => soma + l.exercicios.length, 0)
+const feitosFundamentos = LICOES.reduce((soma, l) => soma + feitosNaLicao(l, progresso.fundamentos), 0)
+
 const numero = (n: number) => n.toLocaleString('pt-BR')
 
 const revisoes = revisoesPendentes(obterConjuntos())
@@ -35,6 +40,17 @@ const primeiraRevisao = revisoes[0]
 <template>
   <div class="pagina">
     <h1>Exercícios</h1>
+    <RouterLink to="/fundamentos" class="fundamentos">
+      <span class="icone" aria-hidden="true">♙</span>
+      <span class="textos">
+        <strong>Fundamentos do xadrez</strong>
+        <span class="suave">
+          Aprenda do zero: o tabuleiro, o movimento de cada peça, capturar, defender, xeque e mate ·
+          {{ LICOES.length }} lições · {{ feitosFundamentos }} de {{ totalFundamentos }} exercícios feitos
+        </span>
+      </span>
+      <span class="botao">{{ feitosFundamentos ? 'Continuar' : 'Começar' }}</span>
+    </RouterLink>
     <section class="revisao" :class="{ vazia: !primeiraRevisao }">
       <div>
         <strong>Revisão de hoje</strong>
@@ -79,6 +95,27 @@ const primeiraRevisao = revisoes[0]
 <style scoped>
 h1 {
   margin: 0 0 1rem;
+}
+.fundamentos {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  background: var(--superficie);
+  color: var(--texto);
+  text-decoration: none;
+}
+.fundamentos .icone {
+  font-size: 2rem;
+  line-height: 1;
+}
+.fundamentos .textos {
+  display: grid;
+  flex: 1;
+  min-width: 0;
 }
 .revisao {
   display: flex;

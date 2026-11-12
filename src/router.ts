@@ -16,6 +16,9 @@ import ExercicioView from './views/ExercicioView.vue'
 import PartidasView from './views/PartidasView.vue'
 import ProgressoView from './views/ProgressoView.vue'
 import RelampagoView from './views/RelampagoView.vue'
+import FundamentosView from './views/FundamentosView.vue'
+import LicaoView from './views/LicaoView.vue'
+import { buscarLicao } from './lib/licoes'
 import ExerciciosView from './views/ExerciciosView.vue'
 import ExplorarView from './views/ExplorarView.vue'
 import InicioView from './views/InicioView.vue'
@@ -62,6 +65,14 @@ export const router = createRouter({
         await carregarConjuntos()
         return buscarConjunto(destino.params.conjunto as string) ? true : { name: 'exercicios' }
       },
+    },
+    { path: '/fundamentos', name: 'fundamentos', component: FundamentosView, meta: { secao: 'exercicios' } },
+    {
+      path: '/fundamentos/:licao',
+      name: 'licao',
+      component: LicaoView,
+      meta: { secao: 'exercicios', foco: true },
+      beforeEnter: (destino) => (buscarLicao(destino.params.licao as string) ? true : { name: 'fundamentos' }),
     },
     { path: '/diagnostico', name: 'diagnostico', component: DiagnosticoView, meta: { secao: 'diagnostico' } },
     { path: '/config', name: 'config', component: ConfigView, meta: { secao: 'config' } },

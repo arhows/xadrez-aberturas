@@ -40,8 +40,15 @@ const props = withDefaults(
     animacao?: number
     /** Sinal de avaliação no canto da casa de destino do lance. */
     selo?: SeloCasa | null
+    /**
+     * Lances permitidos por casa de origem, no lugar dos lances legais (lições de Fundamentos,
+     * em que as posições não têm reis). Com eles, o xeque não é conferido.
+     */
+    destinos?: Map<string, string[]> | null
+    /** Estrelas para pegar, desenhadas no meio das casas. */
+    estrelas?: string[]
   }>(),
-  { orientacao: 'white', ultimoLance: null, formas: () => [], jogavel: false, capturadas: true, avaliacao: undefined, animacao: undefined, selo: null },
+  { orientacao: 'white', ultimoLance: null, formas: () => [], jogavel: false, capturadas: true, avaliacao: undefined, animacao: undefined, selo: null, destinos: null, estrelas: () => [] },
 )
 
 const posicaoDoSelo = computed(() => (props.selo ? cantoDaCasa(props.selo.casa, props.orientacao) : null))
@@ -60,7 +67,12 @@ const rotuloBarra = computed(() => {
   return Math.abs(props.avaliacao / 100).toFixed(1).replace('.', ',')
 })
 
-const emit = defineEmits<{ lance: [de: string, para: string] }>()
+const emit = defineEmits<{ lance: [de: string, para: string]; casa: [casa: string] }>()
+
+const posicaoDaCasa = (casa: string) => {
+  const c = cantoDaCasa(casa, props.orientacao)
+  return { left: `${c.esquerda - 12.5}%`, top: `${c.topo}%` }
+}
 
 const elemento = ref<HTMLElement>()
 let api: Api | undefined
@@ -78,6 +90,16 @@ function pinceis() {
   }
 }
 
+/** Posições sem reis (lições de Fundamentos) não são válidas para o chess.js: sem xeque. */
+function xequeNaPosicao(): boolean {
+  if (props.destinos) return false
+  try {
+    return estaEmXeque(props.fen)
+  } catch {
+    return false
+  }
+}
+
 function configuracao(): Config {
   const vez = corDaPosicao(props.fen) === 'w' ? 'white' : 'black'
   return {
@@ -85,12 +107,12 @@ function configuracao(): Config {
     orientation: props.orientacao,
     turnColor: vez,
     lastMove: props.ultimoLance ? (props.ultimoLance as Key[]) : undefined,
-    check: estaEmXeque(props.fen),
+    check: xequeNaPosicao(),
     animation: { enabled: (props.animacao ?? progresso.config.animacaoMs) > 0, duration: props.animacao ?? progresso.config.animacaoMs },
     movable: {
       free: false,
       color: props.jogavel ? vez : undefined,
-      dests: props.jogavel ? (destinosLegais(props.fen) as Map<Key, Key[]>) : new Map(),
+      dests: !props.jogavel ? new Map() : ((props.destinos ?? destinosLegais(props.fen)) as Map<Key, Key[]>),
       showDests: true,
       events: { after: (de, para) => emit('lance', de, para) },
     },
@@ -98,6 +120,7 @@ function configuracao(): Config {
     // As coordenadas ficam fora do tabuleiro (ver template), para não ficarem sob as peças.
     coordinates: false,
     drawable: { enabled: false, visible: true, brushes: pinceis() },
+    events: { select: (casa) => emit('casa', casa) },
   }
 }
 
@@ -134,7 +157,7 @@ onBeforeUnmount(() => {
   api?.destroy()
 })
 
-watch(() => [props.fen, props.orientacao, props.ultimoLance, props.jogavel], sincronizar)
+watch(() => [props.fen, props.orientacao, props.ultimoLance, props.jogavel, props.destinos], sincronizar)
 watch(() => props.formas, desenhar)
 
 // Trocou o tema (em Configurações ou no sistema): relê as cores das setas.
@@ -169,6 +192,9 @@ onBeforeUnmount(() => temaEscuro.removeEventListener('change', trocarPinceis))
       </div>
       <div class="moldura">
         <div ref="elemento" class="tabuleiro"></div>
+        <span v-for="estrela in estrelas" :key="estrela" class="estrela-casa" :style="posicaoDaCasa(estrela)" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z" /></svg>
+        </span>
         <span
           v-if="selo && posicaoDoSelo"
           class="selo-casa"
@@ -193,6 +219,23 @@ onBeforeUnmount(() => temaEscuro.removeEventListener('change', trocarPinceis))
 </template>
 
 <style scoped>
+.estrela-casa {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 12.5%;
+  height: 12.5%;
+  pointer-events: none;
+}
+.estrela-casa svg {
+  width: 62%;
+  height: 62%;
+  fill: #f2c230;
+  stroke: #8a6a00;
+  stroke-width: 1.2;
+  filter: drop-shadow(0 1px 1px rgb(0 0 0 / 35%));
+}
 .grade {
   display: grid;
   grid-template-columns: 1rem minmax(0, 1fr);

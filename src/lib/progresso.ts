@@ -97,6 +97,8 @@ export interface Progresso {
   relampago: Record<string, number>
   /** Partidas jogadas no app (modo Partida do Jogar), para analisar depois. */
   jogos: Record<string, JogoSalvo>
+  /** Exercícios de Fundamentos do xadrez já feitos (id → data ISO da primeira vez). */
+  fundamentos: Record<string, string>
   /** Atividade por dia (AAAA-MM-DD), para a sequência de dias e o calendário do painel. */
   atividade: Record<string, Atividade>
   config: Configuracoes
@@ -141,6 +143,7 @@ function progressoVazio(): Progresso {
     anotacoes: {},
     relampago: {},
     jogos: {},
+    fundamentos: {},
     repertorio: { capitulos: [], atualizado: '' },
     config: { ...CONFIG_PADRAO },
   }
@@ -170,6 +173,7 @@ export function normalizarProgresso(dados: unknown): Progresso | null {
     anotacoes: ehObjeto(parcial.anotacoes) ? parcial.anotacoes! : {},
     relampago: ehObjeto(parcial.relampago) ? parcial.relampago! : {},
     jogos: ehObjeto(parcial.jogos) ? parcial.jogos! : {},
+    fundamentos: ehObjeto(parcial.fundamentos) ? parcial.fundamentos! : {},
     repertorio:
       ehObjeto(parcial.repertorio) && Array.isArray(parcial.repertorio!.capitulos)
         ? { capitulos: parcial.repertorio!.capitulos, atualizado: String(parcial.repertorio!.atualizado ?? '') }
