@@ -22,6 +22,7 @@ import { fmtLance, fmtTexto } from '../lib/formato'
 import { carregarMotor, type DadosMotor } from '../lib/motor'
 import { somarAtividade } from '../lib/painel'
 import { chaveDaNota, lerNota } from '../lib/anotacoes'
+import { marcasDoCapitulo } from '../lib/qualidade'
 import { progresso } from '../lib/progresso'
 import { tocar } from '../lib/som'
 import {
@@ -51,6 +52,10 @@ const capitulo = buscarCapitulo(route.params.cap as string)!
 const { arvore } = capitulo
 const idCapitulo = capitulo.capitulo.id
 const config = progresso.config
+
+/** Marca do MCO no lance, como "7...Nf6!?" no retorno do Treino. */
+const marcas = marcasDoCapitulo(capitulo)
+const comMarca = (ply: number, aresta: Aresta) => `${fmtLance(ply, aresta.san)}${marcas.get(aresta.id) ?? ''}`
 
 const corEscolhida = computed<EscolhaCor>({
   get: () => corDoCapitulo(capitulo, progresso.corPorCapitulo),
@@ -316,7 +321,7 @@ function aoJogar(de: string, para: string) {
     nivelPista.value = 3
     aviso.value = {
       tipo: 'errado',
-      lance: fmtLance(plyDaJogada.value, certo.san),
+      lance: comMarca(plyDaJogada.value, certo),
       texto: dicaVisivel('errado') ? certo.dica : null,
       nota: lerNota(chaveDaNota(idCapitulo, certo.id)),
     }
@@ -338,7 +343,7 @@ function aoJogar(de: string, para: string) {
   const mostrarDica = (dicaVisivel('certo') && !!aceito.dica) || !!nota
   aviso.value = {
     tipo: 'certo',
-    lance: fmtLance(ply, aceito.san),
+    lance: comMarca(ply, aceito),
     texto: dicaVisivel('certo') ? aceito.dica : null,
     fechavel: mostrarDica,
     nota,

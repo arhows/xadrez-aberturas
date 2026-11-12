@@ -8,6 +8,9 @@ import CartaoDica from '../components/CartaoDica.vue'
 import HistoricoLances from '../components/HistoricoLances.vue'
 import LinhaMotor from '../components/LinhaMotor.vue'
 import MinhaNota from '../components/MinhaNota.vue'
+import LegendaQualidade from '../components/LegendaQualidade.vue'
+import SeloQualidade from '../components/SeloQualidade.vue'
+import { marcasDoCapitulo, qualidadeDoMotor } from '../lib/qualidade'
 import { chaveDaNota } from '../lib/anotacoes'
 import PlanoMeioJogo from '../components/PlanoMeioJogo.vue'
 import TaticasDoTabuleiro from '../components/TaticasDoTabuleiro.vue'
@@ -80,6 +83,10 @@ function aoJogar(de: string, para: string) {
   revelado.value = true
   tabuleiro.value?.sincronizar()
 }
+
+// Marca do MCO de cada lance da linha (também aparece no histórico, como no livro).
+const marcas = marcasDoCapitulo(capitulo)
+const sansComMarca = arestas.map((aresta) => `${aresta.san}${marcas.get(aresta.id) ?? ''}`)
 
 const formasTatica = ref<Forma[]>([])
 const xeque = computed(() => xequeDaPosicao(fen.value, ultimoLance.value))
@@ -185,7 +192,7 @@ function trocarLinha(evento: Event) {
 
       <!-- Adivinhando, o histórico só mostra até o lance atual, para não entregar os próximos. -->
       <HistoricoLances
-        :lances="(progresso.config.adivinhar ? lances.slice(0, ply + (revelado ? 1 : 0)) : lances).map((l) => l.san)"
+        :lances="progresso.config.adivinhar ? sansComMarca.slice(0, ply + (revelado ? 1 : 0)) : sansComMarca"
         :atual="ply"
         clicavel
         @ir="ply = $event"
@@ -193,8 +200,13 @@ function trocarLinha(evento: Event) {
 
       <CartaoDica
         v-if="lanceAtual"
-        :lance="fmtLance(lanceAtual.ply, lanceAtual.san)"
+        :lance="`${fmtLance(lanceAtual.ply, lanceAtual.san)}${arestaAtual ? (marcas.get(arestaAtual.id) ?? '') : ''}`"
         :texto="dica"
+      />
+      <SeloQualidade
+        v-if="arestaAtual"
+        :marca="marcas.get(arestaAtual.id) ?? null"
+        :motor="qualidadeDoMotor(arestaAtual, dadosMotor?.posicoes)"
       />
       <MinhaNota
         v-if="lanceAtual && arestaAtual"
@@ -212,6 +224,8 @@ function trocarLinha(evento: Event) {
         :lances-do-livro="proximoDoLivro ? [proximoDoLivro.san] : []"
         @formas="formasTatica = $event"
       />
+
+      <LegendaQualidade />
 
       <CartaoDica v-if="noFim" tipo="nota" class="fim">
         <strong>Fim da linha</strong>

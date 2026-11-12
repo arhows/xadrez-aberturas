@@ -8,6 +8,9 @@ import AvisoXeque from '../components/AvisoXeque.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import ExploradorLichess from '../components/ExploradorLichess.vue'
 import MinhaNota from '../components/MinhaNota.vue'
+import LegendaQualidade from '../components/LegendaQualidade.vue'
+import SeloQualidade from '../components/SeloQualidade.vue'
+import { marcasDoCapitulo, qualidadeDoMotor } from '../lib/qualidade'
 import { chaveDaNota } from '../lib/anotacoes'
 import HistoricoLances from '../components/HistoricoLances.vue'
 import LinhaMotor from '../components/LinhaMotor.vue'
@@ -179,6 +182,11 @@ function voltar() {
   if (foraDoLivro.value) fora.value = fora.value.slice(0, -1)
   else caminho.value = caminho.value.slice(0, -1)
 }
+
+// Marca do MCO e opinião do Stockfish sobre cada lance do livro.
+const marcas = marcasDoCapitulo(capitulo)
+const marcaDe = (aresta: Aresta) => marcas.get(aresta.id) ?? null
+const motorDe = (aresta: Aresta) => qualidadeDoMotor(aresta, dadosMotor.value?.posicoes)
 
 const avisoCompartilhar = ref('')
 async function compartilhar() {
@@ -356,10 +364,11 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
       </CartaoDica>
       <CartaoDica
         v-else-if="ultima"
-        :lance="fmtLance(caminho.length, ultima.san)"
+        :lance="`${fmtLance(caminho.length, ultima.san)}${marcaDe(ultima) ?? ''}`"
         :texto="ultima.dica"
       />
       <CartaoDica v-else texto="Escolha um lance na lista, nas setas ou movendo a peça no tabuleiro." />
+      <SeloQualidade v-if="ultima" :marca="marcaDe(ultima)" :motor="motorDe(ultima)" />
       <MinhaNota
         v-if="ultima"
         :chave="chaveDaNota(capitulo.capitulo.id, ultima.id)"
@@ -416,7 +425,7 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
             :class="{ livro: aresta === principal }"
             @click="selecionar([...caminho, aresta])"
           >
-            {{ fmtSan(aresta.san) }}
+            {{ fmtSan(aresta.san) }}<strong v-if="marcaDe(aresta)" class="marca-lance">{{ marcaDe(aresta) }}</strong>
             <small>{{ aresta.linhas.length }}</small>
           </button>
         </div>
@@ -444,6 +453,8 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
         <p class="apoio-partidas">Verde = lance do livro. A porcentagem é o seu aproveitamento nessas partidas.</p>
       </section>
 
+      <LegendaQualidade />
+
       <ExploradorLichess
         v-show="!escondido"
         :fen="fen"
@@ -467,6 +478,10 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
 </template>
 
 <style scoped>
+.marca-lance {
+  margin-left: 1px;
+  font-weight: 700;
+}
 .aviso-compartilhar {
   color: var(--texto-suave);
   font-size: 14px;
