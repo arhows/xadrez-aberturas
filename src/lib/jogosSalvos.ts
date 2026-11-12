@@ -16,6 +16,8 @@ export interface JogoSalvo {
   lances: string
   /** Quantos meios-lances eram a posição de partida (vinda do Treino ou do Explorar). */
   inicio: number
+  /** Posição de partida montada no editor; sem ela, a posição inicial. */
+  fen?: string
   adversario: 'motor' | 'amigo'
   nivel?: number
   /** Cor da pessoa contra o computador. */

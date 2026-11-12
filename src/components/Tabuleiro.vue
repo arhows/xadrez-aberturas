@@ -47,8 +47,13 @@ const props = withDefaults(
     destinos?: Map<string, string[]> | null
     /** Estrelas para pegar, desenhadas no meio das casas. */
     estrelas?: string[]
+    /**
+     * Editor de posição: as peças das duas cores se arrastam para qualquer casa, e soltar fora
+     * do tabuleiro tira a peça. Cada mudança sai no evento `mudou`.
+     */
+    editavel?: boolean
   }>(),
-  { orientacao: 'white', ultimoLance: null, formas: () => [], jogavel: false, capturadas: true, avaliacao: undefined, animacao: undefined, selo: null, destinos: null, estrelas: () => [] },
+  { orientacao: 'white', ultimoLance: null, formas: () => [], jogavel: false, capturadas: true, avaliacao: undefined, animacao: undefined, selo: null, destinos: null, estrelas: () => [], editavel: false },
 )
 
 const posicaoDoSelo = computed(() => (props.selo ? cantoDaCasa(props.selo.casa, props.orientacao) : null))
@@ -67,7 +72,7 @@ const rotuloBarra = computed(() => {
   return Math.abs(props.avaliacao / 100).toFixed(1).replace('.', ',')
 })
 
-const emit = defineEmits<{ lance: [de: string, para: string]; casa: [casa: string] }>()
+const emit = defineEmits<{ lance: [de: string, para: string]; casa: [casa: string]; mudou: [disposicao: string] }>()
 
 const posicaoDaCasa = (casa: string) => {
   const c = cantoDaCasa(casa, props.orientacao)
@@ -109,18 +114,26 @@ function configuracao(): Config {
     lastMove: props.ultimoLance ? (props.ultimoLance as Key[]) : undefined,
     check: xequeNaPosicao(),
     animation: { enabled: (props.animacao ?? progresso.config.animacaoMs) > 0, duration: props.animacao ?? progresso.config.animacaoMs },
-    movable: {
+    movable: props.editavel
+      ? { free: true, color: 'both', dests: undefined, showDests: false, events: {} }
+      : {
       free: false,
       color: props.jogavel ? vez : undefined,
       dests: !props.jogavel ? new Map() : ((props.destinos ?? destinosLegais(props.fen)) as Map<Key, Key[]>),
       showDests: true,
       events: { after: (de, para) => emit('lance', de, para) },
     },
+    draggable: { deleteOnDropOff: props.editavel },
     premovable: { enabled: false },
     // As coordenadas ficam fora do tabuleiro (ver template), para não ficarem sob as peças.
     coordinates: false,
     drawable: { enabled: false, visible: true, brushes: pinceis() },
-    events: { select: (casa) => emit('casa', casa) },
+    events: {
+      select: (casa) => emit('casa', casa),
+      change: () => {
+        if (props.editavel && api) emit('mudou', api.getFen())
+      },
+    },
   }
 }
 
@@ -157,7 +170,7 @@ onBeforeUnmount(() => {
   api?.destroy()
 })
 
-watch(() => [props.fen, props.orientacao, props.ultimoLance, props.jogavel, props.destinos], sincronizar)
+watch(() => [props.fen, props.orientacao, props.ultimoLance, props.jogavel, props.destinos, props.editavel], sincronizar)
 watch(() => props.formas, desenhar)
 
 // Trocou o tema (em Configurações ou no sistema): relê as cores das setas.

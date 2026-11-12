@@ -103,7 +103,7 @@ function exportarJogo(j: JogoSalvo) {
   const outro = j.adversario === 'amigo' ? 'Amigo' : nomeDoAdversario(j)
   const brancas = j.adversario === 'amigo' ? 'Brancas' : j.cor === 'w' ? voce : outro
   const pretas = j.adversario === 'amigo' ? 'Pretas' : j.cor === 'b' ? voce : outro
-  baixarTexto(`partida-${j.data.slice(0, 10)}.pgn`, pgnDoJogo(j.lances.split(' '), { brancas, pretas, resultado: j.resultado, data: j.data.slice(0, 10) }), 'application/x-chess-pgn')
+  baixarTexto(`partida-${j.data.slice(0, 10)}.pgn`, pgnDoJogo(j.lances.split(' '), { brancas, pretas, resultado: j.resultado, data: j.data.slice(0, 10) }, j.fen), 'application/x-chess-pgn')
 }
 /** Apagar pede um segundo toque (sem janela de confirmação do navegador). */
 function apagarJogo(id: string) {
@@ -182,7 +182,7 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
           <div class="acoes-jogo">
             <RouterLink
               class="botao"
-              :to="{ name: 'analise', query: { c: j.lances, cor: j.cor, titulo: `${textoDoResultado(j)} ${j.adversario === 'amigo' ? 'contra amigo' : `contra ${nomeDoAdversario(j)}`}`, volta: '/partidas' } }"
+              :to="{ name: 'analise', query: { c: j.lances, fen: j.fen, cor: j.cor, titulo: `${textoDoResultado(j)} ${j.adversario === 'amigo' ? 'contra amigo' : `contra ${nomeDoAdversario(j)}`}`, volta: '/partidas' } }"
             >Analisar</RouterLink>
             <button type="button" class="botao" @click="exportarJogo(j)">PGN</button>
             <button type="button" class="botao fantasma" :class="{ perigo: confirmandoApagar === j.id }" @click="apagarJogo(j.id)">

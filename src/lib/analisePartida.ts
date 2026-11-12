@@ -30,8 +30,8 @@ export const ROTULO_CLASSE: Record<Classe, string> = {
 export const SIMBOLO_CLASSE: Record<Classe, string> = { imprecisao: '?!', erro: '?', grave: '??' }
 
 /** Posição antes do 1º lance e depois de cada lance; fim de jogo já tem o valor certo. */
-export function posicoesDaPartida(sans: string[]): { fen: string; valorFixo?: number }[] {
-  const jogo = new Chess()
+export function posicoesDaPartida(sans: string[], fenInicial?: string): { fen: string; valorFixo?: number }[] {
+  const jogo = fenInicial ? new Chess(fenInicial) : new Chess()
   const posicao = () => {
     const fen = jogo.fen()
     if (jogo.isCheckmate()) return { fen, valorFixo: jogo.turn() === 'w' ? -20000 : 20000 }
@@ -71,11 +71,13 @@ export function analisarLances(
   sans: string[],
   valores: (number | null)[],
   melhores: (string | null)[] = [],
+  fenInicial?: string,
 ): { chances: (number | null)[]; lances: LanceAnalisado[] } {
   const chances = valores.map((v) => (v === null || v === undefined ? null : chanceDasBrancas(v)))
-  const posicoes = melhores.length ? posicoesDaPartida(sans) : []
+  const posicoes = melhores.length ? posicoesDaPartida(sans, fenInicial) : []
+  const primeira = fenInicial?.split(' ')[1] === 'b' ? 'b' : 'w'
   const lances = sans.map((san, i): LanceAnalisado => {
-    const cor = i % 2 === 0 ? 'w' : 'b'
+    const cor = (i % 2 === 0) === (primeira === 'w') ? 'w' : 'b'
     const antes = chances[i]
     const depois = chances[i + 1]
     const perda = antes == null || depois == null ? 0 : Math.max(0, cor === 'w' ? antes - depois : depois - antes)

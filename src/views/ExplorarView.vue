@@ -334,6 +334,7 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
           class="botao"
           :to="{ name: 'jogar', query: { c: [...caminho.map((a) => a.san), ...fora.map((l) => l.san)].join(' '), cap: capitulo.capitulo.id } }"
         >Jogar daqui</RouterLink>
+        <RouterLink class="botao" :to="{ name: 'editor', query: { fen } }" title="Abrir esta posição no editor">Editar posição</RouterLink>
         <button type="button" class="botao" title="Compartilhar o link desta posição" @click="compartilhar">Compartilhar</button>
         <span v-if="avisoCompartilhar" class="aviso-compartilhar" role="status">{{ avisoCompartilhar }}</span>
         <label class="marcar">

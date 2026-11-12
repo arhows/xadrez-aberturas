@@ -65,6 +65,7 @@ const maisErrados = computed(() =>
       <span class="atalhos">
         <RouterLink class="botao fantasma" to="/relampago">Relâmpago</RouterLink>
         <RouterLink class="botao fantasma" to="/jogar">Jogar</RouterLink>
+        <RouterLink class="botao fantasma" to="/editor">Editor de posição</RouterLink>
         <RouterLink class="botao fantasma" to="/progresso">Ver progresso</RouterLink>
       </span>
     </div>

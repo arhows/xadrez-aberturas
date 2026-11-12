@@ -11,7 +11,7 @@ import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
 import { baixarTexto } from '../lib/download'
 import { ehPromocao, type PecaPromocao } from '../lib/exercicios'
 import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
-import { jogoDosLances, pgnDoJogo, situacaoDoJogo } from '../lib/jogo'
+import { jogoDosLances, lancesAntesDoFen, pgnDoJogo, situacaoDoJogo } from '../lib/jogo'
 import { separarLances, type Cor } from '../lib/lances'
 import { progresso } from '../lib/progresso'
 import { novoIdDeJogo, salvarJogo } from '../lib/jogosSalvos'
@@ -24,8 +24,22 @@ import { dataLocal } from '../lib/srs'
 const route = useRoute()
 const escolhas = progresso.config.jogo
 
+/** Posição montada no Editor de posição (FEN); a partida começa dela. */
+const fenInicio = (() => {
+  const pedido = typeof route.query.fen === 'string' ? route.query.fen : ''
+  if (!pedido) return undefined
+  try {
+    return new Chess(pedido).fen()
+  } catch {
+    return undefined
+  }
+})()
+/** Meios-lances antes da posição do editor, para numerar os lances. */
+const antes = lancesAntesDoFen(fenInicio)
+
 /** Lances até a posição de partida (do Treino ou do Explorar); vazio = posição inicial. */
 const inicio = (() => {
+  if (fenInicio) return []
   const pedidos = separarLances(String(route.query.c ?? ''))
   try {
     jogoDosLances(pedidos)
@@ -158,7 +172,9 @@ function valorDoFim(fenPosicao: string): number | null {
 
 async function avaliarLance(ply: number, fenAntes: string, fenDepois: string, san: string) {
   qualidades.value = { ...qualidades.value, [ply]: null }
-  const { marca, noLivro } = lanceNoLivro(sans.value.slice(0, ply), obterCapitulos(), capitulo)
+  const { marca, noLivro } = fenInicio
+    ? { marca: null, noLivro: false }
+    : lanceNoLivro(sans.value.slice(0, ply), obterCapitulos(), capitulo)
   try {
     const antes = await avaliar(fenAntes)
     const depois = valorDoFim(fenDepois) ?? (await avaliar(fenDepois)).cp
@@ -191,7 +207,7 @@ async function pedirDica() {
 
 const contraMotor = computed(() => escolhas.adversario === 'motor')
 const nivel = computed(() => nivelPorNumero(escolhas.nivel))
-const jogo = computed(() => jogoDosLances(sans.value))
+const jogo = computed(() => jogoDosLances(sans.value, fenInicio))
 const fen = computed(() => jogo.value.fen())
 const situacao = computed(() => situacaoDoJogo(jogo.value))
 const vez = computed<Cor>(() => jogo.value.turn())
@@ -234,7 +250,7 @@ function comecar() {
   pararComputador()
   pensando.value = false
   minhaCor.value = escolhas.cor === 'sorteio' ? (Math.random() < 0.5 ? 'w' : 'b') : escolhas.cor
-  orientacaoAmigo.value = jogoDosLances(inicio).turn() === 'b' ? 'black' : 'white'
+  orientacaoAmigo.value = jogoDosLances(inicio, fenInicio).turn() === 'b' ? 'black' : 'white'
   sans.value = [...inicio]
   abandono.value = null
   erroMotor.value = null
@@ -254,7 +270,7 @@ function comecar() {
 }
 
 function fazer(lance: LanceUci): boolean {
-  const copia = jogoDosLances(sans.value)
+  const copia = jogoDosLances(sans.value, fenInicio)
   const quemJoga = copia.turn()
   try {
     const feito = copia.move(lance)
@@ -344,7 +360,7 @@ function desfazer() {
   if (lista.length <= inicio.length) return
   lista.pop()
   if (contraMotor.value) {
-    while (lista.length > inicio.length && jogoDosLances(lista).turn() !== minhaCor.value) lista.pop()
+    while (lista.length > inicio.length && jogoDosLances(lista, fenInicio).turn() !== minhaCor.value) lista.pop()
     // Antes do primeiro lance seu, o computador joga de novo.
   }
   sans.value = lista
@@ -402,6 +418,7 @@ watch(fase, (agora) => {
     data: new Date().toISOString(),
     lances: sans.value.join(' '),
     inicio: inicio.length,
+    fen: fenInicio,
     adversario: escolhas.adversario,
     nivel: contraMotor.value ? nivel.value.nivel : undefined,
     cor: contraMotor.value ? minhaCor.value : undefined,
@@ -420,7 +437,7 @@ function exportarPgn() {
   const pretas = !contraMotor.value ? 'Pretas' : minhaCor.value === 'b' ? voce : outro
   baixarTexto(
     `partida-${dataLocal()}.pgn`,
-    pgnDoJogo(sans.value, { brancas, pretas, resultado: resultado.value, data: dataLocal() }),
+    pgnDoJogo(sans.value, { brancas, pretas, resultado: resultado.value, data: dataLocal() }, fenInicio),
     'application/x-chess-pgn',
   )
 }
@@ -437,6 +454,7 @@ onBeforeUnmount(() => {
       ‹ {{ capitulo ? fmtTexto(capitulo.capitulo.nome) : 'Início' }}
     </RouterLink>
     <h1 class="titulo-pagina">Jogar</h1>
+    <p v-if="fenInicio" class="suave">A partida começa na posição montada no editor.</p>
     <p v-if="inicio.length" class="suave">
       A partida começa depois de <span class="lance">{{ textoInicio }}</span>.
     </p>
@@ -505,6 +523,7 @@ onBeforeUnmount(() => {
         :ultimo-lance="ultimoLance"
         :formas="formas"
         :animacao="animacaoTabuleiro"
+        :capturadas="!fenInicio"
         :selo="seloCasa"
         :jogavel="jogavel"
         @lance="aoJogar"
@@ -545,12 +564,12 @@ onBeforeUnmount(() => {
       </div>
 
       <div v-if="treinoAtivo && ultimaAvaliada" class="avaliacao-lance">
-        <span class="lance">{{ fmtLance(ultimaAvaliada.ply, ultimaAvaliada.san) }}</span>
+        <span class="lance">{{ fmtLance(antes + ultimaAvaliada.ply, ultimaAvaliada.san) }}</span>
         <span v-if="!ultimaAvaliada.qualidade" class="suave">avaliando…</span>
         <SeloQualidade v-else :marca="ultimaAvaliada.qualidade.marca" :motor="ultimaAvaliada.qualidade.motor" />
       </div>
 
-      <HistoricoLances :lances="treinoAtivo ? sansMarcados : sans" :atual="sans.length" />
+      <HistoricoLances :lances="treinoAtivo ? sansMarcados : sans" :atual="sans.length" :antes="antes" />
 
       <div class="acoes">
         <template v-if="fase === 'jogando'">
@@ -570,7 +589,7 @@ onBeforeUnmount(() => {
           <RouterLink
             v-if="sans.length > inicio.length"
             class="botao"
-            :to="{ name: 'analise', query: { c: sans.join(' '), cor: contraMotor ? minhaCor : undefined, titulo: 'Análise da partida', volta: '/jogar' } }"
+            :to="{ name: 'analise', query: { c: sans.join(' '), fen: fenInicio, cor: contraMotor ? minhaCor : undefined, titulo: 'Análise da partida', volta: '/jogar' } }"
           >Analisar partida</RouterLink>
           <button type="button" class="botao" @click="exportarPgn">Exportar PGN</button>
           <RouterLink

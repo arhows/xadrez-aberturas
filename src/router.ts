@@ -19,6 +19,8 @@ import RelampagoView from './views/RelampagoView.vue'
 import FundamentosView from './views/FundamentosView.vue'
 import LicaoView from './views/LicaoView.vue'
 import { buscarLicao } from './lib/licoes'
+import EditorView from './views/EditorView.vue'
+import AnalisarView from './views/AnalisarView.vue'
 import ExerciciosView from './views/ExerciciosView.vue'
 import ExplorarView from './views/ExplorarView.vue'
 import InicioView from './views/InicioView.vue'
@@ -74,6 +76,8 @@ export const router = createRouter({
       meta: { secao: 'exercicios', foco: true },
       beforeEnter: (destino) => (buscarLicao(destino.params.licao as string) ? true : { name: 'fundamentos' }),
     },
+    { path: '/editor', name: 'editor', component: EditorView, meta: { secao: 'inicio' } },
+    { path: '/analisar', name: 'analisar', component: AnalisarView, meta: { secao: 'inicio' } },
     { path: '/diagnostico', name: 'diagnostico', component: DiagnosticoView, meta: { secao: 'diagnostico' } },
     { path: '/config', name: 'config', component: ConfigView, meta: { secao: 'config' } },
     { path: '/:resto(.*)', redirect: '/' },

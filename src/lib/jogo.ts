@@ -22,15 +22,31 @@ export function situacaoDoJogo(jogo: Chess): Situacao {
   return { fim: false, resultado: '*', texto: jogo.inCheck() ? `Xeque! Vez das ${vez}.` : `Vez das ${vez}.` }
 }
 
-/** Reconstrói a partida a partir da posição inicial e dos lances em SAN. */
-export function jogoDosLances(sans: string[]): Chess {
-  const jogo = new Chess()
+export const FEN_INICIAL = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
+
+/**
+ * Meios-lances "antes" de uma posição pelo FEN (número do lance e vez), para numerar os lances
+ * de uma partida que começa no meio: pretas no lance 12 = 23.
+ */
+export function lancesAntesDoFen(fen?: string): number {
+  if (!fen) return 0
+  const [, vez, , , , numero] = fen.split(' ')
+  return ((Number(numero) || 1) - 1) * 2 + (vez === 'b' ? 1 : 0)
+}
+
+/** Reconstrói a partida a partir da posição inicial (ou de `fen`) e dos lances em SAN. */
+export function jogoDosLances(sans: string[], fen?: string): Chess {
+  const jogo = fen ? new Chess(fen) : new Chess()
   for (const san of sans) jogo.move(san)
   return jogo
 }
 
-export function pgnDoJogo(sans: string[], cabecalhos: { brancas: string; pretas: string; resultado: string; data: string }): string {
-  const jogo = jogoDosLances(sans)
+export function pgnDoJogo(
+  sans: string[],
+  cabecalhos: { brancas: string; pretas: string; resultado: string; data: string },
+  fen?: string,
+): string {
+  const jogo = jogoDosLances(sans, fen)
   jogo.setHeader('Event', 'Partida no Treinador de Xadrez')
   jogo.setHeader('Date', cabecalhos.data.replace(/-/g, '.'))
   jogo.setHeader('White', cabecalhos.brancas)

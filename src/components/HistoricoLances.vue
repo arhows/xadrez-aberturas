@@ -10,8 +10,10 @@ const props = withDefaults(
     atual: number
     /** Com clique, cada lance leva àquela posição. */
     clicavel?: boolean
+    /** Meios-lances antes do primeiro (partida que começa numa posição do editor). */
+    antes?: number
   }>(),
-  { clicavel: false },
+  { clicavel: false, antes: 0 },
 )
 
 const emit = defineEmits<{ ir: [ply: number] }>()
@@ -20,9 +22,11 @@ const pares = computed(() => {
   const linhas: { numero: number; brancas?: number; pretas?: number }[] = []
   props.lances.forEach((_, i) => {
     const ply = i + 1
-    if (ply % 2 === 1) linhas.push({ numero: (ply + 1) / 2, brancas: ply })
+    const absoluto = props.antes + ply
+    const numero = Math.ceil(absoluto / 2)
+    if (absoluto % 2 === 1) linhas.push({ numero, brancas: ply })
     else if (linhas.length) linhas[linhas.length - 1].pretas = ply
-    else linhas.push({ numero: 1, pretas: ply })
+    else linhas.push({ numero, pretas: ply })
   })
   return linhas
 })

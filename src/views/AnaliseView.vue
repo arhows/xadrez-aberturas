@@ -12,15 +12,29 @@ import { fmtLance } from '../lib/formato'
 import { lanceNoLivro, tomDaMarca } from '../lib/qualidade'
 import { seloDoLance } from '../lib/seloNoTabuleiro'
 import { separarLances } from '../lib/lances'
+import { lancesAntesDoFen } from '../lib/jogo'
 
 /** Análise de uma partida pelo Stockfish: gráfico de chance, erros marcados e navegação. */
 const PROFUNDIDADE = 10
 
 const route = useRoute()
+/** Partida que começou numa posição do editor. */
+const fenInicial = (() => {
+  const pedido = typeof route.query.fen === 'string' ? route.query.fen : ''
+  if (!pedido) return undefined
+  try {
+    return new Chess(pedido).fen()
+  } catch {
+    return undefined
+  }
+})()
+const antes = lancesAntesDoFen(fenInicial)
+/** Número do lance contando os meios-lances antes da posição do editor. */
+const fmtNum = (p: number, san: string) => fmtLance(antes + p, san)
 const sans = (() => {
   const lista = separarLances(String(route.query.c ?? ''))
   try {
-    posicoesDaPartida(lista)
+    posicoesDaPartida(lista, fenInicial)
     return lista
   } catch {
     return []
@@ -30,11 +44,13 @@ const minhaCor = route.query.cor === 'w' || route.query.cor === 'b' ? route.quer
 const titulo = String(route.query.titulo ?? 'Análise da partida')
 const voltar = String(route.query.volta ?? '/')
 
-const posicoes = posicoesDaPartida(sans)
+const posicoes = posicoesDaPartida(sans, fenInicial)
 const valores = ref<(number | null)[]>(posicoes.map((p) => p.valorFixo ?? null))
 const melhores = ref<(string | null)[]>([])
 /** Marca do MCO de cada lance enquanto a partida estava no livro. */
-const livro = sans.map((_, i) => lanceNoLivro(sans.slice(0, i + 1), obterCapitulos()))
+const livro = sans.map((_, i) =>
+  fenInicial ? { marca: null, noLivro: false } : lanceNoLivro(sans.slice(0, i + 1), obterCapitulos()),
+)
 const marcas = livro.map((l) => l.marca)
 /** Histórico com as marcas: do MCO, e ?!/?/?? do motor quando o livro não marcou. */
 const sansMarcados = computed(() =>
@@ -55,11 +71,11 @@ const mostrarSeta = ref(true)
 const vendoMelhor = ref<number | null>(null)
 watch(ply, () => (vendoMelhor.value = null))
 
-const analise = computed(() => analisarLances(sans, valores.value, melhores.value))
+const analise = computed(() => analisarLances(sans, valores.value, melhores.value, fenInicial))
 const analisando = computed(() => feitas.value < posicoes.length && !erro.value)
 /** Casas de origem e destino de cada lance, para destacar o último. */
 const casas = (() => {
-  const jogo = new Chess()
+  const jogo = fenInicial ? new Chess(fenInicial) : new Chess()
   return sans.map((san) => {
     const lance = jogo.move(san)
     return [lance.from, lance.to] as [string, string]
@@ -157,16 +173,17 @@ onBeforeUnmount(() => {
         <button type="button" class="botao" :disabled="ply === sans.length" aria-label="Próximo lance" @click="ply++">▶</button>
         <button type="button" class="botao" :disabled="ply === sans.length" aria-label="Último lance" @click="ply = sans.length">⏭</button>
         <button type="button" class="botao" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">Girar</button>
+        <RouterLink class="botao" :to="{ name: 'analisar', query: { fen: posicoes[ply].fen, orientacao } }" title="Explorar esta posição com lances livres">Analisar daqui</RouterLink>
         <label class="marcar" title="Seta azul com o melhor lance do Stockfish na posição mostrada">
           <input v-model="mostrarSeta" type="checkbox" />
           Seta do Stockfish
         </label>
       </div>
 
-      <HistoricoLances :lances="sansMarcados" :atual="ply" clicavel @ir="ply = $event" />
+      <HistoricoLances :lances="sansMarcados" :atual="ply" :antes="antes" clicavel @ir="ply = $event" />
 
       <p v-if="ply > 0 && (marcas[ply - 1] || analise.lances[ply - 1]?.boa || analise.lances[ply - 1]?.classe)" class="lance-atual">
-        {{ fmtLance(ply, sans[ply - 1]) }}:
+        {{ fmtNum(ply, sans[ply - 1]) }}:
         <template v-if="marcas[ply - 1]">
           <span class="fonte">MCO</span> <strong :class="tomDaMarca(marcas[ply - 1]!)">{{ marcas[ply - 1] }}</strong>
         </template>
@@ -178,14 +195,14 @@ onBeforeUnmount(() => {
           <strong class="simbolo" :class="analise.lances[ply - 1].classe!">{{ SIMBOLO_CLASSE[analise.lances[ply - 1].classe!] }}</strong>
           {{ ROTULO_CLASSE[analise.lances[ply - 1].classe!] }} (−{{ Math.round(analise.lances[ply - 1].perda) }} pontos)
           <template v-if="melhorSan(ply - 1)">
-            · Melhor era <strong class="lance">{{ fmtLance(ply, melhorSan(ply - 1)!) }}</strong>
+            · Melhor era <strong class="lance">{{ fmtNum(ply, melhorSan(ply - 1)!) }}</strong>
             <button v-if="vendoMelhor === null" type="button" class="botao pequeno" @click="verMelhor(ply)">Ver</button>
           </template>
         </template>
       </p>
       <p v-if="vendoMelhor !== null" class="vendo-melhor">
-        Posição antes de <span class="lance">{{ fmtLance(vendoMelhor, sans[vendoMelhor - 1]) }}</span>: o Stockfish jogaria
-        <strong class="lance">{{ fmtLance(vendoMelhor, melhorSan(vendoMelhor - 1) ?? '') }}</strong> (seta azul).
+        Posição antes de <span class="lance">{{ fmtNum(vendoMelhor, sans[vendoMelhor - 1]) }}</span>: o Stockfish jogaria
+        <strong class="lance">{{ fmtNum(vendoMelhor, melhorSan(vendoMelhor - 1) ?? '') }}</strong> (seta azul).
         <button type="button" class="botao pequeno" @click="vendoMelhor = null">Voltar ao lance</button>
       </p>
 
@@ -211,11 +228,11 @@ onBeforeUnmount(() => {
         <ul class="marcados">
           <li v-for="lance in marcados" :key="lance.ply">
             <button type="button" class="chip-lance" :class="{ atual: lance.ply === ply }" @click="ply = lance.ply">
-              {{ fmtLance(lance.ply, lance.san) }}<span class="simbolo" :class="lance.classe!">{{ SIMBOLO_CLASSE[lance.classe!] }}</span>
+              {{ fmtNum(lance.ply, lance.san) }}<span class="simbolo" :class="lance.classe!">{{ SIMBOLO_CLASSE[lance.classe!] }}</span>
             </button>
             <span class="suave">
               {{ ROTULO_CLASSE[lance.classe!] }} de {{ nomeDaCor(lance.cor).toLowerCase() }} · −{{ Math.round(lance.perda) }} pontos de chance
-              <template v-if="melhorSan(lance.ply - 1)"> · melhor era <span class="lance">{{ fmtLance(lance.ply, melhorSan(lance.ply - 1)!) }}</span></template>
+              <template v-if="melhorSan(lance.ply - 1)"> · melhor era <span class="lance">{{ fmtNum(lance.ply, melhorSan(lance.ply - 1)!) }}</span></template>
             </span>
             <button v-if="melhorSan(lance.ply - 1)" type="button" class="botao pequeno" @click="verMelhor(lance.ply)">Ver</button>
           </li>
