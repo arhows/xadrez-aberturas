@@ -292,6 +292,10 @@ onBeforeUnmount(pararComputador)
           <button type="button" class="botao primario" @click="comecar">Jogar de novo</button>
           <button type="button" class="botao" @click="fase = 'escolha'">Mudar opções</button>
           <button type="button" class="botao" :disabled="sans.length <= inicio.length" @click="desfazer">Voltar lance</button>
+          <RouterLink
+            class="botao"
+            :to="{ name: 'analise', query: { c: sans.join(' '), cor: contraMotor ? minhaCor : undefined, titulo: 'Análise da partida', volta: '/jogar' } }"
+          >Analisar partida</RouterLink>
           <button type="button" class="botao" @click="exportarPgn">Exportar PGN</button>
           <RouterLink
             v-if="capitulo"

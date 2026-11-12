@@ -5,6 +5,7 @@ import { esperarSessao, nuvem } from './lib/nuvem'
 import { atualizarAnalises } from './lib/partidasRepertorio'
 import { progresso } from './lib/progresso'
 import AberturasView from './views/AberturasView.vue'
+import AnaliseView from './views/AnaliseView.vue'
 import AberturaView from './views/AberturaView.vue'
 import ConfigView from './views/ConfigView.vue'
 import DiagnosticoView from './views/DiagnosticoView.vue'
@@ -43,6 +44,7 @@ export const router = createRouter({
     { path: '/aberturas', name: 'aberturas', component: AberturasView, meta: { secao: 'aberturas' } },
     { path: '/abertura/:cap', name: 'abertura', component: AberturaView, beforeEnter: exigirCapitulo, meta: { secao: 'aberturas' } },
     { path: '/jogar', name: 'jogar', component: JogarView, meta: { secao: 'inicio', foco: true } },
+    { path: '/analise', name: 'analise', component: AnaliseView, meta: { secao: 'inicio' } },
     { path: '/relampago', name: 'relampago', component: RelampagoView, meta: { secao: 'inicio', foco: true } },
     { path: '/erros', name: 'erros', component: ErrosView, meta: { secao: 'inicio', foco: true } },
     { path: '/partidas', name: 'partidas', component: PartidasView, meta: { secao: 'partidas' } },

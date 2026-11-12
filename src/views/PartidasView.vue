@@ -302,6 +302,11 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
               </span>
               <span>{{ situacaoDaPartida(p) }}</span>
             </div>
+            <RouterLink
+              v-if="p.lances"
+              class="botao"
+              :to="{ name: 'analise', query: { c: p.lances, cor: p.cor, titulo: `${textoResultado(p)} contra ${p.adversario}`, volta: '/partidas', parcial: p.lances.split(' ').length >= 50 ? '1' : undefined } }"
+            >Analisar</RouterLink>
             <a v-if="p.url" class="botao" :href="p.url" target="_blank" rel="noopener">Ver partida</a>
             <RouterLink
               v-else-if="p.desvio"
