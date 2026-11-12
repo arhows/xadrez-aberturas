@@ -276,6 +276,8 @@ function registrarErro(aresta: Aresta) {
     erros: (anterior?.erros ?? 0) + 1,
     caminho: [...atual.jogadas.map((jogada) => jogada.san), aresta.san],
     linhas: aresta.linhas,
+    seguidos: 0,
+    atualizado: new Date().toISOString(),
   }
 }
 

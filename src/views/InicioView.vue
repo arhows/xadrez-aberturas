@@ -50,7 +50,7 @@ const fmtPct = (valor: number) =>
 
 const maisErrados = computed(() =>
   Object.values(progresso.errosPorAresta)
-    .filter((erro) => buscarCapitulo(erro.capitulo))
+    .filter((erro) => erro.erros > 0 && buscarCapitulo(erro.capitulo))
     .sort((a, b) => b.erros - a.erros)
     .slice(0, 5)
     .filter((erro) => percorrer(buscarCapitulo(erro.capitulo)!.arvore, erro.caminho))
@@ -139,7 +139,10 @@ const maisErrados = computed(() =>
 
     <div class="areas">
       <section v-if="maisErrados.length" class="secao">
-        <h2 class="titulo-secao">Lances em que você mais erra</h2>
+        <div class="cabeca-erros">
+          <h2 class="titulo-secao">Lances em que você mais erra</h2>
+          <RouterLink class="botao primario" to="/erros">Treinar meus erros</RouterLink>
+        </div>
         <div class="lista">
           <RouterLink
             v-for="erro in maisErrados"
@@ -178,6 +181,13 @@ const maisErrados = computed(() =>
 </template>
 
 <style scoped>
+.cabeca-erros {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-2);
+}
 .topo-inicio {
   display: flex;
   align-items: center;

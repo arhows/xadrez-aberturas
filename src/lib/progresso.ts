@@ -36,6 +36,10 @@ export interface ErroAresta {
   caminho: string[]
   /** Linhas que passam pelo lance, para priorizá-las no Treino. */
   linhas: string[]
+  /** Acertos seguidos em "Treinar meus erros"; com 2, o erro sai da lista (erros = 0). */
+  seguidos?: number
+  /** Última mudança (ISO), para a sincronização ficar com a mais recente. */
+  atualizado?: string
 }
 
 /** O que foi estudado num dia: partidas de treino terminadas e problemas resolvidos. */

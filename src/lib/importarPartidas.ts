@@ -109,6 +109,8 @@ function registrarDesvio(analise: PartidaAnalisada): boolean {
     erros: (anterior?.erros ?? 0) + 1,
     caminho: [...analise.desvio!.caminho, aresta.san],
     linhas: aresta.linhas,
+    seguidos: 0,
+    atualizado: new Date().toISOString(),
   }
   return true
 }

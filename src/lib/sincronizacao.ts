@@ -34,7 +34,15 @@ function juntarPorChave<T>(a: Record<string, T>, b: Record<string, T>, escolher:
 }
 
 function juntarErros(a: ErroAresta, b: ErroAresta): ErroAresta {
-  const base = a.erros >= b.erros ? a : b
+  // Com datas, vale a mudança mais recente (um erro resolvido não volta); sem elas, o maior número.
+  const base =
+    a.atualizado && b.atualizado && a.atualizado !== b.atualizado
+      ? a.atualizado > b.atualizado
+        ? a
+        : b
+      : a.erros >= b.erros
+        ? a
+        : b
   return { ...base, linhas: [...new Set([...a.linhas, ...b.linhas])] }
 }
 
