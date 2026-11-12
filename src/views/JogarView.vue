@@ -3,15 +3,19 @@ import { computed, onBeforeUnmount, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import CartaoDica from '../components/CartaoDica.vue'
 import HistoricoLances from '../components/HistoricoLances.vue'
+import SeloQualidade from '../components/SeloQualidade.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { lanceDoComputador, NIVEIS, nivelPorNumero, pararComputador, type LanceUci } from '../lib/adversario'
-import { buscarCapitulo } from '../lib/capitulos'
+import { avaliarPosicao, type Avaliacao } from '../lib/avaliador'
+import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
 import { baixarTexto } from '../lib/download'
 import { ehPromocao, type PecaPromocao } from '../lib/exercicios'
 import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
 import { jogoDosLances, pgnDoJogo, situacaoDoJogo } from '../lib/jogo'
 import { separarLances, type Cor } from '../lib/lances'
 import { progresso } from '../lib/progresso'
+import { classificarLance, marcaNaSequencia, type MarcaLivro, type QualidadeMotor } from '../lib/qualidade'
+import { Chess } from 'chess.js'
 import { dataLocal } from '../lib/srs'
 
 const route = useRoute()
@@ -43,6 +47,89 @@ const tabuleiro = ref<InstanceType<typeof Tabuleiro>>()
 /** Muda a cada lance ou desfazer, para ignorar a resposta atrasada do computador. */
 let versao = 0
 
+// ---------- Modo treino: voltar lance, dica e qualidade de cada lance ----------
+/** Fixado ao começar: a partida comum não volta lance, não dá dica nem classifica. */
+const treinoAtivo = ref(false)
+const PROFUNDIDADE_TREINO = 12
+const avaliacoes = new Map<string, Promise<Avaliacao>>()
+const avaliar = (fenPosicao: string) => {
+  let pedido = avaliacoes.get(fenPosicao)
+  if (!pedido) avaliacoes.set(fenPosicao, (pedido = avaliarPosicao(fenPosicao, PROFUNDIDADE_TREINO)))
+  return pedido
+}
+/** Qualidade por lance (chave = ply do lance, 1 = 1.e4); `null` = ainda avaliando. */
+const qualidades = ref<Record<number, { marca: MarcaLivro | null; motor: QualidadeMotor | null } | null>>({})
+const nivelDica = ref(0)
+const dicaLance = ref<{ from: string; to: string } | null>(null)
+const carregandoDica = ref(false)
+
+const SIMBOLO_MOTOR = { imprecisao: '?!', erro: '?', grave: '??' } as const
+/** Histórico com as marcas dos lances já avaliados (MCO ou ?!/?/?? do motor). */
+const sansMarcados = computed(() =>
+  sans.value.map((san, i) => {
+    const q = qualidades.value[i + 1]
+    const classe = q?.motor?.classe
+    const doMotor = classe === 'imprecisao' || classe === 'erro' || classe === 'grave' ? SIMBOLO_MOTOR[classe] : ''
+    return `${san}${q?.marca ?? doMotor}`
+  }),
+)
+/** O último lance avaliado (o seu, contra o computador). */
+const ultimaAvaliada = computed(() => {
+  const plys = Object.keys(qualidades.value).map(Number).sort((a, b) => b - a)
+  const ply = plys[0]
+  return ply ? { ply, san: sans.value[ply - 1], qualidade: qualidades.value[ply] } : null
+})
+
+function sanDoUci(fenPosicao: string, uci: string | null): string | null {
+  if (!uci) return null
+  try {
+    return new Chess(fenPosicao).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san
+  } catch {
+    return null
+  }
+}
+
+/** Valor fixo de fim de jogo (mate/empate) ou null para perguntar ao motor. */
+function valorDoFim(fenPosicao: string): number | null {
+  const j = new Chess(fenPosicao)
+  if (j.isCheckmate()) return j.turn() === 'w' ? -20000 : 20000
+  if (j.isDraw()) return 0
+  return null
+}
+
+async function avaliarLance(ply: number, fenAntes: string, fenDepois: string, san: string) {
+  qualidades.value = { ...qualidades.value, [ply]: null }
+  const marca = marcaNaSequencia(sans.value.slice(0, ply), obterCapitulos(), capitulo)
+  try {
+    const antes = await avaliar(fenAntes)
+    const depois = valorDoFim(fenDepois) ?? (await avaliar(fenDepois)).cp
+    if (sans.value[ply - 1] !== san) return
+    const motor =
+      antes.cp !== null && depois !== null
+        ? classificarLance(antes.cp, depois, fenAntes.split(' ')[1] === 'w', sanDoUci(fenAntes, antes.melhor), san)
+        : null
+    qualidades.value = { ...qualidades.value, [ply]: { marca, motor } }
+  } catch {
+    if (sans.value[ply - 1] === san) qualidades.value = { ...qualidades.value, [ply]: { marca, motor: null } }
+  }
+}
+
+/** 1º toque: qual peça mexer; 2º: a seta do melhor lance (Stockfish). */
+async function pedirDica() {
+  if (nivelDica.value === 0) {
+    carregandoDica.value = true
+    const minha = versao
+    try {
+      const { melhor } = await avaliar(fen.value)
+      if (minha !== versao || !melhor) return
+      dicaLance.value = { from: melhor.slice(0, 2), to: melhor.slice(2, 4) }
+      nivelDica.value = 1
+    } finally {
+      carregandoDica.value = false
+    }
+  } else if (nivelDica.value === 1) nivelDica.value = 2
+}
+
 const contraMotor = computed(() => escolhas.adversario === 'motor')
 const nivel = computed(() => nivelPorNumero(escolhas.nivel))
 const jogo = computed(() => jogoDosLances(sans.value))
@@ -58,7 +145,11 @@ const ultimoLance = computed<[string, string] | null>(() => {
 })
 const formas = computed<Forma[]>(() => {
   const pendente = promocaoPendente.value
-  return pendente ? [{ de: pendente.de, para: pendente.para, cor: 'yellow' }] : []
+  if (pendente) return [{ de: pendente.de, para: pendente.para, cor: 'yellow' }]
+  const dica = dicaLance.value
+  if (dica && jogavel.value && nivelDica.value === 1) return [{ de: dica.from, cor: 'yellow' }]
+  if (dica && jogavel.value && nivelDica.value === 2) return [{ de: dica.from, para: dica.to, cor: 'green' }]
+  return []
 })
 const jogavel = computed(
   () =>
@@ -81,6 +172,10 @@ function comecar() {
   sans.value = [...inicio]
   abandono.value = null
   erroMotor.value = null
+  treinoAtivo.value = escolhas.modo === 'treino'
+  qualidades.value = {}
+  nivelDica.value = 0
+  dicaLance.value = null
   versao++
   fase.value = 'jogando'
   if (contraMotor.value && vez.value !== minhaCor.value) void vezDoComputador()
@@ -92,6 +187,8 @@ function fazer(lance: LanceUci): boolean {
     const feito = copia.move(lance)
     sans.value = [...sans.value, feito.san]
     versao++
+    nivelDica.value = 0
+    dicaLance.value = null
   } catch {
     return false
   }
@@ -123,10 +220,13 @@ function aoJogar(de: string, para: string) {
 }
 
 function jogar(lance: LanceUci) {
+  const fenAntes = fen.value
   if (!fazer(lance)) {
     tabuleiro.value?.sincronizar()
     return
   }
+  // No modo treino, cada lance de quem joga no tabuleiro ganha a avaliação logo depois.
+  if (treinoAtivo.value) void avaliarLance(sans.value.length, fenAntes, fen.value, sans.value.at(-1)!)
   if (contraMotor.value && fase.value === 'jogando') void vezDoComputador()
 }
 
@@ -146,6 +246,7 @@ function promover(peca: PecaPromocao | null) {
 
 /** Contra o computador, volta até a sua vez (desfaz o seu lance e a resposta dele). */
 function desfazer() {
+  if (!treinoAtivo.value) return
   pararComputador()
   pensando.value = false
   let lista = [...sans.value]
@@ -157,6 +258,9 @@ function desfazer() {
   }
   sans.value = lista
   versao++
+  nivelDica.value = 0
+  dicaLance.value = null
+  qualidades.value = Object.fromEntries(Object.entries(qualidades.value).filter(([ply]) => Number(ply) <= lista.length))
   fase.value = 'jogando'
   abandono.value = null
   if (contraMotor.value && vez.value !== minhaCor.value) void vezDoComputador()
@@ -218,6 +322,18 @@ onBeforeUnmount(pararComputador)
         <label class="marcar"><input v-model="escolhas.adversario" type="radio" value="amigo" /> Amigo, neste aparelho</label>
       </fieldset>
 
+      <fieldset class="opcoes">
+        <legend>Modo</legend>
+        <label class="marcar">
+          <input v-model="escolhas.modo" type="radio" value="partida" />
+          Partida: sem voltar lance e sem dicas; a avaliação dos lances fica para a análise no fim
+        </label>
+        <label class="marcar">
+          <input v-model="escolhas.modo" type="radio" value="treino" />
+          Treino: pode voltar lance, pedir dica e ver a qualidade de cada lance logo depois de jogar
+        </label>
+      </fieldset>
+
       <template v-if="escolhas.adversario === 'motor'">
         <fieldset class="opcoes">
           <legend>Sua cor</legend>
@@ -259,6 +375,7 @@ onBeforeUnmount(pararComputador)
         <p class="suave">
           <template v-if="contraMotor">Você de {{ minhaCor === 'w' ? 'brancas' : 'pretas' }} contra {{ nomeDoMotor }}</template>
           <template v-else>Amigo, neste aparelho</template>
+          · {{ treinoAtivo ? 'modo treino' : 'partida' }}
         </p>
       </div>
 
@@ -280,18 +397,29 @@ onBeforeUnmount(pararComputador)
         <button type="button" class="botao" @click="promover(null)">Cancelar</button>
       </div>
 
-      <HistoricoLances :lances="sans" :atual="sans.length" />
+      <div v-if="treinoAtivo && ultimaAvaliada" class="avaliacao-lance">
+        <span class="lance">{{ fmtLance(ultimaAvaliada.ply, ultimaAvaliada.san) }}</span>
+        <span v-if="!ultimaAvaliada.qualidade" class="suave">avaliando…</span>
+        <SeloQualidade v-else :marca="ultimaAvaliada.qualidade.marca" :motor="ultimaAvaliada.qualidade.motor" />
+      </div>
+
+      <HistoricoLances :lances="treinoAtivo ? sansMarcados : sans" :atual="sans.length" />
 
       <div class="acoes">
         <template v-if="fase === 'jogando'">
-          <button type="button" class="botao" :disabled="sans.length <= inicio.length" @click="desfazer">Voltar lance</button>
+          <template v-if="treinoAtivo">
+            <button type="button" class="botao" :disabled="!jogavel || nivelDica >= 2 || carregandoDica" @click="pedirDica">
+              {{ carregandoDica ? 'Pensando…' : nivelDica === 0 ? 'Dica: qual peça?' : 'Dica: mostrar o lance' }}
+            </button>
+            <button type="button" class="botao" :disabled="sans.length <= inicio.length" @click="desfazer">Voltar lance</button>
+          </template>
           <button v-if="!contraMotor" type="button" class="botao" @click="orientacaoAmigo = orientacaoAmigo === 'white' ? 'black' : 'white'">Girar</button>
           <button type="button" class="botao fantasma" @click="abandonar">Abandonar</button>
         </template>
         <template v-else>
           <button type="button" class="botao primario" @click="comecar">Jogar de novo</button>
           <button type="button" class="botao" @click="fase = 'escolha'">Mudar opções</button>
-          <button type="button" class="botao" :disabled="sans.length <= inicio.length" @click="desfazer">Voltar lance</button>
+          <button v-if="treinoAtivo" type="button" class="botao" :disabled="sans.length <= inicio.length" @click="desfazer">Voltar lance</button>
           <RouterLink
             class="botao"
             :to="{ name: 'analise', query: { c: sans.join(' '), cor: contraMotor ? minhaCor : undefined, titulo: 'Análise da partida', volta: '/jogar' } }"
@@ -346,6 +474,12 @@ onBeforeUnmount(pararComputador)
 }
 .cabeca-painel p {
   margin: 0;
+}
+.avaliacao-lance {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--espaco-2);
 }
 .instrucao {
   margin: 0.25rem 0 0;

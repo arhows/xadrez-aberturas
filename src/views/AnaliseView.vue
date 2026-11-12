@@ -7,7 +7,9 @@ import HistoricoLances from '../components/HistoricoLances.vue'
 import Tabuleiro from '../components/Tabuleiro.vue'
 import { analisarLances, contarClasses, posicoesDaPartida, ROTULO_CLASSE, SIMBOLO_CLASSE, type Classe } from '../lib/analisePartida'
 import { avaliarPosicoes, pararAvaliacao } from '../lib/avaliador'
+import { obterCapitulos } from '../lib/capitulos'
 import { fmtLance } from '../lib/formato'
+import { marcaNaSequencia, tomDaMarca } from '../lib/qualidade'
 import { separarLances } from '../lib/lances'
 
 /** Análise de uma partida pelo Stockfish: gráfico de chance, erros marcados e navegação. */
@@ -29,12 +31,22 @@ const voltar = String(route.query.volta ?? '/')
 
 const posicoes = posicoesDaPartida(sans)
 const valores = ref<(number | null)[]>(posicoes.map((p) => p.valorFixo ?? null))
+const melhores = ref<(string | null)[]>([])
+/** Marca do MCO de cada lance enquanto a partida estava no livro. */
+const marcas = sans.map((_, i) => marcaNaSequencia(sans.slice(0, i + 1), obterCapitulos()))
+/** Histórico com as marcas: do MCO, e ?!/?/?? do motor quando o livro não marcou. */
+const sansMarcados = computed(() =>
+  sans.map((san, i) => {
+    const lance = analise.value.lances[i]
+    return `${san}${marcas[i] ?? (lance?.classe ? SIMBOLO_CLASSE[lance.classe] : '')}`
+  }),
+)
 const feitas = ref(0)
 const erro = ref<string | null>(null)
 const ply = ref(sans.length)
 const orientacao = ref<'white' | 'black'>(minhaCor === 'b' ? 'black' : 'white')
 
-const analise = computed(() => analisarLances(sans, valores.value))
+const analise = computed(() => analisarLances(sans, valores.value, melhores.value))
 const analisando = computed(() => feitas.value < posicoes.length && !erro.value)
 /** Casas de origem e destino de cada lance, para destacar o último. */
 const casas = (() => {
@@ -63,7 +75,8 @@ onMounted(async () => {
   try {
     await avaliarPosicoes(posicoes, PROFUNDIDADE, (n, lista) => {
       feitas.value = n
-      valores.value = posicoes.map((p, i) => lista[i] ?? p.valorFixo ?? null)
+      valores.value = posicoes.map((p, i) => lista[i]?.cp ?? p.valorFixo ?? null)
+      melhores.value = lista.map((a) => a.melhor)
     })
   } catch (falha) {
     erro.value = falha instanceof Error ? falha.message : 'O Stockfish não respondeu.'
@@ -99,18 +112,35 @@ onBeforeUnmount(() => {
         <button type="button" class="botao" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">Girar</button>
       </div>
 
-      <HistoricoLances :lances="sans" :atual="ply" clicavel @ir="ply = $event" />
+      <HistoricoLances :lances="sansMarcados" :atual="ply" clicavel @ir="ply = $event" />
+
+      <p v-if="ply > 0 && (marcas[ply - 1] || analise.lances[ply - 1]?.boa || analise.lances[ply - 1]?.classe)" class="lance-atual">
+        {{ fmtLance(ply, sans[ply - 1]) }}:
+        <template v-if="marcas[ply - 1]">
+          <span class="fonte">MCO</span> <strong :class="tomDaMarca(marcas[ply - 1]!)">{{ marcas[ply - 1] }}</strong>
+        </template>
+        <template v-if="analise.lances[ply - 1]?.boa">
+          <span class="fonte">Stockfish</span> {{ analise.lances[ply - 1].boa === 'melhor' ? '★ Melhor lance' : '✓ Bom' }}
+        </template>
+        <template v-else-if="analise.lances[ply - 1]?.classe">
+          <span class="fonte">Stockfish</span>
+          <strong class="simbolo" :class="analise.lances[ply - 1].classe!">{{ SIMBOLO_CLASSE[analise.lances[ply - 1].classe!] }}</strong>
+          {{ ROTULO_CLASSE[analise.lances[ply - 1].classe!] }} (−{{ Math.round(analise.lances[ply - 1].perda) }} pontos)
+        </template>
+      </p>
 
       <table class="resumo">
         <thead>
           <tr>
             <th scope="col"></th>
+            <th scope="col" class="num">Melhor lance <span class="simbolo bom">★</span></th>
             <th v-for="classe in CLASSES" :key="classe" scope="col" class="num">{{ ROTULO_CLASSE[classe] }} <span class="simbolo" :class="classe">{{ SIMBOLO_CLASSE[classe] }}</span></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="cor in ['w', 'b'] as const" :key="cor">
             <th scope="row">{{ nomeDaCor(cor) }} <span class="suave">({{ cor === 'w' ? 'brancas' : 'pretas' }})</span></th>
+            <td class="num">{{ analise.lances.filter((l) => l.cor === cor && l.boa === 'melhor').length }}</td>
             <td v-for="classe in CLASSES" :key="classe" class="num">{{ resumo(cor)[classe] }}</td>
           </tr>
         </tbody>
@@ -207,6 +237,21 @@ h2 {
   font-weight: 700;
 }
 .simbolo.imprecisao { color: var(--aviso); }
+.simbolo.bom,
+.bom,
+.otimo { color: var(--ok); }
+.interessante { color: var(--motor); }
+.duvidoso { color: var(--aviso); }
+.lance-atual {
+  margin: 0;
+  font-size: 14px;
+}
+.fonte {
+  color: var(--texto-suave);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
 .simbolo.erro { color: #d9772b; }
 .simbolo.grave { color: var(--erro); }
 .nota {

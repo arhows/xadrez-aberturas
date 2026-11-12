@@ -17,6 +17,8 @@ export interface LanceAnalisado {
   /** Pontos de chance que o lado que jogou perdeu com o lance (0 se ganhou). */
   perda: number
   classe: Classe | null
+  /** Lance elogiado pelo motor: o melhor da posição ou um bom (perde menos de 5 pontos). */
+  boa: 'melhor' | 'bom' | null
 }
 
 export const ROTULO_CLASSE: Record<Classe, string> = {
@@ -51,15 +53,37 @@ export function classificar(perda: number): Classe | null {
   return null
 }
 
-/** `valores[i]` = avaliação (cp, brancas) da posição depois de i lances. */
-export function analisarLances(sans: string[], valores: (number | null)[]): { chances: (number | null)[]; lances: LanceAnalisado[] } {
+/** "e2e4" → "e4" na posição dada; null se não der. */
+function sanDoUci(fen: string, uci: string | null | undefined): string | null {
+  if (!uci) return null
+  try {
+    return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san
+  } catch {
+    return null
+  }
+}
+
+/**
+ * `valores[i]` = avaliação (cp, brancas) da posição depois de i lances; `melhores[i]` = melhor
+ * lance (UCI) nessa posição, para reconhecer o ★ melhor lance.
+ */
+export function analisarLances(
+  sans: string[],
+  valores: (number | null)[],
+  melhores: (string | null)[] = [],
+): { chances: (number | null)[]; lances: LanceAnalisado[] } {
   const chances = valores.map((v) => (v === null || v === undefined ? null : chanceDasBrancas(v)))
+  const posicoes = melhores.length ? posicoesDaPartida(sans) : []
   const lances = sans.map((san, i): LanceAnalisado => {
     const cor = i % 2 === 0 ? 'w' : 'b'
     const antes = chances[i]
     const depois = chances[i + 1]
     const perda = antes == null || depois == null ? 0 : Math.max(0, cor === 'w' ? antes - depois : depois - antes)
-    return { ply: i + 1, san, cor, perda, classe: classificar(perda) }
+    const classe = classificar(perda)
+    const melhor = posicoes.length ? sanDoUci(posicoes[i].fen, melhores[i]) : null
+    const semXeque = (x: string) => x.replace(/[+#]/g, '')
+    const boa = classe || depois == null ? null : melhor && semXeque(melhor) === semXeque(san) ? 'melhor' : perda < 5 ? 'bom' : null
+    return { ply: i + 1, san, cor, perda, classe, boa }
   })
   return { chances, lances }
 }

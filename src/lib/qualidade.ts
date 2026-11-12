@@ -120,16 +120,49 @@ export function qualidadeDoMotor(
   const antes = posicoes?.[aresta.de]
   const depois = posicoes?.[aresta.para]
   if (!antes || !depois) return null
-  const brancasJogam = aresta.de.split(' ')[1] === 'w'
-  const diferenca = chanceDasBrancas(antes.cp) - chanceDasBrancas(depois.cp)
+  return classificarLance(antes.cp, depois.cp, aresta.de.split(' ')[1] === 'w', antes.lance, aresta.san)
+}
+
+/** A mesma régua para qualquer lance: avaliação antes/depois, de quem é a vez e o melhor lance. */
+export function classificarLance(
+  cpAntes: number,
+  cpDepois: number,
+  brancasJogam: boolean,
+  melhorSan: string | null,
+  san: string,
+): QualidadeMotor {
+  const diferenca = chanceDasBrancas(cpAntes) - chanceDasBrancas(cpDepois)
   const perda = Math.max(0, brancasJogam ? diferenca : -diferenca)
   let classe: ClasseMotor | null = null
-  if (semXeque(antes.lance) === semXeque(aresta.san)) classe = 'melhor'
+  if (melhorSan && semXeque(melhorSan) === semXeque(san)) classe = 'melhor'
   else if (perda >= 30) classe = 'grave'
   else if (perda >= 20) classe = 'erro'
   else if (perda >= 10) classe = 'imprecisao'
   else if (perda < 5) classe = 'bom'
   return { classe, perda }
+}
+
+/**
+ * Marca do MCO do último lance de uma sequência que ainda está no livro (procura primeiro no
+ * capítulo preferido, depois em todos). null se a sequência saiu do livro ou não tem marca.
+ */
+export function marcaNaSequencia(
+  sans: string[],
+  capitulos: CapituloCarregado[],
+  preferido?: CapituloCarregado,
+): MarcaLivro | null {
+  if (!sans.length) return null
+  for (const capitulo of preferido ? [preferido, ...capitulos] : capitulos) {
+    let no = capitulo.arvore.nos.get(capitulo.arvore.raiz)
+    let ultima: Aresta | undefined
+    for (const san of sans) {
+      ultima = no?.saidas.find((aresta) => aresta.san === san)
+      if (!ultima) break
+      no = capitulo.arvore.nos.get(ultima.para)
+    }
+    if (ultima && no) return marcasDoCapitulo(capitulo).get(ultima.id) ?? null
+  }
+  return null
 }
 
 const cacheMarcas = new WeakMap<CapituloCarregado, Map<string, MarcaLivro>>()

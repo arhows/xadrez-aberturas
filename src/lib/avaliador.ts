@@ -17,7 +17,14 @@ export function lerPontuacao(linha: string, vezDasBrancas: boolean): number | nu
 
 let worker: Worker | null = null
 let pronto: Promise<void> | null = null
-let atual: { vezDasBrancas: boolean; ultima: number | null; resolver: (cp: number | null) => void } | null = null
+export interface Avaliacao {
+  /** Centipeões do ponto de vista das brancas (mate = ±20000); null sem resposta. */
+  cp: number | null
+  /** Melhor lance em UCI ("e2e4"); null em fim de jogo. */
+  melhor: string | null
+}
+
+let atual: { vezDasBrancas: boolean; ultima: number | null; resolver: (a: Avaliacao) => void } | null = null
 let cancelado = false
 
 function iniciar(): Promise<void> {
@@ -44,7 +51,8 @@ function iniciar(): Promise<void> {
       } else if (linha.startsWith('bestmove')) {
         const terminado = atual
         atual = null
-        terminado.resolver(terminado.ultima)
+        const uci = linha.split(' ')[1]
+        terminado.resolver({ cp: terminado.ultima, melhor: uci && uci !== '(none)' ? uci : null })
       }
     }
     worker.postMessage('uci')
@@ -54,7 +62,20 @@ function iniciar(): Promise<void> {
   return pronto
 }
 
-function avaliar(fen: string, profundidade: number): Promise<number | null> {
+/** Fila: uma avaliação por vez no mesmo worker (o Jogar pode pedir enquanto outra termina). */
+let fila: Promise<unknown> = Promise.resolve()
+
+/** Avalia uma posição (usado pelo modo treino do Jogar: dica e qualidade do lance). */
+export function avaliarPosicao(fen: string, profundidade: number): Promise<Avaliacao> {
+  const resultado = fila.then(async () => {
+    await iniciar()
+    return avaliar(fen, profundidade)
+  })
+  fila = resultado.catch(() => undefined)
+  return resultado
+}
+
+function avaliar(fen: string, profundidade: number): Promise<Avaliacao> {
   return new Promise((resolver) => {
     atual = { vezDasBrancas: fen.split(' ')[1] === 'w', ultima: null, resolver }
     worker!.postMessage(`position fen ${fen}`)
@@ -69,17 +90,17 @@ function avaliar(fen: string, profundidade: number): Promise<number | null> {
 export async function avaliarPosicoes(
   posicoes: { fen: string; valorFixo?: number }[],
   profundidade: number,
-  aoProgredir: (feitas: number, valores: (number | null)[]) => void,
-): Promise<(number | null)[]> {
+  aoProgredir: (feitas: number, avaliacoes: Avaliacao[]) => void,
+): Promise<Avaliacao[]> {
   await iniciar()
   cancelado = false
-  const valores: (number | null)[] = []
+  const avaliacoes: Avaliacao[] = []
   for (const posicao of posicoes) {
     if (cancelado) break
-    valores.push(posicao.valorFixo ?? (await avaliar(posicao.fen, profundidade)))
-    aoProgredir(valores.length, valores)
+    avaliacoes.push(posicao.valorFixo !== undefined ? { cp: posicao.valorFixo, melhor: null } : await avaliar(posicao.fen, profundidade))
+    aoProgredir(avaliacoes.length, avaliacoes)
   }
-  return valores
+  return avaliacoes
 }
 
 export function pararAvaliacao(): void {

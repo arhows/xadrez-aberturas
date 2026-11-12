@@ -86,8 +86,6 @@ const todas = computed(() =>
 )
 const noRepertorio = computed(() => todas.value.filter((p) => p.capitulo))
 const porAbertura = computed(() => resumoPorAbertura(noRepertorio.value))
-/** Importadas antes de guardar os lances: não dá para analisar de novo quando o repertório cresce. */
-const semLances = computed(() => todas.value.filter((p) => !p.lances && p.site !== 'pgn').length)
 
 interface Grupo {
   chave: string
@@ -217,11 +215,6 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
         <h2>Resumo</h2>
         <p>
           {{ todas.length }} partidas · <strong>{{ noRepertorio.length }}</strong> no seu repertório
-        </p>
-        <p v-if="semLances" class="aviso">
-          {{ semLances }} {{ semLances === 1 ? 'partida foi importada' : 'partidas foram importadas' }} antes desta versão e não
-          {{ semLances === 1 ? 'é analisada' : 'são analisadas' }} de novo quando entra uma abertura nova.
-          Toque em “Importar partidas” uma vez para atualizar.
         </p>
         <div v-if="porAbertura.length" class="tabela-rolagem">
           <table class="tabela">
