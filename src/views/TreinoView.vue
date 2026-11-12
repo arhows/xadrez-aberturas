@@ -184,11 +184,36 @@ function iniciarSessao(livre = false) {
   else proximaPartida()
 }
 
+/** A unidade sorteada da fila (a partida pode mudar de alvo no caminho, mas é esta que sai da fila ao pular). */
+let unidadeSorteada: UnidadeRevisao | null = null
+/** A última linha foi pulada: a tela final não mostra placar nem altera a agenda. */
+const pulada = ref(false)
+
 function proximaPartida() {
   const unidade = sortear(fila.value, (u) => pesoDaLinha(u.linha, u.cor))
+  unidadeSorteada = unidade
   revisando.value = false
   escopoDaPartida = idsNoEscopo
   comecarPartida(unidade.linha, unidade.cor)
+}
+
+/**
+ * Tira a linha da sessão sem nota: o cartão não muda, então ela continua pendente
+ * e volta na próxima revisão. Se ainda houver fila, já começa a próxima.
+ */
+function pularLinha() {
+  clearTimeout(temporizador)
+  aoFimDaEspera = null
+  esperandoToque.value = false
+  const sorteada = unidadeSorteada
+  if (sorteada) fila.value = fila.value.filter((u) => idCartao(u) !== idCartao(sorteada))
+  if (fila.value.length) {
+    proximaPartida()
+  } else {
+    aviso.value = null
+    pulada.value = true
+    fase.value = 'fim-partida'
+  }
 }
 
 /** Joga de novo a linha que acabou de terminar, sem afetar a agenda nem a fila. */
@@ -203,6 +228,7 @@ function comecarPartida(linha: string, cor: UnidadeRevisao['cor']) {
   partida.value = iniciarPartida(arvore, linha, cor)
   placar.value = { acertos: 0, erros: 0, pistas: 0 }
   aviso.value = null
+  pulada.value = false
   fase.value = 'jogando'
   prepararJogada(0)
 }
@@ -563,6 +589,13 @@ if (revisaoAutomatica) iniciarSessao()
             :disabled="!jogavel || nivelPista >= 3"
             @click="pedirPista"
           >{{ textoBotaoPista }}</button>
+          <button
+            v-if="!revisando"
+            type="button"
+            class="botao fantasma grande largo-celular"
+            title="Deixa esta linha para a próxima revisão, sem contar como erro"
+            @click="pularLinha"
+          >Pular linha</button>
         </div>
         <p class="apoio suave so-celular">Pistas usadas: {{ placar.pistas }}</p>
       </template>
@@ -573,9 +606,10 @@ if (revisaoAutomatica) iniciarSessao()
           <h1 class="titulo-pagina">{{ titulo?.titulo }}</h1>
           <p v-if="titulo?.nome" class="suave">{{ titulo.nome }}</p>
           <p v-if="revisando" class="suave">Revisão: não altera a agenda de repetição.</p>
+          <p v-if="pulada" class="suave">Linha pulada: ela continua na fila e volta na próxima revisão.</p>
         </div>
 
-        <dl class="placar-final">
+        <dl v-if="!pulada" class="placar-final">
           <div><dt>Acertos</dt><dd class="ok">{{ placar.acertos }}</dd></div>
           <div><dt>Erros</dt><dd class="erro">{{ placar.erros }}</dd></div>
           <div><dt>Pistas</dt><dd class="aviso">{{ placar.pistas }}</dd></div>
