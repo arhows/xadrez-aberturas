@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
 import GraficoPartida from '../components/GraficoPartida.vue'
 import HistoricoLances from '../components/HistoricoLances.vue'
-import Tabuleiro from '../components/Tabuleiro.vue'
-import { analisarLances, contarClasses, posicoesDaPartida, ROTULO_CLASSE, SIMBOLO_CLASSE, type Classe } from '../lib/analisePartida'
+import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
+import { analisarLances, contarClasses, posicoesDaPartida, sanDoUci, ROTULO_CLASSE, SIMBOLO_CLASSE, type Classe } from '../lib/analisePartida'
 import { avaliarPosicoes, pararAvaliacao } from '../lib/avaliador'
 import { obterCapitulos } from '../lib/capitulos'
 import { fmtLance } from '../lib/formato'
@@ -48,6 +48,13 @@ const erro = ref<string | null>(null)
 const ply = ref(sans.length)
 const orientacao = ref<'white' | 'black'>(minhaCor === 'b' ? 'black' : 'white')
 
+// ---------- Sugestão do Stockfish ----------
+/** Seta azul com o melhor lance na posição mostrada (como no lichess). */
+const mostrarSeta = ref(true)
+/** Ply de um lance marcado cuja alternativa está sendo mostrada (a posição antes dele). */
+const vendoMelhor = ref<number | null>(null)
+watch(ply, () => (vendoMelhor.value = null))
+
 const analise = computed(() => analisarLances(sans, valores.value, melhores.value))
 const analisando = computed(() => feitas.value < posicoes.length && !erro.value)
 /** Casas de origem e destino de cada lance, para destacar o último. */
@@ -69,6 +76,27 @@ const seloCasa = computed(() => {
     noLivro: livro[ply.value - 1].noLivro,
   })
 })
+/** Melhor lance (SAN) na posição depois de `i` meios-lances. */
+const melhorSan = (i: number) => sanDoUci(posicoes[i]?.fen ?? '', melhores.value[i])
+const setaDe = (i: number): Forma[] => {
+  const uci = melhores.value[i]
+  return uci ? [{ de: uci.slice(0, 2), para: uci.slice(2, 4), cor: 'blue' }] : []
+}
+/** Posição no tabuleiro: a do lance, ou a de antes do lance marcado quando se vê a alternativa. */
+const plyNoTabuleiro = computed(() => (vendoMelhor.value !== null ? vendoMelhor.value - 1 : ply.value))
+const formas = computed<Forma[]>(() =>
+  vendoMelhor.value !== null ? setaDe(vendoMelhor.value - 1) : mostrarSeta.value ? setaDe(ply.value) : [],
+)
+const ultimoNoTabuleiro = computed<[string, string] | null>(() =>
+  vendoMelhor.value !== null ? (vendoMelhor.value > 1 ? casas[vendoMelhor.value - 2] : null) : ultimoLance.value,
+)
+
+function verMelhor(p: number) {
+  ply.value = p
+  // O watch de ply limpa a escolha; marca depois dele.
+  setTimeout(() => (vendoMelhor.value = p))
+}
+
 const marcados = computed(() => analise.value.lances.filter((l) => l.classe))
 const CLASSES: Classe[] = ['imprecisao', 'erro', 'grave']
 const resumo = (cor: 'w' | 'b') => contarClasses(analise.value.lances, cor)
@@ -103,7 +131,14 @@ onBeforeUnmount(() => {
 <template>
   <div v-if="sans.length" class="tela">
     <div class="area-tabuleiro">
-      <Tabuleiro :fen="posicoes[ply].fen" :orientacao="orientacao" :ultimo-lance="ultimoLance" :avaliacao="valores[ply]" :selo="seloCasa" />
+      <Tabuleiro
+        :fen="posicoes[plyNoTabuleiro].fen"
+        :orientacao="orientacao"
+        :ultimo-lance="ultimoNoTabuleiro"
+        :avaliacao="valores[plyNoTabuleiro]"
+        :selo="vendoMelhor === null ? seloCasa : null"
+        :formas="formas"
+      />
     </div>
 
     <div class="painel">
@@ -122,6 +157,10 @@ onBeforeUnmount(() => {
         <button type="button" class="botao" :disabled="ply === sans.length" aria-label="Próximo lance" @click="ply++">▶</button>
         <button type="button" class="botao" :disabled="ply === sans.length" aria-label="Último lance" @click="ply = sans.length">⏭</button>
         <button type="button" class="botao" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">Girar</button>
+        <label class="marcar" title="Seta azul com o melhor lance do Stockfish na posição mostrada">
+          <input v-model="mostrarSeta" type="checkbox" />
+          Seta do Stockfish
+        </label>
       </div>
 
       <HistoricoLances :lances="sansMarcados" :atual="ply" clicavel @ir="ply = $event" />
@@ -138,7 +177,16 @@ onBeforeUnmount(() => {
           <span class="fonte">Stockfish</span>
           <strong class="simbolo" :class="analise.lances[ply - 1].classe!">{{ SIMBOLO_CLASSE[analise.lances[ply - 1].classe!] }}</strong>
           {{ ROTULO_CLASSE[analise.lances[ply - 1].classe!] }} (−{{ Math.round(analise.lances[ply - 1].perda) }} pontos)
+          <template v-if="melhorSan(ply - 1)">
+            · Melhor era <strong class="lance">{{ fmtLance(ply, melhorSan(ply - 1)!) }}</strong>
+            <button v-if="vendoMelhor === null" type="button" class="botao pequeno" @click="verMelhor(ply)">Ver</button>
+          </template>
         </template>
+      </p>
+      <p v-if="vendoMelhor !== null" class="vendo-melhor">
+        Posição antes de <span class="lance">{{ fmtLance(vendoMelhor, sans[vendoMelhor - 1]) }}</span>: o Stockfish jogaria
+        <strong class="lance">{{ fmtLance(vendoMelhor, melhorSan(vendoMelhor - 1) ?? '') }}</strong> (seta azul).
+        <button type="button" class="botao pequeno" @click="vendoMelhor = null">Voltar ao lance</button>
       </p>
 
       <table class="resumo">
@@ -165,7 +213,11 @@ onBeforeUnmount(() => {
             <button type="button" class="chip-lance" :class="{ atual: lance.ply === ply }" @click="ply = lance.ply">
               {{ fmtLance(lance.ply, lance.san) }}<span class="simbolo" :class="lance.classe!">{{ SIMBOLO_CLASSE[lance.classe!] }}</span>
             </button>
-            <span class="suave">{{ ROTULO_CLASSE[lance.classe!] }} de {{ nomeDaCor(lance.cor).toLowerCase() }} · −{{ Math.round(lance.perda) }} pontos de chance</span>
+            <span class="suave">
+              {{ ROTULO_CLASSE[lance.classe!] }} de {{ nomeDaCor(lance.cor).toLowerCase() }} · −{{ Math.round(lance.perda) }} pontos de chance
+              <template v-if="melhorSan(lance.ply - 1)"> · melhor era <span class="lance">{{ fmtLance(lance.ply, melhorSan(lance.ply - 1)!) }}</span></template>
+            </span>
+            <button v-if="melhorSan(lance.ply - 1)" type="button" class="botao pequeno" @click="verMelhor(lance.ply)">Ver</button>
           </li>
         </ul>
       </section>
@@ -254,6 +306,20 @@ h2 {
 .otimo { color: var(--ok); }
 .interessante { color: var(--motor); }
 .duvidoso { color: var(--aviso); }
+.vendo-melhor {
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  border-left: 3px solid var(--motor);
+  border-radius: var(--raio-sm);
+  background: var(--superficie-2);
+  font-size: 14px;
+}
+.pequeno {
+  min-height: 32px;
+  padding: 0 0.5rem;
+  font-size: 13px;
+  vertical-align: middle;
+}
 .lance-atual {
   margin: 0;
   font-size: 14px;

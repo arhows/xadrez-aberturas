@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref } from 'vue'
+import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import CartaoDica from '../components/CartaoDica.vue'
 import HistoricoLances from '../components/HistoricoLances.vue'
@@ -14,6 +14,7 @@ import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
 import { jogoDosLances, pgnDoJogo, situacaoDoJogo } from '../lib/jogo'
 import { separarLances, type Cor } from '../lib/lances'
 import { progresso } from '../lib/progresso'
+import { novoIdDeJogo, salvarJogo } from '../lib/jogosSalvos'
 import { aposLance, formatarRelogio, relogioInicial, semMaterialParaMate, tempoPorId, TEMPOS, type Restante } from '../lib/relogio'
 import { classificarLance, lanceNoLivro, type MarcaLivro, type QualidadeMotor } from '../lib/qualidade'
 import { seloDoLance } from '../lib/seloNoTabuleiro'
@@ -238,6 +239,7 @@ function comecar() {
   abandono.value = null
   erroMotor.value = null
   treinoAtivo.value = escolhas.modo === 'treino'
+  jogoSalvo.value = false
   relogioAtivo.value = !treinoAtivo.value && tempo.value.minutos > 0
   restante.value = relogioInicial(tempo.value)
   tempoEsgotado.value = null
@@ -391,6 +393,26 @@ const textoFim = computed(() => {
   return `${situacao.value.texto} ${venci ? 'Você venceu!' : 'O computador venceu.'}`
 })
 
+// Partidas do modo Partida ficam salvas em Minhas partidas, para analisar depois.
+const jogoSalvo = ref(false)
+watch(fase, (agora) => {
+  if (agora !== 'fim' || treinoAtivo.value || jogoSalvo.value || sans.value.length <= inicio.length) return
+  progresso.jogos = salvarJogo(progresso.jogos, {
+    id: novoIdDeJogo(),
+    data: new Date().toISOString(),
+    lances: sans.value.join(' '),
+    inicio: inicio.length,
+    adversario: escolhas.adversario,
+    nivel: contraMotor.value ? nivel.value.nivel : undefined,
+    cor: contraMotor.value ? minhaCor.value : undefined,
+    tempo: relogioAtivo.value ? tempo.value.id : 'livre',
+    resultado: resultado.value,
+    motivo: textoFim.value,
+    capitulo: capitulo?.capitulo.id,
+  })
+  jogoSalvo.value = true
+})
+
 function exportarPgn() {
   const voce = 'Você'
   const outro = contraMotor.value ? nomeDoMotor.value : 'Amigo'
@@ -506,6 +528,7 @@ onBeforeUnmount(() => {
       <CartaoDica v-if="fase === 'fim'" tipo="nota">
         <strong>Fim de partida · {{ resultado.replace('1/2-1/2', '½-½') }}</strong>
         <p class="instrucao">{{ textoFim }}</p>
+        <p v-if="jogoSalvo" class="instrucao">Partida salva em <RouterLink to="/partidas">Minhas partidas</RouterLink>.</p>
       </CartaoDica>
       <CartaoDica v-else-if="erroMotor" tipo="errado" :texto="erroMotor" />
       <CartaoDica

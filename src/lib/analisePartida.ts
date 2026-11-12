@@ -54,7 +54,7 @@ export function classificar(perda: number): Classe | null {
 }
 
 /** "e2e4" → "e4" na posição dada; null se não der. */
-function sanDoUci(fen: string, uci: string | null | undefined): string | null {
+export function sanDoUci(fen: string, uci: string | null | undefined): string | null {
   if (!uci) return null
   try {
     return new Chess(fen).move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci[4] }).san

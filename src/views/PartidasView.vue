@@ -8,6 +8,10 @@ import { importarPartidas, importarPgn, type ResultadoImportacao, type Resultado
 import type { Cor } from '../lib/lances'
 import type { PartidaAnalisada } from '../lib/partidas'
 import { aproveitamento, resumoPorAbertura } from '../lib/partidasRepertorio'
+import { jogosVisiveis, textoDoResultado, type JogoSalvo } from '../lib/jogosSalvos'
+import { pgnDoJogo } from '../lib/jogo'
+import { baixarTexto } from '../lib/download'
+import { NIVEIS } from '../lib/adversario'
 import { progresso } from '../lib/progresso'
 
 const usuarios = progresso.partidas
@@ -87,6 +91,30 @@ const todas = computed(() =>
 const noRepertorio = computed(() => todas.value.filter((p) => p.capitulo))
 const porAbertura = computed(() => resumoPorAbertura(noRepertorio.value))
 
+// ---------- Partidas jogadas no app (Jogar, modo Partida) ----------
+const jogos = computed(() => jogosVisiveis(progresso.jogos))
+const confirmandoApagar = ref<string | null>(null)
+const nomeDoAdversario = (j: JogoSalvo) =>
+  j.adversario === 'amigo' ? 'amigo' : `Stockfish nível ${j.nivel} (${NIVEIS.find((n) => n.nivel === j.nivel)?.nome ?? ''})`
+const dataCurta = (iso: string) => new Date(iso).toLocaleDateString('pt-BR')
+const numeroDeLances = (j: JogoSalvo) => Math.ceil((j.lances.split(' ').length - j.inicio) / 2)
+function exportarJogo(j: JogoSalvo) {
+  const voce = 'Você'
+  const outro = j.adversario === 'amigo' ? 'Amigo' : nomeDoAdversario(j)
+  const brancas = j.adversario === 'amigo' ? 'Brancas' : j.cor === 'w' ? voce : outro
+  const pretas = j.adversario === 'amigo' ? 'Pretas' : j.cor === 'b' ? voce : outro
+  baixarTexto(`partida-${j.data.slice(0, 10)}.pgn`, pgnDoJogo(j.lances.split(' '), { brancas, pretas, resultado: j.resultado, data: j.data.slice(0, 10) }), 'application/x-chess-pgn')
+}
+/** Apagar pede um segundo toque (sem janela de confirmação do navegador). */
+function apagarJogo(id: string) {
+  if (confirmandoApagar.value !== id) {
+    confirmandoApagar.value = id
+    return
+  }
+  progresso.jogos = { ...progresso.jogos, [id]: { ...progresso.jogos[id], apagada: true } }
+  confirmandoApagar.value = null
+}
+
 interface Grupo {
   chave: string
   partidas: PartidaAnalisada[]
@@ -138,6 +166,33 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
       Importa suas partidas e mostra onde elas saíram do repertório. Cada vez que você sai do livro, aquele lance
       passa a ser cobrado com mais frequência no Treino.
     </p>
+
+    <section v-if="jogos.length">
+      <h2>Jogadas no app</h2>
+      <ul class="lista">
+        <li v-for="j in jogos" :key="j.id">
+          <div>
+            <strong>{{ textoDoResultado(j) }} {{ j.adversario === 'amigo' ? 'contra amigo' : `contra ${nomeDoAdversario(j)}` }}</strong>
+            <span class="suave">
+              {{ dataCurta(j.data) }}<template v-if="j.cor"> · {{ j.cor === 'w' ? 'brancas' : 'pretas' }}</template>
+              · {{ j.tempo === 'livre' ? 'sem relógio' : j.tempo }} · {{ numeroDeLances(j) }} lances
+            </span>
+            <span class="suave">{{ j.motivo }}</span>
+          </div>
+          <div class="acoes-jogo">
+            <RouterLink
+              class="botao"
+              :to="{ name: 'analise', query: { c: j.lances, cor: j.cor, titulo: `${textoDoResultado(j)} ${j.adversario === 'amigo' ? 'contra amigo' : `contra ${nomeDoAdversario(j)}`}`, volta: '/partidas' } }"
+            >Analisar</RouterLink>
+            <button type="button" class="botao" @click="exportarJogo(j)">PGN</button>
+            <button type="button" class="botao fantasma" :class="{ perigo: confirmandoApagar === j.id }" @click="apagarJogo(j.id)">
+              {{ confirmandoApagar === j.id ? 'Confirmar' : 'Apagar' }}
+            </button>
+          </div>
+        </li>
+      </ul>
+      <p class="suave">As últimas {{ 100 }} partidas do modo Partida ficam guardadas e sincronizam entre os aparelhos.</p>
+    </section>
 
     <form class="importar" @submit.prevent="importar">
       <label class="campo">
@@ -405,6 +460,12 @@ p {
 }
 .lista li + li {
   border-top: 1px solid var(--borda);
+}
+.acoes-jogo {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: var(--espaco-2) !important;
+  justify-content: flex-end;
 }
 .lista li div {
   display: grid;

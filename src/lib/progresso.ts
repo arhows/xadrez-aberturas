@@ -4,6 +4,7 @@ import type { EscolhaCor, Profundidade } from './escopo'
 import type { Notacao } from './notacao'
 import type { PartidaAnalisada } from './partidas'
 import type { Cartao } from './srs'
+import type { JogoSalvo } from './jogosSalvos'
 
 export interface Configuracoes {
   notacao: Notacao
@@ -94,6 +95,8 @@ export interface Progresso {
   anotacoes: Record<string, { texto: string; atualizado: string }>
   /** Recorde do modo relâmpago por duração em minutos (chave "1", "3", "5"). */
   relampago: Record<string, number>
+  /** Partidas jogadas no app (modo Partida do Jogar), para analisar depois. */
+  jogos: Record<string, JogoSalvo>
   /** Atividade por dia (AAAA-MM-DD), para a sequência de dias e o calendário do painel. */
   atividade: Record<string, Atividade>
   config: Configuracoes
@@ -137,6 +140,7 @@ function progressoVazio(): Progresso {
     atividade: {},
     anotacoes: {},
     relampago: {},
+    jogos: {},
     repertorio: { capitulos: [], atualizado: '' },
     config: { ...CONFIG_PADRAO },
   }
@@ -165,6 +169,7 @@ export function normalizarProgresso(dados: unknown): Progresso | null {
     atividade: ehObjeto(parcial.atividade) ? parcial.atividade! : {},
     anotacoes: ehObjeto(parcial.anotacoes) ? parcial.anotacoes! : {},
     relampago: ehObjeto(parcial.relampago) ? parcial.relampago! : {},
+    jogos: ehObjeto(parcial.jogos) ? parcial.jogos! : {},
     repertorio:
       ehObjeto(parcial.repertorio) && Array.isArray(parcial.repertorio!.capitulos)
         ? { capitulos: parcial.repertorio!.capitulos, atualizado: String(parcial.repertorio!.atualizado ?? '') }
