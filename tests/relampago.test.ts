@@ -55,3 +55,17 @@ describe('modo relâmpago', () => {
     expect(erro.caminho).toEqual([...p.antes, p.esperado.san])
   })
 })
+
+describe('relâmpago só com linhas já treinadas', () => {
+  it('sorteia apenas as colunas que passam no filtro', () => {
+    const permitida = petrov[0].capitulo.linhas[2].id
+    const filtro = (_c: string, linha: string, cor: string) => linha === permitida && cor === 'b'
+    const aleatorio = semente(11)
+    for (let i = 0; i < 20; i++) {
+      const p = sortearPergunta(petrov, { petrov: 'ambas' }, aleatorio, filtro)!
+      expect(p.linha).toBe(permitida)
+      expect(p.cor).toBe('b')
+    }
+    expect(sortearPergunta(petrov, { petrov: 'w' }, aleatorio, filtro)).toBeNull()
+  })
+})

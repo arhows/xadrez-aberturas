@@ -32,6 +32,8 @@ export interface Configuracoes {
   jogo: { adversario: 'motor' | 'amigo'; cor: 'w' | 'b' | 'sorteio'; nivel: number }
   /** Duração do modo relâmpago, em minutos. */
   minutosRelampago: number
+  /** De onde saem as posições do relâmpago. */
+  fonteRelampago: 'treinadas' | 'repertorio' | 'todas'
   /** Estudo e Explorar: esconde as setas e os lances do livro até a pessoa tentar o lance. */
   adivinhar: boolean
   /** Última escolha da tela de Treino, usada também por "Revisar agora". */
@@ -114,6 +116,7 @@ export const CONFIG_PADRAO: Configuracoes = {
   taticasAutomaticas: false,
   adivinhar: false,
   minutosRelampago: 3,
+  fonteRelampago: 'treinadas',
   barraAvaliacao: true,
   jogo: { adversario: 'motor', cor: 'sorteio', nivel: 3 },
   fonteExplorador: 'lichess',

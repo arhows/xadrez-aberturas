@@ -5,7 +5,8 @@ import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { obterCapitulos } from '../lib/capitulos'
 import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
 import { progresso } from '../lib/progresso'
-import { registrarRecorde, sortearPergunta, type PerguntaRelampago } from '../lib/relampago'
+import { candidatosRelampago, registrarRecorde, sortearPergunta, type FiltroLinha, type PerguntaRelampago } from '../lib/relampago'
+import { idCartao } from '../lib/srs'
 import { capitulosDoRepertorio, repertorioEscolhido } from '../lib/repertorio'
 import { tocar } from '../lib/som'
 import { registrarErroNoLance } from '../lib/treinoErros'
@@ -14,7 +15,16 @@ const config = progresso.config
 const MINUTOS = [1, 3, 5]
 const TEMPO_DO_ERRO_MS = 900
 
-const capitulos = capitulosDoRepertorio(obterCapitulos())
+/** "Só as que já treinei" usa o repertório (se houver) e filtra as linhas com cartão de revisão. */
+const capitulos = computed(() =>
+  config.fonteRelampago === 'todas' ? obterCapitulos() : capitulosDoRepertorio(obterCapitulos()),
+)
+const filtro = computed<FiltroLinha>(() =>
+  config.fonteRelampago === 'treinadas'
+    ? (capitulo, linha, cor) => progresso.cartoes[idCartao({ capitulo, linha, cor })] !== undefined
+    : () => true,
+)
+const linhasDisponiveis = computed(() => candidatosRelampago(capitulos.value, progresso.corPorCapitulo, filtro.value).length)
 const fase = ref<'inicio' | 'jogando' | 'fim'>('inicio')
 const pergunta = shallowRef<PerguntaRelampago | null>(null)
 const acertos = ref(0)
@@ -45,7 +55,7 @@ const contexto = computed(() =>
 
 function proxima() {
   mostrandoErro.value = false
-  pergunta.value = sortearPergunta(capitulos, progresso.corPorCapitulo)
+  pergunta.value = sortearPergunta(capitulos.value, progresso.corPorCapitulo, Math.random, filtro.value)
   if (!pergunta.value) terminar()
 }
 
@@ -144,9 +154,26 @@ onBeforeUnmount(() => {
       <p v-if="erros" class="suave">Os lances que você errou foram para “Treinar meus erros”.</p>
     </template>
     <p v-else>
-      Posições sorteadas {{ repertorioEscolhido ? 'do seu repertório' : 'de todas as aberturas' }}, sempre na vez da cor que você
-      treina em cada uma. Jogue o lance do livro o mais rápido que puder; se errar, a seta mostra o certo e vem a próxima.
+      Posições sorteadas, sempre na vez da cor que você treina em cada abertura. Jogue o lance do livro o mais rápido que
+      puder; se errar, a seta mostra o certo e vem a próxima.
     </p>
+
+    <fieldset class="opcoes">
+      <legend>Posições de quais linhas?</legend>
+      <label class="marcar">
+        <input v-model="config.fonteRelampago" type="radio" value="treinadas" />
+        Só as que já treinei
+      </label>
+      <label class="marcar">
+        <input v-model="config.fonteRelampago" type="radio" value="repertorio" />
+        {{ repertorioEscolhido ? 'Todo o meu repertório' : 'Todo o repertório (você ainda não escolheu as suas aberturas)' }}
+      </label>
+      <label class="marcar">
+        <input v-model="config.fonteRelampago" type="radio" value="todas" />
+        Todas as aberturas do app
+      </label>
+      <span class="suave">{{ linhasDisponiveis }} {{ linhasDisponiveis === 1 ? 'linha disponível' : 'linhas disponíveis' }}</span>
+    </fieldset>
 
     <label class="campo">
       <span>Duração</span>
@@ -156,9 +183,11 @@ onBeforeUnmount(() => {
         </option>
       </select>
     </label>
-    <p v-if="!capitulos.length" class="erro">Nenhuma abertura disponível.</p>
+    <p v-if="!linhasDisponiveis" class="erro">
+      {{ config.fonteRelampago === 'treinadas' ? 'Você ainda não treinou nenhuma linha. Treine algumas no Treino ou escolha outra opção.' : 'Nenhuma linha disponível.' }}
+    </p>
     <div class="acoes">
-      <button type="button" class="botao primario grande largo-celular" :disabled="!capitulos.length" @click="comecar">
+      <button type="button" class="botao primario grande largo-celular" :disabled="!linhasDisponiveis" @click="comecar">
         {{ fase === 'fim' ? 'Jogar de novo' : 'Começar' }}
       </button>
       <RouterLink v-if="fase === 'fim' && erros" class="botao largo-celular" to="/erros">Treinar meus erros</RouterLink>
@@ -190,6 +219,20 @@ onBeforeUnmount(() => {
 }
 .instrucao {
   margin: 0;
+}
+.opcoes {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.opcoes legend {
+  padding: 0;
+  font: 600 14px/20px var(--font-texto);
+}
+.opcoes input[type='radio'] {
+  border-radius: 50%;
 }
 .erro {
   color: var(--erro);

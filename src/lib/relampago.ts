@@ -21,17 +21,31 @@ export interface PerguntaRelampago {
   aceitos: Aresta[]
 }
 
+/** Que linhas entram: só as já treinadas (têm cartão de revisão naquela cor) ou todas. */
+export type FiltroLinha = (capitulo: string, linha: string, cor: Cor) => boolean
+
+/** Linhas candidatas (coluna + cor); vazio quando o filtro não deixa nenhuma. */
+export function candidatosRelampago(
+  capitulos: CapituloCarregado[],
+  corPorCapitulo: Record<string, EscolhaCor>,
+  filtro: FiltroLinha = () => true,
+) {
+  return capitulos.flatMap((capitulo) =>
+    capitulo.unidades
+      .filter((u) => u.tipo === 'linha' && u.lances.length > 0)
+      .flatMap((u) => coresDaEscolha(corDoCapitulo(capitulo, corPorCapitulo)).map((cor) => ({ capitulo, unidade: u, cor })))
+      .filter(({ unidade, cor }) => filtro(capitulo.capitulo.id, unidade.id, cor)),
+  )
+}
+
 export function sortearPergunta(
   capitulos: CapituloCarregado[],
   corPorCapitulo: Record<string, EscolhaCor>,
   aleatorio: () => number = Math.random,
+  filtro: FiltroLinha = () => true,
 ): PerguntaRelampago | null {
   const escolher = <T>(lista: T[]): T => lista[Math.floor(aleatorio() * lista.length)]
-  const candidatos = capitulos.flatMap((capitulo) =>
-    capitulo.unidades
-      .filter((u) => u.tipo === 'linha' && u.lances.length > 0)
-      .flatMap((u) => coresDaEscolha(corDoCapitulo(capitulo, corPorCapitulo)).map((cor) => ({ capitulo, unidade: u, cor }))),
-  )
+  const candidatos = candidatosRelampago(capitulos, corPorCapitulo, filtro)
   for (let tentativa = 0; tentativa < 20 && candidatos.length; tentativa++) {
     const { capitulo, unidade, cor } = escolher(candidatos)
     // Lances da cor escolhida (1.e4 é ply 1 = brancas).
