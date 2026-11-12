@@ -1,4 +1,4 @@
-import type { ErroAresta, EstadoExercicio, Progresso } from './progresso'
+import type { Atividade, ErroAresta, EstadoExercicio, Progresso } from './progresso'
 import { somarDias, type Cartao } from './srs'
 
 /**
@@ -12,7 +12,7 @@ export function paraNuvem({ config: _config, ...resto }: Progresso): ProgressoSi
 }
 
 /** Dia da última revisão do cartão: a próxima menos o intervalo. */
-function ultimaRevisao(cartao: Cartao): string {
+export function ultimaRevisao(cartao: Cartao): string {
   return somarDias(cartao.proxima, -cartao.intervalo)
 }
 
@@ -36,6 +36,14 @@ function juntarPorChave<T>(a: Record<string, T>, b: Record<string, T>, escolher:
 function juntarErros(a: ErroAresta, b: ErroAresta): ErroAresta {
   const base = a.erros >= b.erros ? a : b
   return { ...base, linhas: [...new Set([...a.linhas, ...b.linhas])] }
+}
+
+/**
+ * Cada aparelho conta o que estudou nele; somar contaria duas vezes a cada sincronização,
+ * então fica o maior de cada campo (a junção pode ser repetida sem mudar o resultado).
+ */
+function juntarAtividade(a: Atividade, b: Atividade): Atividade {
+  return { linhas: Math.max(a.linhas, b.linhas), exercicios: Math.max(a.exercicios, b.exercicios) }
 }
 
 /** Resolvido sem ajuda em algum aparelho conta como resolvido sem ajuda. */
@@ -63,5 +71,6 @@ export function juntarProgresso(local: ProgressoSincronizado, nuvem: ProgressoSi
       chesscom: local.partidas.chesscom || nuvem.partidas.chesscom,
       analisadas: { ...nuvem.partidas.analisadas, ...local.partidas.analisadas },
     },
+    atividade: juntarPorChave(nuvem.atividade ?? {}, local.atividade ?? {}, juntarAtividade),
   }
 }

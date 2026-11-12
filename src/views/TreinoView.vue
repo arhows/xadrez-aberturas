@@ -19,6 +19,7 @@ import {
   type PlanoDeRevisao,
 } from '../lib/escopo'
 import { fmtLance, fmtTexto } from '../lib/formato'
+import { somarAtividade } from '../lib/painel'
 import { progresso } from '../lib/progresso'
 import { tocar } from '../lib/som'
 import {
@@ -338,6 +339,7 @@ const textoBotaoPista = computed(() =>
 
 function finalizarPartida() {
   aviso.value = null
+  somarAtividade(progresso.atividade, 'linhas')
   if (!revisando.value) {
     const { alvo, cor } = partida.value!
     const id = idCartao({ capitulo: idCapitulo, linha: alvo, cor })

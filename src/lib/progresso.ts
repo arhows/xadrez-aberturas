@@ -36,6 +36,12 @@ export interface ErroAresta {
   linhas: string[]
 }
 
+/** O que foi estudado num dia: partidas de treino terminadas e problemas resolvidos. */
+export interface Atividade {
+  linhas: number
+  exercicios: number
+}
+
 /** Como o problema foi resolvido da última vez: sem ajuda ou depois de errar/pedir pista. */
 export type EstadoExercicio = 'primeira' | 'ajuda'
 
@@ -57,6 +63,8 @@ export interface Progresso {
     chesscom: string
     analisadas: Record<string, PartidaAnalisada>
   }
+  /** Atividade por dia (AAAA-MM-DD), para a sequência de dias e o calendário do painel. */
+  atividade: Record<string, Atividade>
   config: Configuracoes
 }
 
@@ -88,6 +96,7 @@ function progressoVazio(): Progresso {
     cartoesExercicios: {},
     ultimoConjunto: null,
     partidas: { lichess: '', chesscom: '', analisadas: {} },
+    atividade: {},
     config: { ...CONFIG_PADRAO },
   }
 }
@@ -112,6 +121,7 @@ export function normalizarProgresso(dados: unknown): Progresso | null {
       analisadas: {},
       ...(ehObjeto(parcial.partidas) ? parcial.partidas : {}),
     },
+    atividade: ehObjeto(parcial.atividade) ? parcial.atividade! : {},
     config: { ...CONFIG_PADRAO, ...(ehObjeto(parcial.config) ? parcial.config : {}) },
   }
 }

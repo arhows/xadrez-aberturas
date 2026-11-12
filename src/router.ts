@@ -10,6 +10,7 @@ import EntrarView from './views/EntrarView.vue'
 import EstudoView from './views/EstudoView.vue'
 import ExercicioView from './views/ExercicioView.vue'
 import PartidasView from './views/PartidasView.vue'
+import ProgressoView from './views/ProgressoView.vue'
 import ExerciciosView from './views/ExerciciosView.vue'
 import ExplorarView from './views/ExplorarView.vue'
 import InicioView from './views/InicioView.vue'
@@ -21,7 +22,7 @@ const exigirCapitulo = (destino: RouteLocationNormalized) =>
 declare module 'vue-router' {
   interface RouteMeta {
     /** Item do menu que fica marcado nesta tela. */
-    secao?: 'inicio' | 'aberturas' | 'exercicios' | 'partidas' | 'diagnostico' | 'config'
+    secao?: 'inicio' | 'aberturas' | 'exercicios' | 'partidas' | 'progresso' | 'diagnostico' | 'config'
     /** Tela de foco (Treino, Exercício): no celular some a barra inferior. */
     foco?: boolean
     publica?: boolean
@@ -37,6 +38,7 @@ export const router = createRouter({
     { path: '/aberturas', name: 'aberturas', component: AberturasView, meta: { secao: 'aberturas' } },
     { path: '/abertura/:cap', name: 'abertura', component: AberturaView, beforeEnter: exigirCapitulo, meta: { secao: 'aberturas' } },
     { path: '/partidas', name: 'partidas', component: PartidasView, meta: { secao: 'partidas' } },
+    { path: '/progresso', name: 'progresso', component: ProgressoView, beforeEnter: () => carregarConjuntos().then(() => true), meta: { secao: 'progresso' } },
     { path: '/explorar/:cap', name: 'explorar', component: ExplorarView, beforeEnter: exigirCapitulo, meta: { secao: 'aberturas' } },
     { path: '/estudo/:cap/:linha', name: 'estudo', component: EstudoView, beforeEnter: exigirCapitulo, meta: { secao: 'aberturas' } },
     { path: '/treino/:cap', name: 'treino', component: TreinoView, beforeEnter: exigirCapitulo, meta: { secao: 'aberturas', foco: true } },

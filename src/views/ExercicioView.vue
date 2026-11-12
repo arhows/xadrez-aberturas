@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { somarAtividade } from '../lib/painel'
 import { computed, onBeforeUnmount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CartaoDica from '../components/CartaoDica.vue'
@@ -273,6 +274,7 @@ function concluir(lance: LanceVerificado) {
   ultimoLance.value = [lance.from, lance.to]
   resolvido.value = true
   const dePrimeira = erros.value === 0 && !usouPista.value
+  somarAtividade(progresso.atividade, 'exercicios')
   if (!refazendo) {
     estados.value[problema.n] = dePrimeira ? 'primeira' : 'ajuda'
     registrarResultado(conjunto.id, problema.n, notaDoExercicio(erros.value, usouPista.value))

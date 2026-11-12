@@ -36,6 +36,7 @@ const LINKS: { secao: Secao; para: string; nome: string }[] = [
   { secao: 'aberturas', para: '/aberturas', nome: 'Aberturas' },
   { secao: 'exercicios', para: '/exercicios', nome: 'Exercícios' },
   { secao: 'partidas', para: '/partidas', nome: 'Partidas' },
+  { secao: 'progresso', para: '/progresso', nome: 'Progresso' },
   { secao: 'diagnostico', para: '/diagnostico', nome: 'Diagnóstico' },
   { secao: 'config', para: '/config', nome: 'Configurações' },
 ]
@@ -43,7 +44,7 @@ const NA_BARRA = LINKS.slice(0, 4)
 const NO_MAIS = LINKS.slice(4)
 const noMais = computed(() => NO_MAIS.some((link) => link.secao === secao.value))
 
-// "Mais" (celular): folha com Diagnóstico e Configurações.
+// "Mais" (celular): folha com Progresso, Diagnóstico e Configurações.
 const maisAberto = ref(false)
 watch(() => rota.fullPath, () => (maisAberto.value = false))
 </script>

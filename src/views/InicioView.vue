@@ -58,7 +58,10 @@ const maisErrados = computed(() =>
 
 <template>
   <div class="pagina inicio">
-    <h1 class="titulo-pagina">Hoje</h1>
+    <div class="topo-inicio">
+      <h1 class="titulo-pagina">Hoje</h1>
+      <RouterLink class="botao fantasma" to="/progresso">Ver progresso</RouterLink>
+    </div>
 
     <div class="areas">
       <section class="cartao">
@@ -173,6 +176,12 @@ const maisErrados = computed(() =>
 </template>
 
 <style scoped>
+.topo-inicio {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-2);
+}
 .inicio {
   display: grid;
   gap: var(--espaco-5);
