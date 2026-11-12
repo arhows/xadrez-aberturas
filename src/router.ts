@@ -22,6 +22,7 @@ import { buscarLicao } from './lib/licoes'
 import EditorView from './views/EditorView.vue'
 import AnalisarView from './views/AnalisarView.vue'
 import PreparacaoView from './views/PreparacaoView.vue'
+import JogadorView from './views/JogadorView.vue'
 import ExerciciosView from './views/ExerciciosView.vue'
 import ExplorarView from './views/ExplorarView.vue'
 import InicioView from './views/InicioView.vue'
@@ -80,6 +81,7 @@ export const router = createRouter({
     { path: '/editor', name: 'editor', component: EditorView, meta: { secao: 'inicio' } },
     { path: '/analisar', name: 'analisar', component: AnalisarView, meta: { secao: 'inicio' } },
     { path: '/preparacao', name: 'preparacao', component: PreparacaoView, meta: { secao: 'inicio' } },
+    { path: '/jogador', name: 'jogador', component: JogadorView, meta: { secao: 'inicio' } },
     { path: '/diagnostico', name: 'diagnostico', component: DiagnosticoView, meta: { secao: 'diagnostico' } },
     { path: '/config', name: 'config', component: ConfigView, meta: { secao: 'config' } },
     { path: '/:resto(.*)', redirect: '/' },
