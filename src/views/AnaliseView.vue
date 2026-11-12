@@ -9,7 +9,8 @@ import { analisarLances, contarClasses, posicoesDaPartida, ROTULO_CLASSE, SIMBOL
 import { avaliarPosicoes, pararAvaliacao } from '../lib/avaliador'
 import { obterCapitulos } from '../lib/capitulos'
 import { fmtLance } from '../lib/formato'
-import { marcaNaSequencia, tomDaMarca } from '../lib/qualidade'
+import { lanceNoLivro, tomDaMarca } from '../lib/qualidade'
+import { seloDoLance } from '../lib/seloNoTabuleiro'
 import { separarLances } from '../lib/lances'
 
 /** Análise de uma partida pelo Stockfish: gráfico de chance, erros marcados e navegação. */
@@ -33,7 +34,8 @@ const posicoes = posicoesDaPartida(sans)
 const valores = ref<(number | null)[]>(posicoes.map((p) => p.valorFixo ?? null))
 const melhores = ref<(string | null)[]>([])
 /** Marca do MCO de cada lance enquanto a partida estava no livro. */
-const marcas = sans.map((_, i) => marcaNaSequencia(sans.slice(0, i + 1), obterCapitulos()))
+const livro = sans.map((_, i) => lanceNoLivro(sans.slice(0, i + 1), obterCapitulos()))
+const marcas = livro.map((l) => l.marca)
 /** Histórico com as marcas: do MCO, e ?!/?/?? do motor quando o livro não marcou. */
 const sansMarcados = computed(() =>
   sans.map((san, i) => {
@@ -57,6 +59,16 @@ const casas = (() => {
   })
 })()
 const ultimoLance = computed<[string, string] | null>(() => (ply.value > 0 ? casas[ply.value - 1] : null))
+/** Sinal no canto da casa de destino do lance mostrado. */
+const seloCasa = computed(() => {
+  if (ply.value === 0) return null
+  const lance = analise.value.lances[ply.value - 1]
+  return seloDoLance(casas[ply.value - 1][1], {
+    marca: marcas[ply.value - 1],
+    classe: lance?.classe ?? lance?.boa ?? null,
+    noLivro: livro[ply.value - 1].noLivro,
+  })
+})
 const marcados = computed(() => analise.value.lances.filter((l) => l.classe))
 const CLASSES: Classe[] = ['imprecisao', 'erro', 'grave']
 const resumo = (cor: 'w' | 'b') => contarClasses(analise.value.lances, cor)
@@ -91,7 +103,7 @@ onBeforeUnmount(() => {
 <template>
   <div v-if="sans.length" class="tela">
     <div class="area-tabuleiro">
-      <Tabuleiro :fen="posicoes[ply].fen" :orientacao="orientacao" :ultimo-lance="ultimoLance" :avaliacao="valores[ply]" />
+      <Tabuleiro :fen="posicoes[ply].fen" :orientacao="orientacao" :ultimo-lance="ultimoLance" :avaliacao="valores[ply]" :selo="seloCasa" />
     </div>
 
     <div class="painel">

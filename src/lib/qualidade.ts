@@ -151,7 +151,16 @@ export function marcaNaSequencia(
   capitulos: CapituloCarregado[],
   preferido?: CapituloCarregado,
 ): MarcaLivro | null {
-  if (!sans.length) return null
+  return lanceNoLivro(sans, capitulos, preferido).marca
+}
+
+/** Se o último lance da sequência ainda é do livro, e a marca dele (se houver). */
+export function lanceNoLivro(
+  sans: string[],
+  capitulos: CapituloCarregado[],
+  preferido?: CapituloCarregado,
+): { noLivro: boolean; marca: MarcaLivro | null } {
+  if (!sans.length) return { noLivro: false, marca: null }
   for (const capitulo of preferido ? [preferido, ...capitulos] : capitulos) {
     let no = capitulo.arvore.nos.get(capitulo.arvore.raiz)
     let ultima: Aresta | undefined
@@ -160,9 +169,9 @@ export function marcaNaSequencia(
       if (!ultima) break
       no = capitulo.arvore.nos.get(ultima.para)
     }
-    if (ultima && no) return marcasDoCapitulo(capitulo).get(ultima.id) ?? null
+    if (ultima && no) return { noLivro: true, marca: marcasDoCapitulo(capitulo).get(ultima.id) ?? null }
   }
-  return null
+  return { noLivro: false, marca: null }
 }
 
 const cacheMarcas = new WeakMap<CapituloCarregado, Map<string, MarcaLivro>>()

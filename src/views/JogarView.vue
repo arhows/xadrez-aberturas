@@ -15,7 +15,8 @@ import { jogoDosLances, pgnDoJogo, situacaoDoJogo } from '../lib/jogo'
 import { separarLances, type Cor } from '../lib/lances'
 import { progresso } from '../lib/progresso'
 import { aposLance, formatarRelogio, relogioInicial, semMaterialParaMate, tempoPorId, TEMPOS, type Restante } from '../lib/relogio'
-import { classificarLance, marcaNaSequencia, type MarcaLivro, type QualidadeMotor } from '../lib/qualidade'
+import { classificarLance, lanceNoLivro, type MarcaLivro, type QualidadeMotor } from '../lib/qualidade'
+import { seloDoLance } from '../lib/seloNoTabuleiro'
 import { Chess } from 'chess.js'
 import { dataLocal } from '../lib/srs'
 
@@ -115,7 +116,7 @@ const avaliar = (fenPosicao: string) => {
   return pedido
 }
 /** Qualidade por lance (chave = ply do lance, 1 = 1.e4); `null` = ainda avaliando. */
-const qualidades = ref<Record<number, { marca: MarcaLivro | null; motor: QualidadeMotor | null } | null>>({})
+const qualidades = ref<Record<number, { marca: MarcaLivro | null; noLivro: boolean; motor: QualidadeMotor | null } | null>>({})
 const nivelDica = ref(0)
 const dicaLance = ref<{ from: string; to: string } | null>(null)
 const carregandoDica = ref(false)
@@ -156,7 +157,7 @@ function valorDoFim(fenPosicao: string): number | null {
 
 async function avaliarLance(ply: number, fenAntes: string, fenDepois: string, san: string) {
   qualidades.value = { ...qualidades.value, [ply]: null }
-  const marca = marcaNaSequencia(sans.value.slice(0, ply), obterCapitulos(), capitulo)
+  const { marca, noLivro } = lanceNoLivro(sans.value.slice(0, ply), obterCapitulos(), capitulo)
   try {
     const antes = await avaliar(fenAntes)
     const depois = valorDoFim(fenDepois) ?? (await avaliar(fenDepois)).cp
@@ -165,9 +166,9 @@ async function avaliarLance(ply: number, fenAntes: string, fenDepois: string, sa
       antes.cp !== null && depois !== null
         ? classificarLance(antes.cp, depois, fenAntes.split(' ')[1] === 'w', sanDoUci(fenAntes, antes.melhor), san)
         : null
-    qualidades.value = { ...qualidades.value, [ply]: { marca, motor } }
+    qualidades.value = { ...qualidades.value, [ply]: { marca, noLivro, motor } }
   } catch {
-    if (sans.value[ply - 1] === san) qualidades.value = { ...qualidades.value, [ply]: { marca, motor: null } }
+    if (sans.value[ply - 1] === san) qualidades.value = { ...qualidades.value, [ply]: { marca, noLivro, motor: null } }
   }
 }
 
@@ -199,6 +200,13 @@ const orientacao = computed<'white' | 'black'>(() =>
 const ultimoLance = computed<[string, string] | null>(() => {
   const ultimo = jogo.value.history({ verbose: true }).at(-1)
   return ultimo ? [ultimo.from, ultimo.to] : null
+})
+/** No modo treino, o sinal do seu lance aparece no canto da casa enquanto ele é o último. */
+const seloCasa = computed(() => {
+  const q = qualidades.value[sans.value.length]
+  if (!treinoAtivo.value || !q || !ultimoLance.value) return null
+  const classe = q.motor?.classe
+  return seloDoLance(ultimoLance.value[1], { marca: q.marca, classe: classe ?? null, noLivro: q.noLivro })
 })
 const formas = computed<Forma[]>(() => {
   const pendente = promocaoPendente.value
@@ -263,14 +271,27 @@ function fazer(lance: LanceUci): boolean {
   return true
 }
 
+/** O computador "pensa" entre 1,5 e 2,5 s, como uma pessoa, mesmo quando acha o lance antes. */
+const PAUSA_MINIMA_MS = 1500
+const PAUSA_VARIACAO_MS = 1000
+/** A peça do computador desliza mais devagar que a da pessoa, para dar para acompanhar. */
+const ANIMACAO_COMPUTADOR_MS = 650
+const ultimoDoComputador = ref(false)
+const animacaoTabuleiro = computed(() => (ultimoDoComputador.value ? ANIMACAO_COMPUTADOR_MS : undefined))
+
 async function vezDoComputador() {
   const minha = versao
   pensando.value = true
+  const comeco = performance.now()
+  const pausa = PAUSA_MINIMA_MS + Math.random() * PAUSA_VARIACAO_MS
   try {
     const lance = await lanceDoComputador(fen.value, nivel.value)
+    const falta = pausa - (performance.now() - comeco)
+    if (falta > 0) await new Promise((resolver) => setTimeout(resolver, falta))
     // Cancelada (desfazer, abandonar, nova partida): quem cancelou já cuidou do estado.
     if (minha !== versao || fase.value !== 'jogando') return
     pensando.value = false
+    ultimoDoComputador.value = true
     if (lance) fazer(lance)
   } catch (erro) {
     pensando.value = false
@@ -287,6 +308,7 @@ function aoJogar(de: string, para: string) {
 }
 
 function jogar(lance: LanceUci) {
+  ultimoDoComputador.value = false
   const fenAntes = fen.value
   if (!fazer(lance)) {
     tabuleiro.value?.sincronizar()
@@ -460,6 +482,8 @@ onBeforeUnmount(() => {
         :orientacao="orientacao"
         :ultimo-lance="ultimoLance"
         :formas="formas"
+        :animacao="animacaoTabuleiro"
+        :selo="seloCasa"
         :jogavel="jogavel"
         @lance="aoJogar"
       />

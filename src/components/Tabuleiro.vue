@@ -13,6 +13,7 @@ import { corDaPosicao, destinosLegais, estaEmXeque } from '../lib/lances'
 import { progresso } from '../lib/progresso'
 import { formatarAvaliacao } from '../lib/motor'
 import { chanceDasBrancas } from '../lib/probabilidade'
+import { cantoDaCasa, type SeloCasa } from '../lib/seloNoTabuleiro'
 
 export interface Forma {
   de: string
@@ -35,9 +36,15 @@ const props = withDefaults(
      * undefined = sem barra; null = posição sem análise (a barra fica apagada no meio).
      */
     avaliacao?: number | null
+    /** Duração da animação das peças (ms); sem ela, vale a das Configurações. */
+    animacao?: number
+    /** Sinal de avaliação no canto da casa de destino do lance. */
+    selo?: SeloCasa | null
   }>(),
-  { orientacao: 'white', ultimoLance: null, formas: () => [], jogavel: false, capturadas: true, avaliacao: undefined },
+  { orientacao: 'white', ultimoLance: null, formas: () => [], jogavel: false, capturadas: true, avaliacao: undefined, animacao: undefined, selo: null },
 )
+
+const posicaoDoSelo = computed(() => (props.selo ? cantoDaCasa(props.selo.casa, props.orientacao) : null))
 
 const comBarra = computed(() => props.avaliacao !== undefined && progresso.config.barraAvaliacao)
 const chance = computed(() => (props.avaliacao == null ? 50 : chanceDasBrancas(props.avaliacao)))
@@ -79,7 +86,7 @@ function configuracao(): Config {
     turnColor: vez,
     lastMove: props.ultimoLance ? (props.ultimoLance as Key[]) : undefined,
     check: estaEmXeque(props.fen),
-    animation: { enabled: progresso.config.animacaoMs > 0, duration: progresso.config.animacaoMs },
+    animation: { enabled: (props.animacao ?? progresso.config.animacaoMs) > 0, duration: props.animacao ?? progresso.config.animacaoMs },
     movable: {
       free: false,
       color: props.jogavel ? vez : undefined,
@@ -162,6 +169,20 @@ onBeforeUnmount(() => temaEscuro.removeEventListener('change', trocarPinceis))
       </div>
       <div class="moldura">
         <div ref="elemento" class="tabuleiro"></div>
+        <span
+          v-if="selo && posicaoDoSelo"
+          class="selo-casa"
+          :class="selo.tom"
+          :style="{ left: `${posicaoDoSelo.esquerda}%`, top: `${posicaoDoSelo.topo}%` }"
+          role="img"
+          :aria-label="selo.nome"
+          :title="selo.nome"
+        >
+          <svg v-if="selo.tom === 'livro'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 6.5C10 5 7 4.5 3.5 5v13c3.5-.5 6.5 0 8.5 1.5 2-1.5 5-2 8.5-1.5V5C17 4.5 14 5 12 6.5z" /><path d="M12 6.5v13" />
+          </svg>
+          <template v-else>{{ selo.simbolo }}</template>
+        </span>
       </div>
       <div class="colunas coordenadas" aria-hidden="true">
         <span v-for="c in colunas" :key="c">{{ c }}</span>
@@ -178,6 +199,7 @@ onBeforeUnmount(() => temaEscuro.removeEventListener('change', trocarPinceis))
   grid-template-rows: auto 1.25rem;
 }
 .moldura {
+  position: relative;
   width: 100%;
   aspect-ratio: 1;
 }
@@ -253,6 +275,35 @@ onBeforeUnmount(() => temaEscuro.removeEventListener('change', trocarPinceis))
   width: 100%;
   height: 100%;
 }
+/* Círculo no canto superior direito da casa, meio para fora, por cima das peças. */
+.selo-casa {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(20px, 6%, 34px);
+  aspect-ratio: 1;
+  transform: translate(-65%, -35%);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  color: #fff;
+  font: 800 clamp(10px, 2.2vmin, 15px)/1 var(--font-texto);
+  letter-spacing: -0.04em;
+  pointer-events: none;
+}
+/* Cores fixas (não do tema), como nos apps de análise. */
+.selo-casa.brilhante { background: #1baaa6; }
+.selo-casa.bom { background: #5b8bb0; }
+.selo-casa.interessante { background: #8f6fb0; }
+.selo-casa.melhor { background: #6fa83e; }
+.selo-casa.excelente { background: #8fb14b; }
+.selo-casa.livro { background: #a3815d; }
+.selo-casa svg { width: 62%; height: 62%; }
+.selo-casa.imprecisao { background: #e3ad1d; }
+.selo-casa.erro { background: #e0802a; }
+.selo-casa.grave { background: #c9352f; }
 /* No computador o tabuleiro ganha cantos arredondados; no celular vai de ponta a ponta. */
 @media (min-width: 800px) {
   .moldura {
