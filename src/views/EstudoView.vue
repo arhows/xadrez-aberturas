@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref, shallowRef } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref, shallowRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
 import AvisosDoLance from '../components/AvisosDoLance.vue'
@@ -18,6 +18,7 @@ import { fmtLance, fmtTexto } from '../lib/formato'
 import { casasDoLance } from '../lib/lances'
 import { carregarMotor, type DadosMotor } from '../lib/motor'
 import { progresso } from '../lib/progresso'
+import { tocar } from '../lib/som'
 import { oportunidadeDaPosicao, xequeDaPosicao } from '../lib/taticas'
 
 const route = useRoute()
@@ -54,14 +55,39 @@ const oportunidade = computed(() =>
   oportunidadeDaPosicao(fen.value, dadosMotor.value?.posicoes[chaveAtual.value]),
 )
 
+// Modo Adivinhar: o próximo lance fica escondido até a pessoa tentar jogá-lo (ou pedir para ver).
+const revelado = ref(false)
+const errou = ref(false)
+watch(ply, () => {
+  revelado.value = false
+  errou.value = false
+})
+const escondido = computed(() => progresso.config.adivinhar && !revelado.value)
+const tabuleiro = ref<InstanceType<typeof Tabuleiro>>()
+
+/** Jogar o lance da linha no tabuleiro avança; outro lance volta e mostra a seta. */
+function aoJogar(de: string, para: string) {
+  const certo = proximoDoLivro.value
+  if (certo && certo.from === de && certo.to === para) {
+    tocar('certo')
+    ply.value++
+    return
+  }
+  tocar('errado')
+  errou.value = true
+  revelado.value = true
+  tabuleiro.value?.sincronizar()
+}
+
 const formasTatica = ref<Forma[]>([])
 const xeque = computed(() => xequeDaPosicao(fen.value, ultimoLance.value))
 
 const setaDaAmeaca = computed<Forma[]>(() => {
   const formas: Forma[] = [...formasTatica.value]
   const proximo = proximoDoLivro.value
-  if (analise.value && proximo) formas.push({ de: proximo.from, para: proximo.to, cor: 'green' })
-  const sugestao = analise.value && casasDoLance(fen.value, analise.value.lance)
+  // Depois de um erro a seta aparece mesmo sem a análise do motor.
+  if (proximo && !escondido.value && (analise.value || errou.value)) formas.push({ de: proximo.from, para: proximo.to, cor: 'green' })
+  const sugestao = !escondido.value && analise.value && casasDoLance(fen.value, analise.value.lance)
   if (sugestao && analise.value!.lance !== proximo?.san) {
     formas.push({ de: sugestao.from, para: sugestao.to, cor: 'blue' })
   }
@@ -114,7 +140,15 @@ function trocarLinha(evento: Event) {
 <template>
   <div v-if="linha && lances.length" class="tela">
     <div class="area-tabuleiro" @touchstart.passive="aoIniciarToque" @touchend.passive="aoTerminarToque">
-      <Tabuleiro :fen="fen" :orientacao="orientacao" :ultimo-lance="ultimoLance" :formas="setaDaAmeaca" />
+      <Tabuleiro
+        ref="tabuleiro"
+        :fen="fen"
+        :orientacao="orientacao"
+        :ultimo-lance="ultimoLance"
+        :formas="setaDaAmeaca"
+        :jogavel="!noFim"
+        @lance="aoJogar"
+      />
     </div>
 
     <div class="painel">
@@ -132,19 +166,35 @@ function trocarLinha(evento: Event) {
         <span class="posicao">{{ ply }} / {{ lances.length }}</span>
         <button type="button" class="botao" :disabled="noFim" aria-label="Próximo lance" @click="proximo">▶</button>
         <button type="button" class="botao" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">Girar</button>
+        <label class="marcar" title="Esconde a seta do próximo lance até você tentar jogá-lo">
+          <input v-model="progresso.config.adivinhar" type="checkbox" />
+          Adivinhar
+        </label>
       </div>
 
-      <HistoricoLances :lances="lances.map((l) => l.san)" :atual="ply" clicavel @ir="ply = $event" />
+      <div v-if="!noFim && (errou || escondido)" class="adivinhe">
+        <p v-if="errou">Esse não é o lance da linha. Jogue o lance da seta verde.</p>
+        <p v-else>Qual é o próximo lance? Jogue no tabuleiro.</p>
+        <button v-if="escondido" type="button" class="botao" @click="revelado = true">Mostrar lance</button>
+      </div>
+
+      <!-- Adivinhando, o histórico só mostra até o lance atual, para não entregar os próximos. -->
+      <HistoricoLances
+        :lances="(progresso.config.adivinhar ? lances.slice(0, ply + (revelado ? 1 : 0)) : lances).map((l) => l.san)"
+        :atual="ply"
+        clicavel
+        @ir="ply = $event"
+      />
 
       <CartaoDica
         v-if="lanceAtual"
         :lance="fmtLance(lanceAtual.ply, lanceAtual.san)"
         :texto="dica"
       />
-      <CartaoDica v-else texto="Avance com ▶, com as setas do teclado ou deslizando no tabuleiro." />
+      <CartaoDica v-else texto="Jogue o lance no tabuleiro, ou avance com ▶, com as setas do teclado ou deslizando no tabuleiro." />
       <AvisoXeque :xeque="xeque" />
       <AvisosDoLance :aresta="arestaAtual" />
-      <LinhaMotor :analise="analise" :lances-do-livro="proximoDoLivro ? [proximoDoLivro.san] : []" />
+      <LinhaMotor v-if="!escondido" :analise="analise" :lances-do-livro="proximoDoLivro ? [proximoDoLivro.san] : []" />
       <TaticasDoTabuleiro
         v-if="progresso.config.mostrarTaticas"
         :fen="fen"
@@ -195,8 +245,22 @@ function trocarLinha(evento: Event) {
 <style scoped>
 .controles {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
+}
+.adivinhe {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--raio-md);
+  background: var(--superficie-2);
+}
+.adivinhe p {
+  margin: 0;
 }
 .posicao {
   min-width: 4rem;

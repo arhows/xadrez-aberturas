@@ -23,6 +23,8 @@ export interface Configuracoes {
   mostrarTaticas: boolean
   /** Setas de todas as táticas sem precisar tocar nos itens. */
   taticasAutomaticas: boolean
+  /** Estudo e Explorar: esconde as setas e os lances do livro até a pessoa tentar o lance. */
+  adivinhar: boolean
   /** Última escolha da tela de Treino, usada também por "Revisar agora". */
   profundidade: Profundidade
 }
@@ -85,6 +87,7 @@ export const CONFIG_PADRAO: Configuracoes = {
   motorAoVivo: false,
   mostrarTaticas: true,
   taticasAutomaticas: false,
+  adivinhar: false,
   profundidade: 'colunas',
 }
 

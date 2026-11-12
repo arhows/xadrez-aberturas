@@ -21,6 +21,7 @@ import { casasDoLance } from '../lib/lances'
 import { carregarMotor, type DadosMotor } from '../lib/motor'
 import { aproveitamento, indiceDePosicoes } from '../lib/partidasRepertorio'
 import { progresso } from '../lib/progresso'
+import { tocar } from '../lib/som'
 import { oportunidadeDaPosicao, xequeDaPosicao } from '../lib/taticas'
 
 const route = useRoute()
@@ -109,14 +110,14 @@ const formasTatica = ref<Forma[]>([])
 /** Seta para cada lance do livro, mais larga quanto mais linhas passam por ele. */
 const setas = computed<Forma[]>(() => {
   const maior = Math.max(1, ...continuacoes.value.map((aresta) => aresta.linhas.length))
-  const doLivro: Forma[] = [...formasTatica.value, ...continuacoes.value.map((aresta): Forma => ({
+  const doLivro: Forma[] = [...formasTatica.value, ...(escondido.value ? [] : continuacoes.value).map((aresta): Forma => ({
     de: aresta.from,
     para: aresta.to,
     cor: 'green',
     largura: 3 + 11 * (aresta.linhas.length / maior),
   }))]
   const melhor = progresso.config.motorAoVivo ? melhorAoVivo.value : analise.value?.lance
-  const sugestao = melhor && casasDoLance(fen.value, melhor)
+  const sugestao = !escondido.value && melhor && casasDoLance(fen.value, melhor)
   if (sugestao && !continuacoes.value.some((aresta) => aresta.san === melhor)) {
     doLivro.push({ de: sugestao.from, para: sugestao.to, cor: 'blue' })
   }
@@ -199,10 +200,27 @@ function jogarDasPartidas(lance: { san: string; aresta?: Aresta }) {
   else jogarFora(lance.san)
 }
 
+// Modo Adivinhar: setas e lances do livro ficam escondidos até a pessoa tentar (ou pedir para ver).
+const revelado = ref(false)
+const errouAqui = ref(false)
+watch([noAtual, () => fora.value.length], () => {
+  revelado.value = false
+  errouAqui.value = false
+})
+const escondido = computed(() => progresso.config.adivinhar && !revelado.value && continuacoes.value.length > 0)
+
 function aoJogar(de: string, para: string) {
   const aresta = continuacoes.value.find((s) => s.from === de && s.to === para)
-  if (aresta) selecionar([...caminho.value, aresta])
-  else if (!jogarFora({ from: de, to: para })) tabuleiro.value?.sincronizar()
+  if (aresta) {
+    if (progresso.config.adivinhar) tocar('certo')
+    selecionar([...caminho.value, aresta])
+  } else if (progresso.config.adivinhar && continuacoes.value.length) {
+    // Adivinhando, um lance fora do livro não sai do livro: volta e mostra as setas.
+    tocar('errado')
+    errouAqui.value = true
+    revelado.value = true
+    tabuleiro.value?.sincronizar()
+  } else if (!jogarFora({ from: de, to: para })) tabuleiro.value?.sincronizar()
 }
 
 /** Toque numa linha do motor: segue o livro se o lance for dele, senão joga fora do livro. */
@@ -276,6 +294,10 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
           <input v-model="mostrarNotas" type="checkbox" />
           Notas
         </label>
+        <label class="marcar" title="Esconde as setas e os lances do livro até você tentar jogar">
+          <input v-model="progresso.config.adivinhar" type="checkbox" />
+          Adivinhar
+        </label>
         <label class="marcar ao-vivo">
           <input v-model="progresso.config.motorAoVivo" type="checkbox" />
           Stockfish ao vivo
@@ -301,7 +323,12 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
       />
       <CartaoDica v-else texto="Escolha um lance na lista, nas setas ou movendo a peça no tabuleiro." />
 
-      <LinhaMotor :analise="analise" :lances-do-livro="continuacoes.map((aresta) => aresta.san)" />
+      <div v-if="escondido || (errouAqui && progresso.config.adivinhar)" class="adivinhe">
+        <p v-if="errouAqui">Esse lance não é do livro aqui. Veja as setas verdes.</p>
+        <p v-else>Qual é o lance do livro? Jogue no tabuleiro.</p>
+        <button v-if="escondido" type="button" class="botao" @click="revelado = true">Mostrar lances</button>
+      </div>
+      <LinhaMotor v-if="!escondido" :analise="analise" :lances-do-livro="continuacoes.map((aresta) => aresta.san)" />
       <AnaliseAoVivo
         v-if="progresso.config.motorAoVivo"
         :fen="fen"
@@ -334,7 +361,7 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
         <p v-if="unidadeAtiva.referencia" class="suave">{{ unidadeAtiva.referencia }}</p>
       </CartaoDica>
 
-      <section v-if="continuacoes.length">
+      <section v-if="continuacoes.length && !escondido">
         <h2>Lances do livro nesta posição</h2>
         <div class="proximos">
           <button
@@ -351,7 +378,7 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
         </div>
       </section>
 
-      <section v-if="nasPartidas.length">
+      <section v-if="nasPartidas.length && !escondido">
         <h2>Nas suas partidas</h2>
         <p class="apoio-partidas">
           {{ totalNasPartidas }} {{ totalNasPartidas === 1 ? 'partida passou' : 'partidas passaram' }} por aqui. Lances jogados em seguida:
@@ -373,7 +400,7 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
         <p class="apoio-partidas">Verde = lance do livro. A porcentagem é o seu aproveitamento nessas partidas.</p>
       </section>
 
-      <section>
+      <section v-show="!escondido">
         <h2>Árvore</h2>
         <div ref="listaLances" class="lista">
           <RamoLances
@@ -389,6 +416,19 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
 </template>
 
 <style scoped>
+.adivinhe {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--raio-md);
+  background: var(--superficie-2);
+}
+.adivinhe p {
+  margin: 0;
+}
 .apoio-partidas {
   margin: 0 0 0.5rem;
   color: var(--texto-suave);
