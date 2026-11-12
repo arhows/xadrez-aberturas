@@ -177,6 +177,12 @@ function voltar() {
   else caminho.value = caminho.value.slice(0, -1)
 }
 
+/** Volta à posição inicial para praticar a linha de novo do começo. */
+function voltarAoInicio() {
+  fora.value = []
+  caminho.value = []
+}
+
 function voltarAoLivro() {
   fora.value = []
 }
@@ -243,6 +249,7 @@ function jogarSan(san: string) {
 function aoTeclar(evento: KeyboardEvent) {
   if (evento.key === 'ArrowLeft') voltar()
   if (evento.key === 'ArrowRight') avancar()
+  if (evento.key === 'Home') voltarAoInicio()
 }
 
 onMounted(() => window.addEventListener('keydown', aoTeclar))
@@ -298,6 +305,7 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
 
     <div class="painel">
       <div class="controles">
+        <button type="button" class="botao" :disabled="!caminho.length && !foraDoLivro" aria-label="Voltar ao início" title="Voltar ao início" @click="voltarAoInicio">⏮</button>
         <button type="button" class="botao" :disabled="!caminho.length && !foraDoLivro" aria-label="Lance anterior" @click="voltar">◀</button>
         <button type="button" class="botao" :disabled="!continuacoes.length" aria-label="Próximo lance" @click="avancar">▶</button>
         <button type="button" class="botao" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">Girar</button>

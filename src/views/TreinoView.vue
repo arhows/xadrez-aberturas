@@ -201,6 +201,22 @@ function proximaPartida() {
 }
 
 /**
+ * Recomeça a linha atual do primeiro lance. Os erros e pistas de antes continuam valendo
+ * na nota (senão recomeçar apagaria um erro e a revisão deixaria de cobrar a linha).
+ */
+function recomecarLinha() {
+  clearTimeout(temporizador)
+  aoFimDaEspera = null
+  esperandoToque.value = false
+  const atual = partida.value!
+  const { erros, pistas } = placar.value
+  // Volta à linha sorteada (a partida pode ter trocado de alvo no caminho).
+  const linha = !revisando.value && unidadeSorteada ? unidadeSorteada.linha : atual.alvo
+  comecarPartida(linha, atual.cor)
+  placar.value = { acertos: 0, erros, pistas }
+}
+
+/**
  * Tira a linha da sessão sem nota: o cartão não muda, então ela continua pendente
  * e volta na próxima revisão. Se ainda houver fila, já começa a próxima.
  */
@@ -598,6 +614,13 @@ if (revisaoAutomatica) iniciarSessao()
             :disabled="!jogavel || nivelPista >= 3"
             @click="pedirPista"
           >{{ textoBotaoPista }}</button>
+          <button
+            type="button"
+            class="botao fantasma grande largo-celular"
+            :disabled="!partida?.jogadas.length"
+            title="Volta ao primeiro lance desta linha; os erros de antes continuam contando na nota"
+            @click="recomecarLinha"
+          >Recomeçar linha</button>
           <button
             v-if="!revisando"
             type="button"

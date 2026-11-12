@@ -109,6 +109,7 @@ function aoTeclar(evento: KeyboardEvent) {
   if (evento.target instanceof HTMLSelectElement) return
   if (evento.key === 'ArrowLeft') anterior()
   if (evento.key === 'ArrowRight') proximo()
+  if (evento.key === 'Home') ply.value = 0
 }
 
 let toqueInicial: { x: number; y: number } | null = null
@@ -163,6 +164,7 @@ function trocarLinha(evento: Event) {
       </label>
 
       <div class="controles">
+        <button type="button" class="botao" :disabled="ply === 0" aria-label="Voltar ao início" title="Voltar ao início" @click="ply = 0">⏮</button>
         <button type="button" class="botao" :disabled="ply === 0" aria-label="Lance anterior" @click="anterior">◀</button>
         <span class="posicao">{{ ply }} / {{ lances.length }}</span>
         <button type="button" class="botao" :disabled="noFim" aria-label="Próximo lance" @click="proximo">▶</button>
