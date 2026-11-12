@@ -10,11 +10,13 @@ const conjuntos = todos.filter((c) => c.id.startsWith('tatica-'))
 
 describe('problemas táticos', () => {
   it('exercícios do Koblenz: tarefa e explicação em todos', () => {
-    const koblenz = todos.find((c) => c.id === 'koblenz-finais')!
-    expect(koblenz.problemas.length).toBeGreaterThanOrEqual(25)
-    for (const p of koblenz.problemas) {
-      expect(p.tarefa).toBeTruthy()
-      expect(p.explicacao).toBeTruthy()
+    for (const [id, minimo] of [['koblenz-finais', 25], ['koblenz-meio-jogo', 55]] as const) {
+      const koblenz = todos.find((c) => c.id === id)!
+      expect(koblenz.problemas.length).toBeGreaterThanOrEqual(minimo)
+      for (const p of koblenz.problemas) {
+        expect(p.tarefa).toBeTruthy()
+        expect(p.explicacao).toBeTruthy()
+      }
     }
   })
 
