@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { computed, ref, watch, watchEffect } from 'vue'
-import { useRoute, useRouter, type RouteMeta } from 'vue-router'
+import { computed, watch, watchEffect } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { juntarProgressoSemConta, nuvem, recusarProgressoSemConta } from './lib/nuvem'
 import { progresso } from './lib/progresso'
 import { atualizarAgora, pwa } from './lib/pwa'
+import type { Secao } from './lib/secoes'
 
 const rota = useRoute()
 const roteador = useRouter()
@@ -30,23 +31,14 @@ const secao = computed(() => rota.meta.secao)
 /** Treino e Exercício: no celular a barra inferior some para o tabuleiro ganhar altura. */
 const foco = computed(() => rota.meta.foco === true)
 
-type Secao = NonNullable<RouteMeta['secao']>
+/** As três partes do app (aprender, praticar, jogar), o Início e o Eu: as mesmas no topo e na barra. */
 const LINKS: { secao: Secao; para: string; nome: string }[] = [
   { secao: 'inicio', para: '/', nome: 'Início' },
-  { secao: 'aberturas', para: '/aberturas', nome: 'Aberturas' },
-  { secao: 'exercicios', para: '/exercicios', nome: 'Exercícios' },
-  { secao: 'partidas', para: '/partidas', nome: 'Partidas' },
-  { secao: 'progresso', para: '/progresso', nome: 'Progresso' },
-  { secao: 'diagnostico', para: '/diagnostico', nome: 'Diagnóstico' },
-  { secao: 'config', para: '/config', nome: 'Configurações' },
+  { secao: 'aprender', para: '/aprender', nome: 'Aprender' },
+  { secao: 'praticar', para: '/praticar', nome: 'Praticar' },
+  { secao: 'jogar', para: '/jogar', nome: 'Jogar' },
+  { secao: 'eu', para: '/eu', nome: 'Eu' },
 ]
-const NA_BARRA = LINKS.slice(0, 4)
-const NO_MAIS = LINKS.slice(4)
-const noMais = computed(() => NO_MAIS.some((link) => link.secao === secao.value))
-
-// "Mais" (celular): folha com Progresso, Diagnóstico e Configurações.
-const maisAberto = ref(false)
-watch(() => rota.fullPath, () => (maisAberto.value = false))
 </script>
 
 <template>
@@ -57,6 +49,7 @@ watch(() => rota.fullPath, () => (maisAberto.value = false))
         v-for="link in LINKS"
         :key="link.secao"
         :to="link.para"
+        :class="{ eu: link.secao === 'eu' }"
         :aria-current="secao === link.secao ? 'page' : undefined"
       >{{ link.nome }}</RouterLink>
     </nav>
@@ -64,7 +57,6 @@ watch(() => rota.fullPath, () => (maisAberto.value = false))
       <RouterLink to="/" class="marca"><img :src="icone" alt="" />Xadrez</RouterLink>
     </header>
   </template>
-
   <div v-if="pwa.atualizacaoDisponivel" class="faixa" role="status">
     <span class="texto">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -94,47 +86,23 @@ watch(() => rota.fullPath, () => (maisAberto.value = false))
     <RouterView :key="$route.fullPath" />
   </main>
 
-  <template v-if="nuvem.uid && !foco">
-    <div v-if="maisAberto" class="fundo-folha so-celular" @click="maisAberto = false"></div>
-    <div v-if="maisAberto" id="folha-mais" class="folha so-celular" role="dialog" aria-label="Mais opções">
-      <RouterLink
-        v-for="link in NO_MAIS"
-        :key="link.secao"
-        :to="link.para"
-        class="linha-lista"
-        :aria-current="secao === link.secao ? 'page' : undefined"
-      ><span class="nome">{{ link.nome }}</span></RouterLink>
-    </div>
-
-    <nav class="barra-inferior so-celular" aria-label="Principal">
-      <RouterLink
-        v-for="link in NA_BARRA"
-        :key="link.secao"
-        :to="link.para"
-        :aria-current="secao === link.secao && !maisAberto ? 'page' : undefined"
-      >
-        <span class="icone">
-          <svg v-if="link.secao === 'inicio'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5 12 3.5l8.5 7V20a1 1 0 0 1-1 1H15v-6H9v6H4.5a1 1 0 0 1-1-1z" /></svg>
-          <svg v-else-if="link.secao === 'aberturas'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 18V6a2.5 2.5 0 0 1 2.5-2.5H19v13H7.5A2.5 2.5 0 0 0 5 19a2 2 0 0 0 2 2h12v-4.5" /></svg>
-          <svg v-else-if="link.secao === 'exercicios'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5" /><circle cx="12" cy="12" r="4.5" /><circle cx="12" cy="12" r="0.8" fill="currentColor" /></svg>
-          <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11" /><circle cx="4.5" cy="6" r="1" fill="currentColor" /><circle cx="4.5" cy="12" r="1" fill="currentColor" /><circle cx="4.5" cy="18" r="1" fill="currentColor" /></svg>
-        </span>
-        {{ link.nome }}
-      </RouterLink>
-      <button
-        type="button"
-        :aria-expanded="maisAberto"
-        aria-controls="folha-mais"
-        :aria-current="noMais && !maisAberto ? 'page' : undefined"
-        @click="maisAberto = !maisAberto"
-      >
-        <span class="icone">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true"><circle cx="5" cy="12" r="1.4" fill="currentColor" /><circle cx="12" cy="12" r="1.4" fill="currentColor" /><circle cx="19" cy="12" r="1.4" fill="currentColor" /></svg>
-        </span>
-        Mais
-      </button>
-    </nav>
-  </template>
+  <nav v-if="nuvem.uid && !foco" class="barra-inferior so-celular" aria-label="Principal">
+    <RouterLink
+      v-for="link in LINKS"
+      :key="link.secao"
+      :to="link.para"
+      :aria-current="secao === link.secao ? 'page' : undefined"
+    >
+      <span class="icone">
+        <svg v-if="link.secao === 'inicio'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10.5 12 3.5l8.5 7V20a1 1 0 0 1-1 1H15v-6H9v6H4.5a1 1 0 0 1-1-1z" /></svg>
+        <svg v-else-if="link.secao === 'aprender'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 18V6a2.5 2.5 0 0 1 2.5-2.5H19v13H7.5A2.5 2.5 0 0 0 5 19a2 2 0 0 0 2 2h12v-4.5" /></svg>
+        <svg v-else-if="link.secao === 'praticar'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5" /><circle cx="12" cy="12" r="4.5" /><circle cx="12" cy="12" r="0.8" fill="currentColor" /></svg>
+        <svg v-else-if="link.secao === 'jogar'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="2" /><path d="M3.5 12h17M12 3.5v17" /></svg>
+        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5" /><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5" /></svg>
+      </span>
+      {{ link.nome }}
+    </RouterLink>
+  </nav>
 </template>
 
 <style scoped>
@@ -163,33 +131,9 @@ watch(() => rota.fullPath, () => (maisAberto.value = false))
   height: 28px;
   border-radius: 7px;
 }
-.fundo-folha {
-  position: fixed;
-  inset: 0;
-  z-index: 9;
-  background: rgba(0, 0, 0, 0.3);
+.topo .eu {
+  margin-left: auto;
 }
-.folha {
-  position: fixed;
-  right: var(--espaco-3);
-  bottom: calc(var(--barra-inferior) + env(safe-area-inset-bottom) + var(--espaco-2));
-  left: var(--espaco-3);
-  z-index: 11;
-  display: grid;
-  overflow: hidden;
-  border: 1px solid var(--borda);
-  border-radius: var(--raio-lg);
-  background: var(--superficie);
-  box-shadow: var(--sombra-cartao);
-}
-.folha .linha-lista {
-  min-height: 56px;
-}
-.folha .linha-lista[aria-current='page'] {
-  color: var(--destaque);
-  background: var(--destaque-suave);
-}
-
 @media (max-width: 799.98px) {
   .so-computador {
     display: none;

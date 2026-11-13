@@ -50,3 +50,11 @@ export const filasDeHoje = computed(() =>
 export const filaDoCapitulo = (id: string) => filasDeHoje.value.find((fila) => fila.id === id)?.total ?? 0
 export const proximaFila = computed(() => filasDeHoje.value.find((fila) => fila.total > 0))
 export const totalRevisoes = computed(() => filasDeHoje.value.reduce((soma, fila) => soma + fila.total, 0))
+
+/** Quanto das linhas ativas (de todos os capítulos passados) está dominado, de 0 a 100. */
+export function dominadoNasLinhasAtivas(capitulos: CapituloCarregado[]): number {
+  const ativas = capitulos.map((c) => ({ c, linhas: c.capitulo.linhas.filter((l) => !c.desativadas.includes(l.id)) }))
+  const total = ativas.reduce((soma, a) => soma + a.linhas.length, 0)
+  if (!total) return 0
+  return Math.round(ativas.reduce((soma, a) => soma + percentual(a.c, a.linhas) * a.linhas.length, 0) / total)
+}

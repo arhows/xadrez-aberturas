@@ -459,8 +459,8 @@ onBeforeUnmount(() => {
 
 <template>
   <div v-if="fase === 'escolha'" class="pagina formulario">
-    <RouterLink :to="capitulo ? { name: 'abertura', params: { cap: capitulo.capitulo.id } } : '/'" class="trilha">
-      ‹ {{ capitulo ? fmtTexto(capitulo.capitulo.nome) : 'Início' }}
+    <RouterLink :to="capitulo ? { name: 'abertura', params: { cap: capitulo.capitulo.id } } : '/jogar'" class="trilha">
+      ‹ {{ capitulo ? fmtTexto(capitulo.capitulo.nome) : 'Jogar' }}
     </RouterLink>
     <h1 class="titulo-pagina">Jogar</h1>
     <p v-if="fenInicio" class="suave">A partida começa na posição montada no editor.</p>
@@ -600,7 +600,7 @@ onBeforeUnmount(() => {
           <RouterLink
             v-if="sans.length > inicio.length"
             class="botao"
-            :to="{ name: 'analise', query: { c: sans.join(' '), fen: fenInicio, cor: contraMotor ? minhaCor : undefined, titulo: 'Análise da partida', volta: '/jogar' } }"
+            :to="{ name: 'analise', query: { c: sans.join(' '), fen: fenInicio, cor: contraMotor ? minhaCor : undefined, titulo: 'Análise da partida', volta: '/partida' } }"
           >Analisar partida</RouterLink>
           <button type="button" class="botao" @click="exportarPgn">Exportar PGN</button>
           <RouterLink

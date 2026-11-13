@@ -23,7 +23,7 @@ const feitas = computed(() => todas.filter((a) => armou(a.id) && defendeu(a.id))
 
 <template>
   <div class="pagina">
-    <RouterLink to="/exercicios" class="trilha">‹ Exercícios</RouterLink>
+    <RouterLink to="/aprender" class="trilha">‹ Aprender</RouterLink>
     <h1>Armadilhas de abertura</h1>
     <p class="intro">
       Em cada armadilha, um lance que parece natural perde material ou leva a mate. Veja como ela funciona, treine a punição com o lado

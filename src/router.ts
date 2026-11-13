@@ -1,3 +1,4 @@
+import type { Secao } from './lib/secoes'
 import { createRouter, createWebHashHistory, type RouteLocationNormalized } from 'vue-router'
 import { buscarCapitulo, carregarCapitulos } from './lib/capitulos'
 import { buscarConjunto, carregarConjuntos } from './lib/exercicios'
@@ -39,7 +40,7 @@ const exigirCapitulo = (destino: RouteLocationNormalized) =>
 declare module 'vue-router' {
   interface RouteMeta {
     /** Item do menu que fica marcado nesta tela. */
-    secao?: 'inicio' | 'aberturas' | 'exercicios' | 'partidas' | 'progresso' | 'diagnostico' | 'config'
+    secao?: Secao
     /** Tela de foco (Treino, Exercício): no celular some a barra inferior. */
     foco?: boolean
     publica?: boolean
@@ -52,23 +53,27 @@ export const router = createRouter({
   routes: [
     { path: '/entrar', name: 'entrar', component: EntrarView, meta: { publica: true } },
     { path: '/', name: 'inicio', component: InicioView, meta: { secao: 'inicio' } },
-    { path: '/aberturas', name: 'aberturas', component: AberturasView, meta: { secao: 'aberturas' } },
-    { path: '/abertura/:cap', name: 'abertura', component: AberturaView, beforeEnter: exigirCapitulo, meta: { secao: 'aberturas' } },
-    { path: '/jogar', name: 'jogar', component: JogarView, meta: { secao: 'inicio', foco: true } },
-    { path: '/analise', name: 'analise', component: AnaliseView, meta: { secao: 'inicio' } },
-    { path: '/relampago', name: 'relampago', component: RelampagoView, meta: { secao: 'inicio', foco: true } },
-    { path: '/erros', name: 'erros', component: ErrosView, meta: { secao: 'inicio', foco: true } },
-    { path: '/partidas', name: 'partidas', component: PartidasView, meta: { secao: 'partidas' } },
-    { path: '/progresso', name: 'progresso', component: ProgressoView, beforeEnter: () => carregarConjuntos().then(() => true), meta: { secao: 'progresso' } },
-    { path: '/explorar/:cap', name: 'explorar', component: ExplorarView, beforeEnter: exigirCapitulo, meta: { secao: 'aberturas' } },
-    { path: '/estudo/:cap/:linha', name: 'estudo', component: EstudoView, beforeEnter: exigirCapitulo, meta: { secao: 'aberturas' } },
-    { path: '/treino/:cap', name: 'treino', component: TreinoView, beforeEnter: exigirCapitulo, meta: { secao: 'aberturas', foco: true } },
-    { path: '/exercicios', name: 'exercicios', component: ExerciciosView, beforeEnter: () => carregarConjuntos().then(() => true), meta: { secao: 'exercicios' } },
+    { path: '/aprender', name: 'aprender', component: () => import('./views/AprenderView.vue'), meta: { secao: 'aprender' } },
+    { path: '/praticar', name: 'praticar', component: () => import('./views/PraticarView.vue'), beforeEnter: () => carregarConjuntos().then(() => true), meta: { secao: 'praticar' } },
+    { path: '/jogar', name: 'secao-jogar', component: () => import('./views/JogarSecaoView.vue'), meta: { secao: 'jogar' } },
+    { path: '/eu', name: 'eu', component: () => import('./views/EuView.vue'), meta: { secao: 'eu' } },
+    { path: '/aberturas', name: 'aberturas', component: AberturasView, meta: { secao: 'aprender' } },
+    { path: '/abertura/:cap', name: 'abertura', component: AberturaView, beforeEnter: exigirCapitulo, meta: { secao: 'aprender' } },
+    { path: '/partida', name: 'jogar', component: JogarView, meta: { secao: 'jogar', foco: true } },
+    { path: '/analise', name: 'analise', component: AnaliseView, meta: { secao: 'jogar' } },
+    { path: '/relampago', name: 'relampago', component: RelampagoView, meta: { secao: 'praticar', foco: true } },
+    { path: '/erros', name: 'erros', component: ErrosView, meta: { secao: 'praticar', foco: true } },
+    { path: '/partidas', name: 'partidas', component: PartidasView, meta: { secao: 'jogar' } },
+    { path: '/progresso', name: 'progresso', component: ProgressoView, beforeEnter: () => carregarConjuntos().then(() => true), meta: { secao: 'eu' } },
+    { path: '/explorar/:cap', name: 'explorar', component: ExplorarView, beforeEnter: exigirCapitulo, meta: { secao: 'aprender' } },
+    { path: '/estudo/:cap/:linha', name: 'estudo', component: EstudoView, beforeEnter: exigirCapitulo, meta: { secao: 'aprender' } },
+    { path: '/treino/:cap', name: 'treino', component: TreinoView, beforeEnter: exigirCapitulo, meta: { secao: 'praticar', foco: true } },
+    { path: '/exercicios', name: 'exercicios', component: ExerciciosView, beforeEnter: () => carregarConjuntos().then(() => true), meta: { secao: 'praticar' } },
     {
       path: '/exercicios/:conjunto',
       name: 'exercicio',
       component: ExercicioView,
-      meta: { secao: 'exercicios', foco: true },
+      meta: { secao: 'praticar', foco: true },
       beforeEnter: async (destino) => {
         await carregarConjuntos()
         const conjunto = buscarConjunto(destino.params.conjunto as string)
@@ -81,7 +86,7 @@ export const router = createRouter({
       path: '/taticas/:conjunto',
       name: 'tatica',
       component: TaticaView,
-      meta: { secao: 'exercicios', foco: true },
+      meta: { secao: 'praticar', foco: true },
       beforeEnter: async (destino) => {
         await carregarConjuntos()
         return buscarConjunto(destino.params.conjunto as string)?.tipo === 'tatica' ? true : { name: 'exercicios' }
@@ -92,42 +97,42 @@ export const router = createRouter({
       name: 'diario',
       component: () => import('./views/DiarioView.vue'),
       beforeEnter: () => carregarConjuntos().then(() => true),
-      meta: { secao: 'exercicios', foco: true },
+      meta: { secao: 'praticar', foco: true },
     },
-    { path: '/fundamentos', name: 'fundamentos', component: FundamentosView, meta: { secao: 'exercicios' } },
+    { path: '/fundamentos', name: 'fundamentos', component: FundamentosView, meta: { secao: 'aprender' } },
     {
       path: '/fundamentos/:licao',
       name: 'licao',
       component: LicaoView,
-      meta: { secao: 'exercicios', foco: true },
+      meta: { secao: 'aprender', foco: true },
       beforeEnter: (destino) => (buscarLicao(destino.params.licao as string) ? true : { name: 'fundamentos' }),
     },
-    { path: '/editor', name: 'editor', component: EditorView, meta: { secao: 'inicio' } },
-    { path: '/analisar', name: 'analisar', component: AnalisarView, meta: { secao: 'inicio' } },
-    { path: '/preparacao', name: 'preparacao', component: PreparacaoView, meta: { secao: 'inicio' } },
-    { path: '/jogador', name: 'jogador', component: JogadorView, meta: { secao: 'inicio' } },
-    { path: '/online', name: 'online', component: () => import('./views/OnlineView.vue'), meta: { secao: 'inicio' } },
-    { path: '/online/:id', name: 'partida-online', component: () => import('./views/PartidaOnlineView.vue'), meta: { secao: 'inicio', foco: true } },
-    { path: '/ranking', name: 'ranking', component: () => import('./views/RankingView.vue'), meta: { secao: 'inicio' } },
+    { path: '/editor', name: 'editor', component: EditorView, meta: { secao: 'jogar' } },
+    { path: '/analisar', name: 'analisar', component: AnalisarView, meta: { secao: 'jogar' } },
+    { path: '/preparacao', name: 'preparacao', component: PreparacaoView, meta: { secao: 'jogar' } },
+    { path: '/jogador', name: 'jogador', component: JogadorView, meta: { secao: 'jogar' } },
+    { path: '/online', name: 'online', component: () => import('./views/OnlineView.vue'), meta: { secao: 'jogar' } },
+    { path: '/online/:id', name: 'partida-online', component: () => import('./views/PartidaOnlineView.vue'), meta: { secao: 'jogar', foco: true } },
+    { path: '/ranking', name: 'ranking', component: () => import('./views/RankingView.vue'), meta: { secao: 'jogar' } },
     {
       path: '/estrategia',
       name: 'estrategia',
       component: () => import('./views/EstrategiaView.vue'),
       beforeEnter: () => Promise.all([carregarEstrategia(), carregarQuizzes()]).then(() => true),
-      meta: { secao: 'exercicios' },
+      meta: { secao: 'aprender' },
     },
     {
       path: '/armadilhas',
       name: 'armadilhas',
       component: () => import('./views/ArmadilhasView.vue'),
       beforeEnter: () => carregarArmadilhas().then(() => true),
-      meta: { secao: 'exercicios' },
+      meta: { secao: 'aprender' },
     },
     {
       path: '/armadilhas/:id',
       name: 'armadilha',
       component: () => import('./views/ArmadilhaView.vue'),
-      meta: { secao: 'exercicios', foco: true },
+      meta: { secao: 'aprender', foco: true },
       beforeEnter: async (destino) => {
         await carregarArmadilhas()
         return buscarArmadilha(destino.params.id as string) ? true : { name: 'armadilhas' }
@@ -137,7 +142,7 @@ export const router = createRouter({
       path: '/estrategia/quiz/:id',
       name: 'quiz',
       component: () => import('./views/QuizView.vue'),
-      meta: { secao: 'exercicios', foco: true },
+      meta: { secao: 'praticar', foco: true },
       beforeEnter: async (destino) => {
         await carregarQuizzes()
         return buscarQuiz(destino.params.id as string) ? true : { name: 'estrategia' }
@@ -147,7 +152,7 @@ export const router = createRouter({
       path: '/estrategia/:id',
       name: 'estrutura',
       component: () => import('./views/EstruturaView.vue'),
-      meta: { secao: 'exercicios' },
+      meta: { secao: 'aprender' },
       beforeEnter: async (destino) => {
         await carregarEstrategia()
         return buscarEstrutura(destino.params.id as string) ? true : { name: 'estrategia' }
@@ -157,15 +162,15 @@ export const router = createRouter({
       path: '/estrategia/:id/:n',
       name: 'partida-modelo',
       component: () => import('./views/PartidaModeloView.vue'),
-      meta: { secao: 'exercicios', foco: true },
+      meta: { secao: 'aprender', foco: true },
       beforeEnter: async (destino) => {
         await carregarEstrategia()
         const estrutura = buscarEstrutura(destino.params.id as string)
         return estrutura?.partidas.some((p) => p.n === Number(destino.params.n)) ? true : { name: 'estrategia' }
       },
     },
-    { path: '/diagnostico', name: 'diagnostico', component: DiagnosticoView, meta: { secao: 'diagnostico' } },
-    { path: '/config', name: 'config', component: ConfigView, meta: { secao: 'config' } },
+    { path: '/diagnostico', name: 'diagnostico', component: DiagnosticoView, meta: { secao: 'eu' } },
+    { path: '/config', name: 'config', component: ConfigView, meta: { secao: 'eu' } },
     { path: '/:resto(.*)', redirect: '/' },
   ],
 })

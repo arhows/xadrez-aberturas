@@ -150,7 +150,7 @@ onBeforeUnmount(() => {
   </div>
 
   <div v-else class="pagina formulario">
-    <RouterLink to="/" class="trilha">‹ Início</RouterLink>
+    <RouterLink to="/praticar" class="trilha">‹ Praticar</RouterLink>
     <h1 class="titulo-pagina">Relâmpago</h1>
 
     <template v-if="fase === 'fim'">

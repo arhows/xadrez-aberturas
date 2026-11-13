@@ -101,7 +101,7 @@ const restantes = computed(() => Object.values(progresso.errosPorAresta).filter(
 
     <div class="painel">
       <div class="cabeca-painel">
-        <RouterLink to="/" class="trilha">‹ Início</RouterLink>
+        <RouterLink to="/praticar" class="trilha">‹ Praticar</RouterLink>
         <h1 class="titulo-pagina">Treinar meus erros</h1>
         <p class="suave">{{ indice + 1 }} de {{ perguntas.length }} · {{ fmtTexto(atual.capitulo.capitulo.nome) }}</p>
       </div>
@@ -136,7 +136,7 @@ const restantes = computed(() => Object.values(progresso.errosPorAresta).filter(
   </div>
 
   <div v-else class="pagina formulario">
-    <RouterLink to="/" class="trilha">‹ Início</RouterLink>
+    <RouterLink to="/praticar" class="trilha">‹ Praticar</RouterLink>
     <h1 class="titulo-pagina">Treinar meus erros</h1>
     <template v-if="perguntas.length">
       <dl class="placar-final">

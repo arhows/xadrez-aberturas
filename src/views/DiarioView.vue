@@ -102,7 +102,7 @@ function aoFalharNaSeq() {
 
 <template>
   <header class="cabecalho-movel so-celular">
-    <RouterLink class="voltar" to="/exercicios" aria-label="Voltar">
+    <RouterLink class="voltar" to="/praticar" aria-label="Voltar">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6" /></svg>
     </RouterLink>
     <h1>{{ modo === 'serie' ? 'Exercícios do dia' : 'Sequência' }}</h1>
@@ -120,7 +120,7 @@ function aoFalharNaSeq() {
     >
       <template #topo>
         <div class="cabeca so-computador">
-          <RouterLink to="/exercicios" class="trilha">‹ Exercícios</RouterLink>
+          <RouterLink to="/praticar" class="trilha">‹ Praticar</RouterLink>
           <h1 class="titulo-pagina">Exercícios do dia</h1>
         </div>
         <div class="abas" role="tablist">
@@ -151,7 +151,7 @@ function aoFalharNaSeq() {
     </ResolverMisturado>
 
     <div v-else class="pagina resumo">
-      <RouterLink to="/exercicios" class="trilha">‹ Exercícios</RouterLink>
+      <RouterLink to="/praticar" class="trilha">‹ Praticar</RouterLink>
       <h1 class="titulo-pagina">Exercícios do dia</h1>
       <p class="destaque">Série de hoje completa!</p>
       <dl class="placar-final">
@@ -182,7 +182,7 @@ function aoFalharNaSeq() {
     >
       <template #topo>
         <div class="cabeca so-computador">
-          <RouterLink to="/exercicios" class="trilha">‹ Exercícios</RouterLink>
+          <RouterLink to="/praticar" class="trilha">‹ Praticar</RouterLink>
           <h1 class="titulo-pagina">Sequência</h1>
         </div>
         <div class="abas" role="tablist">
@@ -211,7 +211,7 @@ function aoFalharNaSeq() {
     </ResolverMisturado>
 
     <div v-else class="pagina resumo">
-      <RouterLink to="/exercicios" class="trilha">‹ Exercícios</RouterLink>
+      <RouterLink to="/praticar" class="trilha">‹ Praticar</RouterLink>
       <h1 class="titulo-pagina">Sequência</h1>
       <div class="abas" role="tablist">
         <button type="button" role="tab" class="aba" aria-selected="false" @click="trocarModo('serie')">Do dia</button>

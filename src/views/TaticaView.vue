@@ -264,7 +264,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
 
     <div class="painel">
       <div class="cabeca-painel so-computador">
-        <RouterLink to="/exercicios" class="trilha">‹ Exercícios</RouterLink>
+        <RouterLink to="/exercicios" class="trilha">‹ Táticas e mates</RouterLink>
         <h1 class="titulo-pagina">{{ autorDoLivro ?? "Táticas" }} · {{ conjunto.nome }}</h1>
       </div>
 

@@ -21,7 +21,7 @@ const totalFeitas = computed(() => livro.estruturas.reduce((s, e) => s + feitas(
 
 <template>
   <div class="pagina">
-    <RouterLink to="/exercicios" class="trilha">‹ Exercícios</RouterLink>
+    <RouterLink to="/aprender" class="trilha">‹ Aprender</RouterLink>
     <h1>Estratégia por estruturas</h1>
     <p class="intro">
       A estrutura de peões decide os planos de cada lado. Em cada estrutura: o resumo dos planos das brancas e das pretas e

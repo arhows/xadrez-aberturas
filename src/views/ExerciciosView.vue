@@ -2,8 +2,6 @@
 import { diasSeguidos, TAMANHO_DA_SERIE } from '../lib/diario'
 import { dataLocal } from '../lib/srs'
 import { livroDoConjunto, obterConjuntos, type ConjuntoExercicios } from '../lib/exercicios'
-import { feitosNaLicao } from '../lib/fundamentos'
-import { LICOES } from '../lib/licoes'
 import { progresso } from '../lib/progresso'
 import { revisoesPendentes } from '../lib/revisaoExercicios'
 
@@ -30,8 +28,6 @@ function contagem(conjuntos: ConjuntoExercicios[]) {
   return { total, primeira, ajuda, percentual: total ? Math.round(((primeira + ajuda) / total) * 100) : 0 }
 }
 
-const totalFundamentos = LICOES.reduce((soma, l) => soma + l.exercicios.length, 0)
-const feitosFundamentos = LICOES.reduce((soma, l) => soma + feitosNaLicao(l, progresso.fundamentos), 0)
 
 const numero = (n: number) => n.toLocaleString('pt-BR')
 
@@ -45,7 +41,7 @@ const primeiraRevisao = revisoes[0]
 
 <template>
   <div class="pagina">
-    <h1>Exercícios</h1>
+    <h1>Táticas e mates</h1>
     <RouterLink to="/diario" class="fundamentos diario" :class="{ pendente: feitosHoje < TAMANHO_DA_SERIE }">
       <span class="icone" aria-hidden="true">★</span>
       <span class="textos">
@@ -57,33 +53,6 @@ const primeiraRevisao = revisoes[0]
         </span>
       </span>
       <span class="botao" :class="{ primario: feitosHoje < TAMANHO_DA_SERIE }">{{ feitosHoje ? (feitosHoje < TAMANHO_DA_SERIE ? 'Continuar' : 'Ver') : 'Começar' }}</span>
-    </RouterLink>
-    <RouterLink to="/fundamentos" class="fundamentos">
-      <span class="icone" aria-hidden="true">♙</span>
-      <span class="textos">
-        <strong>Fundamentos do xadrez</strong>
-        <span class="suave">
-          Aprenda do zero: o tabuleiro, o movimento de cada peça, capturar, defender, xeque e mate ·
-          {{ LICOES.length }} lições · {{ feitosFundamentos }} de {{ totalFundamentos }} exercícios feitos
-        </span>
-      </span>
-      <span class="botao">{{ feitosFundamentos ? 'Continuar' : 'Começar' }}</span>
-    </RouterLink>
-    <RouterLink to="/estrategia" class="fundamentos">
-      <span class="icone" aria-hidden="true">♜</span>
-      <span class="textos">
-        <strong>Estratégia por estruturas</strong>
-        <span class="suave">Planos de cada estrutura de peões (isolado, Carlsbad, Índia do Rei, Francesa…) e 114 partidas-modelo para adivinhar os lances</span>
-      </span>
-      <span class="botao">Estudar</span>
-    </RouterLink>
-    <RouterLink to="/armadilhas" class="fundamentos">
-      <span class="icone" aria-hidden="true">♞</span>
-      <span class="textos">
-        <strong>Armadilhas de abertura</strong>
-        <span class="suave">Mate de Légal, Elefante, Arca de Noé, Stafford… Veja cada armadilha, aprenda a armá-la e a se defender dela</span>
-      </span>
-      <span class="botao">Treinar</span>
     </RouterLink>
     <section class="revisao" :class="{ vazia: !primeiraRevisao }">
       <div>

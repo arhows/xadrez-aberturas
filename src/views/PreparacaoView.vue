@@ -102,7 +102,7 @@ async function conectar() {
 
 <template>
   <div class="pagina">
-    <RouterLink to="/" class="trilha">‹ Início</RouterLink>
+    <RouterLink to="/jogar" class="trilha">‹ Jogar</RouterLink>
     <h1>O que estudar</h1>
     <p class="intro">
       Os lances mais jogados no lichess por jogadores do seu nível (partidas blitz, rápidas e clássicas) e, contra cada um,

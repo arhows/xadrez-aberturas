@@ -272,7 +272,7 @@ const textoPontos = (pontos: number | null) => (pontos === null ? '—' : `${Mat
 
 <template>
   <header class="cabecalho-movel so-celular">
-    <RouterLink class="voltar" to="/" aria-label="Voltar">
+    <RouterLink class="voltar" to="/jogar" aria-label="Voltar">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6" /></svg>
     </RouterLink>
     <h1>{{ colecao ? `Estudar ${nomeCurto}` : 'Estudar um jogador' }}</h1>
@@ -293,7 +293,7 @@ const textoPontos = (pontos: number | null) => (pontos === null ? '—' : `${Mat
 
     <div class="painel">
       <div class="cabeca-painel so-computador">
-        <RouterLink to="/" class="trilha">‹ Início</RouterLink>
+        <RouterLink to="/jogar" class="trilha">‹ Jogar</RouterLink>
         <h1 class="titulo-pagina">{{ colecao ? `Estudar ${nomeCurto}` : 'Estudar um jogador' }}</h1>
       </div>
 

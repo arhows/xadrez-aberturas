@@ -13,7 +13,7 @@ const atual = computed(() => LICOES.find((l) => feitosNaLicao(l, progresso.funda
 
 <template>
   <div class="pagina">
-    <RouterLink to="/exercicios" class="trilha">‹ Exercícios</RouterLink>
+    <RouterLink to="/aprender" class="trilha">‹ Aprender</RouterLink>
     <h1>Fundamentos do xadrez</h1>
     <p class="intro">
       Aprenda a jogar do zero: o tabuleiro, como cada peça se move e captura, como defender, o xeque, o xeque-mate e as
