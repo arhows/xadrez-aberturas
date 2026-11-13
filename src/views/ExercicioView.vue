@@ -431,29 +431,29 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
         <button v-if="!resolvido" type="button" class="botao grande largo-celular" :disabled="pista >= 2 || aguardando" @click="pedirPista">
           {{ pista === 0 ? 'Pista: qual peça?' : 'Mostrar o lance' }}
         </button>
-        <button v-if="resolvido" type="button" class="botao" @click="refazer">↺ Refazer</button>
-        <template v-if="resolvido && revisando">
-          <button v-if="proximaRevisao" type="button" class="botao primario" @click="irParaRevisao">
+        <template v-else-if="revisando">
+          <button v-if="proximaRevisao" type="button" class="botao primario grande largo-celular" @click="irParaRevisao">
             Próxima revisão ({{ restantesNaRevisao }})
           </button>
           <template v-else>
-            <p class="concluido">Revisões de hoje concluídas!</p>
-            <RouterLink class="botao primario" to="/exercicios">Voltar aos exercícios</RouterLink>
+            <p class="concluido">✓ Revisões de hoje concluídas!</p>
+            <RouterLink class="botao primario grande largo-celular" to="/praticar">Voltar a Praticar</RouterLink>
           </template>
         </template>
-        <template v-else-if="resolvido">
+        <template v-else>
           <button
             v-if="proximoPendente"
             type="button"
-            class="botao primario"
+            class="botao primario grande largo-celular"
             @click="irPara(proximoPendente.n)"
           >Próximo não resolvido ({{ proximoPendente.n }})</button>
-          <p v-else class="concluido">Todos os problemas resolvidos de primeira!</p>
+          <p v-else class="concluido">✓ Todos os problemas resolvidos de primeira!</p>
         </template>
       </div>
 
       <div class="navegacao">
         <button type="button" class="botao" :disabled="!anterior" @click="irPara(anterior.n)">← Anterior</button>
+        <button v-if="resolvido" type="button" class="botao" @click="refazer">↺ Refazer</button>
         <button type="button" class="botao" :disabled="!proximo" @click="irPara(proximo.n)">Próximo →</button>
       </div>
 
@@ -579,6 +579,9 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
 }
 .acoes:empty {
   display: none;
+}
+.navegacao > .botao {
+  flex: 1 1 0;
 }
 .concluido {
   margin: 0;

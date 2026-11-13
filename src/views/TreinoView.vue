@@ -67,6 +67,12 @@ const corEscolhida = computed<EscolhaCor>({
   },
 })
 
+const OPCOES_DE_COR: { valor: EscolhaCor; nome: string }[] = [
+  { valor: 'w', nome: 'Brancas' },
+  { valor: 'b', nome: 'Pretas' },
+  { valor: 'ambas', nome: 'Ambas' },
+]
+
 /** null = espera o usuário tocar em Continuar. */
 const TEMPO_DICA_MS = { normal: 2000, longo: 5000, toque: null } as const
 const TEMPO_ADVERSARIO_MS = 500
@@ -516,31 +522,40 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
         </select>
       </label>
 
-      <label class="campo">
-        <span>Sua cor</span>
-        <select v-model="corEscolhida">
-          <option value="w">Brancas</option>
-          <option value="b">Pretas</option>
-          <option value="ambas">Ambas</option>
-        </select>
-      </label>
+      <div class="campo" role="group" aria-labelledby="rotulo-cor">
+        <span id="rotulo-cor">Sua cor</span>
+        <div class="segmentado">
+          <button
+            v-for="opcao in OPCOES_DE_COR"
+            :key="opcao.valor"
+            type="button"
+            :aria-pressed="corEscolhida === opcao.valor"
+            @click="corEscolhida = opcao.valor"
+          >{{ opcao.nome }}</button>
+        </div>
+      </div>
 
-      <label class="campo">
-        <span>Profundidade</span>
-        <select v-model="config.profundidade">
-          <option value="colunas">Só colunas</option>
-          <option value="notas">Colunas + notas</option>
-        </select>
-      </label>
+      <details class="recolhivel">
+        <summary>Ajustes do treino</summary>
+        <div class="ajustes">
+          <label class="campo">
+            <span>Profundidade</span>
+            <select v-model="config.profundidade">
+              <option value="colunas">Só colunas</option>
+              <option value="notas">Colunas + notas</option>
+            </select>
+          </label>
 
-      <label class="campo">
-        <span>Tempo para ler a dica no Treino</span>
-        <select v-model="config.tempoDica">
-          <option value="normal">Normal (2 segundos)</option>
-          <option value="longo">Mais tempo (5 segundos)</option>
-          <option value="toque">Até eu tocar para continuar</option>
-        </select>
-      </label>
+          <label class="campo">
+            <span>Tempo para ler a dica</span>
+            <select v-model="config.tempoDica">
+              <option value="normal">Normal (2 segundos)</option>
+              <option value="longo">Mais tempo (5 segundos)</option>
+              <option value="toque">Até eu tocar para continuar</option>
+            </select>
+          </label>
+        </div>
+      </details>
     </div>
 
     <button type="button" class="botao primario grande largo-celular" @click="iniciarSessao()">Começar</button>
@@ -659,7 +674,7 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
           >{{ textoBotaoPista }}</button>
           <button
             type="button"
-            class="botao fantasma grande largo-celular"
+            class="botao fantasma secundaria"
             :disabled="!partida?.jogadas.length"
             title="Volta ao primeiro lance desta linha; os erros de antes continuam contando na nota"
             @click="recomecarLinha"
@@ -667,7 +682,7 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
           <button
             v-if="!revisando"
             type="button"
-            class="botao fantasma grande largo-celular"
+            class="botao fantasma secundaria"
             title="Deixa esta linha para a próxima revisão, sem contar como erro"
             @click="pularLinha"
           >Pular linha</button>
@@ -698,6 +713,7 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
           <PlanoMeioJogo :plano="titulo.plano" />
         </CartaoDica>
 
+        <!-- Um caminho principal à vista; o resto fica numa lista curta logo abaixo. -->
         <div class="acoes">
           <button v-if="fila.length" type="button" class="botao primario grande largo-celular" @click="proximaPartida">
             {{ escopoEscolhido.tipo === 'linha' ? 'Próxima variante' : 'Próxima' }} ({{ fila.length }})
@@ -706,25 +722,39 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
             <p class="concluido">✓ Sessão concluída.</p>
             <RouterLink
               v-if="proximoCapitulo"
-              class="botao primario largo-celular"
+              class="botao primario grande largo-celular"
               :to="{ name: 'treino', params: { cap: proximoCapitulo.capitulo.capitulo.id }, query: { auto: '1' } }"
             >Revisar {{ proximoCapitulo.capitulo.capitulo.nome }} ({{ proximoCapitulo.fila.length }})</RouterLink>
-            <button type="button" class="botao" @click="repetir">Treinar de novo</button>
           </template>
           <RouterLink
             v-if="colunaSeguinte"
-            class="botao largo-celular"
-            :class="{ primario: !fila.length }"
+            class="botao grande largo-celular"
+            :class="{ primario: !fila.length && !proximoCapitulo }"
             :to="{ name: 'treino', params: { cap: idCapitulo }, query: { escopo: `linha:${colunaSeguinte.id}`, comecar: '1' } }"
           >Próxima coluna{{ colunaSeguinte.coluna ? ` (${colunaSeguinte.coluna})` : '' }} →</RouterLink>
-          <button type="button" class="botao" @click="revisarLinha">Revisar esta linha</button>
+        </div>
+
+        <div class="lista mais-opcoes">
+          <button type="button" class="linha-lista" @click="revisarLinha">
+            <span class="nome">Revisar esta linha</span>
+            <span class="meta">Repetir agora, sem mexer na agenda</span>
+          </button>
+          <RouterLink class="linha-lista" :to="linkParaRever">
+            <span class="nome">Rever com dicas</span>
+            <span class="meta">Passear pela linha lendo os comentários</span>
+          </RouterLink>
           <RouterLink
             v-if="partida"
-            class="botao"
+            class="linha-lista"
             :to="{ name: 'jogar', query: { c: partida.jogadas.map((j) => j.san).join(' '), cor: partida.cor, cap: idCapitulo } }"
-          >Jogar daqui</RouterLink>
-          <RouterLink class="botao" :to="linkParaRever">Rever com dicas</RouterLink>
-          <RouterLink class="botao fantasma" to="/">Início</RouterLink>
+          >
+            <span class="nome">Jogar daqui</span>
+            <span class="meta">Continuar a partida contra o computador</span>
+          </RouterLink>
+          <button v-if="!fila.length" type="button" class="linha-lista" @click="repetir">
+            <span class="nome">Treinar de novo</span>
+            <span class="meta">Recomeçar a sessão com o mesmo escopo</span>
+          </button>
         </div>
         <nav v-if="!fila.length && (vizinhas.anterior || vizinhas.proxima)" class="outras-aberturas" aria-label="Outras aberturas">
           <RouterLink v-if="vizinhas.anterior" class="botao" :to="{ name: 'treino', params: { cap: vizinhas.anterior.capitulo.id } }">
@@ -798,6 +828,10 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
   flex-wrap: wrap;
   gap: var(--espaco-2);
 }
+.ajustes {
+  display: grid;
+  gap: var(--espaco-4);
+}
 .placar-final {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -858,6 +892,10 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
   }
   .largo-celular {
     width: 100%;
+  }
+  /* Debaixo do tabuleiro: a pista em cima, as duas saídas lado a lado. */
+  .rodape-acoes > .secundaria {
+    flex: 1 1 0;
   }
 }
 @media (min-width: 800px) {
