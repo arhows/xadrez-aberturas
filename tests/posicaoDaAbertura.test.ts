@@ -31,3 +31,15 @@ describe('miniaturas', () => {
       for (const g of secao.grupos) for (const a of g.atalhos) expect(DESENHOS[a.icone], a.id).toBeTruthy()
   })
 })
+
+describe('miniaturas da estratégia', () => {
+  it('toda partida-modelo chega ao lance da miniatura sem lance ilegal', async () => {
+    const { carregarEstrategia, PLY_DA_MINIATURA } = await import('../src/lib/estrategia')
+    const livro = await carregarEstrategia()
+    for (const e of livro.estruturas)
+      for (const p of e.partidas) {
+        const parte = p.lances.split(' ').slice(0, PLY_DA_MINIATURA).join(' ')
+        expect(jogarLances(parte).erro, `${e.id}/${p.n}`).toBeNull()
+      }
+  })
+})

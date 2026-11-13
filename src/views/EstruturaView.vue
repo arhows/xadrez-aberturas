@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { buscarEstrutura, chaveDaPartidaModelo, obterEstrategia } from '../lib/estrategia'
+import MiniTabuleiro from '../components/MiniTabuleiro.vue'
+import { buscarEstrutura, chaveDaPartidaModelo, fenDaMiniatura, obterEstrategia, PLY_DA_MINIATURA } from '../lib/estrategia'
 import { progresso } from '../lib/progresso'
 
 /** Uma estrutura de peões: planos de cada lado e partidas-modelo. */
@@ -41,6 +42,7 @@ const textoResultado = (r: string) => (r === '*' ? '' : r.replace('½–½', '½
       <ul class="partidas">
         <li v-for="p in estrutura.partidas" :key="p.n">
           <RouterLink :to="{ name: 'partida-modelo', params: { id: estrutura.id, n: p.n } }" class="partida">
+            <MiniTabuleiro class="miniatura" :fen="fenDaMiniatura(p)" :rotulo="`${p.brancas} – ${p.pretas} no lance ${PLY_DA_MINIATURA / 2}`" />
             <span class="textos">
               <strong>{{ p.brancas }} – {{ p.pretas }}</strong>
               <span class="suave">{{ [p.evento, textoResultado(p.resultado)].filter(Boolean).join(' · ') }}</span>
@@ -129,11 +131,15 @@ h2 {
 }
 .partida {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.75rem;
   padding: 0.75rem 0;
   color: var(--texto);
   text-decoration: none;
+}
+.miniatura {
+  flex: none;
+  width: 72px;
 }
 .textos {
   display: grid;

@@ -1,4 +1,4 @@
-import type { Cor } from './lances'
+import { jogarLances, type Cor } from './lances'
 
 /**
  * Estratégia por estruturas de peões: as partidas-modelo do "Chess Structures" (Flores Rios)
@@ -108,4 +108,13 @@ export function juntarEstrategia(a: Record<string, ResultadoQuiz>, b: Record<str
     if (!atual || taxa(r) > taxa(atual) || (taxa(r) === taxa(atual) && r.data > atual.data)) junto[chave] = r
   }
   return junto
+}
+
+/** Meio-lance em que a miniatura mostra a partida: lá pelo 10º lance a estrutura já se formou e ainda não se desfez. */
+export const PLY_DA_MINIATURA = 20
+
+/** Posição da partida-modelo no lance da miniatura (ou no fim, se ela for mais curta). */
+export function fenDaMiniatura(p: PartidaModelo): string {
+  const lances = p.lances.split(' ').slice(0, PLY_DA_MINIATURA).join(' ')
+  return jogarLances(lances).lances.at(-1)?.fenDepois ?? '8/8/8/8/8/8/8/8 w - - 0 1'
 }

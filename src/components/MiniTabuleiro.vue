@@ -8,7 +8,16 @@ import { computed } from 'vue'
  * Não monta o chessground: desenha as casas com um gradiente e as peças com as mesmas imagens,
  * então dezenas cabem numa página sem custo.
  */
-const props = withDefaults(defineProps<{ fen: string; orientacao?: 'white' | 'black'; rotulo?: string }>(), { orientacao: 'white', rotulo: undefined })
+const props = withDefaults(
+  defineProps<{
+    fen: string
+    orientacao?: 'white' | 'black'
+    rotulo?: string
+    /** Só os peões: mostra a estrutura sem as peças (Estratégia). */
+    soPeoes?: boolean
+  }>(),
+  { orientacao: 'white', rotulo: undefined, soPeoes: false },
+)
 
 const NOMES: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' }
 
@@ -22,6 +31,10 @@ const pecas = computed(() => {
       for (const ch of fileira) {
         if (/\d/.test(ch)) {
           c += Number(ch)
+          continue
+        }
+        if (props.soPeoes && ch.toLowerCase() !== 'p') {
+          c++
           continue
         }
         const coluna = props.orientacao === 'white' ? c : 7 - c

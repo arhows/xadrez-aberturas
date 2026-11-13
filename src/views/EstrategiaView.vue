@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import { chaveDaPartidaModelo, obterEstrategia, type Estrutura } from '../lib/estrategia'
+import MiniTabuleiro from '../components/MiniTabuleiro.vue'
+import { chaveDaPartidaModelo, fenDaMiniatura, obterEstrategia, type Estrutura } from '../lib/estrategia'
 import { progresso } from '../lib/progresso'
 import { chaveDoQuiz, obterQuizzes, totalDePerguntas } from '../lib/quizzes'
 
@@ -55,6 +56,7 @@ const totalFeitas = computed(() => livro.estruturas.reduce((s, e) => s + feitas(
       <ul class="estruturas">
         <li v-for="e in g.estruturas" :key="e.id">
           <RouterLink :to="{ name: 'estrutura', params: { id: e.id } }" class="estrutura">
+            <MiniTabuleiro v-if="e.partidas.length" class="miniatura" :fen="fenDaMiniatura(e.partidas[0])" so-peoes :rotulo="`Estrutura: ${e.nome}`" />
             <span class="textos">
               <strong>{{ e.nome }}</strong>
               <span class="suave">{{ e.ideia }}</span>
@@ -122,6 +124,10 @@ h2 {
   color: var(--texto);
   text-decoration: none;
   background: var(--fundo);
+}
+.miniatura {
+  flex: none;
+  width: 64px;
 }
 .estrutura:hover {
   background: var(--superficie-2);
