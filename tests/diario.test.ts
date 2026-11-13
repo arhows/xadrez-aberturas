@@ -73,14 +73,23 @@ describe('sequência', () => {
 })
 
 describe('semana do diário', () => {
-  it('mostra os 7 dias até hoje com o estado de cada série', async () => {
+  it('mostra a semana de domingo a sábado com o estado de cada série', async () => {
     const { semanaDoDiario, TAMANHO_DA_SERIE } = await import('../src/lib/diario')
     const completa = Object.fromEntries(Array.from({ length: TAMANHO_DA_SERIE }, (_, i) => [String(i), 'primeira' as const]))
+    // 13/11/2026 é uma sexta-feira.
     const semana = semanaDoDiario({ '2026-11-13': completa, '2026-11-12': { '0': 'ajuda' } }, '2026-11-13')
-    expect(semana.map((d) => d.data)).toEqual(['2026-11-07', '2026-11-08', '2026-11-09', '2026-11-10', '2026-11-11', '2026-11-12', '2026-11-13'])
-    expect(semana.map((d) => d.letra).join('')).toBe('SDSTQQS')
-    expect(semana.at(-1)).toMatchObject({ estado: 'completa', hoje: true })
-    expect(semana.at(-2)?.estado).toBe('comecada')
+    expect(semana.map((d) => d.data)).toEqual(['2026-11-08', '2026-11-09', '2026-11-10', '2026-11-11', '2026-11-12', '2026-11-13', '2026-11-14'])
+    expect(semana.map((d) => d.letra).join('')).toBe('DSTQQSS')
+    expect(semana[5]).toMatchObject({ estado: 'completa', hoje: true })
+    expect(semana[4].estado).toBe('comecada')
     expect(semana[0].estado).toBe('vazia')
+    expect(semana[6].estado).toBe('futuro')
+  })
+
+  it('no domingo, a semana começa hoje', async () => {
+    const { semanaDoDiario } = await import('../src/lib/diario')
+    const semana = semanaDoDiario({}, '2026-11-15')
+    expect(semana[0]).toMatchObject({ data: '2026-11-15', hoje: true })
+    expect(semana.slice(1).every((d) => d.estado === 'futuro')).toBe(true)
   })
 })

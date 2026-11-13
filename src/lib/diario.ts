@@ -151,24 +151,27 @@ export function juntarDiario(a: Record<string, SerieDoDia>, b: Record<string, Se
 
 export interface DiaDaSemana {
   data: string
-  /** Inicial do dia da semana ("S" de segunda, "D" de domingo). */
+  /** Inicial do dia da semana ("D" de domingo, "S" de segunda). */
   letra: string
-  estado: 'completa' | 'comecada' | 'vazia'
+  /** "futuro" = dia desta semana que ainda não chegou. */
+  estado: 'completa' | 'comecada' | 'vazia' | 'futuro'
   hoje: boolean
 }
 
 const LETRAS = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
 
-/** Os últimos 7 dias até hoje, para a fileira de bolinhas da série no Início. */
+/** A semana de hoje, de domingo a sábado (como no calendário brasileiro), para as bolinhas do Início. */
 export function semanaDoDiario(diario: Record<string, SerieDoDia>, hoje: string): DiaDaSemana[] {
-  return Array.from({ length: 7 }, (_, i) => {
-    const data = somarDias(hoje, i - 6)
-    const [ano, mes, dia] = data.split('-').map(Number)
+  const [ano, mes, dia] = hoje.split('-').map(Number)
+  const domingo = somarDias(hoje, -new Date(ano, mes - 1, dia).getDay())
+  return LETRAS.map((letra, i) => {
+    const data = somarDias(domingo, i)
     const feitos = diario[data]
     return {
       data,
-      letra: LETRAS[new Date(ano, mes - 1, dia).getDay()],
-      estado: serieCompleta(feitos) ? 'completa' : feitos && Object.keys(feitos).length ? 'comecada' : 'vazia',
+      letra,
+      estado:
+        data > hoje ? 'futuro' : serieCompleta(feitos) ? 'completa' : feitos && Object.keys(feitos).length ? 'comecada' : 'vazia',
       hoje: data === hoje,
     }
   })

@@ -13,7 +13,7 @@ const hoje = dataLocal()
 const feitosHoje = computed(() => Object.keys(progresso.diario[hoje] ?? {}).length)
 const dias = computed(() => diasSeguidos(progresso.diario, hoje))
 const semana = computed(() => semanaDoDiario(progresso.diario, hoje))
-const ESTADO_DO_DIA = { completa: 'série completa', comecada: 'série começada', vazia: 'sem série' }
+const ESTADO_DO_DIA = { completa: 'série completa', comecada: 'série começada', vazia: 'sem série', futuro: 'ainda não chegou' }
 
 /** Anel de progresso dos exercícios do dia (raio 26). */
 const CIRCUNFERENCIA = 2 * Math.PI * 26
@@ -268,6 +268,13 @@ p {
 .semana .completa .bolinha {
   border-color: var(--cor-jogar);
   background: var(--cor-jogar);
+}
+.semana .futuro .bolinha {
+  border-color: var(--superficie-2);
+  background: var(--superficie-2);
+}
+.semana .futuro .letra {
+  opacity: 0.55;
 }
 .semana .letra {
   color: var(--texto-suave);
