@@ -165,15 +165,18 @@ onBeforeUnmount(() => {
         <p v-else-if="erro" class="erro">{{ erro }}</p>
       </div>
 
-      <GraficoPartida :chances="analise.chances" :lances="analise.lances" :atual="ply" @ir="ply = $event" />
-
-      <div class="controles">
+      <div class="navegar">
         <button type="button" class="botao" :disabled="ply === 0" aria-label="Voltar ao início" @click="ply = 0">⏮</button>
         <button type="button" class="botao" :disabled="ply === 0" aria-label="Lance anterior" @click="ply--">◀</button>
         <button type="button" class="botao" :disabled="ply === sans.length" aria-label="Próximo lance" @click="ply++">▶</button>
         <button type="button" class="botao" :disabled="ply === sans.length" aria-label="Último lance" @click="ply = sans.length">⏭</button>
-        <button type="button" class="botao" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">Girar</button>
-        <RouterLink class="botao" :to="{ name: 'analisar', query: { fen: posicoes[ply].fen, orientacao } }" title="Explorar esta posição com lances livres">Analisar daqui</RouterLink>
+        <button type="button" class="botao" aria-label="Girar o tabuleiro" title="Girar o tabuleiro" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">⇅</button>
+      </div>
+
+      <GraficoPartida :chances="analise.chances" :lances="analise.lances" :atual="ply" @ir="ply = $event" />
+
+      <div class="controles">
+        <RouterLink class="botao fantasma" :to="{ name: 'analisar', query: { fen: posicoes[ply].fen, orientacao } }" title="Explorar esta posição com lances livres">Analisar daqui</RouterLink>
         <label class="marcar" title="Seta azul com o melhor lance do Stockfish na posição mostrada">
           <input v-model="mostrarSeta" type="checkbox" />
           Seta do Stockfish
@@ -272,10 +275,20 @@ onBeforeUnmount(() => {
 .erro {
   color: var(--erro);
 }
+.navegar {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--espaco-2);
+}
+.navegar .botao {
+  padding: 0;
+  font-size: 18px;
+}
 .controles {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  align-items: center;
+  gap: var(--espaco-2) var(--espaco-4);
 }
 .resumo {
   width: 100%;
