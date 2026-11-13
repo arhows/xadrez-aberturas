@@ -102,6 +102,8 @@ export interface Progresso {
   fundamentos: Record<string, string>
   /** Quiz das partidas-modelo de estratégia ("estrutura/n" → melhor resultado). */
   estrategia: Record<string, ResultadoQuiz>
+  /** Armadilhas resolvidas ("id/armar" ou "id/defender" → data da primeira vez). */
+  armadilhas: Record<string, string>
   /** Atividade por dia (AAAA-MM-DD), para a sequência de dias e o calendário do painel. */
   atividade: Record<string, Atividade>
   config: Configuracoes
@@ -148,6 +150,7 @@ function progressoVazio(): Progresso {
     jogos: {},
     fundamentos: {},
     estrategia: {},
+    armadilhas: {},
     repertorio: { capitulos: [], atualizado: '' },
     config: { ...CONFIG_PADRAO },
   }
@@ -179,6 +182,7 @@ export function normalizarProgresso(dados: unknown): Progresso | null {
     jogos: ehObjeto(parcial.jogos) ? parcial.jogos! : {},
     fundamentos: ehObjeto(parcial.fundamentos) ? parcial.fundamentos! : {},
     estrategia: ehObjeto(parcial.estrategia) ? parcial.estrategia! : {},
+    armadilhas: ehObjeto(parcial.armadilhas) ? parcial.armadilhas! : {},
     repertorio:
       ehObjeto(parcial.repertorio) && Array.isArray(parcial.repertorio!.capitulos)
         ? { capitulos: parcial.repertorio!.capitulos, atualizado: String(parcial.repertorio!.atualizado ?? '') }

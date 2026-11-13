@@ -59,6 +59,14 @@ const primeiraRevisao = revisoes[0]
       </span>
       <span class="botao">Estudar</span>
     </RouterLink>
+    <RouterLink to="/armadilhas" class="fundamentos">
+      <span class="icone" aria-hidden="true">♞</span>
+      <span class="textos">
+        <strong>Armadilhas de abertura</strong>
+        <span class="suave">Mate de Légal, Elefante, Arca de Noé, Stafford… Veja cada armadilha, aprenda a armá-la e a se defender dela</span>
+      </span>
+      <span class="botao">Treinar</span>
+    </RouterLink>
     <section class="revisao" :class="{ vazia: !primeiraRevisao }">
       <div>
         <strong>Revisão de hoje</strong>

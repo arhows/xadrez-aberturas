@@ -26,6 +26,7 @@ import JogadorView from './views/JogadorView.vue'
 import TaticaView from './views/TaticaView.vue'
 import { buscarEstrutura, carregarEstrategia } from './lib/estrategia'
 import { buscarQuiz, carregarQuizzes } from './lib/quizzes'
+import { buscarArmadilha, carregarArmadilhas } from './lib/armadilhas'
 import ExerciciosView from './views/ExerciciosView.vue'
 import ExplorarView from './views/ExplorarView.vue'
 import InicioView from './views/InicioView.vue'
@@ -107,6 +108,23 @@ export const router = createRouter({
       component: () => import('./views/EstrategiaView.vue'),
       beforeEnter: () => Promise.all([carregarEstrategia(), carregarQuizzes()]).then(() => true),
       meta: { secao: 'exercicios' },
+    },
+    {
+      path: '/armadilhas',
+      name: 'armadilhas',
+      component: () => import('./views/ArmadilhasView.vue'),
+      beforeEnter: () => carregarArmadilhas().then(() => true),
+      meta: { secao: 'exercicios' },
+    },
+    {
+      path: '/armadilhas/:id',
+      name: 'armadilha',
+      component: () => import('./views/ArmadilhaView.vue'),
+      meta: { secao: 'exercicios', foco: true },
+      beforeEnter: async (destino) => {
+        await carregarArmadilhas()
+        return buscarArmadilha(destino.params.id as string) ? true : { name: 'armadilhas' }
+      },
     },
     {
       path: '/estrategia/quiz/:id',
