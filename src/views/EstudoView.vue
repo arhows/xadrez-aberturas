@@ -148,6 +148,14 @@ function trocarLinha(evento: Event) {
 </script>
 
 <template>
+  <header class="cabecalho-movel so-celular">
+    <RouterLink class="voltar" :to="{ name: 'abertura', params: { cap: capitulo.capitulo.id } }" aria-label="Voltar">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6" /></svg>
+    </RouterLink>
+    <h1>{{ fmtTexto(capitulo.capitulo.nome) }}</h1>
+    <span v-if="linha" class="apoio suave">{{ ply }} / {{ lances.length }}</span>
+  </header>
+
   <div v-if="linha && lances.length" class="tela">
     <div class="area-tabuleiro" @touchstart.passive="aoIniciarToque" @touchend.passive="aoTerminarToque">
       <Tabuleiro
@@ -163,6 +171,10 @@ function trocarLinha(evento: Event) {
     </div>
 
     <div class="painel">
+      <div class="cabeca-painel so-computador">
+        <RouterLink :to="{ name: 'abertura', params: { cap: capitulo.capitulo.id } }" class="trilha">‹ {{ fmtTexto(capitulo.capitulo.nome) }}</RouterLink>
+        <h1 class="titulo-pagina">Estudo</h1>
+      </div>
       <label class="campo">
         <span>Linha</span>
         <select :value="linha.id" @change="trocarLinha">
@@ -172,17 +184,17 @@ function trocarLinha(evento: Event) {
         </select>
       </label>
 
-      <div class="controles">
+      <div class="navegar">
         <button type="button" class="botao" :disabled="ply === 0" aria-label="Voltar ao início" title="Voltar ao início" @click="ply = 0">⏮</button>
         <button type="button" class="botao" :disabled="ply === 0" aria-label="Lance anterior" @click="anterior">◀</button>
         <span class="posicao">{{ ply }} / {{ lances.length }}</span>
         <button type="button" class="botao" :disabled="noFim" aria-label="Próximo lance" @click="proximo">▶</button>
-        <button type="button" class="botao" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">Girar</button>
-        <label class="marcar" title="Esconde a seta do próximo lance até você tentar jogá-lo">
-          <input v-model="progresso.config.adivinhar" type="checkbox" />
-          Adivinhar
-        </label>
+        <button type="button" class="botao" aria-label="Girar o tabuleiro" title="Girar o tabuleiro" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">⇅</button>
       </div>
+      <label class="marcar" title="Esconde a seta do próximo lance até você tentar jogá-lo">
+        <input v-model="progresso.config.adivinhar" type="checkbox" />
+        Modo adivinhar: esconder o próximo lance
+      </label>
 
       <div v-if="!noFim && (errou || escondido)" class="adivinhe">
         <p v-if="errou">Esse não é o lance da linha. Jogue o lance da seta verde.</p>
@@ -242,19 +254,19 @@ function trocarLinha(evento: Event) {
           </dl>
         </details>
         <div class="acoes">
-          <button type="button" class="botao" @click="ply = 0">Rever este estudo</button>
-          <RouterLink
-            class="botao"
-            :to="{ name: 'treino', params: { cap: capitulo.capitulo.id }, query: { escopo: `linha:${linha.id}` } }"
-          >Treinar esta linha</RouterLink>
           <RouterLink
             v-if="proxima"
-            class="botao primario"
+            class="botao primario grande largo-celular"
             :to="{ name: 'estudo', params: { cap: capitulo.capitulo.id, linha: proxima.id } }"
           >Próximo estudo: {{ tituloDaLinha(proxima) }}</RouterLink>
-          <RouterLink v-else class="botao primario" :to="{ name: 'abertura', params: { cap: capitulo.capitulo.id } }">
-            Último estudo do capítulo: voltar à abertura
+          <RouterLink v-else class="botao primario grande largo-celular" :to="{ name: 'abertura', params: { cap: capitulo.capitulo.id } }">
+            Último estudo: voltar à abertura
           </RouterLink>
+          <RouterLink
+            class="botao largo-celular"
+            :to="{ name: 'treino', params: { cap: capitulo.capitulo.id }, query: { escopo: `linha:${linha.id}` } }"
+          >Treinar esta linha</RouterLink>
+          <button type="button" class="botao fantasma largo-celular" @click="ply = 0">Rever do começo</button>
         </div>
       </CartaoDica>
     </div>
@@ -267,11 +279,30 @@ function trocarLinha(evento: Event) {
 </template>
 
 <style scoped>
-.controles {
-  display: flex;
-  flex-wrap: wrap;
+.cabeca-painel {
+  display: grid;
+  gap: var(--espaco-1);
+}
+.cabeca-painel .titulo-pagina {
+  margin: 0;
+}
+.trilha {
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  min-height: var(--alvo-toque);
+  color: var(--destaque);
+  font-size: 14px;
+  text-decoration: none;
+}
+.navegar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) auto repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: var(--espaco-2);
+}
+.navegar .botao {
+  padding: 0;
+  font-size: 18px;
 }
 .adivinhe {
   display: flex;
@@ -311,5 +342,15 @@ function trocarLinha(evento: Event) {
 }
 .legenda dd {
   margin: 0;
+}
+@media (max-width: 799.98px) {
+  .so-computador {
+    display: none;
+  }
+}
+@media (min-width: 800px) {
+  .so-celular {
+    display: none;
+  }
 }
 </style>

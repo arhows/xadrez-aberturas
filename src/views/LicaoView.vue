@@ -290,26 +290,26 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
 
       <CartaoDica v-if="aviso && (aviso.texto || aviso.lance || aviso.tipo === 'certo')" :tipo="aviso.tipo" :lance="aviso.lance" :texto="aviso.texto" />
 
-      <div class="acoes">
+      <div v-if="concluido" class="acoes">
+        <button v-if="proximo" type="button" class="botao primario grande largo-celular" @click="irPara(indice + 1)">Próximo exercício</button>
+        <template v-else>
+          <p class="parabens">Lição concluída!</p>
+          <RouterLink v-if="proximaLicao" class="botao primario grande largo-celular" :to="{ name: 'licao', params: { licao: proximaLicao.id } }">
+            Próxima lição: {{ proximaLicao.titulo }}
+          </RouterLink>
+          <RouterLink v-else class="botao primario grande largo-celular" to="/jogar">Curso completo! Jogar uma partida</RouterLink>
+        </template>
+      </div>
+      <div class="acoes secundarias">
         <button v-if="!concluido" type="button" class="botao" @click="pedirDica">Dica</button>
         <button v-if="percursoEx || concluido" type="button" class="botao" @click="recomecar">↺ Recomeçar</button>
-        <template v-if="concluido">
-          <button v-if="proximo" type="button" class="botao primario" @click="irPara(indice + 1)">Próximo exercício</button>
-          <template v-else>
-            <p class="parabens">Lição concluída!</p>
-            <RouterLink v-if="proximaLicao" class="botao primario" :to="{ name: 'licao', params: { licao: proximaLicao.id } }">
-              Próxima lição: {{ proximaLicao.titulo }}
-            </RouterLink>
-            <RouterLink v-else class="botao primario" to="/jogar">Curso completo! Jogar uma partida</RouterLink>
-          </template>
-        </template>
       </div>
 
       <nav class="navegacao-licoes" aria-label="Outras lições">
-        <RouterLink v-if="licaoAnterior" class="botao" :to="{ name: 'licao', params: { licao: licaoAnterior.id } }">
+        <RouterLink v-if="licaoAnterior" class="botao fantasma" :to="{ name: 'licao', params: { licao: licaoAnterior.id } }">
           ← {{ licaoAnterior.titulo }}
         </RouterLink>
-        <RouterLink v-if="proximaLicao" class="botao proxima" :to="{ name: 'licao', params: { licao: proximaLicao.id } }">
+        <RouterLink v-if="proximaLicao" class="botao fantasma proxima" :to="{ name: 'licao', params: { licao: proximaLicao.id } }">
           {{ proximaLicao.titulo }} →
         </RouterLink>
       </nav>
@@ -432,6 +432,14 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
 @media (min-width: 800px) {
   .so-celular {
     display: none;
+  }
+}
+.acoes.secundarias:empty {
+  display: none;
+}
+@media (max-width: 799.98px) {
+  .acoes.secundarias > .botao {
+    flex: 1 1 0;
   }
 }
 </style>

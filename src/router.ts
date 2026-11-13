@@ -65,8 +65,8 @@ export const router = createRouter({
     { path: '/erros', name: 'erros', component: ErrosView, meta: { secao: 'praticar', foco: true } },
     { path: '/partidas', name: 'partidas', component: PartidasView, meta: { secao: 'jogar' } },
     { path: '/progresso', name: 'progresso', component: ProgressoView, beforeEnter: () => carregarConjuntos().then(() => true), meta: { secao: 'eu' } },
-    { path: '/explorar/:cap', name: 'explorar', component: ExplorarView, beforeEnter: exigirCapitulo, meta: { secao: 'aprender' } },
-    { path: '/estudo/:cap/:linha', name: 'estudo', component: EstudoView, beforeEnter: exigirCapitulo, meta: { secao: 'aprender' } },
+    { path: '/explorar/:cap', name: 'explorar', component: ExplorarView, beforeEnter: exigirCapitulo, meta: { secao: 'aprender', foco: true } },
+    { path: '/estudo/:cap/:linha', name: 'estudo', component: EstudoView, beforeEnter: exigirCapitulo, meta: { secao: 'aprender', foco: true } },
     { path: '/treino/:cap', name: 'treino', component: TreinoView, beforeEnter: exigirCapitulo, meta: { secao: 'praticar', foco: true } },
     { path: '/exercicios', name: 'exercicios', component: ExerciciosView, beforeEnter: () => carregarConjuntos().then(() => true), meta: { secao: 'praticar' } },
     {

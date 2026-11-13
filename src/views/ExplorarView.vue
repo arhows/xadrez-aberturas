@@ -310,6 +310,13 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
 </script>
 
 <template>
+  <header class="cabecalho-movel so-celular">
+    <RouterLink class="voltar" :to="{ name: 'abertura', params: { cap: capitulo.capitulo.id } }" aria-label="Voltar">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6" /></svg>
+    </RouterLink>
+    <h1>{{ fmtTexto(capitulo.capitulo.nome) }}</h1>
+  </header>
+
   <div class="tela">
     <div class="area-tabuleiro">
       <Tabuleiro
@@ -325,18 +332,19 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
     </div>
 
     <div class="painel">
-      <div class="controles">
+      <div class="cabeca-painel so-computador">
+        <RouterLink :to="{ name: 'abertura', params: { cap: capitulo.capitulo.id } }" class="trilha">‹ {{ fmtTexto(capitulo.capitulo.nome) }}</RouterLink>
+        <h1 class="titulo-pagina">Explorar</h1>
+      </div>
+
+      <div class="navegar">
         <button type="button" class="botao" :disabled="!caminho.length && !foraDoLivro" aria-label="Voltar ao início" title="Voltar ao início" @click="voltarAoInicio">⏮</button>
         <button type="button" class="botao" :disabled="!caminho.length && !foraDoLivro" aria-label="Lance anterior" @click="voltar">◀</button>
         <button type="button" class="botao" :disabled="!continuacoes.length" aria-label="Próximo lance" @click="avancar">▶</button>
-        <button type="button" class="botao" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">Girar</button>
-        <RouterLink
-          class="botao"
-          :to="{ name: 'jogar', query: { c: [...caminho.map((a) => a.san), ...fora.map((l) => l.san)].join(' '), cap: capitulo.capitulo.id } }"
-        >Jogar daqui</RouterLink>
-        <RouterLink class="botao" :to="{ name: 'editor', query: { fen } }" title="Abrir esta posição no editor">Editar posição</RouterLink>
-        <button type="button" class="botao" title="Compartilhar o link desta posição" @click="compartilhar">Compartilhar</button>
-        <span v-if="avisoCompartilhar" class="aviso-compartilhar" role="status">{{ avisoCompartilhar }}</span>
+        <button type="button" class="botao" aria-label="Girar o tabuleiro" title="Girar o tabuleiro" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">⇅</button>
+      </div>
+
+      <div class="controles">
         <label class="marcar">
           <input v-model="mostrarNotas" type="checkbox" />
           Notas
@@ -345,7 +353,7 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
           <input v-model="progresso.config.adivinhar" type="checkbox" />
           Adivinhar
         </label>
-        <label class="marcar ao-vivo">
+        <label class="marcar">
           <input v-model="progresso.config.motorAoVivo" type="checkbox" />
           Stockfish ao vivo
         </label>
@@ -463,6 +471,16 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
         @jogar="jogarSan"
       />
 
+      <div class="mais-acoes">
+        <RouterLink
+          class="botao fantasma"
+          :to="{ name: 'jogar', query: { c: [...caminho.map((a) => a.san), ...fora.map((l) => l.san)].join(' '), cap: capitulo.capitulo.id } }"
+        >Jogar daqui</RouterLink>
+        <RouterLink class="botao fantasma" :to="{ name: 'editor', query: { fen } }" title="Abrir esta posição no editor">Editar posição</RouterLink>
+        <button type="button" class="botao fantasma" title="Compartilhar o link desta posição" @click="compartilhar">Compartilhar</button>
+        <span v-if="avisoCompartilhar" class="aviso-compartilhar" role="status">{{ avisoCompartilhar }}</span>
+      </div>
+
       <section v-show="!escondido">
         <h2>Árvore</h2>
         <div ref="listaLances" class="lista">
@@ -508,21 +526,47 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
 .proximos + .apoio-partidas {
   margin: 0.5rem 0 0;
 }
-.controles {
+.cabeca-painel {
+  display: grid;
+  gap: var(--espaco-1);
+}
+.cabeca-painel .titulo-pagina {
+  margin: 0;
+}
+.trilha {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alvo-toque);
+  color: var(--destaque);
+  font-size: 14px;
+  text-decoration: none;
+}
+.navegar {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--espaco-2);
+}
+.navegar .botao {
+  padding: 0;
+  font-size: 18px;
+}
+.controles,
+.mais-acoes {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--espaco-1) var(--espaco-4);
+}
+.mais-acoes {
+  gap: var(--espaco-2);
+  padding-top: var(--espaco-3);
+  border-top: 1px solid var(--borda);
 }
 .marcar {
   display: inline-flex;
   align-items: center;
   gap: 0.375rem;
   min-height: 44px;
-  margin-left: auto;
-}
-.marcar.ao-vivo {
-  margin-left: 0;
 }
 .voltar-livro {
   margin-top: 0.5rem;
@@ -554,5 +598,15 @@ small {
   padding: 0.5rem;
   border: 1px solid var(--borda);
   border-radius: 8px;
+}
+@media (max-width: 799.98px) {
+  .so-computador {
+    display: none;
+  }
+}
+@media (min-width: 800px) {
+  .so-celular {
+    display: none;
+  }
 }
 </style>
