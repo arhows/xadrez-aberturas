@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import EstadoVazio from '../components/EstadoVazio.vue'
 import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
 import { pgnDoCompartilhado, retirarCompartilhado } from '../lib/compartilhado'
 import { fmtLance } from '../lib/formato'
@@ -194,6 +195,13 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
       </ul>
       <p class="suave">As últimas {{ 100 }} partidas do modo Partida ficam guardadas e sincronizam entre os aparelhos.</p>
     </section>
+
+    <EstadoVazio v-if="!todas.length && !jogos.length" titulo="Nenhuma partida ainda" peca="knight" tom="jogar">
+      Jogue contra o computador ou importe as suas partidas do lichess e do chess.com para ver onde você saiu do livro.
+      <template #acoes>
+        <RouterLink class="botao primario" to="/partida">Jogar contra o computador</RouterLink>
+      </template>
+    </EstadoVazio>
 
     <!-- Importar fica recolhido depois que já há partidas: o resultado é o que importa. -->
     <details class="cartao recolhivel importar" :open="!todas.length && !jogos.length">

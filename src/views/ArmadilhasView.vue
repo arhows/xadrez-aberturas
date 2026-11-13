@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import MiniTabuleiro from '../components/MiniTabuleiro.vue'
+import EstadoVazio from '../components/EstadoVazio.vue'
 import { chaveDaArmadilha, grupoDaArmadilha, noRepertorio, obterArmadilhas, ORDEM_DOS_GRUPOS } from '../lib/armadilhas'
 import { jogarLances } from '../lib/lances'
 import { progresso } from '../lib/progresso'
@@ -60,7 +61,12 @@ const feitas = computed(() => todas.filter((a) => armou(a.id) && defendeu(a.id))
         </li>
       </ul>
     </section>
-    <p v-if="!grupos.length" class="suave">Nenhuma armadilha do seu repertório por enquanto.</p>
+    <EstadoVazio v-if="!grupos.length" titulo="Nenhuma armadilha por aqui" peca="bishop" tom="aprender">
+      As aberturas do seu repertório ainda não têm armadilhas no app.
+      <template #acoes>
+        <button type="button" class="botao" @click="soRepertorio = false">Ver todas as armadilhas</button>
+      </template>
+    </EstadoVazio>
   </div>
 </template>
 

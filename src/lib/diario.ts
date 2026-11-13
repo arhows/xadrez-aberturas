@@ -148,3 +148,28 @@ export function juntarDiario(a: Record<string, SerieDoDia>, b: Record<string, Se
   }
   return saida
 }
+
+export interface DiaDaSemana {
+  data: string
+  /** Inicial do dia da semana ("S" de segunda, "D" de domingo). */
+  letra: string
+  estado: 'completa' | 'comecada' | 'vazia'
+  hoje: boolean
+}
+
+const LETRAS = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S']
+
+/** Os últimos 7 dias até hoje, para a fileira de bolinhas da série no Início. */
+export function semanaDoDiario(diario: Record<string, SerieDoDia>, hoje: string): DiaDaSemana[] {
+  return Array.from({ length: 7 }, (_, i) => {
+    const data = somarDias(hoje, i - 6)
+    const [ano, mes, dia] = data.split('-').map(Number)
+    const feitos = diario[data]
+    return {
+      data,
+      letra: LETRAS[new Date(ano, mes - 1, dia).getDay()],
+      estado: serieCompleta(feitos) ? 'completa' : feitos && Object.keys(feitos).length ? 'comecada' : 'vazia',
+      hoje: data === hoje,
+    }
+  })
+}

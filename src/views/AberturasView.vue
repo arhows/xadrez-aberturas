@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import MiniTabuleiro from '../components/MiniTabuleiro.vue'
+import EstadoVazio from '../components/EstadoVazio.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { buscarAberturas } from '../lib/busca'
 import { obterCapitulos, type CapituloCarregado } from '../lib/capitulos'
@@ -134,10 +135,13 @@ const plural = (n: number, palavra: string) => `${n} ${palavra}${n === 1 ? '' : 
           Todas <span class="suave">{{ obterCapitulos().length }}</span>
         </button>
       </div>
-      <p v-if="aba === 'meu' && !totalNoRepertorio" class="aviso">
-        Você ainda não escolheu o seu repertório, então todas as aberturas entram nas revisões e linhas novas do dia.
-        Toque na ☆ das aberturas que você joga (em “Todas”) para focar só nelas.
-      </p>
+      <EstadoVazio v-if="aba === 'meu' && !totalNoRepertorio" titulo="Monte o seu repertório" peca="queen" tom="aprender">
+        Enquanto você não escolhe, todas as aberturas entram nas revisões e nas linhas novas do dia.
+        Toque na ☆ das aberturas que você joga para focar só nelas.
+        <template #acoes>
+          <button type="button" class="botao primario" @click="aba = 'todas'">Escolher aberturas</button>
+        </template>
+      </EstadoVazio>
       <section v-for="familia in familias" :key="familia.id" class="familia">
         <h2>{{ familia.nome }} <span class="suave">{{ fmtTexto(familia.lances) }}</span></h2>
         <ul class="cartoes">

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, ref, shallowRef } from 'vue'
 import CartaoDica from '../components/CartaoDica.vue'
+import Ilustracao from '../components/Ilustracao.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { obterCapitulos } from '../lib/capitulos'
 import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
@@ -154,6 +155,7 @@ onBeforeUnmount(() => {
     <h1 class="titulo-pagina">Relâmpago</h1>
 
     <template v-if="fase === 'fim'">
+      <Ilustracao :peca="recordeNovo ? 'queen' : 'knight'" :tom="recordeNovo ? 'jogar' : 'praticar'" :festa="recordeNovo" pequena class="ilustracao-fim" />
       <dl class="placar-final">
         <div><dt>Acertos</dt><dd class="ok">{{ acertos }}</dd></div>
         <div><dt>Erros</dt><dd class="erro">{{ erros }}</dd></div>
@@ -245,6 +247,9 @@ onBeforeUnmount(() => {
 }
 .erro {
   color: var(--erro);
+}
+.ilustracao-fim {
+  margin: var(--espaco-2) 0 0;
 }
 .destaque {
   margin: 0;

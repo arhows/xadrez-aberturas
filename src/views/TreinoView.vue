@@ -3,6 +3,8 @@ import { computed, onBeforeUnmount, ref, shallowRef } from 'vue'
 import { useRoute } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
 import CartaoDica from '../components/CartaoDica.vue'
+import EstadoVazio from '../components/EstadoVazio.vue'
+import Ilustracao from '../components/Ilustracao.vue'
 import PlanoMeioJogo from '../components/PlanoMeioJogo.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { aberturasVizinhas } from '../lib/aberturasVizinhas'
@@ -563,17 +565,18 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
 
   <div v-else-if="fase === 'vazio'" class="pagina formulario">
     <RouterLink :to="voltarPara" class="trilha so-computador">‹ {{ capitulo.capitulo.nome }}</RouterLink>
-    <h1 class="titulo-pagina">Nada pendente</h1>
-    <p>Não há revisões vencidas nem linhas novas disponíveis hoje neste escopo.</p>
-    <div class="acoes">
-      <RouterLink
-        v-if="proximoCapitulo"
-        class="botao primario"
-        :to="{ name: 'treino', params: { cap: proximoCapitulo.capitulo.capitulo.id }, query: { auto: '1' } }"
-      >Revisar {{ proximoCapitulo.capitulo.capitulo.nome }} ({{ proximoCapitulo.fila.length }})</RouterLink>
-      <button type="button" class="botao" :class="{ primario: !proximoCapitulo }" @click="iniciarSessao(true)">Treinar mesmo assim</button>
-      <RouterLink class="botao fantasma" to="/">Voltar ao início</RouterLink>
-    </div>
+    <EstadoVazio titulo="Tudo em dia por aqui" peca="king" tom="praticar">
+      Não há revisões vencidas nem linhas novas disponíveis hoje neste escopo.
+      <template #acoes>
+        <RouterLink
+          v-if="proximoCapitulo"
+          class="botao primario"
+          :to="{ name: 'treino', params: { cap: proximoCapitulo.capitulo.capitulo.id }, query: { auto: '1' } }"
+        >Revisar {{ proximoCapitulo.capitulo.capitulo.nome }} ({{ proximoCapitulo.fila.length }})</RouterLink>
+        <button type="button" class="botao" :class="{ primario: !proximoCapitulo }" @click="iniciarSessao(true)">Treinar mesmo assim</button>
+        <RouterLink class="botao fantasma" to="/">Voltar ao início</RouterLink>
+      </template>
+    </EstadoVazio>
     <nav v-if="vizinhas.anterior || vizinhas.proxima" class="outras-aberturas" aria-label="Outras aberturas">
       <RouterLink v-if="vizinhas.anterior" class="botao" :to="{ name: 'treino', params: { cap: vizinhas.anterior.capitulo.id } }">
         ← {{ vizinhas.anterior.capitulo.nome }}
@@ -719,7 +722,10 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
             {{ escopoEscolhido.tipo === 'linha' ? 'Próxima variante' : 'Próxima' }} ({{ fila.length }})
           </button>
           <template v-else>
-            <p class="concluido">✓ Sessão concluída.</p>
+            <div class="concluido">
+              <Ilustracao peca="king" tom="praticar" festa pequena />
+              <span>Sessão concluída!</span>
+            </div>
             <RouterLink
               v-if="proximoCapitulo"
               class="botao primario grande largo-celular"
@@ -881,10 +887,15 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
   margin-left: auto;
 }
 .concluido {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
   width: 100%;
-  margin: 0;
   color: var(--ok);
-  font-weight: 600;
+  font: 600 20px/26px var(--font-titulo);
+}
+.concluido .ilustracao {
+  margin: 0;
 }
 @media (max-width: 799.98px) {
   .so-computador {

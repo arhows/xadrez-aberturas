@@ -71,3 +71,16 @@ describe('sequência', () => {
     expect(media(ratings.slice(30))).toBeGreaterThan(media(ratings.slice(0, 10)) + 800)
   })
 })
+
+describe('semana do diário', () => {
+  it('mostra os 7 dias até hoje com o estado de cada série', async () => {
+    const { semanaDoDiario, TAMANHO_DA_SERIE } = await import('../src/lib/diario')
+    const completa = Object.fromEntries(Array.from({ length: TAMANHO_DA_SERIE }, (_, i) => [String(i), 'primeira' as const]))
+    const semana = semanaDoDiario({ '2026-11-13': completa, '2026-11-12': { '0': 'ajuda' } }, '2026-11-13')
+    expect(semana.map((d) => d.data)).toEqual(['2026-11-07', '2026-11-08', '2026-11-09', '2026-11-10', '2026-11-11', '2026-11-12', '2026-11-13'])
+    expect(semana.map((d) => d.letra).join('')).toBe('SDSTQQS')
+    expect(semana.at(-1)).toMatchObject({ estado: 'completa', hoje: true })
+    expect(semana.at(-2)?.estado).toBe('comecada')
+    expect(semana[0].estado).toBe('vazia')
+  })
+})

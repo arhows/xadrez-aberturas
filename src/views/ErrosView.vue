@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import CartaoDica from '../components/CartaoDica.vue'
+import EstadoVazio from '../components/EstadoVazio.vue'
+import Ilustracao from '../components/Ilustracao.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { buscarCapitulo } from '../lib/capitulos'
 import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
@@ -139,6 +141,7 @@ const restantes = computed(() => Object.values(progresso.errosPorAresta).filter(
     <RouterLink to="/praticar" class="trilha">‹ Praticar</RouterLink>
     <h1 class="titulo-pagina">Treinar meus erros</h1>
     <template v-if="perguntas.length">
+      <Ilustracao v-if="!restantes" peca="rook" tom="praticar" festa pequena />
       <dl class="placar-final">
         <div><dt>De primeira</dt><dd class="ok">{{ placar.deprimeira }}</dd></div>
         <div><dt>Saíram da lista</dt><dd>{{ placar.sairam }}</dd></div>
@@ -150,10 +153,14 @@ const restantes = computed(() => Object.values(progresso.errosPorAresta).filter(
         Cada lance sai da lista depois de dois acertos seguidos.
       </p>
     </template>
-    <p v-else>
-      Nenhum erro para treinar. Os lances que você errar no Treino ou em que sair do livro nas suas partidas aparecem aqui.
-    </p>
-    <div class="acoes">
+    <EstadoVazio v-else titulo="Nenhum erro para treinar" peca="rook">
+      Os lances que você errar no Treino, ou em que sair do livro nas suas partidas, aparecem aqui.
+      <template #acoes>
+        <RouterLink class="botao primario" to="/aberturas">Treinar uma abertura</RouterLink>
+        <RouterLink class="botao" to="/">Voltar ao início</RouterLink>
+      </template>
+    </EstadoVazio>
+    <div v-if="perguntas.length" class="acoes">
       <RouterLink class="botao primario" to="/">Voltar ao início</RouterLink>
     </div>
   </div>

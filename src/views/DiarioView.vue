@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, shallowRef } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import Ilustracao from '../components/Ilustracao.vue'
 import ResolverMisturado from '../components/ResolverMisturado.vue'
 import {
   chaveDoItem,
@@ -155,7 +156,10 @@ function aoFalharNaSeq() {
     <div v-else class="pagina resumo">
       <RouterLink to="/praticar" class="trilha so-computador">‹ Praticar</RouterLink>
       <h1 class="titulo-pagina so-computador">Exercícios do dia</h1>
-      <p class="destaque">Série de hoje completa!</p>
+      <div class="conquista">
+        <Ilustracao peca="king" tom="praticar" festa />
+        <h2 class="titulo-secao">Série de hoje completa!</h2>
+      </div>
       <dl class="placar-final">
         <div><dt>De primeira</dt><dd class="ok">{{ dePrimeira }}</dd></div>
         <div><dt>Com ajuda</dt><dd>{{ completos - dePrimeira }}</dd></div>
@@ -204,6 +208,7 @@ function aoFalharNaSeq() {
       </template>
       <template #rodape>
         <section v-if="faseSeq === 'fim'" class="cartao fim">
+          <Ilustracao pequena :peca="recordeNovo ? 'queen' : 'knight'" :tom="recordeNovo ? 'jogar' : 'praticar'" :festa="recordeNovo" />
           <strong>Fim da sequência: {{ acertos }} {{ acertos === 1 ? 'acerto' : 'acertos' }}.</strong>
           <span v-if="recordeNovo" class="ok">Recorde novo!</span>
           <span v-else class="suave">Seu recorde é {{ progresso.sequencia }}.</span>
@@ -300,7 +305,19 @@ function aoFalharNaSeq() {
   font-variant-numeric: tabular-nums;
 }
 .fim {
-  justify-items: start;
+  justify-items: center;
+  text-align: center;
+}
+.conquista {
+  display: grid;
+  justify-items: center;
+  gap: var(--espaco-3);
+  padding: var(--espaco-2) 0;
+  text-align: center;
+}
+.conquista h2 {
+  margin: 0;
+  color: var(--ok);
 }
 .ok {
   color: var(--ok);

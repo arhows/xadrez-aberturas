@@ -26,6 +26,10 @@ export const DESENHOS = {
   grafico: '<path d="M4 20h16"/><path d="M7 20v-6M12 20V8M17 20v-9"/>',
   pulso: '<path d="M3 12h4l2.5-6 5 12 2.5-6h4"/>',
   ajustes: '<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>',
+  chama:
+    '<path d="M12 21.5c3.6 0 6.5-2.6 6.5-6.3 0-4.2-3.3-6.3-4-10.7-2.3 1.6-3.6 3.9-3.6 6.5-1-.6-1.7-1.6-2-3C7.3 9.6 5.5 12 5.5 15.2c0 3.7 2.9 6.3 6.5 6.3z"/>',
+  certo: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+  seguir: '<path d="M5 12h14M13 6l6 6-6 6"/>',
   aprender: '<path d="M5 18V6a2.5 2.5 0 0 1 2.5-2.5H19v13H7.5A2.5 2.5 0 0 0 5 19a2 2 0 0 0 2 2h12v-4.5"/>',
   praticar: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="0.8" fill="currentColor"/>',
   jogar: '<rect x="3.5" y="3.5" width="17" height="17" rx="2"/><path d="M3.5 12h17M12 3.5v17"/>',
