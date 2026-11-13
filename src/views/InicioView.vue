@@ -63,6 +63,7 @@ const maisErrados = computed(() =>
     <div class="topo-inicio">
       <h1 class="titulo-pagina">Hoje</h1>
       <span class="atalhos">
+        <RouterLink class="botao fantasma" to="/diario">Exercícios do dia</RouterLink>
         <RouterLink class="botao fantasma" to="/relampago">Relâmpago</RouterLink>
         <RouterLink class="botao fantasma" to="/jogar">Jogar</RouterLink>
         <RouterLink class="botao fantasma" to="/editor">Editor de posição</RouterLink>

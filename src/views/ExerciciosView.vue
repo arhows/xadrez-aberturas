@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { diasSeguidos, TAMANHO_DA_SERIE } from '../lib/diario'
+import { dataLocal } from '../lib/srs'
 import { livroDoConjunto, obterConjuntos, type ConjuntoExercicios } from '../lib/exercicios'
 import { feitosNaLicao } from '../lib/fundamentos'
 import { LICOES } from '../lib/licoes'
@@ -33,6 +35,10 @@ const feitosFundamentos = LICOES.reduce((soma, l) => soma + feitosNaLicao(l, pro
 
 const numero = (n: number) => n.toLocaleString('pt-BR')
 
+const hoje = dataLocal()
+const feitosHoje = Object.keys(progresso.diario[hoje] ?? {}).length
+const dias = diasSeguidos(progresso.diario, hoje)
+
 const revisoes = revisoesPendentes(obterConjuntos())
 const primeiraRevisao = revisoes[0]
 </script>
@@ -40,6 +46,18 @@ const primeiraRevisao = revisoes[0]
 <template>
   <div class="pagina">
     <h1>Exercícios</h1>
+    <RouterLink to="/diario" class="fundamentos diario" :class="{ pendente: feitosHoje < TAMANHO_DA_SERIE }">
+      <span class="icone" aria-hidden="true">★</span>
+      <span class="textos">
+        <strong>Exercícios do dia</strong>
+        <span class="suave">
+          Táticas e mates em 1 a 4 misturados, sem dizer o tema · {{ feitosHoje }} de {{ TAMANHO_DA_SERIE }} hoje
+          <template v-if="dias"> · {{ dias }} {{ dias === 1 ? 'dia seguido' : 'dias seguidos' }}</template>
+          · Sequência: recorde {{ progresso.sequencia }}
+        </span>
+      </span>
+      <span class="botao" :class="{ primario: feitosHoje < TAMANHO_DA_SERIE }">{{ feitosHoje ? (feitosHoje < TAMANHO_DA_SERIE ? 'Continuar' : 'Ver') : 'Começar' }}</span>
+    </RouterLink>
     <RouterLink to="/fundamentos" class="fundamentos">
       <span class="icone" aria-hidden="true">♙</span>
       <span class="textos">
@@ -123,6 +141,9 @@ h1 {
   background: var(--superficie);
   color: var(--texto);
   text-decoration: none;
+}
+.fundamentos.diario.pendente {
+  border-color: var(--destaque);
 }
 .fundamentos .icone {
   font-size: 2rem;

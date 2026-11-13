@@ -87,6 +87,13 @@ export const router = createRouter({
         return buscarConjunto(destino.params.conjunto as string)?.tipo === 'tatica' ? true : { name: 'exercicios' }
       },
     },
+    {
+      path: '/diario',
+      name: 'diario',
+      component: () => import('./views/DiarioView.vue'),
+      beforeEnter: () => carregarConjuntos().then(() => true),
+      meta: { secao: 'exercicios', foco: true },
+    },
     { path: '/fundamentos', name: 'fundamentos', component: FundamentosView, meta: { secao: 'exercicios' } },
     {
       path: '/fundamentos/:licao',
