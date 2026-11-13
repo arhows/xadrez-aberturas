@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
+import Icone from '../components/Icone.vue'
 import { diasSeguidos, TAMANHO_DA_SERIE } from '../lib/diario'
 import { carregarConjuntos, type ConjuntoExercicios } from '../lib/exercicios'
 import { progresso } from '../lib/progresso'
@@ -94,11 +95,7 @@ const partesDaRevisao = computed(() => {
       <div class="pilares">
         <div v-for="parte in SECOES" :key="parte.secao" class="pilar">
           <RouterLink class="cabeca-pilar" :to="parte.para">
-            <span class="icone" aria-hidden="true">
-              <svg v-if="parte.secao === 'aprender'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 18V6a2.5 2.5 0 0 1 2.5-2.5H19v13H7.5A2.5 2.5 0 0 0 5 19a2 2 0 0 0 2 2h12v-4.5" /></svg>
-              <svg v-else-if="parte.secao === 'praticar'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5" /><circle cx="12" cy="12" r="4.5" /><circle cx="12" cy="12" r="0.8" fill="currentColor" /></svg>
-              <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="2" /><path d="M3.5 12h17M12 3.5v17" /></svg>
-            </span>
+            <span class="ladrilho grande" :class="`tom-${parte.secao}`"><Icone :nome="parte.secao" /></span>
             <span class="textos">
               <span class="titulo-item">{{ parte.nome }}</span>
               <span class="apoio suave">{{ parte.grupos.flatMap((g) => g.atalhos).slice(0, 4).map((a) => a.nome).join(', ') }}</span>
@@ -108,7 +105,7 @@ const partesDaRevisao = computed(() => {
           <!-- No computador cabe tudo: cada parte mostra os próprios atalhos. -->
           <ul class="atalhos-pilar">
             <li v-for="atalho in parte.grupos.flatMap((g) => g.atalhos)" :key="atalho.id">
-              <RouterLink :to="atalho.para">{{ atalho.nome }}</RouterLink>
+              <RouterLink :to="atalho.para"><Icone :nome="atalho.icone" class="mini" :class="`tom-${parte.secao}`" />{{ atalho.nome }}</RouterLink>
             </li>
           </ul>
         </div>
@@ -179,21 +176,6 @@ p {
 .cabeca-pilar:hover {
   background: var(--superficie-2);
 }
-.cabeca-pilar .icone {
-  flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--raio-md);
-  background: var(--destaque-suave);
-  color: var(--destaque);
-}
-.cabeca-pilar .icone svg {
-  width: 24px;
-  height: 24px;
-}
 .cabeca-pilar .textos {
   display: grid;
   flex: 1;
@@ -223,6 +205,13 @@ p {
 }
 .atalhos-pilar a:hover {
   color: var(--destaque);
+}
+.atalhos-pilar .mini {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-right: var(--espaco-3);
+  color: var(--tom);
 }
 @media (min-width: 800px) {
   .atalhos-pilar {

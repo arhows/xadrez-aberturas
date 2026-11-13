@@ -23,7 +23,7 @@ const selos = {
       <h1>{{ APRENDER.nome }}</h1>
       <p class="corpo suave">{{ APRENDER.descricao }}</p>
     </header>
-    <ListaDeAtalhos :grupos="APRENDER.grupos" :selos="selos" />
+    <ListaDeAtalhos tom="aprender" :grupos="APRENDER.grupos" :selos="selos" />
     <p class="apoio suave">
       Depois de estudar, fixe em <RouterLink to="/praticar">Praticar</RouterLink>: o app traz de volta o que você aprendeu no dia certo.
     </p>

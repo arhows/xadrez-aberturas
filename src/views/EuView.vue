@@ -30,7 +30,7 @@ const dominado = dominadoNasLinhasAtivas(capitulosDoRepertorio(obterCapitulos())
       <div class="cartao"><span class="titulo-pagina">{{ dominado }}%</span><span class="apoio suave">das aberturas dominado</span></div>
     </div>
 
-    <ListaDeAtalhos :grupos="EU.grupos" />
+    <ListaDeAtalhos tom="eu" :grupos="EU.grupos" />
 
     <button type="button" class="botao perigo sair" @click="sair">Sair da conta</button>
   </div>

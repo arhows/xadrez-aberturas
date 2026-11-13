@@ -1,8 +1,12 @@
 <script setup lang="ts">
-import type { GrupoDeAtalhos } from '../lib/secoes'
+import Icone from './Icone.vue'
+import type { GrupoDeAtalhos, Secao } from '../lib/secoes'
 
-/** Os atalhos de uma seção, em grupos; `selos` anexa pendências por id ("8 HOJE"). */
-defineProps<{ grupos: GrupoDeAtalhos[]; selos?: Record<string, string | undefined> }>()
+/**
+ * Os atalhos de uma seção, em grupos, cada um com o seu ícone na cor da seção (`tom`);
+ * `selos` anexa pendências por id ("8 HOJE").
+ */
+defineProps<{ grupos: GrupoDeAtalhos[]; tom: Exclude<Secao, 'inicio'>; selos?: Record<string, string | undefined> }>()
 </script>
 
 <template>
@@ -10,7 +14,8 @@ defineProps<{ grupos: GrupoDeAtalhos[]; selos?: Record<string, string | undefine
     <section v-for="(grupo, i) in grupos" :key="i" class="grupo-atalhos">
       <h2 v-if="grupo.titulo" class="rotulo">{{ grupo.titulo }}</h2>
       <div class="lista">
-        <RouterLink v-for="atalho in grupo.atalhos" :key="atalho.id" class="linha-lista" :to="atalho.para">
+        <RouterLink v-for="atalho in grupo.atalhos" :key="atalho.id" class="linha-lista com-icone" :to="atalho.para">
+          <span class="ladrilho" :class="`tom-${tom}`"><Icone :nome="atalho.icone" /></span>
           <span class="nome">{{ atalho.nome }}</span>
           <span class="meta">{{ atalho.descricao }}</span>
           <span class="lado">

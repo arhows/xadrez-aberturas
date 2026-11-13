@@ -22,6 +22,11 @@
   --aviso: #8a6400;
   --aviso-suave: #f9efd1;
   --motor: #2463a8;
+  /* Uma cor por parte do app, nos ícones dos atalhos. */
+  --cor-aprender: #2463a8;
+  --cor-praticar: #2f6f4f;
+  --cor-jogar: #b4530f;
+  --cor-eu: #6a4bb0;
   --foco: var(--texto);
   --casa-clara: #f0d9b5;
   --casa-escura: #b58863;
@@ -57,6 +62,10 @@
     --aviso: #e8bf4b;
     --aviso-suave: #3a3013;
     --motor: #7fb3ee;
+  --cor-aprender: #7fb3ee;
+  --cor-praticar: #5cc285;
+  --cor-jogar: #f0a35c;
+  --cor-eu: #b39cf0;
     --casa-ultimo-lance: rgba(214, 186, 64, 0.42);
     --casa-selecao: rgba(92, 194, 133, 0.45);
     --casa-xeque: rgba(242, 121, 110, 0.7);
@@ -88,6 +97,10 @@
   --aviso: #e8bf4b;
   --aviso-suave: #3a3013;
   --motor: #7fb3ee;
+  --cor-aprender: #7fb3ee;
+  --cor-praticar: #5cc285;
+  --cor-jogar: #f0a35c;
+  --cor-eu: #b39cf0;
   --casa-ultimo-lance: rgba(214, 186, 64, 0.42);
   --casa-selecao: rgba(92, 194, 133, 0.45);
   --casa-xeque: rgba(242, 121, 110, 0.7);
@@ -497,6 +510,33 @@ button.linha-lista:hover { background: var(--superficie-2); }
 .linha-lista .lado { grid-row: 1 / span 3; grid-column: 2; display: flex; align-items: center; gap: var(--espaco-2); color: var(--texto-suave); }
 .linha-lista .progresso { grid-column: 1; margin-top: var(--espaco-1); }
 .linha-lista .seta { width: 20px; height: 20px; color: var(--texto-suave); }
+/* Com ícone: o ladrilho à esquerda ocupa as linhas do nome e da descrição. */
+.linha-lista.com-icone { grid-template-columns: auto minmax(0, 1fr) auto; }
+.linha-lista.com-icone > .ladrilho { grid-row: 1 / span 3; grid-column: 1; }
+.linha-lista.com-icone > .nome,
+.linha-lista.com-icone > .meta,
+.linha-lista.com-icone > .progresso { grid-column: 2; }
+.linha-lista.com-icone > .lado { grid-column: 3; }
+
+/* ---------- Ícone em ladrilho colorido ---------- */
+.ladrilho {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--raio-md);
+  color: var(--tom, var(--destaque));
+  background: color-mix(in srgb, var(--tom, var(--destaque)) 15%, transparent);
+}
+.ladrilho .icone-svg { width: 22px; height: 22px; }
+.ladrilho.grande { width: 48px; height: 48px; }
+.ladrilho.grande .icone-svg { width: 26px; height: 26px; }
+.tom-aprender { --tom: var(--cor-aprender); }
+.tom-praticar { --tom: var(--cor-praticar); }
+.tom-jogar { --tom: var(--cor-jogar); }
+.tom-eu { --tom: var(--cor-eu); }
 
 /* ---------- Chip de lance ---------- */
 .chips { display: flex; flex-wrap: wrap; gap: var(--espaco-2); }

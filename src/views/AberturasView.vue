@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
+import MiniTabuleiro from '../components/MiniTabuleiro.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { buscarAberturas } from '../lib/busca'
 import { obterCapitulos, type CapituloCarregado } from '../lib/capitulos'
 import { FAMILIAS, familiaDaAbertura } from '../lib/familias'
 import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
 import { alternarRepertorio, estaNoRepertorio, repertorioEscolhido } from '../lib/repertorio'
+import { fenDaAbertura, orientacaoDaAbertura } from '../lib/posicaoDaAbertura'
 import { filaDoCapitulo, percentual } from '../lib/resumoAberturas'
 import type { Linha } from '../lib/tipos'
 
@@ -70,11 +72,14 @@ const plural = (n: number, palavra: string) => `${n} ${palavra}${n === 1 ? '' : 
       </p>
       <ul class="cartoes">
         <li v-for="r in busca.resultados" :key="r.capitulo.capitulo.id">
-          <RouterLink class="cartao" :to="{ name: 'abertura', params: { cap: r.capitulo.capitulo.id } }">
+          <RouterLink class="cartao com-miniatura" :to="{ name: 'abertura', params: { cap: r.capitulo.capitulo.id } }">
+            <MiniTabuleiro class="miniatura" :fen="fenDaAbertura(r.capitulo)" :orientacao="orientacaoDaAbertura(r.capitulo)" :rotulo="`Posição da ${r.capitulo.capitulo.nome}`" />
+            <span class="textos-cartao">
             <strong class="titulo-item">{{ fmtTexto(r.capitulo.capitulo.nome) }}</strong>
             <span class="lance suave">{{ fmtTexto(r.capitulo.capitulo.base) }}</span>
             <span class="suave">{{ familiaDaAbertura(r.capitulo.capitulo.base).nome }} · {{ percentual(r.capitulo) }}% dominado</span>
             <span v-for="grupo in r.grupos" :key="grupo.id" class="grupo-achado">{{ fmtTexto(grupo.nome) }}</span>
+            </span>
           </RouterLink>
         </li>
       </ul>
@@ -146,7 +151,9 @@ const plural = (n: number, palavra: string) => `${n} ${palavra}${n === 1 ? '' : 
               :title="estaNoRepertorio(capitulo.capitulo.id) ? 'No meu repertório' : 'Adicionar ao meu repertório'"
               @click="alternarRepertorio(capitulo.capitulo.id)"
             >{{ estaNoRepertorio(capitulo.capitulo.id) ? '★' : '☆' }}</button>
-            <RouterLink class="cartao" :to="{ name: 'abertura', params: { cap: capitulo.capitulo.id } }">
+            <RouterLink class="cartao com-miniatura" :to="{ name: 'abertura', params: { cap: capitulo.capitulo.id } }">
+              <MiniTabuleiro class="miniatura" :fen="fenDaAbertura(capitulo)" :orientacao="orientacaoDaAbertura(capitulo)" :rotulo="`Posição da ${capitulo.capitulo.nome}`" />
+              <span class="textos-cartao">
               <strong class="titulo-item">{{ capitulo.capitulo.nome }}</strong>
               <span class="lance suave">{{ fmtTexto(capitulo.capitulo.base) }}</span>
               <span class="suave">
@@ -156,6 +163,7 @@ const plural = (n: number, palavra: string) => `${n} ${palavra}${n === 1 ? '' : 
               <span v-if="!repertorioEscolhido || estaNoRepertorio(capitulo.capitulo.id)" class="rodape">
                 <span v-if="filaDoCapitulo(capitulo.capitulo.id)" class="selo">{{ filaDoCapitulo(capitulo.capitulo.id) }} PARA HOJE</span>
                 <span v-else class="selo ok">EM DIA</span>
+              </span>
               </span>
             </RouterLink>
           </li>
@@ -260,6 +268,17 @@ h2 .suave {
   height: 100%;
   color: var(--texto);
   text-decoration: none;
+}
+.com-miniatura {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  align-items: start;
+  gap: var(--espaco-3);
+}
+.textos-cartao {
+  display: grid;
+  gap: var(--espaco-2);
+  min-width: 0;
 }
 .cartao .lance {
   font-size: 14px;

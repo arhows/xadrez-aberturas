@@ -9,7 +9,7 @@ import { JOGAR } from '../lib/secoes'
       <h1>{{ JOGAR.nome }}</h1>
       <p class="corpo suave">{{ JOGAR.descricao }}</p>
     </header>
-    <ListaDeAtalhos :grupos="JOGAR.grupos" />
+    <ListaDeAtalhos tom="jogar" :grupos="JOGAR.grupos" />
   </div>
 </template>
 

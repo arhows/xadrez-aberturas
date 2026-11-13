@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
+import MiniTabuleiro from '../components/MiniTabuleiro.vue'
 import { caminhoDaArmadilha } from '../lib/arvore'
 import { buscarCapitulo } from '../lib/capitulos'
 import { baixarTexto } from '../lib/download'
@@ -12,6 +13,7 @@ import { aproveitamento, resumoPorAbertura } from '../lib/partidasRepertorio'
 import { progresso } from '../lib/progresso'
 import { alternarRepertorio, estaNoRepertorio, repertorioEscolhido } from '../lib/repertorio'
 import { exportarPgn } from '../lib/pgn'
+import { fenDaAbertura, orientacaoDaAbertura } from '../lib/posicaoDaAbertura'
 import { filaDoCapitulo, percentual, percentualLinha, revisoesDaLinha } from '../lib/resumoAberturas'
 
 const route = useRoute()
@@ -67,8 +69,13 @@ function baixarPgn() {
     </nav>
 
     <header class="cartao cabeca-abertura">
-      <h1>{{ capitulo.capitulo.nome }}</h1>
-      <p class="apoio suave">{{ fmtTexto(capitulo.capitulo.base) }}</p>
+      <div class="topo-abertura">
+        <div class="titulos">
+          <h1>{{ capitulo.capitulo.nome }}</h1>
+          <p class="apoio suave">{{ fmtTexto(capitulo.capitulo.base) }}</p>
+        </div>
+        <MiniTabuleiro class="miniatura" :fen="fenDaAbertura(capitulo)" :orientacao="orientacaoDaAbertura(capitulo)" :rotulo="`Posição da ${capitulo.capitulo.nome}`" />
+      </div>
       <div class="progresso fino">
         <div class="rotulos">
           <span><strong>{{ dominado }}%</strong> dominado</span>
@@ -214,6 +221,21 @@ function baixarPgn() {
 .pagina {
   display: grid;
   gap: var(--espaco-4);
+}
+.topo-abertura {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px;
+  align-items: start;
+  gap: var(--espaco-3);
+}
+.titulos {
+  display: grid;
+  gap: var(--espaco-1);
+}
+@media (min-width: 800px) {
+  .topo-abertura {
+    grid-template-columns: minmax(0, 1fr) 128px;
+  }
 }
 .cabeca-abertura .acoes > .botao {
   flex: 1 1 8rem;

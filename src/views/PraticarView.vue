@@ -57,7 +57,7 @@ const selos = computed(() => ({
       </div>
     </section>
 
-    <ListaDeAtalhos :grupos="grupos" :selos="selos" />
+    <ListaDeAtalhos tom="praticar" :grupos="grupos" :selos="selos" />
   </div>
 </template>
 

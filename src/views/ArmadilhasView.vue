@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import MiniTabuleiro from '../components/MiniTabuleiro.vue'
 import { chaveDaArmadilha, grupoDaArmadilha, noRepertorio, obterArmadilhas, ORDEM_DOS_GRUPOS } from '../lib/armadilhas'
+import { jogarLances } from '../lib/lances'
 import { progresso } from '../lib/progresso'
 
 /** Armadilhas de abertura agrupadas pelo começo da partida, com o que já foi treinado. */
@@ -10,6 +12,8 @@ const capitulosDoRepertorio = computed(() => progresso.repertorio.capitulos)
 const temRepertorio = computed(() => capitulosDoRepertorio.value.length > 0)
 const doRepertorio = computed(() => todas.filter((a) => a.capitulos.some((c) => capitulosDoRepertorio.value.includes(c))))
 const soRepertorio = ref(false)
+/** A miniatura mostra o fim da armadilha: o mate ou o material ganho. */
+const finais = new Map(todas.map((a) => [a.id, jogarLances(a.lances).lances.at(-1)?.fenDepois ?? '8/8/8/8/8/8/8/8 w - - 0 1']))
 
 const grupos = computed(() => {
   const lista = soRepertorio.value && temRepertorio.value ? todas.filter((a) => noRepertorio(a, capitulosDoRepertorio.value)) : todas
@@ -43,6 +47,7 @@ const feitas = computed(() => todas.filter((a) => armou(a.id) && defendeu(a.id))
       <ul>
         <li v-for="a in g.armadilhas" :key="a.id">
           <RouterLink :to="{ name: 'armadilha', params: { id: a.id } }" class="item">
+            <MiniTabuleiro class="miniatura" :fen="finais.get(a.id)!" :orientacao="a.lado === 'w' ? 'white' : 'black'" :rotulo="`Fim da armadilha ${a.nome}`" />
             <span class="textos">
               <strong>{{ a.nome }}</strong>
               <span class="suave">{{ a.abertura }} · armada pelas {{ a.lado === 'w' ? 'brancas' : 'pretas' }}</span>
@@ -110,8 +115,8 @@ li {
   border-top: 1px solid var(--borda);
 }
 .item {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
   align-items: center;
   gap: 0.5rem 0.75rem;
   min-height: 56px;
@@ -123,13 +128,18 @@ li {
 .item:hover {
   background: var(--superficie-2);
 }
+.miniatura {
+  grid-row: span 2;
+  align-self: start;
+}
 .textos {
   display: grid;
-  flex: 1 1 14rem;
   min-width: 0;
 }
 .selos {
+  grid-column: 2;
   display: flex;
+  flex-wrap: wrap;
   gap: 0.375rem;
 }
 .selo {
