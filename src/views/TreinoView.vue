@@ -14,6 +14,7 @@ import {
   descreverUnidade,
   idsDoEscopo,
   planoDeRevisao,
+  proximaLinha,
   unidadesDeRevisao,
   type EscolhaCor,
   type Escopo,
@@ -36,6 +37,7 @@ import {
   type UnidadeRevisao,
 } from '../lib/srs'
 import {
+  adiantarPeloJaJogado,
   avancar,
   iniciarPartida,
   lanceEsperado,
@@ -89,6 +91,8 @@ const revisando = ref(false)
 const fila = ref<UnidadeRevisao[]>([])
 let pesosDeErro = new Map<string, number>()
 const revisaoAutomatica = route.query.auto === '1'
+/** Caminhos (nós) das partidas já terminadas nesta sessão: a próxima pula o começo repetido. */
+let caminhosDaSessao: string[][] = []
 
 function planos(): PlanoDeRevisao[] {
   return planoDeRevisao(
@@ -176,6 +180,7 @@ function calcularPesosDeErro(): Map<string, number> {
 
 function iniciarSessao(livre = false) {
   const hoje = dataLocal()
+  caminhosDaSessao = []
   pesosDeErro = calcularPesosDeErro()
 
   if (revisaoAutomatica && !livre) {
@@ -209,7 +214,7 @@ function proximaPartida() {
   unidadeSorteada = unidade
   revisando.value = false
   escopoDaPartida = idsNoEscopo
-  comecarPartida(unidade.linha, unidade.cor)
+  comecarPartida(unidade.linha, unidade.cor, true)
 }
 
 /**
@@ -255,10 +260,15 @@ function revisarLinha() {
   comecarPartida(alvo, cor)
 }
 
-function comecarPartida(linha: string, cor: UnidadeRevisao['cor']) {
-  partida.value = iniciarPartida(arvore, linha, cor)
+/** `pularRepetido`: começa onde a linha sai das partidas já jogadas nesta sessão. */
+function comecarPartida(linha: string, cor: UnidadeRevisao['cor'], pularRepetido = false) {
+  const nova = iniciarPartida(arvore, linha, cor)
+  partida.value = pularRepetido ? adiantarPeloJaJogado(arvore, nova, caminhosDaSessao) : nova
   placar.value = { acertos: 0, erros: 0, pistas: 0 }
-  aviso.value = null
+  const pulados = partida.value.jogadas.length
+  aviso.value = pulados
+    ? { tipo: 'neutro', texto: `Esta variante repete o começo que você acabou de jogar: ela continua a partir do lance ${Math.floor(pulados / 2) + 1}.` }
+    : null
   pulada.value = false
   fase.value = 'jogando'
   prepararJogada(0)
@@ -375,6 +385,7 @@ const textoBotaoPista = computed(() =>
 
 function finalizarPartida() {
   aviso.value = null
+  caminhosDaSessao.push(partida.value!.jogadas.map((j) => j.para))
   somarAtividade(progresso.atividade, 'linhas')
   if (!revisando.value) {
     const { alvo, cor } = partida.value!
@@ -463,8 +474,15 @@ const pontos = computed(() =>
   Math.max(0, placar.value.acertos * 2 - placar.value.erros * 2 - placar.value.pistas),
 )
 
-// "Revisar agora" já sabe a cor de cada capítulo, então começa sem perguntar nada.
-if (revisaoAutomatica) iniciarSessao()
+/** No fim do treino de uma coluna, a coluna seguinte do capítulo. */
+const colunaSeguinte = computed(() => {
+  const escopo = escopoEscolhido.value
+  return escopo.tipo === 'linha' ? proximaLinha(capitulo, escopo.id) : undefined
+})
+
+// "Revisar agora" já sabe a cor de cada capítulo, então começa sem perguntar nada;
+// "Coluna seguinte" também já começa direto.
+if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
 </script>
 
 <template>
@@ -682,7 +700,7 @@ if (revisaoAutomatica) iniciarSessao()
 
         <div class="acoes">
           <button v-if="fila.length" type="button" class="botao primario grande largo-celular" @click="proximaPartida">
-            Próxima ({{ fila.length }})
+            {{ escopoEscolhido.tipo === 'linha' ? 'Próxima variante' : 'Próxima' }} ({{ fila.length }})
           </button>
           <template v-else>
             <p class="concluido">✓ Sessão concluída.</p>
@@ -693,6 +711,12 @@ if (revisaoAutomatica) iniciarSessao()
             >Revisar {{ proximoCapitulo.capitulo.capitulo.nome }} ({{ proximoCapitulo.fila.length }})</RouterLink>
             <button type="button" class="botao" @click="repetir">Treinar de novo</button>
           </template>
+          <RouterLink
+            v-if="colunaSeguinte"
+            class="botao largo-celular"
+            :class="{ primario: !fila.length }"
+            :to="{ name: 'treino', params: { cap: idCapitulo }, query: { escopo: `linha:${colunaSeguinte.id}`, comecar: '1' } }"
+          >Próxima coluna{{ colunaSeguinte.coluna ? ` (${colunaSeguinte.coluna})` : '' }} →</RouterLink>
           <button type="button" class="botao" @click="revisarLinha">Revisar esta linha</button>
           <RouterLink
             v-if="partida"

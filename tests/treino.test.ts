@@ -5,6 +5,7 @@ import { idsDoEscopo } from '../src/lib/escopo'
 import { formatarSan, formatarTexto } from '../src/lib/notacao'
 import { importarProgresso, normalizarProgresso, progresso } from '../src/lib/progresso'
 import {
+  adiantarPeloJaJogado,
   avancar,
   iniciarPartida,
   lanceEsperado,
@@ -28,6 +29,33 @@ function jogarAte(inicial: Partida, escopo: Set<string>, plies: number): Partida
   }
   return partida
 }
+
+describe('variantes que repetem o começo da coluna', () => {
+  const italiana = todosOsCapitulos.find((c) => c.capitulo.id === 'italian')!
+  const escopo = new Set(['c01', 'c01-a'])
+  const jogarTudo = (inicial: Partida) => {
+    let p = inicial
+    while (!terminou(italiana.arvore, p)) p = avancar(p, lanceEsperado(italiana.arvore, p)!, escopo)
+    return p
+  }
+
+  it('a nota começa onde sai da coluna já jogada', () => {
+    const coluna = jogarTudo(iniciarPartida(italiana.arvore, 'c01', 'w'))
+    const caminho = coluna.jogadas.map((j) => j.para)
+    const nota = italiana.capitulo.notas!.find((n) => n.id === 'c01-a')!
+    const adiantada = adiantarPeloJaJogado(italiana.arvore, iniciarPartida(italiana.arvore, 'c01-a', 'w'), [caminho])
+    expect(adiantada.jogadas.length).toBe(nota.desvioNoLance - 1)
+    expect(lanceEsperado(italiana.arvore, adiantada)!.para).not.toBe(caminho[nota.desvioNoLance - 1])
+  })
+
+  it('sem partidas anteriores, começa do primeiro lance; e nunca pula a linha inteira', () => {
+    const nova = iniciarPartida(italiana.arvore, 'c01-a', 'w')
+    expect(adiantarPeloJaJogado(italiana.arvore, nova, []).jogadas).toHaveLength(0)
+    const coluna = jogarTudo(iniciarPartida(italiana.arvore, 'c01', 'w'))
+    const mesma = adiantarPeloJaJogado(italiana.arvore, iniciarPartida(italiana.arvore, 'c01', 'w'), [coluna.jogadas.map((j) => j.para)])
+    expect(terminou(italiana.arvore, mesma)).toBe(false)
+  })
+})
 
 describe('motor de treino', () => {
   it('critério 4: pretas na coluna 5 — o app joga 9.Nh3 e só 9...Bc5 é aceito', () => {

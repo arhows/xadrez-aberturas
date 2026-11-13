@@ -54,6 +54,28 @@ export function avancar(
   return { ...partida, alvo, no: aresta.para, jogadas: [...partida.jogadas, aresta] }
 }
 
+/**
+ * Adianta a partida pelos lances da linha alvo que já foram jogados nesta sessão (`jaJogados`:
+ * caminhos de nós de partidas anteriores), parando no primeiro lance diferente. Assim uma nota,
+ * que repete o começo da coluna, recomeça onde sai dela. Nunca chega ao fim da linha.
+ */
+export function adiantarPeloJaJogado(arvore: Arvore, partida: Partida, jaJogados: string[][]): Partida {
+  let atual = partida
+  let candidatos = jaJogados
+  for (;;) {
+    const esperado = lanceEsperado(arvore, atual)
+    if (!esperado) break
+    const i = atual.jogadas.length
+    const seguem = candidatos.filter((caminho) => caminho[i] === esperado.para)
+    if (!seguem.length) break
+    const proxima = { ...atual, no: esperado.para, jogadas: [...atual.jogadas, esperado] }
+    if (terminou(arvore, proxima)) break
+    atual = proxima
+    candidatos = seguem
+  }
+  return atual
+}
+
 /** Sorteio ponderado: mais peso, mais chance de sair. */
 export function sortear<T>(itens: T[], peso: (item: T) => number, aleatorio = Math.random): T {
   const total = itens.reduce((soma, item) => soma + peso(item), 0)
