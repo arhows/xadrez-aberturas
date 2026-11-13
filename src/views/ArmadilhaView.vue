@@ -224,22 +224,20 @@ comecar(modo.value)
       </div>
       <p class="suave">{{ armadilha.abertura }} · armada pelas {{ nomeDaCor(armadilha.lado) }}</p>
 
-      <div class="abas" role="tablist" aria-label="Modo">
-        <button v-for="m in (['ver', 'armar', 'defender'] as const)" :key="m" type="button" role="tab" class="aba" :class="{ ativa: modo === m }" :aria-selected="modo === m" @click="comecar(m)">
+      <div class="segmentado" role="tablist" aria-label="Modo">
+        <button v-for="m in (['ver', 'armar', 'defender'] as const)" :key="m" type="button" role="tab" :aria-selected="modo === m" :aria-pressed="modo === m" @click="comecar(m)">
           {{ m === 'ver' ? 'Ver' : m === 'armar' ? 'Armar' : 'Defender' }}
           <span v-if="m !== 'ver' && progresso.armadilhas[chaveDaArmadilha(armadilha.id, m)]" class="ok" aria-label="feito">✓</span>
         </button>
       </div>
 
       <template v-if="modo === 'ver'">
-        <CartaoDica tipo="nota" :texto="armadilha.texto" />
-        <CartaoDica v-if="armadilha.ideia" tipo="nota" lance="Como se defender" :texto="armadilha.ideia" />
-        <div class="navegacao" role="group" aria-label="Navegar nos lances">
+        <div class="navegar" role="group" aria-label="Navegar nos lances">
           <button type="button" class="botao" :disabled="ply === 0" aria-label="Início" @click="ir(0)">⏮</button>
           <button type="button" class="botao" :disabled="ply === 0" aria-label="Lance anterior" @click="ir(ply - 1)">◀</button>
           <button type="button" class="botao" :disabled="ply >= sans.length" aria-label="Próximo lance" @click="ir(ply + 1)">▶</button>
           <button type="button" class="botao" :disabled="ply >= sans.length" aria-label="Fim" @click="ir(sans.length)">⏭</button>
-          <button type="button" class="botao" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">Girar</button>
+          <button type="button" class="botao" aria-label="Girar o tabuleiro" title="Girar o tabuleiro" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">⇅</button>
         </div>
         <p class="suave">
           <template v-if="ply === armadilha.erro - 1">Posição antes do erro: {{ nomeDaCor(armadilha.erro % 2 === 1 ? 'w' : 'b') }} jogam.</template>
@@ -247,6 +245,8 @@ comecar(modo.value)
           <template v-else-if="ply === sans.length">Fim da punição.</template>
         </p>
         <HistoricoLances :lances="historicoMarcado" :atual="ply" :clicavel="true" @ir="ir" />
+        <CartaoDica tipo="nota" :texto="armadilha.texto" />
+        <CartaoDica v-if="armadilha.ideia" tipo="nota" lance="Como se defender" :texto="armadilha.ideia" />
       </template>
 
       <template v-else>
@@ -258,16 +258,18 @@ comecar(modo.value)
           <p v-if="modo === 'defender'" class="suave">Lances aceitos: {{ armadilha.defesas.join(', ') }}.</p>
         </template>
         <div class="acoes">
+          <button v-if="resolvido && retorno?.tipo === 'errado'" type="button" class="botao primario grande largo-celular" @click="comecar('ver'); ir(armadilha.erro)">Ver a punição</button>
+          <button v-if="resolvido && modo === 'armar' && !progresso.armadilhas[chaveDaArmadilha(armadilha.id, 'defender')]" type="button" class="botao primario grande largo-celular" @click="comecar('defender')">Agora se defenda</button>
+          <button v-if="resolvido && modo === 'defender' && !progresso.armadilhas[chaveDaArmadilha(armadilha.id, 'armar')]" type="button" class="botao primario grande largo-celular" @click="comecar('armar')">Agora arme</button>
+        </div>
+        <div class="acoes secundarias">
           <button v-if="!resolvido" type="button" class="botao" @click="mostrarDica = true">Dica</button>
           <button v-if="resolvido || retorno?.tipo === 'errado'" type="button" class="botao" @click="comecar(modo)">↺ De novo</button>
-          <button v-if="resolvido && retorno?.tipo === 'errado'" type="button" class="botao primario" @click="comecar('ver'); ir(armadilha.erro)">Ver a punição</button>
-          <button v-if="resolvido && modo === 'armar' && !progresso.armadilhas[chaveDaArmadilha(armadilha.id, 'defender')]" type="button" class="botao primario" @click="comecar('defender')">Agora se defenda</button>
-          <button v-if="resolvido && modo === 'defender' && !progresso.armadilhas[chaveDaArmadilha(armadilha.id, 'armar')]" type="button" class="botao primario" @click="comecar('armar')">Agora arme</button>
         </div>
       </template>
 
       <div class="acoes">
-        <RouterLink v-if="proxima" class="botao" :to="{ name: 'armadilha', params: { id: proxima.id }, query: { modo } }">Próxima armadilha →</RouterLink>
+        <RouterLink v-if="proxima" class="botao fantasma" :to="{ name: 'armadilha', params: { id: proxima.id }, query: { modo } }">Próxima armadilha →</RouterLink>
       </div>
     </div>
   </div>
@@ -298,35 +300,31 @@ comecar(modo.value)
   margin: 0;
   line-height: 1.5;
 }
-.abas {
-  display: flex;
-  gap: var(--espaco-1);
-  border-bottom: 1px solid var(--borda);
-}
-.aba {
-  min-height: var(--alvo-toque);
-  padding: 0 0.875rem;
-  border: none;
-  border-bottom: 2px solid transparent;
-  background: none;
-  color: var(--texto-suave);
-  font: inherit;
-  cursor: pointer;
-}
-.aba.ativa {
-  border-bottom-color: var(--destaque);
-  color: var(--texto);
-  font-weight: 700;
-}
 .ok {
   color: var(--ok);
 }
-.navegacao,
 .acoes {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--espaco-2);
+}
+.acoes:empty {
+  display: none;
+}
+.navegar {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--espaco-2);
+}
+.navegar .botao {
+  padding: 0;
+  font-size: 18px;
+}
+@media (max-width: 799.98px) {
+  .acoes.secundarias > .botao {
+    flex: 1 1 0;
+  }
 }
 @media (max-width: 799.98px) {
   .so-computador {

@@ -199,20 +199,20 @@ const marcaAtual = computed(() => (ply.value > 0 ? marcas.get(ply.value - 1) : u
       <p v-if="!partida.completa" class="suave">A partida aparece até o lance {{ Math.ceil(sans.length / 2) }} (o restante não pôde ser conferido no livro).</p>
 
       <template v-if="modo === 'ver'">
-        <div class="navegacao" role="group" aria-label="Navegar nos lances">
+        <div class="navegar" role="group" aria-label="Navegar nos lances">
           <button type="button" class="botao" :disabled="ply === 0" aria-label="Início" @click="ir(0)">⏮</button>
           <button type="button" class="botao" :disabled="ply === 0" aria-label="Lance anterior" @click="ir(ply - 1)">◀</button>
           <button type="button" class="botao" :disabled="ply >= sans.length" aria-label="Próximo lance" @click="ir(ply + 1)">▶</button>
           <button type="button" class="botao" :disabled="ply >= sans.length" aria-label="Fim" @click="ir(sans.length)">⏭</button>
-          <button type="button" class="botao" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">Girar</button>
+          <button type="button" class="botao" aria-label="Girar o tabuleiro" title="Girar o tabuleiro" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">⇅</button>
         </div>
         <p v-if="marcaAtual" class="suave">O livro marca este lance com <strong>{{ marcaAtual }}</strong>.</p>
         <section class="cartao quiz-convite">
           <strong>Adivinhe os lances</strong>
           <span class="suave">A partir do lance {{ INICIO_DO_QUIZ / 2 + 1 }}, você tenta achar cada lance do lado escolhido.</span>
-          <div class="acoes">
-            <button type="button" class="botao" :class="{ primario: corDoVencedor(partida) === 'w' }" @click="comecarQuiz('w')">Jogar com as brancas</button>
-            <button type="button" class="botao" :class="{ primario: corDoVencedor(partida) === 'b' }" @click="comecarQuiz('b')">Jogar com as pretas</button>
+          <div class="acoes lado-a-lado">
+            <button type="button" class="botao" :class="{ primario: corDoVencedor(partida) === 'w' }" @click="comecarQuiz('w')">Com as brancas</button>
+            <button type="button" class="botao" :class="{ primario: corDoVencedor(partida) === 'b' }" @click="comecarQuiz('b')">Com as pretas</button>
           </div>
         </section>
       </template>
@@ -222,16 +222,16 @@ const marcaAtual = computed(() => (ply.value > 0 ? marcas.get(ply.value - 1) : u
         <p class="placar">✓ {{ acertos }} de {{ respondidas }}<span class="suave"> · {{ perguntas.length }} lances no total</span></p>
         <p v-if="jogavel" class="corpo-forte">Qual lance {{ nomeDaCor(corQuiz) }} jogou?</p>
         <div class="acoes">
-          <button v-if="fimQuiz" type="button" class="botao primario" @click="comecarQuiz(corQuiz)">↺ De novo</button>
-          <button type="button" class="botao" @click="sairDoQuiz">{{ fimQuiz ? 'Rever a partida' : 'Sair do quiz' }}</button>
+          <button v-if="fimQuiz" type="button" class="botao primario grande largo-celular" @click="comecarQuiz(corQuiz)">↺ De novo</button>
+          <button type="button" class="botao" :class="fimQuiz ? 'grande largo-celular' : 'fantasma'" @click="sairDoQuiz">{{ fimQuiz ? 'Rever a partida' : 'Sair do quiz' }}</button>
         </div>
       </template>
 
       <HistoricoLances :lances="historicoAte" :atual="ply" :clicavel="modo === 'ver'" @ir="ir" />
 
-      <div class="acoes">
-        <RouterLink class="botao" :to="{ name: 'analise', query: { c: partida.lances, titulo: `${partida.brancas} – ${partida.pretas}`, volta: route.fullPath } }">Analisar com o Stockfish</RouterLink>
-        <RouterLink v-if="proxima" class="botao" :to="{ name: 'partida-modelo', params: { id: estrutura.id, n: proxima.n } }">Próxima partida →</RouterLink>
+      <div class="acoes mais-acoes">
+        <RouterLink class="botao fantasma" :to="{ name: 'analise', query: { c: partida.lances, titulo: `${partida.brancas} – ${partida.pretas}`, volta: route.fullPath } }">Analisar com o Stockfish</RouterLink>
+        <RouterLink v-if="proxima" class="botao fantasma" :to="{ name: 'partida-modelo', params: { id: estrutura.id, n: proxima.n } }">Próxima partida →</RouterLink>
       </div>
     </div>
   </div>
@@ -263,7 +263,22 @@ const marcaAtual = computed(() => (ply.value > 0 ? marcas.get(ply.value - 1) : u
   margin: 0;
   line-height: 1.5;
 }
-.navegacao,
+.navegar {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--espaco-2);
+}
+.navegar .botao {
+  padding: 0;
+  font-size: 18px;
+}
+.lado-a-lado > .botao {
+  flex: 1 1 0;
+}
+.mais-acoes {
+  padding-top: var(--espaco-3);
+  border-top: 1px solid var(--borda);
+}
 .acoes {
   display: flex;
   flex-wrap: wrap;
