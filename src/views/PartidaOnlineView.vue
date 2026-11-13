@@ -334,7 +334,7 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
 
       <HistoricoLances :lances="partida.lances" :atual="partida.lances.length" />
 
-      <div class="acoes">
+      <div class="acoes" :class="{ jogando: partida.estado === 'jogando' }">
         <template v-if="partida.estado === 'jogando' && minhaCor">
           <button type="button" class="botao" :disabled="partida.empate === uid" @click="proporEmpate(id, uid)">
             {{ partida.empate === uid ? 'Empate oferecido' : 'Oferecer empate' }}
@@ -344,7 +344,7 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
           </button>
         </template>
         <template v-if="partida.estado === 'fim' || partida.estado === 'cancelada'">
-          <button v-if="minhaCor && outro" type="button" class="botao primario" @click="revanche">Revanche</button>
+          <button v-if="minhaCor && outro" type="button" class="botao primario grande largo-celular" @click="revanche">Revanche</button>
           <RouterLink
             v-if="partida.lances.length"
             class="botao"
@@ -465,6 +465,12 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
 @media (min-width: 800px) {
   .so-celular {
     display: none;
+  }
+}
+/* Durante a partida, Empate e Abandonar dividem a linha no celular. */
+@media (max-width: 799.98px) {
+  .acoes.jogando > .botao {
+    flex: 1 1 0;
   }
 }
 </style>

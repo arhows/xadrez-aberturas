@@ -161,6 +161,7 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
 
 <template>
   <div class="pagina">
+    <RouterLink to="/jogar" class="trilha">‹ Jogar</RouterLink>
     <h1>Minhas partidas</h1>
     <p class="suave">
       Importa suas partidas e mostra onde elas saíram do repertório. Cada vez que você sai do livro, aquele lance
@@ -184,7 +185,7 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
               class="botao"
               :to="{ name: 'analise', query: { c: j.lances, fen: j.fen, cor: j.cor, titulo: `${textoDoResultado(j)} contra ${nomeDoAdversario(j)}`, volta: '/partidas' } }"
             >Analisar</RouterLink>
-            <button type="button" class="botao" @click="exportarJogo(j)">PGN</button>
+            <button type="button" class="botao fantasma" @click="exportarJogo(j)">PGN</button>
             <button type="button" class="botao fantasma" :class="{ perigo: confirmandoApagar === j.id }" @click="apagarJogo(j.id)">
               {{ confirmandoApagar === j.id ? 'Confirmar' : 'Apagar' }}
             </button>
@@ -194,48 +195,52 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
       <p class="suave">As últimas {{ 100 }} partidas do modo Partida ficam guardadas e sincronizam entre os aparelhos.</p>
     </section>
 
-    <form class="importar" @submit.prevent="importar">
-      <label class="campo">
-        <span>Usuário no chess.com</span>
-        <input v-model.trim="usuarios.chesscom" autocomplete="off" placeholder="seu usuário" />
-      </label>
-      <label class="campo">
-        <span>Usuário no lichess</span>
-        <input v-model.trim="usuarios.lichess" autocomplete="off" placeholder="seu usuário" />
-      </label>
-      <button class="botao primario" :disabled="importando || (!usuarios.chesscom && !usuarios.lichess)">
-        {{ importando ? 'Importando…' : 'Importar partidas' }}
-      </button>
-      <p v-if="situacao" class="suave">{{ situacao }}</p>
-    </form>
-
-    <form class="importar" @submit.prevent="importarTextoPgn">
-      <h2>Importar PGN</h2>
-      <p class="suave">
-        Para partidas que não aparecem no site, como as jogadas offline contra o computador no app do lichess.
-        No fim da partida, use “Compartilhar PGN” e cole aqui (pode colar várias de uma vez). No Android, com o app
-        instalado, dá para escolher “Xadrez” direto na lista do Compartilhar.
-      </p>
-      <label class="campo">
-        <span>PGN</span>
-        <textarea v-model="textoPgn" rows="6" spellcheck="false" placeholder="[White &quot;Maia&quot;]&#10;[Black &quot;Anonymous&quot;]&#10;&#10;1. e4 e5 2. Nf3 …"></textarea>
-      </label>
-      <label class="campo">
-        <span>Você jogou com</span>
-        <select v-model="corPgn">
-          <option value="auto">Descobrir pelos nomes (o computador é o outro lado)</option>
-          <option value="w">Brancas</option>
-          <option value="b">Pretas</option>
-        </select>
-      </label>
-      <div class="acoes">
-        <button class="botao primario" :disabled="!textoPgn.trim()">Importar PGN</button>
-        <label class="botao">
-          Abrir arquivo .pgn
-          <input class="oculto" type="file" accept=".pgn,application/x-chess-pgn,text/plain" multiple @change="lerArquivos" />
+    <!-- Importar fica recolhido depois que já há partidas: o resultado é o que importa. -->
+    <details class="cartao recolhivel importar" :open="!todas.length && !jogos.length">
+      <summary>Importar do chess.com, do lichess ou um PGN</summary>
+      <form class="formulario-importar" @submit.prevent="importar">
+        <label class="campo">
+          <span>Usuário no chess.com</span>
+          <input v-model.trim="usuarios.chesscom" autocomplete="off" placeholder="seu usuário" />
         </label>
-      </div>
-    </form>
+        <label class="campo">
+          <span>Usuário no lichess</span>
+          <input v-model.trim="usuarios.lichess" autocomplete="off" placeholder="seu usuário" />
+        </label>
+        <button class="botao primario" :disabled="importando || (!usuarios.chesscom && !usuarios.lichess)">
+          {{ importando ? 'Importando…' : 'Importar partidas' }}
+        </button>
+        <p v-if="situacao" class="suave">{{ situacao }}</p>
+      </form>
+
+      <form class="formulario-importar" @submit.prevent="importarTextoPgn">
+        <h3>Colar ou abrir um PGN</h3>
+        <p class="suave">
+          Para partidas que não aparecem no site, como as jogadas offline contra o computador no app do lichess.
+          No fim da partida, use “Compartilhar PGN” e cole aqui (pode colar várias de uma vez). No Android, com o app
+          instalado, dá para escolher “Xadrez” direto na lista do Compartilhar.
+        </p>
+        <label class="campo">
+          <span>PGN</span>
+          <textarea v-model="textoPgn" rows="6" spellcheck="false" placeholder="[White &quot;Maia&quot;]&#10;[Black &quot;Anonymous&quot;]&#10;&#10;1. e4 e5 2. Nf3 …"></textarea>
+        </label>
+        <label class="campo">
+          <span>Você jogou com</span>
+          <select v-model="corPgn">
+            <option value="auto">Descobrir pelos nomes (o computador é o outro lado)</option>
+            <option value="w">Brancas</option>
+            <option value="b">Pretas</option>
+          </select>
+        </label>
+        <div class="acoes">
+          <button class="botao primario" :disabled="!textoPgn.trim()">Importar PGN</button>
+          <label class="botao">
+            Abrir arquivo .pgn
+            <input class="oculto" type="file" accept=".pgn,application/x-chess-pgn,text/plain" multiple @change="lerArquivos" />
+          </label>
+        </div>
+      </form>
+    </details>
 
     <p v-if="recebendo" class="suave">Lendo a partida compartilhada…</p>
     <div v-if="erroCompartilhado" class="aviso erro"><p>{{ erroCompartilhado }}</p></div>
@@ -412,18 +417,30 @@ p {
   color: var(--texto-suave);
   font-size: 0.875rem;
 }
+.trilha {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alvo-toque);
+  color: var(--destaque);
+  font-size: 14px;
+  text-decoration: none;
+}
 .importar {
+  display: block;
+  margin-top: var(--espaco-4);
+}
+.formulario-importar {
   display: grid;
   gap: var(--espaco-3);
-  margin-top: var(--espaco-4);
-  padding: var(--espaco-4);
-  border: 1px solid var(--borda);
-  border-radius: var(--raio-lg);
-  background: var(--superficie);
-  box-shadow: var(--sombra-cartao);
 }
-.importar h2 {
+.formulario-importar + .formulario-importar {
+  margin-top: var(--espaco-5);
+  padding-top: var(--espaco-4);
+  border-top: 1px solid var(--borda);
+}
+.formulario-importar h3 {
   margin: 0;
+  font: 600 17px/24px var(--font-texto);
 }
 .campo textarea {
   font-family: var(--font-mono);

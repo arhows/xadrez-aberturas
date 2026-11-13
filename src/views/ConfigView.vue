@@ -43,26 +43,27 @@ function resetar() {
 
 <template>
   <div class="pagina formulario">
+    <RouterLink to="/eu" class="trilha">‹ Eu</RouterLink>
     <h1>Configurações</h1>
 
     <section class="grupo">
       <h3>Tabuleiro</h3>
       <div class="cartao">
-        <label class="campo">
-          <span>Tema</span>
-          <select v-model="config.tema">
-            <option value="auto">Automático</option>
-            <option value="claro">Claro</option>
-            <option value="escuro">Escuro</option>
-          </select>
-        </label>
-        <label class="campo">
-          <span>Notação</span>
-          <select v-model="config.notacao">
-            <option value="en">Inglês (K Q R B N)</option>
-            <option value="pt">Português (R D T B C)</option>
-          </select>
-        </label>
+        <div class="campo" role="group" aria-labelledby="rotulo-tema">
+          <span id="rotulo-tema">Tema</span>
+          <div class="segmentado">
+            <button type="button" :aria-pressed="config.tema === 'auto'" @click="config.tema = 'auto'">Automático</button>
+            <button type="button" :aria-pressed="config.tema === 'claro'" @click="config.tema = 'claro'">Claro</button>
+            <button type="button" :aria-pressed="config.tema === 'escuro'" @click="config.tema = 'escuro'">Escuro</button>
+          </div>
+        </div>
+        <div class="campo" role="group" aria-labelledby="rotulo-notacao">
+          <span id="rotulo-notacao">Notação</span>
+          <div class="segmentado">
+            <button type="button" :aria-pressed="config.notacao === 'en'" @click="config.notacao = 'en'">Inglês (KQRBN)</button>
+            <button type="button" :aria-pressed="config.notacao === 'pt'" @click="config.notacao = 'pt'">Português (RDTBC)</button>
+          </div>
+        </div>
         <label class="campo">
           <span>Velocidade da animação</span>
           <select v-model.number="config.animacaoMs">
@@ -227,6 +228,15 @@ function resetar() {
 </template>
 
 <style scoped>
+.trilha {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alvo-toque);
+  margin-bottom: calc(-1 * var(--espaco-2));
+  color: var(--destaque);
+  font-size: 14px;
+  text-decoration: none;
+}
 .formulario {
   display: grid;
   gap: var(--espaco-5);

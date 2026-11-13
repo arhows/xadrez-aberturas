@@ -143,14 +143,16 @@ function abrirCodigo() {
           <option v-for="t in TEMPOS" :key="t.id" :value="t.id">{{ t.id === 'livre' ? 'Sem relógio' : `${t.id} · ${t.ritmo}` }}</option>
         </select>
       </label>
-      <fieldset class="opcoes">
-        <legend>Sua cor</legend>
-        <label class="marcar"><input v-model="cor" type="radio" value="w" /> Brancas</label>
-        <label class="marcar"><input v-model="cor" type="radio" value="b" /> Pretas</label>
-        <label class="marcar"><input v-model="cor" type="radio" value="sorteio" /> Sortear</label>
-      </fieldset>
+      <div class="campo" role="group" aria-labelledby="rotulo-cor-online">
+        <span id="rotulo-cor-online">Sua cor</span>
+        <div class="segmentado">
+          <button type="button" :aria-pressed="cor === 'w'" @click="cor = 'w'">Brancas</button>
+          <button type="button" :aria-pressed="cor === 'b'" @click="cor = 'b'">Pretas</button>
+          <button type="button" :aria-pressed="cor === 'sorteio'" @click="cor = 'sorteio'">Sortear</button>
+        </div>
+      </div>
       <label class="marcar"><input v-model="valendo" type="checkbox" /> Valendo ranking</label>
-      <button type="button" class="botao primario grande" :disabled="criando" @click="criar">
+      <button type="button" class="botao primario grande largo-celular" :disabled="criando" @click="criar">
         {{ criando ? 'Criando…' : 'Criar partida e convidar' }}
       </button>
       <p class="suave">Depois de criar, você recebe um link para mandar ao amigo (WhatsApp, por exemplo). Ele precisa entrar com uma conta no app.</p>
@@ -282,17 +284,5 @@ h2 {
 .texto {
   flex: 1;
   min-width: 0;
-}
-.opcoes {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--espaco-1) var(--espaco-4);
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-.opcoes legend {
-  margin-bottom: var(--espaco-1);
-  font-weight: 600;
 }
 </style>
