@@ -1,0 +1,559 @@
+{
+ "id": "nimzovich",
+ "nome": "Defesa Nimzovich (1...Nc6)",
+ "fonte": "Modern Chess Openings — Nimzovich Defense (pp. 382–383), colunas 1–6",
+ "base": "1. e4 Nc6",
+ "corPadrao": "b",
+ "grupos": [
+  {
+   "id": "e5",
+   "nome": "2.d4 e5",
+   "colunas": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "d5",
+   "nome": "2.d4 d5",
+   "colunas": [
+    3,
+    4
+   ]
+  },
+  {
+   "id": "nf3",
+   "nome": "2.Nf3 d6",
+   "colunas": [
+    5,
+    6
+   ]
+  }
+ ],
+ "ordem": 382,
+ "linhas": [
+  {
+   "id": "c01",
+   "coluna": 1,
+   "grupo": "e5",
+   "nome": "2.d4 e5 3.d5 Nce7 4.Nf3",
+   "lances": "1. e4 Nc6 2. d4 e5 3. d5 Nce7 4. Nf3 Ng6 5. h4 h5 6. Bg5 Nf6 7. Nc3 Bc5 8. Na4 Bb4+",
+   "avaliacao": "±",
+   "resumo": "Na Defesa Nimzovich as pretas atacam d4 com o cavalo logo no 1º lance. A resposta mais confiável é 2...e5, mas depois de 3.d5 Nce7 4.Nf3 Ng6 o forte 5.h4! ameaça h5 contra o cavalo e as brancas ficam com clara vantagem.",
+   "dicas": {
+    "1. e4": "O peão do rei ocupa o centro.",
+    "1... Nc6": "A Defesa Nimzovich: o cavalo se desenvolve e já mira d4 e e5.",
+    "2. d4": "As brancas aceitam o desafio e ocupam o centro.",
+    "2... e5": "A resposta mais confiável: as pretas disputam o centro.",
+    "3. d5": "O peão avança e expulsa o cavalo.",
+    "3... Nce7": "O cavalo recua para e7, de onde vai a g6.",
+    "4. Nf3": "O cavalo se desenvolve e ataca e5.",
+    "4... Ng6": "O cavalo defende e5.",
+    "5. h4": "O peão ameaça h5, que expulsaria o cavalo de g6.",
+    "5... h5": "As pretas freiam o peão h.",
+    "6. Bg5": "O bispo se desenvolve e crava o cavalo que virá a f6.",
+    "6... Nf6": "O outro cavalo se desenvolve, mesmo cravado.",
+    "7. Nc3": "O cavalo se desenvolve.",
+    "7... Bc5": "O bispo mira f2.",
+    "8. Na4": "O cavalo ataca o bispo.",
+    "8... Bb4+": "O bispo sai com xeque; as brancas ficam com clara vantagem."
+   }
+  },
+  {
+   "id": "c02",
+   "coluna": 2,
+   "grupo": "e5",
+   "nome": "3.dxe5 Nxe5 4.Nf3",
+   "lances": "1. e4 Nc6 2. d4 e5 3. dxe5 Nxe5 4. Nf3 Nxf3+ 5. Qxf3 Qf6 6. Qg3 Bb4+ 7. c3 Bd6 8. f4 Qg6",
+   "avaliacao": "=",
+   "resumo": "Com 3.dxe5 Nxe5 4.Nf3 as brancas trocam os cavalos e ficam com a dama ativa. As pretas respondem com 5...Qf6 e o xeque em b4; depois de 8.f4 Qg6 o jogo fica igual.",
+   "dicas": {
+    "3. dxe5": "As brancas trocam no centro.",
+    "3... Nxe5": "O cavalo recaptura e ocupa o centro.",
+    "4. Nf3": "O cavalo desafia o de e5.",
+    "4... Nxf3+": "As pretas trocam os cavalos com xeque.",
+    "5. Qxf3": "A dama recaptura e fica ativa.",
+    "5... Qf6": "A dama preta enfrenta a branca.",
+    "6. Qg3": "A dama evita a troca e ataca c7.",
+    "6... Bb4+": "O bispo dá xeque com ganho de tempo.",
+    "7. c3": "O peão bloqueia o xeque e ataca o bispo.",
+    "7... Bd6": "O bispo recua e defende c7.",
+    "8. f4": "O peão ganha espaço e ameaça e5.",
+    "8... Qg6": "A dama preta enfrenta a branca; o jogo é igual."
+   }
+  },
+  {
+   "id": "c03",
+   "coluna": 3,
+   "grupo": "d5",
+   "nome": "2...d5 3.e5 Bf5",
+   "lances": "1. e4 Nc6 2. d4 d5 3. e5 Bf5 4. c3 e6 5. f4 h5 6. Nf3 Nh6 7. Be3 Bg4 8. Nbd2 Be7",
+   "avaliacao": "⩲",
+   "resumo": "O lance 2...d5 sempre foi visto como menos fiel aos princípios. Com 3.e5 as brancas fecham o centro e ganham espaço; as pretas desenvolvem o bispo em f5 e freiam a ala do rei com ...h5, mas as brancas ficam um pouco melhor.",
+   "dicas": {
+    "2... d5": "As pretas golpeiam e4, mas o lance é menos fiel aos princípios.",
+    "3. e5": "O peão avança e fecha o centro.",
+    "3... Bf5": "O bispo se desenvolve antes de ...e6.",
+    "4. c3": "O peão firma d4.",
+    "4... e6": "O peão abre caminho ao bispo de f8.",
+    "5. f4": "As brancas ganham espaço na ala do rei.",
+    "5... h5": "As pretas freiam g4.",
+    "6. Nf3": "O cavalo se desenvolve.",
+    "6... Nh6": "O cavalo vai por h6 para f5.",
+    "7. Be3": "O bispo se desenvolve e defende d4.",
+    "7... Bg4": "O bispo crava o cavalo de f3.",
+    "8. Nbd2": "O cavalo se desenvolve e apoia o de f3.",
+    "8... Be7": "O bispo se desenvolve; as brancas ficam um pouco melhor."
+   }
+  },
+  {
+   "id": "c04",
+   "coluna": 4,
+   "grupo": "d5",
+   "nome": "3.Nc3 dxe4 4.d5",
+   "lances": "1. e4 Nc6 2. d4 d5 3. Nc3 dxe4 4. d5 Nb8 5. Nxe4 e6 6. Bb5+ c6 7. dxc6 Qxd1+ 8. Kxd1 Nxc6",
+   "avaliacao": "=",
+   "resumo": "Com 3.Nc3 dxe4 4.d5 as brancas expulsam o cavalo e recuperam o peão. Depois de 6.Bb5+ c6 7.dxc6 as damas se trocam e o final fica igual.",
+   "dicas": {
+    "3. Nc3": "O cavalo defende e4.",
+    "3... dxe4": "As pretas tomam o peão.",
+    "4. d5": "O peão expulsa o cavalo.",
+    "4... Nb8": "O cavalo volta para casa.",
+    "5. Nxe4": "O cavalo recupera o peão.",
+    "5... e6": "As pretas atacam o peão de d5.",
+    "6. Bb5+": "O bispo dá xeque.",
+    "6... c6": "O peão bloqueia o xeque e ataca o bispo.",
+    "7. dxc6": "As brancas trocam em c6.",
+    "7... Qxd1+": "As pretas trocam as damas com xeque.",
+    "8. Kxd1": "O rei recaptura e perde o roque.",
+    "8... Nxc6": "O cavalo recaptura; o final é igual."
+   }
+  },
+  {
+   "id": "c05",
+   "coluna": 5,
+   "grupo": "nf3",
+   "nome": "2.Nf3 d6 3.d4 Nf6 4.Nc3 Bg4 5.Be3",
+   "lances": "1. e4 Nc6 2. Nf3 d6 3. d4 Nf6 4. Nc3 Bg4 5. Be3 e6 6. Be2 Be7 7. d5 exd5 8. exd5 Bxf3",
+   "avaliacao": "⩲",
+   "resumo": "Contra 2.Nf3 as pretas recusam o convite para 2...e5 e jogam o 2...d6 de Nimzovich, que leva a posições pouco exploradas. Com 5.Be3 e 7.d5 as brancas ganham espaço e ficam com o par de bispos e uma pequena vantagem.",
+   "dicas": {
+    "2. Nf3": "O cavalo se desenvolve e convida ...e5.",
+    "2... d6": "O lance de Nimzovich: as pretas recusam ...e5 e mantêm o jogo pouco explorado.",
+    "3. d4": "As brancas ocupam o centro.",
+    "3... Nf6": "O cavalo ataca e4.",
+    "4. Nc3": "O cavalo defende e4.",
+    "4... Bg4": "O bispo crava o cavalo de f3, que defende d4.",
+    "5. Be3": "O bispo defende d4.",
+    "5... e6": "O peão abre caminho ao bispo de f8.",
+    "6. Be2": "O bispo tira a cravada.",
+    "6... Be7": "O bispo se desenvolve.",
+    "7. d5": "O peão avança e ataca o cavalo.",
+    "7... exd5": "As pretas trocam.",
+    "8. exd5": "O peão recaptura e ataca o cavalo de novo.",
+    "8... Bxf3": "As pretas trocam o bispo; as brancas ficam com o par de bispos."
+   }
+  },
+  {
+   "id": "c06",
+   "coluna": 6,
+   "grupo": "nf3",
+   "nome": "5.d5 Nb8",
+   "lances": "1. e4 Nc6 2. Nf3 d6 3. d4 Nf6 4. Nc3 Bg4 5. d5 Nb8 6. Be2 g6 7. O-O Bg7 8. a4 O-O",
+   "avaliacao": "=",
+   "resumo": "Com 5.d5 as brancas expulsam o cavalo de imediato. As pretas o recuam para b8, fazem o fianqueto e rocam, numa posição parecida com a Pirc, e igualam.",
+   "dicas": {
+    "5. d5": "O peão expulsa o cavalo de imediato.",
+    "5... Nb8": "O cavalo volta para casa, de onde irá a d7.",
+    "6. Be2": "O bispo tira a cravada.",
+    "6... g6": "As pretas preparam o fianqueto, como na Pirc.",
+    "7. O-O": "O rei branco roca.",
+    "7... Bg7": "O bispo ocupa a grande diagonal.",
+    "8. a4": "As brancas ganham espaço na ala da dama.",
+    "8... O-O": "O rei preto roca; o jogo é igual."
+   }
+  }
+ ],
+ "notas": [
+  {
+   "id": "c01-a",
+   "nota": "a",
+   "rotulo": "(a)",
+   "coluna": 1,
+   "linhaBase": "c01",
+   "desvioNoLance": 7,
+   "lances": "1. e4 Nc6 2. d4 e5 3. d5 Nce7 4. Bd3 Ng6 5. Be3 Nf6 6. h3 Bb4+ 7. Nd2 O-O 8. c3 Be7 9. Ne2 d6 10. c4 h6 11. Qc2 Nd7 12. Nc3 Bg5",
+   "avaliacao": "=",
+   "referencia": "Gallagher–Rogers, Biel 1996",
+   "comentario": "4.Bd3 Ng6 5.Be3 Nf6 leva à igualdade.",
+   "dicas": {
+    "4. Bd3": "4.Bd3 Ng6 leva à igualdade."
+   }
+  },
+  {
+   "id": "c01-b",
+   "nota": "b",
+   "rotulo": "(b)",
+   "coluna": 1,
+   "linhaBase": "c01",
+   "desvioNoLance": 8,
+   "lances": "1. e4 Nc6 2. d4 e5 3. d5 Nce7 4. Nf3 d6 5. Nc3",
+   "avaliacao": "⩲",
+   "comentario": "4...d6 5.Nc3 é um pouco melhor para as brancas, mas é pouco testado e pode levar a uma posição confusa.",
+   "dicas": {
+    "4... d6": "4...d6 5.Nc3 é um pouco melhor para as brancas."
+   }
+  },
+  {
+   "id": "c01-c",
+   "nota": "c",
+   "rotulo": "(c)",
+   "coluna": 1,
+   "linhaBase": "c01",
+   "desvioNoLance": 17,
+   "lances": "1. e4 Nc6 2. d4 e5 3. d5 Nce7 4. Nf3 Ng6 5. h4 h5 6. Bg5 Nf6 7. Nc3 Bc5 8. Na4 Bb4+ 9. c3 Be7 10. Bxf6 Bxf6 11. d6 cxd6 12. g3 d5 13. Qxd5 d6 14. Bb5+ Kf8 15. O-O-O",
+   "avaliacao": "±",
+   "referencia": "A. Ivanov–Benjamin, Campeonato dos EUA 1996",
+   "comentario": "9.c3 Be7 10.Bxf6 Bxf6 11.d6! deixa as brancas com clara vantagem.",
+   "dicas": {
+    "9. c3": "9.c3 Be7 10.Bxf6 Bxf6 11.d6! dá clara vantagem às brancas."
+   }
+  },
+  {
+   "id": "c02-d",
+   "nota": "d",
+   "rotulo": "(d)",
+   "coluna": 2,
+   "linhaBase": "c02",
+   "desvioNoLance": 8,
+   "lances": "1. e4 Nc6 2. d4 e5 3. dxe5 Nxe5 4. Nf3 Bb4+ 5. c3 Nxf3+ 6. Qxf3 Bc5 7. Bd3 Qf6 8. Qg3 Ne7 9. Nd2",
+   "avaliacao": "⩲",
+   "referencia": "Aagaard–Linberg, Suécia 2004",
+   "comentario": "4...Bb4+ 5.c3 Nxf3+ 6.Qxf3 dá pequena vantagem às brancas.",
+   "dicas": {
+    "4... Bb4+": "4...Bb4+ 5.c3 dá pequena vantagem às brancas."
+   }
+  },
+  {
+   "id": "c02-e",
+   "nota": "e",
+   "rotulo": "(e)",
+   "coluna": 2,
+   "linhaBase": "c02",
+   "desvioNoLance": 12,
+   "lances": "1. e4 Nc6 2. d4 e5 3. dxe5 Nxe5 4. Nf3 Nxf3+ 5. Qxf3 Qf6 6. Qg3 Qg6 7. Qxc7 Bd6 8. Qc4 Nf6 9. Nc3 O-O 10. Be3 Be5 11. O-O-O",
+   "avaliacao": "±",
+   "referencia": "Simonenko–Malinin, por correspondência 1994",
+   "comentario": "6...Qg6 7.Qxc7 Bd6 dá às pretas desenvolvimento pelo peão, mas não basta.",
+   "dicas": {
+    "6... Qg6": "6...Qg6 7.Qxc7 favorece as brancas."
+   }
+  },
+  {
+   "id": "c02-e-1",
+   "nota": "e",
+   "rotulo": "(e) 7...Qxe4+",
+   "coluna": 2,
+   "linhaBase": "c02-e",
+   "desvioNoLance": 14,
+   "lances": "1. e4 Nc6 2. d4 e5 3. dxe5 Nxe5 4. Nf3 Nxf3+ 5. Qxf3 Qf6 6. Qg3 Qg6 7. Qxc7 Qxe4+ 8. Be3",
+   "avaliacao": "±",
+   "comentario": "7...Qxe4+?! 8.Be3 favorece as brancas.",
+   "dicas": {
+    "7... Qxe4+": "7...Qxe4+?! 8.Be3 favorece as brancas."
+   }
+  },
+  {
+   "id": "c02-f-A",
+   "nota": "f",
+   "rotulo": "(f) A",
+   "coluna": 2,
+   "linhaBase": "c02",
+   "desvioNoLance": 17,
+   "lances": "1. e4 Nc6 2. d4 e5 3. dxe5 Nxe5 4. Nf3 Nxf3+ 5. Qxf3 Qf6 6. Qg3 Bb4+ 7. c3 Bd6 8. f4 Qg6 9. Bd3 Qxg3+ 10. hxg3 Bc5 11. Nd2 d6 12. Nc4 a6 13. a4 Nf6",
+   "avaliacao": "=",
+   "referencia": "Hübner–Hort, Oslo 1984",
+   "comentario": "9.Bd3 Qxg3+ 10.hxg3 leva a um final igual.",
+   "dicas": {
+    "9. Bd3": "9.Bd3 Qxg3+ leva a um final igual."
+   }
+  },
+  {
+   "id": "c02-f-B",
+   "nota": "f",
+   "rotulo": "(f) B",
+   "coluna": 2,
+   "linhaBase": "c02",
+   "desvioNoLance": 17,
+   "lances": "1. e4 Nc6 2. d4 e5 3. dxe5 Nxe5 4. Nf3 Nxf3+ 5. Qxf3 Qf6 6. Qg3 Bb4+ 7. c3 Bd6 8. f4 Qg6 9. Qf3 Bc5 10. Bd3 d6 11. h3 Ne7 12. f5 Qf6 13. Bf4 Nc6",
+   "avaliacao": "∞",
+   "referencia": "Miln–Tomescu, Bucareste 1992",
+   "comentario": "Mais agudo é 9.Qf3 Bc5 10.Bd3, com jogo indefinido.",
+   "dicas": {
+    "9. Qf3": "9.Qf3 é mais agudo, com jogo indefinido."
+   }
+  },
+  {
+   "id": "c03-g",
+   "nota": "g",
+   "rotulo": "(g)",
+   "coluna": 3,
+   "linhaBase": "c03",
+   "desvioNoLance": 4,
+   "lances": "1. e4 Nc6 2. d4 d6 3. d5 Nb8 4. Nf3 e5 5. dxe6 fxe6 6. Nc3 Nc6 7. Bc4 Nf6 8. a3 g6 9. Bg5 Bg7 10. Qd2",
+   "avaliacao": "±",
+   "referencia": "Najdorf–Pérez García, Mar del Plata 1974",
+   "comentario": "2...d6 3.d5 Nb8 favorece as brancas.",
+   "dicas": {
+    "2... d6": "2...d6 3.d5 Nb8 favorece as brancas."
+   }
+  },
+  {
+   "id": "c03-h",
+   "nota": "h",
+   "rotulo": "(h)",
+   "coluna": 3,
+   "linhaBase": "c03",
+   "desvioNoLance": 6,
+   "lances": "1. e4 Nc6 2. d4 d5 3. e5 f6 4. f4 Bf5 5. Ne2 e6 6. Ng3 fxe5 7. fxe5 Qd7 8. Nxf5",
+   "avaliacao": "±",
+   "referencia": "Koste–Nimzovich, Baden-Baden 1925",
+   "comentario": "3...f6 4.f4 Bf5 favorece as brancas. Nimzovich conseguiu ganhar essa partida, o que manteve seu interesse na abertura.",
+   "dicas": {
+    "3... f6": "3...f6 4.f4 favorece as brancas."
+   }
+  },
+  {
+   "id": "c03-h-1",
+   "nota": "h",
+   "rotulo": "(h) 4.Bd3",
+   "coluna": 3,
+   "linhaBase": "c03-h",
+   "desvioNoLance": 7,
+   "lances": "1. e4 Nc6 2. d4 d5 3. e5 f6 4. Bd3 g6",
+   "avaliacao": null,
+   "comentario": "4.Bd3 g6 é a alternativa.",
+   "dicas": {
+    "4. Bd3": "4.Bd3 g6 é a alternativa."
+   }
+  },
+  {
+   "id": "c03-h-2",
+   "nota": "h",
+   "rotulo": "(h) 7...Qh4",
+   "coluna": 3,
+   "linhaBase": "c03-h",
+   "desvioNoLance": 14,
+   "lances": "1. e4 Nc6 2. d4 d5 3. e5 f6 4. f4 Bf5 5. Ne2 e6 6. Ng3 fxe5 7. fxe5 Qh4",
+   "avaliacao": "±",
+   "comentario": "7...Qh4 também favorece as brancas.",
+   "dicas": {
+    "7... Qh4": "7...Qh4 também favorece as brancas."
+   }
+  },
+  {
+   "id": "c03-i",
+   "nota": "i",
+   "rotulo": "(i)",
+   "coluna": 3,
+   "linhaBase": "c03",
+   "desvioNoLance": 17,
+   "lances": "1. e4 Nc6 2. d4 d5 3. e5 Bf5 4. c3 e6 5. f4 h5 6. Nf3 Nh6 7. Be3 Bg4 8. Nbd2 Be7 9. Bd3 Qd7 10. Bf2 Nf5 11. h3",
+   "avaliacao": "⩲",
+   "referencia": "Hermansson–Furhoff, Suécia 2002",
+   "comentario": "9.Bd3 Qd7 10.Bf2 dá pequena vantagem às brancas.",
+   "dicas": {
+    "9. Bd3": "9.Bd3 Qd7 dá pequena vantagem às brancas."
+   }
+  },
+  {
+   "id": "c04-j",
+   "nota": "j",
+   "rotulo": "(j)",
+   "coluna": 4,
+   "linhaBase": "c04",
+   "desvioNoLance": 5,
+   "lances": "1. e4 Nc6 2. d4 d5 3. exd5 Qxd5 4. Nf3 Bg4 5. Be2 O-O-O 6. c4 Qf5 7. Be3 Nf6 8. Nbd2 e5 9. d5 Nb4 10. Rc1 Nxa2 11. Ra1 Nb4 12. O-O a6 13. h3",
+   "avaliacao": "∞",
+   "referencia": "de Firmian–Waitzkin, Nova York 1990",
+   "comentario": "3.exd5 Qxd5 4.Nf3 Bg4 leva a uma posição em que as brancas têm bom jogo pelo peão.",
+   "dicas": {
+    "3. exd5": "3.exd5 Qxd5 dá às brancas bom jogo pelo peão."
+   }
+  },
+  {
+   "id": "c04-k",
+   "nota": "k",
+   "rotulo": "(k)",
+   "coluna": 4,
+   "linhaBase": "c04",
+   "desvioNoLance": 8,
+   "lances": "1. e4 Nc6 2. d4 d5 3. Nc3 dxe4 4. d5 Ne5 5. Qd4 Ng6 6. Bb5+ Bd7 7. Nge2 Bxb5 8. Nxb5 a6 9. Nbc3",
+   "avaliacao": "±",
+   "referencia": "Nasell–Tournier, Pan-Americano Sub-18 2001",
+   "comentario": "4...Ne5 5.Qd4 Ng6 6.Bb5+ favorece as brancas.",
+   "dicas": {
+    "4... Ne5": "4...Ne5 5.Qd4 favorece as brancas."
+   }
+  },
+  {
+   "id": "c04-l",
+   "nota": "l",
+   "rotulo": "(l)",
+   "coluna": 4,
+   "linhaBase": "c04",
+   "desvioNoLance": 17,
+   "lances": "1. e4 Nc6 2. d4 d5 3. Nc3 dxe4 4. d5 Nb8 5. Nxe4 e6 6. Bb5+ c6 7. dxc6 Qxd1+ 8. Kxd1 Nxc6 9. Bxc6+ bxc6 10. c3 Ba6 11. Be3 O-O-O+ 12. Ke1 Kb8",
+   "avaliacao": "=",
+   "referencia": "Gara–Molnar, Budapeste 1994",
+   "comentario": "9.Bxc6+ bxc6 10.c3 Ba6 leva à igualdade.",
+   "dicas": {
+    "9. Bxc6+": "9.Bxc6+ bxc6 leva à igualdade."
+   }
+  },
+  {
+   "id": "c05-m",
+   "nota": "m",
+   "rotulo": "(m)",
+   "coluna": 5,
+   "linhaBase": "c05",
+   "desvioNoLance": 4,
+   "lances": "1. e4 Nc6 2. Nf3 e5",
+   "avaliacao": null,
+   "comentario": "2...e5 aceita o convite e transpõe para 1.e4 e5 2.Nf3 Nc6.",
+   "dicas": {
+    "2... e5": "2...e5 transpõe para 1.e4 e5 2.Nf3 Nc6."
+   }
+  },
+  {
+   "id": "c05-n",
+   "nota": "n",
+   "rotulo": "(n)",
+   "coluna": 5,
+   "linhaBase": "c05",
+   "desvioNoLance": 6,
+   "lances": "1. e4 Nc6 2. Nf3 d6 3. d4 Bg4 4. Be2 Nf6 5. Nc3",
+   "avaliacao": null,
+   "comentario": "3...Bg4 pode voltar à coluna depois de 4.Be2 Nf6 5.Nc3.",
+   "dicas": {
+    "3... Bg4": "3...Bg4 pode voltar à coluna."
+   }
+  },
+  {
+   "id": "c05-n-1",
+   "nota": "n",
+   "rotulo": "(n) 4.c3",
+   "coluna": 5,
+   "linhaBase": "c05-n",
+   "desvioNoLance": 7,
+   "lances": "1. e4 Nc6 2. Nf3 d6 3. d4 Bg4 4. c3 Nf6 5. h3 Bh5 6. Nbd2",
+   "avaliacao": "⩲",
+   "comentario": "Também pode levar as brancas a jogar 4.c3 Nf6 5.h3 Bh5 6.Nbd2, com pequena vantagem.",
+   "dicas": {
+    "4. c3": "4.c3 Nf6 5.h3 dá pequena vantagem às brancas."
+   }
+  },
+  {
+   "id": "c05-o",
+   "nota": "o",
+   "rotulo": "(o)",
+   "coluna": 5,
+   "linhaBase": "c05",
+   "desvioNoLance": 11,
+   "lances": "1. e4 Nc6 2. Nf3 d6 3. d4 Nf6 4. Nc3 Bg4 5. Be3 e6 6. h3 Bh5 7. Bb5 a6 8. Bxc6+ bxc6 9. Qe2",
+   "avaliacao": "⩲",
+   "comentario": "6.h3 Bh5 7.Bb5 a6 8.Bxc6+ bxc6 9.Qe2 e 10.O-O-O dá alguma vantagem às brancas, embora a posição possa ficar de duplo gume.",
+   "dicas": {
+    "6. h3": "6.h3 Bh5 7.Bb5 dá alguma vantagem às brancas."
+   }
+  },
+  {
+   "id": "c05-p",
+   "nota": "p",
+   "rotulo": "(p)",
+   "coluna": 5,
+   "linhaBase": "c05",
+   "desvioNoLance": 17,
+   "lances": "1. e4 Nc6 2. Nf3 d6 3. d4 Nf6 4. Nc3 Bg4 5. Be3 e6 6. Be2 Be7 7. d5 exd5 8. exd5 Bxf3 9. Bxf3 Ne5 10. Be2 Qd7 11. O-O O-O 12. h3 Rfe8 13. Qd2 a6 14. a4 Bd8 15. Rfe1",
+   "avaliacao": "⩲",
+   "referencia": "Sznapik–Castro, Lublin 1979",
+   "comentario": "9.Bxf3 Ne5 10.Be2: as brancas têm a vantagem simples do par de bispos e de mais espaço.",
+   "dicas": {
+    "9. Bxf3": "9.Bxf3 Ne5: par de bispos e mais espaço para as brancas."
+   }
+  },
+  {
+   "id": "c06-q-A",
+   "nota": "q",
+   "rotulo": "(q) A",
+   "coluna": 6,
+   "linhaBase": "c06",
+   "desvioNoLance": 9,
+   "lances": "1. e4 Nc6 2. Nf3 d6 3. d4 Nf6 4. Nc3 Bg4 5. Be2 e5 6. d5 Ne7 7. Nh4 Bd7 8. Bg5 Ng6 9. Nf5 h6",
+   "avaliacao": "=",
+   "referencia": "Kočovski–Mestrović, Pula 1991",
+   "comentario": "5.Be2 e5 6.d5 Ne7 7.Nh4 leva à igualdade depois de 9...h6.",
+   "dicas": {
+    "5. Be2": "5.Be2 e5 6.d5 leva à igualdade."
+   }
+  },
+  {
+   "id": "c06-q-B",
+   "nota": "q",
+   "rotulo": "(q) B",
+   "coluna": 6,
+   "linhaBase": "c06",
+   "desvioNoLance": 9,
+   "lances": "1. e4 Nc6 2. Nf3 d6 3. d4 Nf6 4. Nc3 Bg4 5. Bb5 a6 6. Bxc6+ bxc6 7. h3 Bh5 8. Qe2",
+   "avaliacao": "⩲",
+   "comentario": "5.Bb5 a6 6.Bxc6+ bxc6 7.h3 Bh5 8.Qe2 (parecido com a nota o) é um pouco melhor para as brancas, mas de duplo gume pelo centro compacto das pretas.",
+   "dicas": {
+    "5. Bb5": "5.Bb5 a6 é um pouco melhor para as brancas."
+   }
+  },
+  {
+   "id": "c06-r",
+   "nota": "r",
+   "rotulo": "(r)",
+   "coluna": 6,
+   "linhaBase": "c06",
+   "desvioNoLance": 10,
+   "lances": "1. e4 Nc6 2. Nf3 d6 3. d4 Nf6 4. Nc3 Bg4 5. d5 Ne5 6. Bb5+ c6 7. dxc6 Nxc6 8. e5 dxe5 9. Qxd8+ Rxd8 10. Bxc6+ bxc6 11. Nxe5 Bd7 12. Be3",
+   "avaliacao": "±",
+   "referencia": "Timman–Miles, Tilburg 1981",
+   "comentario": "5...Ne5?! 6.Bb5+ c6 7.dxc6 favorece as brancas.",
+   "dicas": {
+    "5... Ne5": "5...Ne5?! 6.Bb5+ favorece as brancas."
+   }
+  },
+  {
+   "id": "c06-r-1",
+   "nota": "r",
+   "rotulo": "(r) 7.Nxe5",
+   "coluna": 6,
+   "linhaBase": "c06-r",
+   "desvioNoLance": 13,
+   "lances": "1. e4 Nc6 2. Nf3 d6 3. d4 Nf6 4. Nc3 Bg4 5. d5 Ne5 6. Bb5+ c6 7. Nxe5 Bxd1 8. dxc6 dxe5 9. c7+ Qd7",
+   "avaliacao": null,
+   "comentario": "7.dxc6 é melhor que 7.Nxe5 Bxd1 8.dxc6 dxe5 9.c7+ Qd7.",
+   "dicas": {
+    "7. Nxe5": "7.Nxe5? é pior que 7.dxc6."
+   }
+  },
+  {
+   "id": "c06-s",
+   "nota": "s",
+   "rotulo": "(s)",
+   "coluna": 6,
+   "linhaBase": "c06",
+   "desvioNoLance": 17,
+   "lances": "1. e4 Nc6 2. Nf3 d6 3. d4 Nf6 4. Nc3 Bg4 5. d5 Nb8 6. Be2 g6 7. O-O Bg7 8. a4 O-O 9. a5 c6 10. Be3 Qc7 11. h3 Bxf3 12. Bxf3 Rc8",
+   "avaliacao": "=",
+   "referencia": "Wolff–Benjamin, Nova York 1990",
+   "comentario": "9.a5 c6 10.Be3 Qc7 leva à igualdade.",
+   "dicas": {
+    "9. a5": "9.a5 c6 leva à igualdade."
+   }
+  }
+ ]
+}
