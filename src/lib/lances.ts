@@ -1,4 +1,5 @@
 import { Chess } from 'chess.js'
+import { aplicarUci, type JogoPrecalculado } from './jogoPrecalculado'
 
 export type Cor = 'w' | 'b'
 
@@ -101,31 +102,74 @@ export function lanceDaAmeaca(
   }
 }
 
-/** Joga os lances a partir da posição inicial e para no primeiro lance ilegal. */
-export function jogarLances(texto: string): ResultadoJogada {
-  const chess = new Chess()
+/** Resultado de um lance a partir de uma posição ("fen lance" → lance jogado), compartilhado entre as linhas. */
+type LanceMemorizado = Pick<LanceJogado, 'san' | 'from' | 'to' | 'promotion' | 'fenDepois'>
+const memoria = new Map<string, LanceMemorizado | null>()
+const FEN_INICIAL = new Chess().fen()
+
+/**
+ * Joga os lances a partir da posição inicial e para no primeiro lance ilegal.
+ * As linhas de um capítulo repetem longos começos (as notas repetem a coluna), e conferir um
+ * lance no chess.js é caro; por isso cada lance já conferido numa posição fica memorizado.
+ */
+export function jogarLances(texto: string, pre?: JogoPrecalculado): ResultadoJogada {
+  if (pre) return jogarPrecalculado(texto, pre)
+  let chess: Chess | null = null
+  let fen = FEN_INICIAL
   const lances: LanceJogado[] = []
 
   for (const [indice, token] of separarLances(texto).entries()) {
     const ply = indice + 1
-    const fenAntes = chess.fen()
-    try {
-      const lance = chess.move(token)
-      lances.push({
-        ply,
-        numero: numeroDoPly(ply),
-        cor: corDoPly(ply),
-        san: lance.san,
-        from: lance.from,
-        to: lance.to,
-        promotion: lance.promotion,
-        fenAntes,
-        fenDepois: chess.fen(),
-      })
-    } catch {
-      return { lances, erro: { ply, lance: chaveDoLance(ply, token), fen: fenAntes } }
+    const fenAntes = fen
+    const chave = `${fenAntes} ${token}`
+    let feito = memoria.get(chave)
+    if (feito === undefined) {
+      // O tabuleiro só é montado (ou reposicionado) quando o lance ainda não foi visto.
+      if (!chess) chess = new Chess(fenAntes)
+      else if (chess.fen() !== fenAntes) chess.load(fenAntes)
+      try {
+        const lance = chess.move(token)
+        feito = { san: lance.san, from: lance.from, to: lance.to, promotion: lance.promotion, fenDepois: chess.fen() }
+      } catch {
+        feito = null
+      }
+      memoria.set(chave, feito)
     }
+    if (!feito) return { lances, erro: { ply, lance: chaveDoLance(ply, token), fen: fenAntes } }
+    lances.push({ ply, numero: numeroDoPly(ply), cor: corDoPly(ply), ...feito, fenAntes })
+    fen = feito.fenDepois
   }
 
+  return { lances, erro: null }
+}
+
+/** Posição depois de cada lance pré-calculado ("fen uci" → fen): as linhas repetem os começos. */
+const posicoesPrecalculadas = new Map<string, string>()
+
+/** Reproduz lances já conferidos no build: só aplica cada um ao tabuleiro. */
+function jogarPrecalculado(texto: string, pre: JogoPrecalculado): ResultadoJogada {
+  const tokens = separarLances(texto)
+  const sans = pre.s ? pre.s.split(' ') : tokens
+  const lances: LanceJogado[] = []
+  let fen = FEN_INICIAL
+  for (const [i, uci] of (pre.u ? pre.u.split(' ') : []).entries()) {
+    const ply = i + 1
+    const chave = `${fen} ${uci}`
+    let fenDepois = posicoesPrecalculadas.get(chave)
+    if (fenDepois === undefined) posicoesPrecalculadas.set(chave, (fenDepois = aplicarUci(fen, uci)))
+    lances.push({
+      ply,
+      numero: numeroDoPly(ply),
+      cor: corDoPly(ply),
+      san: sans[i],
+      from: uci.slice(0, 2),
+      to: uci.slice(2, 4),
+      promotion: uci[4],
+      fenAntes: fen,
+      fenDepois,
+    })
+    fen = fenDepois
+  }
+  if (pre.e) return { lances, erro: { ply: pre.e, lance: chaveDoLance(pre.e, tokens[pre.e - 1]), fen } }
   return { lances, erro: null }
 }

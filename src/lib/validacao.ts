@@ -1,4 +1,5 @@
 import { chaveDoLance, jogarLances, lanceDaAmeaca, type LanceJogado } from './lances'
+import type { JogoPrecalculado } from './jogoPrecalculado'
 import type { Capitulo } from './tipos'
 
 export type TipoProblema =
@@ -92,7 +93,7 @@ export function validarCapitulo(capitulo: Capitulo): CapituloValidado {
 
   const idsVistos = new Set<string>()
 
-  const jogar = (id: string, tipo: Unidade['tipo'], texto: string): LanceJogado[] | null => {
+  const jogar = (id: string, tipo: Unidade['tipo'], texto: string, pre?: JogoPrecalculado): LanceJogado[] | null => {
     // A primeira ocorrência continua valendo; a repetida fica de fora e vai para o Diagnóstico.
     if (idsVistos.has(id)) {
       problemas.push({
@@ -104,7 +105,7 @@ export function validarCapitulo(capitulo: Capitulo): CapituloValidado {
     }
     idsVistos.add(id)
 
-    const { lances, erro } = jogarLances(texto)
+    const { lances, erro } = jogarLances(texto, pre)
     if (erro) {
       problemas.push({
         tipo: 'lance-ilegal',
@@ -136,7 +137,7 @@ export function validarCapitulo(capitulo: Capitulo): CapituloValidado {
     const entradas = Object.keys(linha.dicas ?? {})
     totalDicas += entradas.length
 
-    const lances = jogar(linha.id, 'linha', linha.lances)
+    const lances = jogar(linha.id, 'linha', linha.lances, linha._jogo)
     if (!lances) continue
 
     const chaves = new Set(lances.map((lance) => chaveDoLance(lance.ply, lance.san)))
@@ -171,7 +172,7 @@ export function validarCapitulo(capitulo: Capitulo): CapituloValidado {
   for (const nota of notas) {
     const entradas = Object.keys(nota.dicas ?? {})
     totalDicas += entradas.length
-    const lances = jogar(nota.id, 'nota', nota.lances)
+    const lances = jogar(nota.id, 'nota', nota.lances, nota._jogo)
     if (!lances) continue
     const chaves = new Set(lances.map((lance) => chaveDoLance(lance.ply, lance.san)))
     for (const chave of entradas) {
@@ -195,7 +196,7 @@ export function validarCapitulo(capitulo: Capitulo): CapituloValidado {
   }
 
   for (const armadilha of capitulo.armadilhas ?? []) {
-    const { lances, erro } = jogarLances(armadilha.lances)
+    const { lances, erro } = jogarLances(armadilha.lances, armadilha._jogo)
     const sans = lances.map((lance) => lance.san)
     const noLivro = unidades.some((unidade) =>
       sans.every((san, i) => unidade.lances[i]?.san === san),

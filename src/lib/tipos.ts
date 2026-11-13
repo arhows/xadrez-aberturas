@@ -1,4 +1,5 @@
 import type { EscolhaCor } from './escopo'
+import type { JogoPrecalculado } from './jogoPrecalculado'
 
 /** Formato dos arquivos em data/openings/*.json (SPEC 3.1 e 3.4). */
 
@@ -23,6 +24,8 @@ export interface Armadilha {
   /** Ply (1 = 1.e4) do lance natural que cai na armadilha. */
   erroNoLance: number
   texto: string
+  /** Lances já conferidos no build (ver jogoPrecalculado.ts). */
+  _jogo?: JogoPrecalculado
 }
 
 export interface Linha {
@@ -39,6 +42,8 @@ export interface Linha {
   plano?: { brancas: string; pretas: string }
   /** Chave no formato de `dicas`: a ameaça criada por aquele lance. */
   ameacas?: Record<string, Ameaca>
+  /** Lances já conferidos no build (ver jogoPrecalculado.ts). */
+  _jogo?: JogoPrecalculado
 }
 
 export interface Nota {
@@ -57,6 +62,8 @@ export interface Nota {
   dicas?: Record<string, string>
   /** Trecho cortado na foto: a nota precisa ser conferida antes de entrar no Treino. */
   conferir?: string
+  /** Lances já conferidos no build (ver jogoPrecalculado.ts). */
+  _jogo?: JogoPrecalculado
 }
 
 export interface Capitulo {

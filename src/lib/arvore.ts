@@ -150,7 +150,7 @@ export function construirArvore(validado: CapituloValidado): Arvore {
 
 /** Os lances até o erro, para marcar a aresta e abrir a posição no Explorar. */
 export function caminhoDaArmadilha(armadilha: Armadilha): string[] {
-  return jogarLances(armadilha.lances)
+  return jogarLances(armadilha.lances, armadilha._jogo)
     .lances.slice(0, armadilha.erroNoLance)
     .map((lance) => lance.san)
 }
