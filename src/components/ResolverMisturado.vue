@@ -310,7 +310,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
       <CartaoDica v-if="aviso" :tipo="aviso.tipo" :lance="aviso.lance" :texto="aviso.texto" />
 
       <div class="acoes">
-        <button v-if="modo === 'serie' && !terminado" type="button" class="botao" :disabled="pista >= 2 || aguardando" @click="pedirPista">
+        <button v-if="modo === 'serie' && !terminado" type="button" class="botao grande largo-celular" :disabled="pista >= 2 || aguardando" @click="pedirPista">
           {{ pista === 0 ? 'Pista: qual peça?' : 'Mostrar o lance' }}
         </button>
         <slot name="acoes" :terminado="terminado" :falhou="falhou" />

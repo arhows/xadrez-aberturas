@@ -462,34 +462,25 @@ onBeforeUnmount(() => {
     <RouterLink :to="capitulo ? { name: 'abertura', params: { cap: capitulo.capitulo.id } } : '/jogar'" class="trilha">
       ‹ {{ capitulo ? fmtTexto(capitulo.capitulo.nome) : 'Jogar' }}
     </RouterLink>
-    <h1 class="titulo-pagina">Jogar</h1>
+    <h1 class="titulo-pagina">Jogar contra o computador</h1>
     <p v-if="fenInicio" class="suave">A partida começa na posição montada no editor.</p>
     <p v-if="inicio.length" class="suave">
       A partida começa depois de <span class="lance">{{ textoInicio }}</span>.
     </p>
 
-    <RouterLink v-if="!fenInicio && !inicio.length" to="/online" class="cartao cartao-online">
-      <span class="icone-online" aria-hidden="true">♞</span>
-      <span class="textos-online">
-        <strong>Jogar com um amigo on-line</strong>
-        <span class="suave">Mande um convite, jogue em tempo real e suba no ranking.</span>
-      </span>
-      <span class="botao">Abrir</span>
-    </RouterLink>
-
-    <h2 class="subtitulo">Contra o computador</h2>
     <div class="cartao">
-      <fieldset class="opcoes">
-        <legend>Modo</legend>
-        <label class="marcar">
-          <input v-model="escolhas.modo" type="radio" value="partida" />
-          Partida: sem voltar lance e sem dicas; a avaliação dos lances fica para a análise no fim
-        </label>
-        <label class="marcar">
-          <input v-model="escolhas.modo" type="radio" value="treino" />
-          Treino: pode voltar lance, pedir dica e ver a qualidade de cada lance logo depois de jogar
-        </label>
-      </fieldset>
+      <div class="campo" role="group" aria-labelledby="rotulo-modo">
+        <span id="rotulo-modo">Modo</span>
+        <div class="segmentado">
+          <button type="button" :aria-pressed="escolhas.modo === 'partida'" @click="escolhas.modo = 'partida'">Partida</button>
+          <button type="button" :aria-pressed="escolhas.modo === 'treino'" @click="escolhas.modo = 'treino'">Treino</button>
+        </div>
+        <span class="ajuda">{{
+          escolhas.modo === 'partida'
+            ? 'Sem voltar lance e sem dicas; a avaliação dos lances fica para a análise no fim.'
+            : 'Pode voltar lance, pedir dica e ver a qualidade de cada lance logo depois de jogar.'
+        }}</span>
+      </div>
 
       <label v-if="escolhas.modo === 'partida'" class="campo">
         <span>Tempo</span>
@@ -502,12 +493,14 @@ onBeforeUnmount(() => {
       </label>
 
       <template v-if="escolhas.adversario === 'motor'">
-        <fieldset class="opcoes">
-          <legend>Sua cor</legend>
-          <label class="marcar"><input v-model="escolhas.cor" type="radio" value="w" /> Brancas</label>
-          <label class="marcar"><input v-model="escolhas.cor" type="radio" value="b" /> Pretas</label>
-          <label class="marcar"><input v-model="escolhas.cor" type="radio" value="sorteio" /> Sortear</label>
-        </fieldset>
+        <div class="campo" role="group" aria-labelledby="rotulo-cor-jogo">
+          <span id="rotulo-cor-jogo">Sua cor</span>
+          <div class="segmentado">
+            <button type="button" :aria-pressed="escolhas.cor === 'w'" @click="escolhas.cor = 'w'">Brancas</button>
+            <button type="button" :aria-pressed="escolhas.cor === 'b'" @click="escolhas.cor = 'b'">Pretas</button>
+            <button type="button" :aria-pressed="escolhas.cor === 'sorteio'" @click="escolhas.cor = 'sorteio'">Sortear</button>
+          </div>
+        </div>
 
         <label class="campo">
           <span>Nível do computador</span>
@@ -583,7 +576,7 @@ onBeforeUnmount(() => {
 
       <HistoricoLances :lances="treinoAtivo ? sansMarcados : sans" :atual="sans.length" :antes="antes" />
 
-      <div class="acoes">
+      <div class="acoes" :class="{ jogando: fase === 'jogando' }">
         <template v-if="fase === 'jogando'">
           <template v-if="treinoAtivo">
             <button type="button" class="botao" :disabled="!jogavel || nivelDica >= 2 || carregandoDica" @click="pedirDica">
@@ -594,21 +587,36 @@ onBeforeUnmount(() => {
           <button type="button" class="botao fantasma" @click="abandonar">Abandonar</button>
         </template>
         <template v-else>
-          <button type="button" class="botao primario" @click="comecar">Jogar de novo</button>
-          <button type="button" class="botao" @click="fase = 'escolha'">Mudar opções</button>
-          <button v-if="treinoAtivo" type="button" class="botao" :disabled="sans.length <= inicio.length" @click="desfazer">Voltar lance</button>
           <RouterLink
             v-if="sans.length > inicio.length"
-            class="botao"
+            class="botao primario grande largo-celular"
             :to="{ name: 'analise', query: { c: sans.join(' '), fen: fenInicio, cor: contraMotor ? minhaCor : undefined, titulo: 'Análise da partida', volta: '/partida' } }"
           >Analisar partida</RouterLink>
-          <button type="button" class="botao" @click="exportarPgn">Exportar PGN</button>
-          <RouterLink
-            v-if="capitulo"
-            class="botao fantasma"
-            :to="{ name: 'explorar', params: { cap: capitulo.capitulo.id }, query: { c: sans.join(' ') } }"
-          >Ver no Explorar</RouterLink>
+          <button type="button" class="botao grande largo-celular" :class="{ primario: sans.length <= inicio.length }" @click="comecar">Jogar de novo</button>
         </template>
+      </div>
+      <!-- O resto, menos usado, numa lista curta. -->
+      <div v-if="fase !== 'jogando'" class="lista mais-opcoes">
+        <button type="button" class="linha-lista" @click="fase = 'escolha'">
+          <span class="nome">Mudar opções</span>
+          <span class="meta">Modo, tempo, cor e nível</span>
+        </button>
+        <button v-if="treinoAtivo && sans.length > inicio.length" type="button" class="linha-lista" @click="desfazer">
+          <span class="nome">Voltar lance</span>
+          <span class="meta">Desfazer e continuar a partida de outro jeito</span>
+        </button>
+        <RouterLink
+          v-if="capitulo"
+          class="linha-lista"
+          :to="{ name: 'explorar', params: { cap: capitulo.capitulo.id }, query: { c: sans.join(' ') } }"
+        >
+          <span class="nome">Ver no Explorar</span>
+          <span class="meta">Comparar com o livro da abertura</span>
+        </RouterLink>
+        <button type="button" class="linha-lista" @click="exportarPgn">
+          <span class="nome">Exportar PGN</span>
+          <span class="meta">Baixar a partida em arquivo</span>
+        </button>
       </div>
     </div>
   </div>
@@ -635,20 +643,6 @@ onBeforeUnmount(() => {
   margin: 0;
   color: var(--texto-suave);
   font-size: 14px;
-}
-.opcoes {
-  display: grid;
-  gap: 0;
-  margin: 0;
-  padding: 0;
-  border: 0;
-}
-.opcoes legend {
-  padding: 0;
-  font: 600 14px/20px var(--font-texto);
-}
-.opcoes input[type='radio'] {
-  border-radius: 50%;
 }
 .cabeca-painel p {
   margin: 0;
@@ -697,24 +691,10 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: var(--espaco-2);
 }
-.cartao-online {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  color: var(--texto);
-  text-decoration: none;
-}
-.icone-online {
-  font-size: 2rem;
-  line-height: 1;
-}
-.textos-online {
-  display: grid;
-  flex: 1;
-  min-width: 0;
-}
-.subtitulo {
-  margin: var(--espaco-2) 0 0;
-  font-size: 1.1rem;
+/* Durante a partida, os botões dividem a linha no celular. */
+@media (max-width: 799.98px) {
+  .acoes.jogando > .botao {
+    flex: 1 1 0;
+  }
 }
 </style>

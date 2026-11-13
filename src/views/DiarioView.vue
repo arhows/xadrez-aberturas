@@ -123,10 +123,17 @@ function aoFalharNaSeq() {
           <RouterLink to="/praticar" class="trilha">‹ Praticar</RouterLink>
           <h1 class="titulo-pagina">Exercícios do dia</h1>
         </div>
-        <div class="abas" role="tablist">
-          <button type="button" role="tab" class="aba ativa" aria-selected="true">Do dia</button>
-          <button type="button" role="tab" class="aba" aria-selected="false" @click="trocarModo('sequencia')">Sequência</button>
+        <div class="segmentado abas" role="tablist">
+          <button type="button" role="tab" aria-selected="true" aria-pressed="true">Do dia</button>
+          <button type="button" role="tab" aria-selected="false" aria-pressed="false" @click="trocarModo('sequencia')">Sequência</button>
         </div>
+      </template>
+      <template #acoes="{ terminado }">
+        <button v-if="terminado && resolvidoAgora" type="button" class="botao primario grande largo-celular" @click="seguirNaSerie">
+          {{ primeiroPendente() === null ? 'Ver o resultado do dia' : 'Próximo' }}
+        </button>
+      </template>
+      <template #rodape>
         <div class="bolinhas" aria-label="Exercícios do dia">
           <button
             v-for="(_, i) in serie"
@@ -138,21 +145,16 @@ function aoFalharNaSeq() {
             @click="abrir(i)"
           >{{ i + 1 }}</button>
         </div>
-        <p class="suave">
+        <p class="suave so-computador">
           Táticas de vários temas e mates em 1, 2, 3 e 4, misturados: o tema não é dito, você tem que reconhecer o padrão.
           <template v-if="dias"> · {{ dias }} {{ dias === 1 ? 'dia seguido' : 'dias seguidos' }}</template>
         </p>
       </template>
-      <template #acoes="{ terminado }">
-        <button v-if="terminado && resolvidoAgora" type="button" class="botao primario" @click="seguirNaSerie">
-          {{ primeiroPendente() === null ? 'Ver o resultado do dia' : 'Próximo' }}
-        </button>
-      </template>
     </ResolverMisturado>
 
     <div v-else class="pagina resumo">
-      <RouterLink to="/praticar" class="trilha">‹ Praticar</RouterLink>
-      <h1 class="titulo-pagina">Exercícios do dia</h1>
+      <RouterLink to="/praticar" class="trilha so-computador">‹ Praticar</RouterLink>
+      <h1 class="titulo-pagina so-computador">Exercícios do dia</h1>
       <p class="destaque">Série de hoje completa!</p>
       <dl class="placar-final">
         <div><dt>De primeira</dt><dd class="ok">{{ dePrimeira }}</dd></div>
@@ -164,8 +166,8 @@ function aoFalharNaSeq() {
         <button v-for="(_, i) in serie" :key="i" type="button" class="bolinha" :class="feitos[String(i)]" @click="abrir(i)">{{ i + 1 }}</button>
       </div>
       <div class="acoes">
-        <button type="button" class="botao primario" @click="trocarModo('sequencia')">Jogar a Sequência</button>
-        <RouterLink class="botao" to="/exercicios">Voltar aos exercícios</RouterLink>
+        <button type="button" class="botao primario grande largo-celular" @click="trocarModo('sequencia')">Jogar a Sequência</button>
+        <RouterLink class="botao grande largo-celular" to="/praticar">Voltar a Praticar</RouterLink>
       </div>
     </div>
   </template>
@@ -185,9 +187,9 @@ function aoFalharNaSeq() {
           <RouterLink to="/praticar" class="trilha">‹ Praticar</RouterLink>
           <h1 class="titulo-pagina">Sequência</h1>
         </div>
-        <div class="abas" role="tablist">
-          <button type="button" role="tab" class="aba" aria-selected="false" @click="trocarModo('serie')">Do dia</button>
-          <button type="button" role="tab" class="aba ativa" aria-selected="true">Sequência</button>
+        <div class="segmentado abas" role="tablist">
+          <button type="button" role="tab" aria-selected="false" aria-pressed="false" @click="trocarModo('serie')">Do dia</button>
+          <button type="button" role="tab" aria-selected="true" aria-pressed="true">Sequência</button>
         </div>
         <div class="placar">
           <span class="contagem">{{ acertos }}</span>
@@ -195,27 +197,27 @@ function aoFalharNaSeq() {
         </div>
       </template>
       <template #acoes="{ terminado }">
-        <button v-if="acertouAgora" type="button" class="botao primario" @click="sortearSeq">Próximo</button>
-        <button v-if="!terminado && faseSeq === 'jogando'" type="button" class="botao" :disabled="pulos <= 0" @click="pular">
+        <button v-if="acertouAgora" type="button" class="botao primario grande largo-celular" @click="sortearSeq">Próximo</button>
+        <button v-if="!terminado && faseSeq === 'jogando'" type="button" class="botao grande largo-celular" :disabled="pulos <= 0" @click="pular">
           Pular ({{ pulos }})
         </button>
       </template>
       <template #rodape>
-        <section v-if="faseSeq === 'fim'" class="fim">
+        <section v-if="faseSeq === 'fim'" class="cartao fim">
           <strong>Fim da sequência: {{ acertos }} {{ acertos === 1 ? 'acerto' : 'acertos' }}.</strong>
           <span v-if="recordeNovo" class="ok">Recorde novo!</span>
           <span v-else class="suave">Seu recorde é {{ progresso.sequencia }}.</span>
-          <button type="button" class="botao primario" @click="comecarSeq">Começar de novo</button>
+          <button type="button" class="botao primario grande largo-celular" @click="comecarSeq">Começar de novo</button>
         </section>
       </template>
     </ResolverMisturado>
 
     <div v-else class="pagina resumo">
-      <RouterLink to="/praticar" class="trilha">‹ Praticar</RouterLink>
-      <h1 class="titulo-pagina">Sequência</h1>
-      <div class="abas" role="tablist">
-        <button type="button" role="tab" class="aba" aria-selected="false" @click="trocarModo('serie')">Do dia</button>
-        <button type="button" role="tab" class="aba ativa" aria-selected="true">Sequência</button>
+      <RouterLink to="/praticar" class="trilha so-computador">‹ Praticar</RouterLink>
+      <h1 class="titulo-pagina so-computador">Sequência</h1>
+      <div class="segmentado abas" role="tablist">
+        <button type="button" role="tab" aria-selected="false" aria-pressed="false" @click="trocarModo('serie')">Do dia</button>
+        <button type="button" role="tab" aria-selected="true" aria-pressed="true">Sequência</button>
       </div>
       <p>
         Táticas e mates misturados, começando fáceis e ficando mais difíceis a cada acerto. O primeiro erro encerra a
@@ -223,7 +225,7 @@ function aoFalharNaSeq() {
       </p>
       <p class="suave">Recorde: {{ progresso.sequencia }}</p>
       <div class="acoes">
-        <button type="button" class="botao primario grande" :disabled="!itens.length" @click="comecarSeq">Começar</button>
+        <button type="button" class="botao primario grande largo-celular" :disabled="!itens.length" @click="comecarSeq">Começar</button>
       </div>
     </div>
   </template>
@@ -247,33 +249,19 @@ function aoFalharNaSeq() {
   text-decoration: none;
 }
 .abas {
-  display: flex;
-  gap: var(--espaco-2);
+  max-width: 320px;
 }
-.aba {
-  min-height: 40px;
-  padding: 0 var(--espaco-3);
-  border: 1px solid var(--borda-controle);
-  border-radius: 999px;
-  background: var(--superficie);
-  color: var(--texto);
-  font: inherit;
-  cursor: pointer;
-}
-.aba.ativa {
-  border-color: var(--destaque);
-  background: var(--destaque);
-  color: #fff;
-  font-weight: 600;
-}
+/* Os 10 exercícios numa linha só, mesmo no celular. */
 .bolinhas {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(10, minmax(0, 1fr));
   gap: 0.375rem;
+  max-width: 440px;
 }
 .bolinha {
-  width: 40px;
-  height: 40px;
+  aspect-ratio: 1;
+  min-height: 0;
+  padding: 0;
   border: 1px solid var(--borda);
   border-radius: 50%;
   background: var(--superficie);
@@ -312,13 +300,7 @@ function aoFalharNaSeq() {
   font-variant-numeric: tabular-nums;
 }
 .fim {
-  display: grid;
-  gap: var(--espaco-2);
   justify-items: start;
-  padding: var(--espaco-3);
-  border: 1px solid var(--borda);
-  border-radius: var(--raio-md);
-  background: var(--superficie);
 }
 .ok {
   color: var(--ok);
