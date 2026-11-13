@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, shallowRef } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, shallowRef } from 'vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { obterCapitulos } from '../lib/capitulos'
@@ -54,9 +54,18 @@ const contexto = computed(() =>
 )
 
 function proxima() {
+  const anterior = pergunta.value?.fen
   mostrandoErro.value = false
-  pergunta.value = sortearPergunta(capitulos.value, progresso.corPorCapitulo, Math.random, filtro.value)
-  if (!pergunta.value) terminar()
+  // Evita repetir a mesma posição em seguida (a inicial está em toda linha das brancas).
+  let nova = sortearPergunta(capitulos.value, progresso.corPorCapitulo, Math.random, filtro.value)
+  for (let i = 0; i < 5 && nova && nova.fen === anterior; i++) {
+    nova = sortearPergunta(capitulos.value, progresso.corPorCapitulo, Math.random, filtro.value)
+  }
+  pergunta.value = nova
+  if (!pergunta.value) return terminar()
+  // Se a posição repetir mesmo assim, o FEN não muda e o tabuleiro ficaria com o lance já jogado:
+  // redesenha sempre.
+  void nextTick(() => tabuleiro.value?.sincronizar())
 }
 
 function comecar() {
