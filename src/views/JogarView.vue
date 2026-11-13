@@ -52,7 +52,9 @@ const inicio = (() => {
 })()
 const capitulo = route.query.cap ? buscarCapitulo(String(route.query.cap)) : undefined
 // Vindo do Treino, a cor da linha treinada já vem marcada.
-if (route.query.cor === 'w' || route.query.cor === 'b') escolhas.cor = route.query.cor
+const corPedida: Cor | undefined = route.query.cor === 'w' || route.query.cor === 'b' ? route.query.cor : undefined
+/** "Jogar daqui" (Treino, Explorar, Análise, Editor): vai direto ao tabuleiro, sem relógio. */
+const daqui = inicio.length > 0 || !!fenInicio
 
 const fase = ref<'escolha' | 'jogando' | 'fim'>('escolha')
 const sans = ref<string[]>([...inicio])
@@ -251,14 +253,17 @@ const textoInicio = computed(() =>
 function comecar() {
   pararComputador()
   pensando.value = false
-  minhaCor.value = escolhas.cor === 'sorteio' ? (Math.random() < 0.5 ? 'w' : 'b') : escolhas.cor
+  // Daqui: joga com a cor da linha treinada, ou com quem tem a vez na posição.
+  minhaCor.value = daqui
+    ? corPedida ?? jogoDosLances(inicio, fenInicio).turn()
+    : escolhas.cor === 'sorteio' ? (Math.random() < 0.5 ? 'w' : 'b') : escolhas.cor
   orientacaoAmigo.value = jogoDosLances(inicio, fenInicio).turn() === 'b' ? 'black' : 'white'
   sans.value = [...inicio]
   abandono.value = null
   erroMotor.value = null
   treinoAtivo.value = escolhas.modo === 'treino'
   jogoSalvo.value = false
-  relogioAtivo.value = !treinoAtivo.value && tempo.value.minutos > 0
+  relogioAtivo.value = !daqui && !treinoAtivo.value && tempo.value.minutos > 0
   restante.value = relogioInicial(tempo.value)
   tempoEsgotado.value = null
   qualidades.value = {}
@@ -443,6 +448,8 @@ function exportarPgn() {
     'application/x-chess-pgn',
   )
 }
+
+if (daqui) comecar()
 
 onBeforeUnmount(() => {
   pararComputador()
