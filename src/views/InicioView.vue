@@ -14,8 +14,10 @@ const dias = computed(() => diasSeguidos(progresso.diario, hoje))
 
 // Os exercícios carregam à parte (são grandes): as revisões deles entram quando chegarem.
 const conjuntos = ref<ConjuntoExercicios[]>([])
+const carregado = ref(false)
 onMounted(async () => {
   conjuntos.value = await carregarConjuntos()
+  carregado.value = true
 })
 const revisoesExercicios = computed(() => revisoesPendentes(conjuntos.value))
 const ultimo = computed(() => conjuntos.value.find((c) => c.id === progresso.ultimoConjunto))
@@ -69,12 +71,12 @@ const partesDaRevisao = computed(() => {
         <div class="cabeca">
           <h2 class="titulo-item">Revisão</h2>
           <span v-if="totalHoje" class="selo">PARA HOJE</span>
-          <span v-else class="selo ok">EM DIA</span>
+          <span v-else-if="carregado" class="selo ok">EM DIA</span>
         </div>
-        <div class="metrica" :class="totalHoje ? 'pendente' : 'em-dia'">
-          <span class="numero-grande">{{ totalHoje }}</span>
+        <div class="metrica" :class="totalHoje ? 'pendente' : carregado ? 'em-dia' : ''">
+          <span class="numero-grande">{{ totalHoje || carregado ? totalHoje : '…' }}</span>
         </div>
-        <p class="apoio suave">{{ partesDaRevisao }}</p>
+        <p class="apoio suave">{{ totalHoje || carregado ? partesDaRevisao : 'Contando as revisões…' }}</p>
         <div class="acoes">
           <RouterLink v-if="destinoDaRevisao" class="botao primario largo-celular" :to="destinoDaRevisao">Revisar agora</RouterLink>
           <RouterLink v-else class="botao largo-celular" to="/praticar">Praticar algo novo</RouterLink>

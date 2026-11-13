@@ -45,6 +45,14 @@ const seusDesvios = computed(() => {
   return [...grupos.values()].sort((a, b) => b.total - a.total).slice(0, 3)
 })
 
+const dominado = computed(() => percentual(capitulo))
+const paraHoje = computed(() => filaDoCapitulo(id))
+const OPCOES_DE_COR: { valor: EscolhaCor; nome: string }[] = [
+  { valor: 'w', nome: 'Brancas' },
+  { valor: 'b', nome: 'Pretas' },
+  { valor: 'ambas', nome: 'Ambas' },
+]
+
 function baixarPgn() {
   baixarTexto(`${id}.pgn`, exportarPgn(capitulo), 'application/x-chess-pgn')
 }
@@ -58,38 +66,53 @@ function baixarPgn() {
       <span>{{ familia.nome }}</span>
     </nav>
 
-    <header>
+    <header class="cartao cabeca-abertura">
       <h1>{{ capitulo.capitulo.nome }}</h1>
-      <p class="suave">{{ fmtTexto(capitulo.capitulo.base) }}</p>
-      <p class="suave">
-        {{ percentual(capitulo) }}% dominado · {{ filaDoCapitulo(id) }} para hoje
-      </p>
-      <div class="acoes">
-        <RouterLink class="botao primario" :to="{ name: 'treino', params: { cap: id } }">Treinar</RouterLink>
-        <RouterLink class="botao" :to="{ name: 'explorar', params: { cap: id } }">Explorar</RouterLink>
-        <button type="button" class="botao" @click="baixarPgn">Exportar PGN</button>
+      <p class="apoio suave">{{ fmtTexto(capitulo.capitulo.base) }}</p>
+      <div class="progresso fino">
+        <div class="rotulos">
+          <span><strong>{{ dominado }}%</strong> dominado</span>
+          <span v-if="paraHoje" class="selo">{{ paraHoje }} PARA HOJE</span>
+          <span v-else-if="noRepertorio" class="selo ok">EM DIA</span>
+        </div>
+        <div class="trilho"><span :style="{ width: `${dominado}%` }"></span></div>
       </div>
-      <div class="repertorio">
+      <div class="acoes">
+        <RouterLink
+          class="botao primario grande"
+          :to="{ name: 'treino', params: { cap: id }, query: paraHoje ? { auto: '1' } : {} }"
+        >{{ paraHoje ? `Revisar (${paraHoje})` : 'Treinar' }}</RouterLink>
+        <RouterLink class="botao grande" :to="{ name: 'explorar', params: { cap: id } }">Explorar</RouterLink>
+      </div>
+    </header>
+
+    <section class="cartao repertorio">
+      <div class="cabeca">
+        <span class="titulo-item">{{ noRepertorio ? 'No meu repertório' : 'Fora do repertório' }}</span>
         <button
           type="button"
           class="botao"
-          :class="{ primario: noRepertorio }"
+          :class="noRepertorio ? 'fantasma' : 'primario'"
           :aria-pressed="noRepertorio"
           @click="alternarRepertorio(id)"
-        >{{ noRepertorio ? '★ No meu repertório' : '☆ Adicionar ao meu repertório' }}</button>
-        <label v-if="noRepertorio" class="cor">
-          Jogo com
-          <select v-model="cor">
-            <option value="w">Brancas</option>
-            <option value="b">Pretas</option>
-            <option value="ambas">Ambas</option>
-          </select>
-        </label>
-        <p v-if="!noRepertorio && repertorioEscolhido" class="suave">
-          Fora do repertório: não entra nas revisões nem nas linhas novas do dia, mas dá para estudar e treinar à vontade.
-        </p>
+        >{{ noRepertorio ? 'Tirar' : '☆ Adicionar' }}</button>
       </div>
-    </header>
+      <div v-if="noRepertorio" class="campo" role="group" aria-labelledby="rotulo-cor-abertura">
+        <span id="rotulo-cor-abertura" class="apoio suave">Jogo com</span>
+        <div class="segmentado">
+          <button
+            v-for="opcao in OPCOES_DE_COR"
+            :key="opcao.valor"
+            type="button"
+            :aria-pressed="cor === opcao.valor"
+            @click="cor = opcao.valor"
+          >{{ opcao.nome }}</button>
+        </div>
+      </div>
+      <p v-else-if="repertorioEscolhido" class="apoio suave">
+        Não entra nas revisões nem nas linhas novas do dia, mas dá para estudar e treinar à vontade.
+      </p>
+    </section>
 
     <details v-if="partidas" class="grupo">
       <summary>
@@ -146,8 +169,8 @@ function baixarPgn() {
         <span class="suave">{{ percentual(capitulo, linhasDoGrupo(capitulo, grupo.id)) }}%</span>
       </summary>
 
-      <RouterLink class="botao treinar-grupo" :to="{ name: 'treino', params: { cap: id }, query: { escopo: `grupo:${grupo.id}` } }">
-        Treinar grupo
+      <RouterLink class="botao fantasma treinar-grupo" :to="{ name: 'treino', params: { cap: id }, query: { escopo: `grupo:${grupo.id}` } }">
+        Treinar o grupo inteiro
       </RouterLink>
 
       <ul class="linhas">
@@ -156,53 +179,51 @@ function baixarPgn() {
           :key="linha.id"
           :class="{ desativada: capitulo.desativadas.includes(linha.id) }"
         >
-          <div class="info">
-            <strong>{{ linha.coluna === null ? 'Bônus' : `Coluna ${linha.coluna}` }}</strong>
-            <Avaliacao :valor="linha.avaliacao" />
-            <span class="nome">{{ linha.nome }}</span>
-            <span class="suave">{{ percentualLinha(capitulo, linha) }}% · {{ revisoesDaLinha(capitulo, linha) }}</span>
-          </div>
-          <div v-if="!capitulo.desativadas.includes(linha.id)" class="acoes">
-            <RouterLink class="botao" :to="{ name: 'estudo', params: { cap: id, linha: linha.id } }">Estudar</RouterLink>
-            <RouterLink class="botao" :to="{ name: 'treino', params: { cap: id }, query: { escopo: `linha:${linha.id}` } }">
-              Treinar
+          <template v-if="!capitulo.desativadas.includes(linha.id)">
+            <RouterLink class="info" :to="{ name: 'estudo', params: { cap: id, linha: linha.id } }" :title="`Estudar ${linha.nome}`">
+              <span class="nome-linha">
+                <strong>{{ linha.coluna === null ? 'Bônus' : `Coluna ${linha.coluna}` }}</strong>
+                <Avaliacao :valor="linha.avaliacao" />
+              </span>
+              <span class="nome">{{ linha.nome }}</span>
+              <span class="apoio suave">{{ percentualLinha(capitulo, linha) }}% · {{ revisoesDaLinha(capitulo, linha) }}</span>
             </RouterLink>
+            <RouterLink
+              class="botao fantasma treinar-linha"
+              :to="{ name: 'treino', params: { cap: id }, query: { escopo: `linha:${linha.id}` } }"
+              :aria-label="`Treinar ${linha.nome}`"
+            >Treinar</RouterLink>
+          </template>
+          <div v-else class="info">
+            <strong>{{ linha.coluna === null ? 'Bônus' : `Coluna ${linha.coluna}` }}</strong>
+            <span class="nome">{{ linha.nome }}</span>
+            <RouterLink to="/diagnostico">Desativada: ver Diagnóstico</RouterLink>
           </div>
-          <RouterLink v-else to="/diagnostico">Desativada: ver Diagnóstico</RouterLink>
         </li>
       </ul>
     </details>
 
-    <p v-if="capitulo.capitulo.fonte" class="suave fonte">{{ capitulo.capitulo.fonte }}</p>
+    <footer class="rodape">
+      <p v-if="capitulo.capitulo.fonte" class="suave">{{ capitulo.capitulo.fonte }}</p>
+      <button type="button" class="botao fantasma" @click="baixarPgn">Exportar PGN</button>
+    </footer>
   </div>
 </template>
 
 <style scoped>
-.repertorio {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 0.75rem;
-  margin-top: 0.75rem;
+.pagina {
+  display: grid;
+  gap: var(--espaco-4);
 }
-.repertorio .suave {
-  flex-basis: 100%;
+.cabeca-abertura .acoes > .botao {
+  flex: 1 1 8rem;
+}
+.repertorio .campo {
+  gap: var(--espaco-2);
+}
+.cabeca-abertura .suave,
+.repertorio .apoio {
   margin: 0;
-}
-.cor {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 14px;
-}
-.cor select {
-  min-height: 40px;
-  padding: 0 0.5rem;
-  border: 1px solid var(--borda-controle);
-  border-radius: var(--raio-md);
-  background: var(--superficie);
-  color: var(--texto);
-  font: inherit;
 }
 .suas-partidas {
   display: grid;
@@ -219,7 +240,7 @@ function baixarPgn() {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.75rem;
+  margin-bottom: calc(-1 * var(--espaco-3));
   color: var(--texto-suave);
   font-size: 0.875rem;
 }
@@ -236,16 +257,12 @@ h1 {
   color: var(--texto-suave);
   font-size: 0.875rem;
 }
-header .acoes {
-  margin-top: 0.75rem;
-}
 .acoes {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 .grupo {
-  margin-top: var(--espaco-3);
   border: 1px solid var(--borda);
   border-radius: var(--raio-lg);
   background: var(--superficie);
@@ -268,24 +285,49 @@ summary {
   list-style: none;
 }
 .linhas li {
-  display: grid;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  padding: var(--espaco-1) var(--espaco-2) var(--espaco-1) 0;
   border-top: 1px solid var(--borda);
 }
-.info {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 0.5rem;
+.linhas li > a:only-child {
+  padding: var(--espaco-3) var(--espaco-4);
+  min-height: var(--alvo-toque);
 }
-.nome,
+.info {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+  padding: var(--espaco-2) var(--espaco-4);
+  color: var(--texto);
+  text-decoration: none;
+}
+a.info {
+  border-radius: var(--raio-md);
+}
+a.info:hover {
+  background: var(--superficie-2);
+}
+.nome-linha {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+}
 .info .suave {
-  width: 100%;
+  margin: 0;
+}
+.treinar-linha {
+  flex: none;
 }
 .desativada {
   opacity: 0.6;
 }
-.fonte {
-  margin-top: 1.5rem;
+.rodape {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-2);
 }
 </style>
