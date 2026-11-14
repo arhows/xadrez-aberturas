@@ -3,10 +3,51 @@ import type { Cor } from './lances'
 import { chanceDasBrancas } from './probabilidade'
 
 /**
- * Lance a lance: as 33 partidas de "Logical Chess: Move by Move" (Chernev). Os lances são os
- * da partida; as explicações são nossas, em português (nada do texto do livro). Você joga com o
- * lado vencedor e tenta achar cada lance; depois lê o porquê.
+ * Lance a lance: partidas comentadas de dois livros do Chernev. Os lances são os da partida; as
+ * explicações são nossas, em português (nada do texto dos livros). Você joga com o lado vencedor
+ * e tenta achar os lances; depois lê o porquê.
+ *
+ * - "Logical Chess: Move by Move" (33 partidas): pergunta em todos os lances do vencedor.
+ * - "The Most Instructive Games of Chess Ever Played" (62 partidas): pergunta só nos
+ *   momentos-chave (notas com `pergunta: true`); os outros lances andam sozinhos.
  */
+
+export type IdDoLivro = 'logico' | 'instrutivas'
+
+export interface Livro {
+  id: IdDoLivro
+  titulo: string
+  /** Texto curto na lista. */
+  descricao: string
+  /** Em quais lances do vencedor o app pergunta. */
+  perguntas: 'todos' | 'chave'
+  partes: { titulo: string; de: number; ate: number }[]
+}
+
+export const LIVROS: Record<IdDoLivro, Livro> = {
+  logico: {
+    id: 'logico',
+    titulo: 'Logical Chess: Move by Move',
+    descricao:
+      'As 33 partidas comentadas lance por lance. Você joga com o lado vencedor e tenta achar todos os lances; depois de cada um, lê por que ele foi jogado.',
+    perguntas: 'todos',
+    partes: [
+      { titulo: 'O ataque na ala do rei', de: 1, ate: 16 },
+      { titulo: 'A abertura do peão da dama', de: 17, ate: 23 },
+      { titulo: 'O mestre explica as suas ideias', de: 24, ate: 33 },
+    ],
+  },
+  instrutivas: {
+    id: 'instrutivas',
+    titulo: 'The Most Instructive Games of Chess Ever Played',
+    descricao:
+      '62 partidas, cada uma com uma lição de estratégia. Os lances andam sozinhos e o app para nos momentos-chave para você achar o lance e entender a ideia.',
+    perguntas: 'chave',
+    partes: [{ titulo: '62 partidas instrutivas', de: 1, ate: 62 }],
+  },
+}
+
+export const ehLivro = (id: unknown): id is IdDoLivro => id === 'logico' || id === 'instrutivas'
 
 export type Principio =
   | 'centro'
@@ -39,6 +80,8 @@ export const NOME_PRINCIPIO: Record<Principio, string> = {
 
 export interface NotaDoLance {
   texto: string
+  /** Nos livros de momentos-chave: o app para e pergunta este lance. */
+  pergunta?: boolean
   /** "E se…?": o que acontece com a alternativa natural (ou o que o Stockfish prefere). */
   alternativa?: string
   principios?: Principio[]
@@ -61,20 +104,42 @@ export interface PartidaLogica {
   notas?: Record<string, NotaDoLance>
 }
 
-let carregando: Promise<PartidaLogica[]> | undefined
-let carregado: PartidaLogica[] | null = null
+const carregando = new Map<IdDoLivro, Promise<PartidaLogica[]>>()
+const carregados = new Map<IdDoLivro, PartidaLogica[]>()
 
-/** O arquivo só é baixado quando a tela abre. */
-export function carregarLogico(): Promise<PartidaLogica[]> {
-  carregando ??= import('../../data/logico/partidas.json').then((m) => (carregado = m.default.partidas as unknown as PartidaLogica[]))
-  return carregando
+const ARQUIVOS: Record<IdDoLivro, () => Promise<{ default: { partidas: unknown } }>> = {
+  logico: () => import('../../data/logico/partidas.json'),
+  instrutivas: () => import('../../data/logico/instrutivas.json'),
 }
 
-export const obterLogico = (): PartidaLogica[] => carregado ?? []
-export const buscarPartidaLogica = (n: number) => carregado?.find((p) => p.n === n)
+/** O arquivo de cada livro só é baixado quando a tela abre. */
+export function carregarLogico(livro: IdDoLivro = 'logico'): Promise<PartidaLogica[]> {
+  let promessa = carregando.get(livro)
+  if (!promessa) {
+    promessa = ARQUIVOS[livro]().then((m) => {
+      const partidas = m.default.partidas as PartidaLogica[]
+      carregados.set(livro, partidas)
+      return partidas
+    })
+    carregando.set(livro, promessa)
+  }
+  return promessa
+}
+
+export const obterLogico = (livro: IdDoLivro = 'logico'): PartidaLogica[] => carregados.get(livro) ?? []
+export const buscarPartidaLogica = (n: number, livro: IdDoLivro = 'logico') => carregados.get(livro)?.find((p) => p.n === n)
 export const partidaPronta = (p: PartidaLogica) => !!p.notas && Object.keys(p.notas).length > 0
 export const corDoVencedorLogico = (p: PartidaLogica): Cor => (p.resultado === '0-1' ? 'b' : 'w')
-export const chaveDoLogico = (n: number) => `logico/${n}`
+/** Chave do resultado no progresso (as do primeiro livro continuam "logico/N"). */
+export const chaveDoLogico = (n: number, livro: IdDoLivro = 'logico') => `${livro}/${n}`
+
+/** O app pergunta este meio-lance? Só os do vencedor, e no livro de momentos-chave só os marcados. */
+export function ehPergunta(p: PartidaLogica, livro: IdDoLivro, ply: number): boolean {
+  if ((ply % 2 === 0 ? 'w' : 'b') !== corDoVencedorLogico(p)) return false
+  if (LIVROS[livro].perguntas === 'todos') return true
+  const san = p.lances.split(' ')[ply]
+  return !!san && !!p.notas?.[rotuloDoPly(ply, san)]?.pergunta
+}
 export const rotuloDoPly = (ply: number, san: string) => `${Math.floor(ply / 2) + 1}${ply % 2 ? '...' : '.'}${san}`
 
 export interface PosicaoLogica {
