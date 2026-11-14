@@ -149,18 +149,29 @@ async function aceitarConvite() {
 // ---------- Convite ----------
 const link = computed(() => `${location.origin}${location.pathname}#/online/${id}`)
 const copiado = ref(false)
+const campoDoLink = ref<HTMLInputElement>()
+/** No celular há o "Compartilhar" do aparelho; no computador o mais prático é copiar o link. */
+const podeCompartilhar = typeof navigator.share === 'function'
+/** Tela de toque (celular, tablet): o "Compartilhar" vem primeiro; com mouse, o "Copiar link". */
+const telaDeToque = matchMedia('(pointer: coarse)').matches
+const compartilharPrimeiro = podeCompartilhar && telaDeToque
 async function compartilhar() {
-  const texto = `Vamos jogar xadrez? Aceite a partida: ${link.value}`
   try {
-    if (navigator.share) await navigator.share({ title: 'Partida de xadrez', text: texto })
-    else {
-      await navigator.clipboard.writeText(link.value)
-      copiado.value = true
-      setTimeout(() => (copiado.value = false), 2000)
-    }
+    await navigator.share({ title: 'Partida de xadrez', text: `Vamos jogar xadrez? Aceite a partida: ${link.value}` })
   } catch {
     // compartilhamento cancelado
   }
+}
+async function copiarLink() {
+  try {
+    await navigator.clipboard.writeText(link.value)
+  } catch {
+    // Navegador sem acesso à área de transferência: seleciona o campo e usa o copiar antigo.
+    campoDoLink.value?.select()
+    document.execCommand('copy')
+  }
+  copiado.value = true
+  setTimeout(() => (copiado.value = false), 2000)
 }
 
 // ---------- Fim ----------
@@ -254,8 +265,9 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
       <p v-if="partida.convidado">Desafio enviado para <strong>{{ nomeDe(partida.convidado) }}</strong>. Ele vê o desafio na tela Jogar on-line; você também pode mandar o link.</p>
       <p v-else>Mande este link para o seu amigo. Quando ele aceitar, a partida começa aqui sozinha.</p>
       <div class="link-convite">
-        <input class="texto" :value="link" readonly @focus="($event.target as HTMLInputElement).select()" />
-        <button type="button" class="botao primario" @click="compartilhar">{{ copiado ? 'Link copiado!' : 'Compartilhar link' }}</button>
+        <input ref="campoDoLink" class="texto" :value="link" readonly aria-label="Link do convite" @focus="($event.target as HTMLInputElement).select()" />
+        <button type="button" class="botao" :class="compartilharPrimeiro ? '' : 'primario'" @click="copiarLink">{{ copiado ? '✓ Link copiado!' : 'Copiar link' }}</button>
+        <button v-if="podeCompartilhar" type="button" class="botao" :class="compartilharPrimeiro ? 'primario' : 'fantasma'" @click="compartilhar">Compartilhar</button>
       </div>
       <p class="suave">
         {{ tempoPorId(partida.tempo).minutos ? `Tempo ${partida.tempo}` : 'Sem relógio' }} · você joga de

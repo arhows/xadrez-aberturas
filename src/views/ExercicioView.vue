@@ -316,6 +316,24 @@ async function pedirPista() {
 }
 
 /** Recomeça o mesmo problema do zero (a tela é montada de novo pela mudança na URL). */
+/**
+ * No meio do problema (depois de uma pista, por exemplo): volta à posição do enunciado para
+ * refazer os lances. Erros e pistas já usados continuam valendo para o registro.
+ */
+const podeRecomecar = computed(() => !resolvido.value && (jogadas.value.length > 0 || pista.value > 0))
+function recomecar() {
+  clearTimeout(temporizador)
+  jogadas.value = []
+  pista.value = 0
+  alvoDaPista.value = null
+  promocaoPendente.value = null
+  aguardando.value = false
+  fen.value = fenInicial
+  ultimoLance.value = lanceDeAbertura
+  tabuleiro.value?.sincronizar()
+  aviso.value = { tipo: 'neutro', texto: 'De volta ao início. Refaça os lances.' }
+}
+
 function refazer() {
   const vez = Number(route.query.refazer ?? 0) + 1
   router.replace({ name: 'exercicio', params: { conjunto: conjunto.id }, query: { ...route.query, n: String(problema.n), refazer: String(vez) } })
@@ -454,6 +472,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
       <div class="navegacao">
         <button type="button" class="botao" :disabled="!anterior" @click="irPara(anterior.n)">← Anterior</button>
         <button v-if="resolvido" type="button" class="botao" @click="refazer">↺ Refazer</button>
+        <button v-else-if="podeRecomecar" type="button" class="botao" :disabled="aguardando" @click="recomecar">↺ Recomeçar</button>
         <button type="button" class="botao" :disabled="!proximo" @click="irPara(proximo.n)">Próximo →</button>
       </div>
 

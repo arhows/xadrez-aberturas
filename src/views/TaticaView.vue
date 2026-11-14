@@ -192,6 +192,20 @@ function pedirPista() {
   aviso.value = { tipo: 'neutro', texto: pista.value === 1 ? 'A peça destacada faz o lance.' : 'Jogue o lance da seta.' }
 }
 
+/** No meio da combinação: volta à posição do problema (erros e pistas continuam valendo). */
+const podeRecomecar = computed(() => !resolvido.value && (jogadas.value.length > 0 || pista.value > 0))
+function recomecar() {
+  clearTimeout(temporizador)
+  jogadas.value = []
+  pista.value = 0
+  promocaoPendente.value = null
+  aguardando.value = false
+  fen.value = fenDeInicio
+  ultimoLance.value = previo ? [previo.from, previo.to] : null
+  tabuleiro.value?.sincronizar()
+  aviso.value = { tipo: 'neutro', texto: 'De volta ao início. Refaça a combinação.' }
+}
+
 function refazer() {
   const vezes = Number(route.query.refazer ?? 0) + 1
   router.replace({ name: 'tatica', params: { conjunto: conjunto.id }, query: { n: String(problema.n), refazer: String(vezes) } })
@@ -307,6 +321,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
         <button v-if="!resolvido" type="button" class="botao" :disabled="pista >= 2 || aguardando" @click="pedirPista">
           {{ pista === 0 ? 'Pista: qual peça?' : 'Mostrar o lance' }}
         </button>
+        <button v-if="podeRecomecar" type="button" class="botao fantasma" :disabled="aguardando" @click="recomecar">↺ Recomeçar do início</button>
         <template v-if="resolvido">
           <button type="button" class="botao" @click="refazer">↺ Refazer</button>
           <button v-if="revisando && proximaRevisao" type="button" class="botao primario" @click="irParaRevisao">Próxima revisão</button>
