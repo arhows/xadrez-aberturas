@@ -2,6 +2,7 @@ import { Chess } from 'chess.js'
 import { describe, expect, it } from 'vitest'
 import dados from '../data/logico/partidas.json'
 import capablanca from '../data/logico/capablanca.json'
+import anand from '../data/logico/anand.json'
 import {
   chaveDoLogico,
   corDoVencedorLogico,
@@ -83,6 +84,36 @@ describe('Lance a lance: Capablanca: Move by Move', () => {
   it('chaves de progresso separadas por livro (as do primeiro livro continuam logico/N)', () => {
     expect(chaveDoLogico(3)).toBe('logico/3')
     expect(chaveDoLogico(3, 'capablanca')).toBe('capablanca/3')
+  })
+})
+
+const partidasAnand = anand.partidas as unknown as PartidaLogica[]
+
+describe('Lance a lance: Anand: Move by Move', () => {
+  it('lances legais, numeração do livro e você joga com Anand', () => {
+    expect(partidasAnand.length).toBeGreaterThan(0)
+    for (const p of partidasAnand) {
+      expect(p.n).toBeGreaterThanOrEqual(1)
+      expect(p.n).toBeLessThanOrEqual(32)
+      const jogo = new Chess()
+      for (const san of p.lances.split(' ')) expect(() => jogo.move(san), `partida ${p.n}: ${san}`).not.toThrow()
+      expect(['1-0', '0-1', '1/2-1/2']).toContain(p.resultado)
+      if (p.resultado === '1/2-1/2') expect(p.lado, `partida ${p.n}: empate precisa indicar o lado`).toBeTruthy()
+      expect(corDoVencedorLogico(p) === 'w' ? p.brancas : p.pretas, `partida ${p.n}: você joga com Anand`).toBe('Anand')
+    }
+  })
+
+  it('nas prontas, toda nota bate com um lance e todo lance de Anand tem nota', () => {
+    for (const p of partidasAnand.filter(partidaPronta)) {
+      const sans = p.lances.split(' ')
+      const rotulos = new Set(sans.map((san, ply) => rotuloDoPly(ply, san)))
+      for (const chave of Object.keys(p.notas!)) expect(rotulos.has(chave), `partida ${p.n}: nota "${chave}" não bate com a partida`).toBe(true)
+      sans.forEach((san, ply) => {
+        if (ehPergunta(p, 'anand', ply)) expect(p.notas![rotuloDoPly(ply, san)]?.texto, `partida ${p.n}: falta a nota de ${rotuloDoPly(ply, san)}`).toBeTruthy()
+      })
+      for (const nota of Object.values(p.notas!)) for (const pr of nota.principios ?? []) expect(NOME_PRINCIPIO[pr], pr).toBeTruthy()
+      expect(p.introducao && p.conclusao && p.tema, `partida ${p.n}: intro, tema e conclusão`).toBeTruthy()
+    }
   })
 })
 

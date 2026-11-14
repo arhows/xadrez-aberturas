@@ -183,7 +183,7 @@ export const router = createRouter({
       name: 'lance-a-lance',
       component: () => import('./views/LanceALanceView.vue'),
       meta: { secao: 'aprender' },
-      beforeEnter: () => Promise.all([carregarLogico('logico'), carregarLogico('capablanca')]).then(() => true),
+      beforeEnter: () => Promise.all([carregarLogico('logico'), carregarLogico('capablanca'), carregarLogico('anand')]).then(() => true),
     },
     {
       path: '/lance-a-lance/:n',

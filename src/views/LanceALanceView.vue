@@ -19,6 +19,7 @@ const route = useRoute()
 const router = useRouter()
 
 /** Os livros do Lance a lance; a aba fica na URL (?livro=capablanca). */
+const ABAS: Record<IdDoLivro, string> = { logico: 'Logical Chess', capablanca: 'Capablanca', anand: 'Anand' }
 const livro = computed<IdDoLivro>(() => (ehLivro(route.query.livro) ? route.query.livro : 'logico'))
 const dados = computed(() => LIVROS[livro.value])
 function escolher(id: IdDoLivro) {
@@ -47,16 +48,15 @@ const lugar = (p: PartidaLogica) => [p.local, p.ano].filter(Boolean).join(' ')
     <RouterLink :to="volta.para" class="trilha">‹ {{ volta.nome }}</RouterLink>
     <h1 class="titulo-pagina">Lance a lance</h1>
     <div class="segmentado livros" role="tablist" aria-label="Livro">
-      <button type="button" role="tab" :aria-selected="livro === 'logico'" :aria-pressed="livro === 'logico'" @click="escolher('logico')">
-        Logical Chess
-      </button>
       <button
+        v-for="(rotulo, id) in ABAS"
+        :key="id"
         type="button"
         role="tab"
-        :aria-selected="livro === 'capablanca'"
-        :aria-pressed="livro === 'capablanca'"
-        @click="escolher('capablanca')"
-      >Capablanca</button>
+        :aria-selected="livro === id"
+        :aria-pressed="livro === id"
+        @click="escolher(id)"
+      >{{ rotulo }}</button>
     </div>
     <p class="intro">
       <em>{{ dados.titulo }}</em>. {{ dados.descricao }} Quando o seu lance é diferente, o Stockfish diz se

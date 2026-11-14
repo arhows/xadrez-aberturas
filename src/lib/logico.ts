@@ -8,13 +8,13 @@ import { chanceDasBrancas } from './probabilidade'
  * os lances; depois lê o porquê.
  *
  * - "Logical Chess: Move by Move" (Chernev, 33 partidas).
- * - "Capablanca: Move by Move" (Lakdawala): só as partidas cujos lances batem em duas fontes
- *   (o livro e a base PGN Mentor).
+ * - "Capablanca: Move by Move" (Lakdawala) e "Anand: Move by Move" (Zenón Franco): só as partidas
+ *   cujos lances batem em duas fontes (o livro e a base PGN Mentor).
  * Os dois perguntam todos os lances do vencedor; o modo de momentos-chave (`perguntas: 'chave'`,
  * notas com `pergunta: true`) continua disponível para um livro futuro.
  */
 
-export type IdDoLivro = 'logico' | 'capablanca'
+export type IdDoLivro = 'logico' | 'capablanca' | 'anand'
 
 export interface Livro {
   id: IdDoLivro
@@ -53,9 +53,21 @@ export const LIVROS: Record<IdDoLivro, Livro> = {
       { titulo: 'Os finais', de: 42, ate: 59 },
     ],
   },
+  anand: {
+    id: 'anand',
+    titulo: 'Anand: Move by Move',
+    descricao:
+      'Partidas de Viswanathan Anand, do livro de Zenón Franco, na numeração do livro. Você joga com Anand e tenta achar todos os lances dele; depois de cada um, lê por que ele foi jogado.',
+    perguntas: 'todos',
+    partes: [
+      { titulo: 'Rumo ao topo (1991–1998)', de: 1, ate: 8 },
+      { titulo: 'Campeão da FIDE (2000–2006)', de: 9, ate: 15 },
+      { titulo: 'Campeão mundial (2007–2014)', de: 16, ate: 32 },
+    ],
+  },
 }
 
-export const ehLivro = (id: unknown): id is IdDoLivro => id === 'logico' || id === 'capablanca'
+export const ehLivro = (id: unknown): id is IdDoLivro => typeof id === 'string' && id in LIVROS
 
 export type Principio =
   | 'centro'
@@ -122,6 +134,7 @@ const carregados = new Map<IdDoLivro, PartidaLogica[]>()
 const ARQUIVOS: Record<IdDoLivro, () => Promise<{ default: { partidas: unknown } }>> = {
   logico: () => import('../../data/logico/partidas.json'),
   capablanca: () => import('../../data/logico/capablanca.json'),
+  anand: () => import('../../data/logico/anand.json'),
 }
 
 /** O arquivo de cada livro só é baixado quando a tela abre. */
