@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { useVolta } from '../lib/volta'
 import { computed } from 'vue'
 import { feitosNaLicao } from '../lib/fundamentos'
 import { LICOES } from '../lib/licoes'
 import { progresso } from '../lib/progresso'
+
+const volta = useVolta('/aprender')
 
 const total = LICOES.reduce((soma, l) => soma + l.exercicios.length, 0)
 const feitos = computed(() => LICOES.reduce((soma, l) => soma + feitosNaLicao(l, progresso.fundamentos), 0))
@@ -13,7 +16,7 @@ const atual = computed(() => LICOES.find((l) => feitosNaLicao(l, progresso.funda
 
 <template>
   <div class="pagina">
-    <RouterLink to="/aprender" class="trilha">‹ Aprender</RouterLink>
+    <RouterLink :to="volta.para" class="trilha">‹ {{ volta.nome }}</RouterLink>
     <h1>Fundamentos do xadrez</h1>
     <p class="intro">
       Aprenda a jogar do zero: o tabuleiro, como cada peça se move e captura, como defender, o xeque, o xeque-mate e as

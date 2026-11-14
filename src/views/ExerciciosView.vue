@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { useVolta } from '../lib/volta'
 import { diasSeguidos, TAMANHO_DA_SERIE } from '../lib/diario'
 import { dataLocal } from '../lib/srs'
 import { livroDoConjunto, obterConjuntos, type ConjuntoExercicios } from '../lib/exercicios'
 import { progresso } from '../lib/progresso'
 import { revisoesPendentes } from '../lib/revisaoExercicios'
+
+const volta = useVolta('/praticar')
 
 interface Livro {
   autor: string
@@ -41,6 +44,7 @@ const primeiraRevisao = revisoes[0]
 
 <template>
   <div class="pagina">
+    <RouterLink :to="volta.para" class="trilha">‹ {{ volta.nome }}</RouterLink>
     <h1>Táticas e mates</h1>
     <RouterLink to="/diario" class="fundamentos diario" :class="{ pendente: feitosHoje < TAMANHO_DA_SERIE }">
       <span class="icone" aria-hidden="true">★</span>
@@ -96,6 +100,14 @@ const primeiraRevisao = revisoes[0]
 </template>
 
 <style scoped>
+.trilha {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alvo-toque);
+  color: var(--destaque);
+  font-size: 14px;
+  text-decoration: none;
+}
 h1 {
   margin: 0 0 1rem;
 }

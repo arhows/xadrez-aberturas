@@ -31,6 +31,7 @@ import { marcasDoCapitulo } from '../lib/qualidade'
 import { progresso } from '../lib/progresso'
 import { revisaoRapida, seguirRevisaoRapida } from '../lib/revisaoRapida'
 import { tocar } from '../lib/som'
+import { useVolta } from '../lib/volta'
 import {
   aplicarResultado,
   dataLocal,
@@ -512,7 +513,11 @@ const totalDaLinha = computed(() => {
 const progressoDaLinha = computed(() =>
   totalDaLinha.value ? Math.round(((partida.value?.jogadas.length ?? 0) / totalDaLinha.value) * 100) : 0,
 )
-const voltarPara = { name: 'abertura', params: { cap: idCapitulo } }
+// Vindo de uma seção (ex.: Praticar → Treinar meu repertório), o voltar leva de volta a ela; senão, à abertura.
+const { para: voltarPara, nome: nomeDaVolta } = useVolta(
+  { name: 'abertura', params: { cap: idCapitulo } },
+  { nome: capitulo.capitulo.nome, lembrar: false },
+)
 
 const pontos = computed(() =>
   Math.max(0, placar.value.acertos * 2 - placar.value.erros * 2 - placar.value.pistas),
@@ -541,7 +546,7 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
   </header>
 
   <div v-if="fase === 'escolha'" class="pagina formulario">
-    <RouterLink :to="voltarPara" class="trilha so-computador">‹ {{ capitulo.capitulo.nome }}</RouterLink>
+    <RouterLink :to="voltarPara" class="trilha so-computador">‹ {{ nomeDaVolta }}</RouterLink>
     <h1 class="titulo-pagina">Treino</h1>
 
     <div class="cartao">
@@ -600,7 +605,7 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
   </div>
 
   <div v-else-if="fase === 'vazio'" class="pagina formulario">
-    <RouterLink :to="voltarPara" class="trilha so-computador">‹ {{ capitulo.capitulo.nome }}</RouterLink>
+    <RouterLink :to="voltarPara" class="trilha so-computador">‹ {{ nomeDaVolta }}</RouterLink>
     <EstadoVazio titulo="Tudo em dia por aqui" peca="king" tom="praticar">
       Não há revisões vencidas nem linhas novas disponíveis hoje neste escopo.
       <template #acoes>
@@ -649,7 +654,7 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
       <BarraRevisaoRapida v-if="rapida" />
       <template v-if="fase === 'jogando'">
         <div class="so-computador cabeca-painel">
-          <RouterLink :to="voltarPara" class="trilha">‹ {{ capitulo.capitulo.nome }}</RouterLink>
+          <RouterLink :to="voltarPara" class="trilha">‹ {{ nomeDaVolta }}</RouterLink>
           <h1 class="titulo-pagina">Treino</h1>
           <p class="apoio suave">
             {{ partida?.cor === 'w' ? 'Você joga de brancas' : 'Você joga de pretas' }}<template v-if="revisando"> · revisão</template>
@@ -740,7 +745,7 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
 
       <template v-else>
         <div class="cabeca-painel">
-          <RouterLink :to="voltarPara" class="trilha so-computador">‹ {{ capitulo.capitulo.nome }}</RouterLink>
+          <RouterLink :to="voltarPara" class="trilha so-computador">‹ {{ nomeDaVolta }}</RouterLink>
           <h1 class="titulo-pagina">{{ titulo?.titulo }}</h1>
           <p v-if="titulo?.nome" class="suave">{{ titulo.nome }}</p>
           <p v-if="revisando" class="suave">Revisão: não altera a agenda de repetição.</p>

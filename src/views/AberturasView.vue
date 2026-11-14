@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useVolta } from '../lib/volta'
 import { computed, ref, watch } from 'vue'
 import MiniTabuleiro from '../components/MiniTabuleiro.vue'
 import EstadoVazio from '../components/EstadoVazio.vue'
@@ -11,6 +12,8 @@ import { alternarRepertorio, estaNoRepertorio, repertorioEscolhido } from '../li
 import { fenDaAbertura, orientacaoDaAbertura } from '../lib/posicaoDaAbertura'
 import { filaDoCapitulo, percentual } from '../lib/resumoAberturas'
 import type { Linha } from '../lib/tipos'
+
+const volta = useVolta('/aprender')
 
 /** "Meu repertório" abre por padrão quando a pessoa já escolheu alguma abertura. */
 const aba = ref<'meu' | 'todas'>(repertorioEscolhido.value ? 'meu' : 'todas')
@@ -52,6 +55,7 @@ const plural = (n: number, palavra: string) => `${n} ${palavra}${n === 1 ? '' : 
 
 <template>
   <div class="pagina">
+    <RouterLink :to="volta.para" class="trilha">‹ {{ volta.nome }}</RouterLink>
     <h1>Aberturas</h1>
 
     <label class="campo busca">
@@ -178,6 +182,14 @@ const plural = (n: number, palavra: string) => `${n} ${palavra}${n === 1 ? '' : 
 </template>
 
 <style scoped>
+.trilha {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alvo-toque);
+  color: var(--destaque);
+  font-size: 14px;
+  text-decoration: none;
+}
 h1 {
   margin: 0 0 1rem;
 }

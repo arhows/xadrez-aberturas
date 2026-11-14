@@ -14,6 +14,7 @@ import {
 import { obterConjuntos } from '../lib/exercicios'
 import { progresso } from '../lib/progresso'
 import { dataLocal } from '../lib/srs'
+import { useVolta } from '../lib/volta'
 
 /**
  * Exercícios do dia (uma série fixa por dia, misturando táticas e mates) e Sequência (fica mais
@@ -23,12 +24,9 @@ const route = useRoute()
 const router = useRouter()
 const modo = computed<'serie' | 'sequencia'>(() => (route.query.modo === 'sequencia' ? 'sequencia' : 'serie'))
 
-/** Volta para a tela de onde veio (Início, Praticar ou Exercícios); sem origem conhecida, Praticar. */
-const ORIGENS: Record<string, string> = { '/': 'Início', '/praticar': 'Praticar', '/exercicios': 'Exercícios' }
-const anterior = (window.history.state as { back?: unknown } | null)?.back
-const voltarPara = typeof anterior === 'string' && anterior in ORIGENS ? anterior : '/praticar'
-const nomeDaVolta = ORIGENS[voltarPara]
-const textoDoBotao = { '/': 'Voltar ao Início', '/praticar': 'Voltar a Praticar', '/exercicios': 'Voltar aos Exercícios' }[voltarPara]
+/** Volta para a tela de onde veio (Início, Praticar ou Táticas e mates); sem origem conhecida, Praticar. */
+const { para: voltarPara, nome: nomeDaVolta } = useVolta('/praticar')
+const textoDoBotao = voltarPara === '/' ? 'Voltar ao Início' : `Voltar a ${nomeDaVolta}`
 
 function trocarModo(novo: 'serie' | 'sequencia') {
   router.replace({ name: 'diario', query: novo === 'sequencia' ? { modo: novo } : {} })

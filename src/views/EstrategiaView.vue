@@ -1,9 +1,12 @@
 <script setup lang="ts">
+import { useVolta } from '../lib/volta'
 import { computed } from 'vue'
 import MiniTabuleiro from '../components/MiniTabuleiro.vue'
 import { chaveDaPartidaModelo, fenDaMiniatura, obterEstrategia, type Estrutura } from '../lib/estrategia'
 import { progresso } from '../lib/progresso'
 import { chaveDoQuiz, obterQuizzes, totalDePerguntas } from '../lib/quizzes'
+
+const volta = useVolta('/aprender')
 
 /** Estratégia por estruturas de peões: famílias e estruturas, com o progresso do quiz. */
 
@@ -22,7 +25,7 @@ const totalFeitas = computed(() => livro.estruturas.reduce((s, e) => s + feitas(
 
 <template>
   <div class="pagina">
-    <RouterLink to="/aprender" class="trilha">‹ Aprender</RouterLink>
+    <RouterLink :to="volta.para" class="trilha">‹ {{ volta.nome }}</RouterLink>
     <h1>Estratégia por estruturas</h1>
     <p class="intro">
       A estrutura de peões decide os planos de cada lado. Em cada estrutura: o resumo dos planos das brancas e das pretas e

@@ -1,7 +1,10 @@
 <script setup lang="ts">
+import { useVolta } from '../lib/volta'
 import { computed } from 'vue'
 import { chaveDoLogico, corDoVencedorLogico, obterLogico, partidaPronta, type PartidaLogica } from '../lib/logico'
 import { progresso } from '../lib/progresso'
+
+const volta = useVolta('/aprender')
 
 /** Lista das 33 partidas de "Logical Chess: Move by Move", nas três partes do livro. */
 const PARTES = [
@@ -19,7 +22,7 @@ const ladoDoVencedor = (p: PartidaLogica) => (corDoVencedorLogico(p) === 'w' ? '
 
 <template>
   <div class="pagina lance-a-lance">
-    <RouterLink to="/aprender" class="trilha">‹ Aprender</RouterLink>
+    <RouterLink :to="volta.para" class="trilha">‹ {{ volta.nome }}</RouterLink>
     <h1 class="titulo-pagina">Lance a lance</h1>
     <p class="intro">
       As 33 partidas de <em>Logical Chess: Move by Move</em>, de Irving Chernev. Em cada uma você joga com o lado vencedor e

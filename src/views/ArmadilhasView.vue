@@ -1,10 +1,13 @@
 <script setup lang="ts">
+import { useVolta } from '../lib/volta'
 import { computed, ref } from 'vue'
 import MiniTabuleiro from '../components/MiniTabuleiro.vue'
 import EstadoVazio from '../components/EstadoVazio.vue'
 import { chaveDaArmadilha, grupoDaArmadilha, noRepertorio, obterArmadilhas, ORDEM_DOS_GRUPOS } from '../lib/armadilhas'
 import { jogarLances } from '../lib/lances'
 import { progresso } from '../lib/progresso'
+
+const volta = useVolta('/aprender')
 
 /** Armadilhas de abertura agrupadas pelo começo da partida, com o que já foi treinado. */
 
@@ -28,7 +31,7 @@ const feitas = computed(() => todas.filter((a) => armou(a.id) && defendeu(a.id))
 
 <template>
   <div class="pagina">
-    <RouterLink to="/aprender" class="trilha">‹ Aprender</RouterLink>
+    <RouterLink :to="volta.para" class="trilha">‹ {{ volta.nome }}</RouterLink>
     <h1>Armadilhas de abertura</h1>
     <p class="intro">
       Em cada armadilha, um lance que parece natural perde material ou leva a mate. Veja como ela funciona, treine a punição com o lado
