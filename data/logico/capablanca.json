@@ -697,6 +697,1159 @@
      ]
     }
    }
+  },
+  {
+   "n": 8,
+   "brancas": "Capablanca",
+   "pretas": "O. Bernstein",
+   "local": "São Petersburgo",
+   "ano": 1914,
+   "abertura": "Gambito da Dama recusado",
+   "resultado": "1-0",
+   "lances": "d4 d5 Nf3 Nf6 c4 e6 Nc3 Nbd7 Bg5 Be7 e3 c6 Bd3 dxc4 Bxc4 b5 Bd3 a6 e4 e5 dxe5 Ng4 Bf4 Bc5 O-O Qc7 Rc1 f6 Bg3 fxe5 b4 Ba7 Bxb5 axb5 Nxb5 Qd8 Nd6+ Kf8 Rxc6 Nb6 Bh4 Qd7 Nxc8 Qxc6 Qd8+ Qe8 Be7+ Kf7 Nd6+ Kg6 Nh4+ Kh5 Nxe8 Rxd8 Nxg7+ Kh6 Ngf5+ Kh5 h3 Nc8 hxg4+ Kxg4 Bxd8 Rxd8 g3 Rd2 Kg2 Re2 a4 Nb6 Ne3+ Kh5 a5 Nd7 Nhf5 Nf6 b5 Bd4 Kf3 Ra2 a6 Ba7 Rc1 Rb2 g4+ Kg6 Rc7 Rxf2+ Kxf2 Nxg4+ Kf3",
+   "tema": "O sacrifício em b5 e a caça ao rei com os cavalos",
+   "introducao": "São Petersburgo, 1914. Bernstein escolhe uma defesa sólida do Gambito da Dama, mas se atrapalha no desenvolvimento e deixa o rei no centro. Capablanca abre o jogo, entrega o bispo em b5 para que o cavalo entre em d6 e conduz uma longa série de xeques: quando ela acaba, as damas e uma torre de cada lado saíram, e as brancas estão com três peões a mais. O resto é técnica: trocar, empurrar os peões passados e não dar chances.",
+   "conclusao": "O rei preto nunca saiu do centro, e foi isso que decidiu: o sacrifício em b5 abriu caminho para os cavalos, e a série de xeques terminou com as brancas três peões à frente. Depois, Capablanca simplificou com calma, sem pressa, até os peões a e b decidirem. Lição: rei no centro com o jogo aberto é motivo para sacrificar; e, depois de ganhar material, simplifique.",
+   "notas": {
+    "1.d4": {
+     "texto": "Abre com o peão da dama, ocupando o centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "2.Nf3": {
+     "texto": "Desenvolve o cavalo e controla e5.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "3.c4": {
+     "texto": "O Gambito da Dama: o peão c ataca o d5 para tirar das pretas o controle do centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "4.Nc3": {
+     "texto": "Mais pressão sobre d5.",
+     "principios": [
+      "desenvolvimento",
+      "centro"
+     ]
+    },
+    "5.Bg5": {
+     "texto": "Crava o cavalo de f6, que defende d5.",
+     "principios": [
+      "desenvolvimento",
+      "tatica"
+     ]
+    },
+    "6.e3": {
+     "texto": "Abre a diagonal do bispo de f1 e apoia d4.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "7.Bd3": {
+     "texto": "O bispo vai para d3, de olho no lado do rei preto.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "8.Bxc4": {
+     "texto": "Recupera o peão c4 com o bispo.",
+     "principios": [
+      "material"
+     ]
+    },
+    "9.Bd3": {
+     "texto": "O bispo recua do ataque do peão b5 e volta à diagonal do roque preto.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "10.e4": {
+     "texto": "As brancas ocupam o centro com os dois peões. As pretas ainda não rocaram.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "11.dxe5": {
+     "texto": "Troca no e5 e abre linhas com o rei preto ainda no centro.",
+     "principios": [
+      "colunas",
+      "ataque"
+     ]
+    },
+    "12.Bf4": {
+     "texto": "O bispo defende o peão e5, atacado pelo cavalo de g4.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "12...Bc5": {
+     "texto": "Um erro: o rei continua no centro. O Stockfish preferia ...Qc7, pressionando e5."
+    },
+    "13.O-O": {
+     "texto": "Rocar antes de abrir o jogo: o rei branco fica seguro, o preto não.",
+     "principios": [
+      "roque"
+     ]
+    },
+    "14.Rc1": {
+     "texto": "A torre vai para a coluna c, onde estão a dama e o peão c6 pretos.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "15.Bg3": {
+     "texto": "O bispo recua para g3, guardando o lado do rei. O Stockfish preferia b4 antes.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "15...fxe5": {
+     "texto": "Um erro grave: abre ainda mais o centro com o rei preto lá. O Stockfish preferia ...Ndxe5."
+    },
+    "16.b4": {
+     "texto": "O peão ataca o bispo de c5 e o tira da diagonal do rei branco. É o preparo do sacrifício.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "17.Bxb5": {
+     "texto": "O sacrifício: o bispo come o peão b5. Se ...axb5, o cavalo entra em b5 atacando a dama e ameaçando Nd6+.",
+     "alternativa": "As pretas não podem ignorar o bispo: em b5 ele já ataca o peão c6 e ajuda a abrir o rei preto.",
+     "principios": [
+      "tatica",
+      "ataque"
+     ]
+    },
+    "18.Nxb5": {
+     "texto": "O cavalo come o b5 e ataca a dama de c7 e o bispo de a7. O próximo é Nd6+.",
+     "principios": [
+      "tatica"
+     ]
+    },
+    "19.Nd6+": {
+     "texto": "Xeque com o cavalo, que se instala em d6, no coração da posição preta.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "20.Rxc6": {
+     "texto": "A torre come o peão c6 e entra no jogo. As brancas já recuperaram material.",
+     "principios": [
+      "material"
+     ]
+    },
+    "21.Bh4": {
+     "texto": "O bispo ataca a dama de d8 pela diagonal.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "22.Nxc8": {
+     "texto": "O cavalo come o bispo de c8. O Stockfish preferia b5, mas o lance começa uma série de xeques que ganha material.",
+     "principios": [
+      "tatica",
+      "material"
+     ]
+    },
+    "23.Qd8+": {
+     "texto": "A dama entra com xeque. As pretas precisam interpor a dama.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "24.Be7+": {
+     "texto": "O bispo dá xeque e empurra o rei preto para f7.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "25.Nd6+": {
+     "texto": "O cavalo volta a d6 com xeque e ataca a dama de e8.",
+     "principios": [
+      "tatica"
+     ]
+    },
+    "26.Nh4+": {
+     "texto": "O outro cavalo dá xeque e afasta o rei preto ainda mais.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "27.Nxe8": {
+     "texto": "O cavalo come a dama preta.",
+     "principios": [
+      "material"
+     ]
+    },
+    "28.Nxg7+": {
+     "texto": "Mais um xeque com o cavalo, comendo o peão g7.",
+     "principios": [
+      "ataque",
+      "material"
+     ]
+    },
+    "29.Ngf5+": {
+     "texto": "O cavalo dá xeque de f5 e prende o rei preto na borda.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "30.h3": {
+     "texto": "O peão ataca o cavalo de g4 e prepara hxg4 com xeque.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "31.hxg4+": {
+     "texto": "Come o cavalo com xeque.",
+     "principios": [
+      "material"
+     ]
+    },
+    "32.Bxd8": {
+     "texto": "O bispo come a torre de d8. Depois da retomada, o balanço da série de xeques: as brancas ficam com três peões a mais e peças mais ativas.",
+     "principios": [
+      "material"
+     ]
+    },
+    "33.g3": {
+     "texto": "Tira do rei preto a casa f4. O Stockfish preferia Nf3, mas a vantagem é enorme de qualquer jeito.",
+     "principios": [
+      "profilaxia"
+     ]
+    },
+    "34.Kg2": {
+     "texto": "O rei sai da primeira fileira e se protege dos xeques da torre preta.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "35.a4": {
+     "texto": "Com material a mais, o plano é simples: criar peões passados na ala da dama.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "36.Ne3+": {
+     "texto": "O cavalo dá xeque e se aproxima do centro.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "37.a5": {
+     "texto": "O peão a avança.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "38.Nhf5": {
+     "texto": "O cavalo de h4 volta ao jogo, em f5.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "39.b5": {
+     "texto": "Os dois peões da ala da dama avançam juntos.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "40.Kf3": {
+     "texto": "O rei se aproxima do centro. O Stockfish preferia trocar o bispo forte com Nxd4.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "41.a6": {
+     "texto": "O peão a chega à sexta fileira.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "42.Rc1": {
+     "texto": "A torre sai da primeira fileira para entrar no jogo.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "43.g4+": {
+     "texto": "O peão dá xeque e afasta o rei preto.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "44.Rc7": {
+     "texto": "A torre vai à sétima e ataca o bispo de a7.",
+     "principios": [
+      "colunas",
+      "material"
+     ]
+    },
+    "45.Kxf2": {
+     "texto": "O rei come a torre que tinha tomado o peão f2.",
+     "principios": [
+      "material"
+     ]
+    },
+    "46.Kf3": {
+     "texto": "O rei sai do xeque do cavalo e segue no centro. As pretas abandonaram.",
+     "principios": [
+      "defesa"
+     ]
+    }
+   }
+  },
+  {
+   "n": 10,
+   "brancas": "Capablanca",
+   "pretas": "Bogoljubow",
+   "local": "Moscou",
+   "ano": 1925,
+   "abertura": "Gambito da Dama aceito",
+   "resultado": "1-0",
+   "lances": "d4 d5 c4 e6 Nf3 dxc4 e4 c5 Bxc4 cxd4 Nxd4 Nf6 Nc3 Bc5 Be3 Nbd7 Bxe6 fxe6 Nxe6 Qa5 O-O Bxe3 fxe3 Kf7 Qb3 Kg6 Rf5 Qb6 Nf4+ Kh6 g4 g5 Qxb6 axb6 Rd1 Rg8 Nfd5 Nxg4 Ne7 Rg7 Rd6+ Kh5 Rf3 Ngf6 Rh3+ Kg4 Rg3+ Kh5 Nf5 Rg6 Ne7 g4 Nxg6 Kxg6 Rxg4+ Kf7 Rf4 Kg7 e5 Ne8 Re6 Nc7 Re7+",
+   "tema": "Um sacrifício em e6 e um ataque que quase escapou",
+   "introducao": "Moscou, 1925. Contra o Gambito da Dama aceito, Capablanca ocupa o centro, entrega o bispo em e6 e expulsa o rei preto até h6. O ataque estava ganho, mas nos lances 16 e 17 Capablanca erra duas vezes, segundo o Stockfish, e deixa Bogoljubow com chances. A partida volta a pender para as brancas só quando as pretas também erram. Uma partida real, com acertos e erros dos dois lados.",
+   "conclusao": "O sacrifício em e6 e os xeques com os cavalos tiraram o rei preto de casa, e as torres brancas foram muito ativas até o fim. Mas a partida mostra também que ataques precisam ser concluídos com precisão: com 16.g4 e 17.Qxb6, a vantagem sumiu. Lição: quando o rei adversário está exposto, procure o lance que mantém o ataque (aqui, Qf7) antes de trocar as damas.",
+   "notas": {
+    "1.d4": {
+     "texto": "Abre com o peão da dama, ocupando o centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "2.c4": {
+     "texto": "O Gambito da Dama: o peão c desafia o d5.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "3.Nf3": {
+     "texto": "Desenvolve o cavalo antes de recuperar o peão c4.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "4.e4": {
+     "texto": "Ocupa o centro com dois peões. O peão c4 pode ser recuperado depois com o bispo.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "5.Bxc4": {
+     "texto": "O bispo recupera o peão e fica na diagonal de f7.",
+     "principios": [
+      "material",
+      "desenvolvimento"
+     ]
+    },
+    "6.Nxd4": {
+     "texto": "O cavalo retoma e se centraliza em d4.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "7.Nc3": {
+     "texto": "Mais uma peça desenvolvida, protegendo o peão e4.",
+     "principios": [
+      "desenvolvimento",
+      "defesa"
+     ]
+    },
+    "8.Be3": {
+     "texto": "O bispo protege o cavalo de d4 e se opõe ao bispo de c5.",
+     "principios": [
+      "defesa",
+      "desenvolvimento"
+     ]
+    },
+    "9.Bxe6": {
+     "texto": "O sacrifício: o bispo se entrega em e6. Depois de ...fxe6, o cavalo entra em e6 atacando a dama e o bispo de c5, e o rei preto fica exposto.",
+     "alternativa": "As brancas dão um bispo por dois peões, mas o rei preto não poderá mais rocar com segurança.",
+     "principios": [
+      "tatica",
+      "ataque"
+     ]
+    },
+    "10.Nxe6": {
+     "texto": "O cavalo entra em e6 e ataca a dama de d8 e o bispo de c5 ao mesmo tempo.",
+     "principios": [
+      "tatica"
+     ]
+    },
+    "10...Qa5": {
+     "texto": "A dama sai do ataque e crava o cavalo de c3, mas o Stockfish preferia ...Qb6."
+    },
+    "11.O-O": {
+     "texto": "Roca e tira o rei da cravada do cavalo de c3.",
+     "principios": [
+      "roque",
+      "defesa"
+     ]
+    },
+    "12.fxe3": {
+     "texto": "Retoma com o peão f e abre a coluna f para a torre, contra o rei preto.",
+     "principios": [
+      "colunas",
+      "ataque"
+     ]
+    },
+    "13.Qb3": {
+     "texto": "A dama defende o cavalo de e6 e fica na mesma diagonal do rei preto em f7: qualquer lance do cavalo vai dar xeque descoberto.",
+     "principios": [
+      "tatica",
+      "ataque"
+     ]
+    },
+    "14.Rf5": {
+     "texto": "A torre sobe para f5, perto do rei preto.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "15.Nf4+": {
+     "texto": "Xeque com o cavalo, que empurra o rei preto para h6.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "16.g4": {
+     "texto": "Um erro: o Stockfish mostra que 16.Qf7 mantinha um ataque decisivo. Depois de g4, as pretas se defendem com ...g5.",
+     "alternativa": "16.Qf7, com a dama ao lado do rei preto, mantinha um ataque muito forte segundo o Stockfish.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "17.Qxb6": {
+     "texto": "Mais um erro: trocar as damas acaba com o ataque, e as pretas ficam com uma peça a mais por dois peões. O Stockfish preferia de novo Qf7.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "18.Rd1": {
+     "texto": "A torre ocupa a coluna d, a única aberta. Sem as damas, as torres ativas são o trunfo das brancas.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "18...Rg8": {
+     "texto": "O Stockfish preferia ...gxf4, ficando com material a mais."
+    },
+    "19.Nfd5": {
+     "texto": "O cavalo vai para d5, de onde salta para e7.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "20.Ne7": {
+     "texto": "O cavalo ataca a torre de g8.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "21.Rd6+": {
+     "texto": "Xeque pela sexta fileira: o rei preto vai para a borda.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "22.Rf3": {
+     "texto": "A torre se prepara para dar xeques pela coluna h e pela coluna g.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "23.Rh3+": {
+     "texto": "Xeque pela coluna h.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "24.Rg3+": {
+     "texto": "Mais um xeque, agora pela coluna g.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "25.Nf5": {
+     "texto": "O cavalo volta a f5, perto do rei preto, e tira dele a casa g7 e h6.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "26.Ne7": {
+     "texto": "O cavalo ataca a torre de g6. O Stockfish acha que a posição está igual aqui.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "26...g4": {
+     "texto": "Um erro grave: o peão sai da defesa da torre. O Stockfish preferia ...Nc5."
+    },
+    "27.Nxg6": {
+     "texto": "O cavalo come a torre de g6.",
+     "principios": [
+      "material"
+     ]
+    },
+    "27...Kxg6": {
+     "texto": "Mais um erro: o Stockfish preferia ...hxg6. Agora a torre branca come o g4 com xeque."
+    },
+    "28.Rxg4+": {
+     "texto": "A torre come o g4 com xeque. As brancas recuperam todo o material.",
+     "principios": [
+      "material"
+     ]
+    },
+    "29.Rf4": {
+     "texto": "A torre ataca o cavalo de f6.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "30.e5": {
+     "texto": "O peão expulsa o cavalo de f6 e avança.",
+     "principios": [
+      "tempo",
+      "peoes"
+     ]
+    },
+    "31.Re6": {
+     "texto": "A torre vai para e6, pronta para entrar na sétima fileira.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "32.Re7+": {
+     "texto": "Xeque na sétima fileira, atacando o cavalo de d7. As pretas abandonaram.",
+     "principios": [
+      "ataque",
+      "colunas"
+     ]
+    }
+   }
+  },
+  {
+   "n": 11,
+   "brancas": "Capablanca",
+   "pretas": "Ed. Lasker",
+   "local": "Lake Hopatcong",
+   "ano": 1926,
+   "abertura": "Gambito da Dama recusado",
+   "resultado": "1-0",
+   "lances": "Nf3 Nf6 c4 c6 d4 d5 Nc3 e6 Bg5 Nbd7 e3 Qa5 cxd5 exd5 Bd3 Ne4 O-O Ndf6 Bxf6 Nxc3 bxc3 gxf6 Qc2 Bd6 Bf5 Be6 Rab1 Qc7 Bxe6 fxe6 e4 O-O-O c4 Bf4 Rb3 dxc4 Qxc4 Qf7 Rfb1 Rd7 e5 fxe5 dxe5 Rhd8 Qxc6+ Kb8 g3 Rd1+ Kg2 Rxb1 Rxb1 Rd5 Qc3 Qf5 Qb4 b5 Nh4 a5 Qxb5+",
+   "tema": "Estragar os peões do adversário e atacar pela coluna b",
+   "introducao": "Lake Hopatcong, 1926. Contra Edward Lasker, Capablanca troca o bispo pelo cavalo de f6 para deixar os peões pretos do lado do rei dobrados. Depois troca os bispos de casas claras, abre o centro e ataca o rei preto, que rocou do lado da dama, pela coluna b.",
+   "conclusao": "As trocas de Capablanca tinham alvo: deixaram os peões pretos fracos e o rei preto sem bons defensores. Com as torres na coluna b e a dama ativa, a ruptura e5 abriu o caminho. No final, um golpe tático ganhou a dama preta. Lição: escolha as trocas que pioram os peões do adversário.",
+   "notas": {
+    "1.Nf3": {
+     "texto": "Abre com o cavalo, guardando a escolha da estrutura para depois.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "2.c4": {
+     "texto": "O peão c disputa d5.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "3.d4": {
+     "texto": "Ocupa o centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "4.Nc3": {
+     "texto": "Mais pressão sobre d5.",
+     "principios": [
+      "desenvolvimento",
+      "centro"
+     ]
+    },
+    "5.Bg5": {
+     "texto": "Crava o cavalo de f6.",
+     "principios": [
+      "desenvolvimento",
+      "tatica"
+     ]
+    },
+    "6.e3": {
+     "texto": "Abre a diagonal do bispo de f1 e protege d4.",
+     "principios": [
+      "desenvolvimento",
+      "defesa"
+     ]
+    },
+    "7.cxd5": {
+     "texto": "Troca no d5 e define a estrutura de peões no centro.",
+     "principios": [
+      "troca",
+      "centro"
+     ]
+    },
+    "8.Bd3": {
+     "texto": "O bispo vai para d3, de olho no lado do rei preto.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "9.O-O": {
+     "texto": "O rei vai para a segurança.",
+     "principios": [
+      "roque"
+     ]
+    },
+    "10.Bxf6": {
+     "texto": "O bispo come o cavalo de f6. Se ...gxf6, os peões pretos do lado do rei ficam dobrados.",
+     "principios": [
+      "troca",
+      "peoes"
+     ]
+    },
+    "10...Nxc3": {
+     "texto": "Um erro: as pretas trocam os cavalos e depois retomam em f6 com peão, ficando com a estrutura estragada. O Stockfish preferia ...Nxf6."
+    },
+    "11.bxc3": {
+     "texto": "Retoma para o centro. A coluna b se abre para as torres brancas.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "12.Qc2": {
+     "texto": "A dama vai para c2, atrás do bispo, mirando o lado do rei preto.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "13.Bf5": {
+     "texto": "Oferece a troca dos bispos de casas claras: o bispo preto é o que defenderia as casas fracas.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "14.Rab1": {
+     "texto": "A torre vai para a coluna b, aberta, contra o peão b7.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "15.Bxe6": {
+     "texto": "Troca os bispos. Depois de ...fxe6, os peões pretos ficam ainda mais fracos.",
+     "principios": [
+      "troca",
+      "peoes"
+     ]
+    },
+    "16.e4": {
+     "texto": "Abre o centro antes que as pretas terminem de se organizar: com as peças brancas mais ativas, linhas abertas favorecem as brancas.",
+     "principios": [
+      "centro",
+      "ataque"
+     ]
+    },
+    "17.c4": {
+     "texto": "Mais um peão contra d5, abrindo a coluna c.",
+     "principios": [
+      "centro",
+      "colunas"
+     ]
+    },
+    "18.Rb3": {
+     "texto": "A torre se prepara para atuar na terceira fileira e na coluna b.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "19.Qxc4": {
+     "texto": "A dama recupera o peão e fica na coluna c, contra o peão c6 e o rei preto, que rocou do lado da dama.",
+     "principios": [
+      "material",
+      "ataque"
+     ]
+    },
+    "20.Rfb1": {
+     "texto": "As duas torres dobradas na coluna b, contra o b7.",
+     "principios": [
+      "colunas",
+      "ataque"
+     ]
+    },
+    "21.e5": {
+     "texto": "A ruptura: abre mais linhas contra o rei preto.",
+     "principios": [
+      "ataque",
+      "centro"
+     ]
+    },
+    "22.dxe5": {
+     "texto": "Retoma e mantém as linhas abertas.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "23.Qxc6+": {
+     "texto": "A dama come o c6 com xeque e fica ao lado do rei preto.",
+     "principios": [
+      "material",
+      "ataque"
+     ]
+    },
+    "24.g3": {
+     "texto": "O peão ataca o bispo de f4 e dá ao rei branco uma casa de escape.",
+     "principios": [
+      "tempo",
+      "profilaxia"
+     ]
+    },
+    "25.Kg2": {
+     "texto": "O rei sai do xeque da torre.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "26.Rxb1": {
+     "texto": "A torre retoma e continua na coluna b.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "27.Qc3": {
+     "texto": "A dama recua para defender e se prepara para voltar à coluna b.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "28.Qb4": {
+     "texto": "Dama e torre juntas na coluna b, contra o rei preto.",
+     "principios": [
+      "ataque",
+      "colunas"
+     ]
+    },
+    "29.Nh4": {
+     "texto": "O cavalo ataca a dama de f5.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "29...a5": {
+     "texto": "Um erro grave: permite o golpe seguinte. O Stockfish preferia ...Qc2."
+    },
+    "30.Qxb5+": {
+     "texto": "A dama come o b5 com xeque. Se ...Rxb5, Rxb5+ e o cavalo come a dama de f5. As pretas abandonaram.",
+     "principios": [
+      "tatica"
+     ]
+    }
+   }
+  },
+  {
+   "n": 12,
+   "brancas": "Capablanca",
+   "pretas": "Levenfish",
+   "local": "Moscou",
+   "ano": 1935,
+   "abertura": "Defesa Semi-Eslava",
+   "resultado": "1-0",
+   "lances": "d4 d5 c4 c6 Nf3 Nf6 e3 e6 Nc3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 a6 e4 c5 e5 cxd4 Nxb5 Nxe5 Nxe5 axb5 Qf3 Ra5 O-O b4 Bf4 Be7 Rfc1 O-O Qh3 Rc5 Rxc5 Bxc5 Bg5 h6 Ng4 Be7 Bxf6 gxf6 Nxh6+ Kg7 Qg4+ Kh8 Qh5 Kg7 Nxf7 Rh8 Qg6+"
+  },
+  {
+   "n": 13,
+   "brancas": "Marshall",
+   "pretas": "Capablanca",
+   "local": "Nova York (match)",
+   "ano": 1909,
+   "abertura": "Gambito da Dama recusado",
+   "resultado": "0-1",
+   "lances": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 Ne4 Bxe7 Qxe7 Bd3 Nxc3 bxc3 Nd7 Nf3 O-O Qc2 h6 O-O c5 Rfe1 dxc4 Bxc4 b6 Qe4 Rb8 Bd3 Nf6 Qf4 Bb7 e4 Rfd8 Rad1 Rbc8 Re3 cxd4 cxd4 Rc3 Bb1 g5 Nxg5 Rxe3 Qxe3 Ng4 Qg3 Qxg5 h4 Qg7 Qc7 Rxd4 Qb8+ Kh7 e5+ Be4 Rxd4 Bxb1 Qxa7 Nxe5 Rf4 Be4 g3 Nf3+ Kg2 f5 Qxb6 Nxh4+ Kh2 Nf3+ Rxf3 Bxf3 Qxe6 Be4 f3 Bd3 Qd5 Qb2+ Kg1 Bb1 a4 Qa1 Qb7+ Kg6 Qb6+ Kh5 Kh2 Ba2 Qb5 Kg6 a5 Qd4 Qc6+ Qf6 Qe8+ Qf7 Qa4 Qe6 a6 Qe2+ Kh3 Bd5 a7 Bxf3"
+  },
+  {
+   "n": 16,
+   "brancas": "Rubinstein",
+   "pretas": "Capablanca",
+   "local": "São Petersburgo",
+   "ano": 1914,
+   "abertura": "Gambito da Dama recusado",
+   "resultado": "1/2-1/2",
+   "lances": "d4 d5 Nf3 Nf6 c4 e6 Nc3 Nbd7 Bg5 Be7 e3 O-O Rc1 Re8 Qc2 c6 Bd3 dxc4 Bxc4 b5 Bd3 a6 Ne5 Bb7 Nxd7 Qxd7 Bxf6 Bxf6 Bxh7+ Kh8 Be4 e5 dxe5 Rxe5 O-O Qe7 Bf3 Rc5 Qe2 Bxc3 Rxc3 Rxc3 bxc3 Rd8 Rd1 Rxd1+ Qxd1 Kg8 h4 c5 Bxb7 Qxb7 Qd6 b4 Qxc5 bxc3 Qxc3 Qb1+ Kh2 Qxa2 Qc8+ Kh7 Qf5+ g6 Qf6 a5 g4 a4 h5 gxh5 Qf5+ Kg7 Qg5+ Kh7 Qxh5+ Kg7",
+   "lado": "b"
+  },
+  {
+   "n": 17,
+   "brancas": "Capablanca",
+   "pretas": "Marshall",
+   "local": "Nova York",
+   "ano": 1918,
+   "abertura": "Ruy Lopez",
+   "resultado": "1-0",
+   "lances": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 Nf6 Re1 Bd6 h3 Ng4 Qf3 Qh4 d4 Nxf2 Re2 Bg4 hxg4 Bh2+ Kf1 Bg3 Rxf2 Qh1+ Ke2 Bxf2 Bd2 Bh4 Qh3 Rae8+ Kd3 Qf1+ Kc2 Bf2 Qf3 Qg1 Bd5 c5 dxc5 Bxc5 b4 Bd6 a4 a5 axb5 axb4 Ra6 bxc3 Nxc3 Bb4 b6 Bxc3 Bxc3 h6 b7 Re3 Bxf7+"
+  },
+  {
+   "n": 18,
+   "brancas": "Capablanca",
+   "pretas": "Em. Lasker",
+   "local": "Havana (match)",
+   "ano": 1921,
+   "abertura": "Gambito da Dama recusado",
+   "resultado": "1-0",
+   "lances": "d4 d5 Nf3 Nf6 c4 e6 Bg5 Nbd7 e3 Be7 Nc3 O-O Rc1 b6 cxd5 exd5 Qa4 c5 Qc6 Rb8 Nxd5 Bb7 Nxe7+ Qxe7 Qa4 Rbc8 Qa3 Qe6 Bxf6 Qxf6 Ba6 Bxf3 Bxc8 Rxc8 gxf3 Qxf3 Rg1 Re8 Qd3 g6 Kf1 Re4 Qd1 Qh3+ Rg2 Nf6 Kg1 cxd4 Rc4 dxe3 Rxe4 Nxe4 Qd8+ Kg7 Qd4+ Nf6 fxe3 Qe6 Rf2 g5 h4 gxh4 Qxh4 Ng4 Qg5+ Kf8 Rf5 h5 Qd8+ Kg7 Qg5+ Kf8 Qd8+ Kg7 Qg5+ Kf8 b3 Qd6 Qf4 Qd1+ Qf1 Qd2 Rxh5 Nxe3 Qf3 Qd4 Qa8+ Ke7 Qb7+ Kf8 Qb8+"
+  },
+  {
+   "n": 19,
+   "brancas": "Capablanca",
+   "pretas": "Alekhine",
+   "local": "Buenos Aires (match)",
+   "ano": 1927,
+   "abertura": "Gambito da Dama recusado",
+   "resultado": "1-0",
+   "lances": "d4 d5 c4 e6 Nc3 Nf6 Nf3 Nbd7 Bg5 c6 e3 Qa5 Nd2 Bb4 Qc2 O-O Bh4 c5 Nb3 Qa4 Bxf6 Nxf6 dxc5 Ne4 cxd5 Bxc3+ bxc3 Nxc5 Rd1 exd5 Rxd5 Nxb3 axb3 Qc6 Rd4 Re8 Bd3 Qxg2 Bxh7+ Kf8 Be4 Qh3 Qd2 Be6 c4 a5 Rg1 Qxh2 Rh1 Qc7 Qb2 Qc5 Bd5 Ra6 Re4 Rd6 Rh7 Ke7 Qxg7 Kd8 Bxe6 fxe6 Qxb7 Qb4+ Qxb4 axb4 c5 Rc6 Rxb4 Rxc5 Ra7"
+  },
+  {
+   "n": 20,
+   "brancas": "Alekhine",
+   "pretas": "Capablanca",
+   "local": "Nova York",
+   "ano": 1927,
+   "abertura": "Defesa Índia da Dama",
+   "resultado": "0-1",
+   "lances": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 c5 d5 exd5 Nh4 g6 Nc3 Bg7 O-O O-O Bf4 d6 cxd5 Nh5 Bd2 Nd7 f4 a6 Bf3 Nhf6 a4 c4 Be3 Qc7 g4 Nc5 g5 Nfd7 f5 Rfe8 Bf4 Be5 Bg4 Nb3 fxg6 hxg6 Rb1 Bxc3 bxc3 Qc5+ e3 Ne5 Bf3 Nd3 Kh1 Bxd5 Rxb3 Nxf4 Rb1 Rxe3 Ng2 Rxf3 Rxf3 Nxg2 Kxg2 Re8 Kf1 Bxf3 Qxf3 Qxg5 Re1 Rxe1+ Kxe1 Qg1+ Kd2 Qxh2+ Kc1 Qe5 Kb2 Kg7 Qf2 b5 Qb6 bxa4 Qxa6 Qe2+"
+  },
+  {
+   "n": 21,
+   "brancas": "Alekhine",
+   "pretas": "Capablanca",
+   "local": "Buenos Aires (match)",
+   "ano": 1927,
+   "abertura": "Gambito da Dama recusado",
+   "resultado": "1/2-1/2",
+   "lances": "d4 Nf6 c4 e6 Nc3 d5 Bg5 Nbd7 e3 Be7 Nf3 O-O Rc1 c6 Bd3 dxc4 Bxc4 Nd5 Bxe7 Qxe7 Ne4 N5f6 Ng3 Qb4+ Qd2 Qxd2+ Kxd2 Rd8 Rhd1 b6 e4 Bb7 e5 Ne8 Ke3 Kf8 Ng5 h6 N5e4 Ke7 f4 f5 Nc3 Nc7 Nge2 g5 h4 g4 Ng3 a5 Bb3 Rac8 a3 Rf8 Rd2 Ba8 Rdc2 c5 dxc5 Nxc5 Na4 N7a6 Bxe6 Kxe6 Nxb6 Rb8 Nxa8 Rb3+ Rc3 Rxc3+ bxc3 Rxa8 Rd1 Rf8 Rd6+ Ke7 Rxh6 Nc7 Rh7+ Kd8 c4 N7e6 Ra7 Nc7 Rxa5 N5e6 h5 Kd7 h6 Nxf4 Kxf4 Ne6+ Ke3 f4+ Kf2 fxg3+ Kxg3 Rh8 Rd5+ Ke7 c5 Rxh6 c6 Nf8 Rc5 Kd8 Kxg4 Rg6+ Kf3 Kc7 g4 Ne6 Rd5 Nd8 Rc5 Ne6 Rd5 Nf8 Ra5 Rxc6 Ke4 Rc1 Ra7+ Kc6 Ra6+ Kd7 Ra7+ Ke6 Ra6+ Ke7 a4 Nd7 Rh6 Re1+ Kd4 Nxe5 a5 Nxg4 Rh7+ Kd6 a6 Ra1 a7 Nf6 Rb7 Nd7 Rb2 Rxa7 Rd2 Nc5 Kc4+ Kc6 Rh2 Ra4+ Kc3 Rg4 Kd2 Rg3 Rh5 Kb5 Ke2 Kc4 Rh4+ Kc3 Kf2 Rd3 Rf4 Kd2 Kg2 Rd5 Kf3 Kd3",
+   "lado": "b"
+  },
+  {
+   "n": 22,
+   "brancas": "Flohr",
+   "pretas": "Capablanca",
+   "local": "Moscou",
+   "ano": 1935,
+   "abertura": "Gambito da Dama recusado",
+   "resultado": "1/2-1/2",
+   "lances": "d4 d5 c4 e6 Nc3 Nf6 Nf3 Nbd7 Bg5 Be7 e3 O-O Qc2 c5 cxd5 Nxd5 Bxe7 Qxe7 Nxd5 exd5 Bd3 cxd4 Nxd4 Qb4+ Qd2 Nc5 Bb5 Qxd2+ Kxd2 a6 Bd3 Be6 Rac1 Rfc8 Rc2 Nxd3 Kxd3 Rxc2 Kxc2 Kf8 Kd2 Rc8 Rc1 Rxc1 Kxc1 Ke7 Kd2 Kd6 Kc3 b6 f4 Bd7 Nf3 f6 Kd4 a5 Nd2 Bc8 Nb1 Be6 Nc3 Kc6 a3 h6 g3 h5 b4 axb4 axb4 Kd6 b5 g6 Na4 Kc7 Nc3 Kd6 f5 gxf5 Ne2 Bd7 Nf4 Be8 Nxd5 Bxb5 Nxb6 Bc6 Nc4+ Ke6 Nb2 Bb5 Nd1 Be2 Nf2 Bf1 Nd3 Bxd3 Kxd3 Ke5 Ke2 Ke4 h3 Kd5 Kf3 Ke5",
+   "lado": "b"
+  },
+  {
+   "n": 23,
+   "brancas": "Marshall",
+   "pretas": "Capablanca",
+   "local": "Nova York (match)",
+   "ano": 1909,
+   "abertura": "Defesa Tarrasch",
+   "resultado": "0-1",
+   "lances": "d4 d5 c4 e6 Nc3 c5 cxd5 exd5 Nf3 Nc6 g3 Be6 Bg2 Be7 O-O Nf6 Bg5 Ne4 Bxe7 Qxe7 Ne5 Nxd4 Nxe4 dxe4 e3 Nf3+ Nxf3 exf3 Qxf3 O-O Rfc1 Rab8 Qe4 Qc7 Rc3 b5 a3 c4 Bf3 Rfd8 Rd1 Rxd1+ Bxd1 Rd8 Bf3 g6 Qc6 Qe5 Qe4 Qxe4 Bxe4 Rd1+ Kg2 a5 Rc2 b4 axb4 axb4 Bf3 Rb1 Be2 b3 Rd2 Rc1 Bd1 c3 bxc3 b2 Rxb2 Rxd1 Rc2 Bf5 Rb2 Rc1 Rb3 Be4+ Kh3 Rc2 f4 h5 g4 hxg4+ Kxg4 Rxh2 Rb4 f5+ Kg3 Re2 Rc4 Rxe3+ Kh4 Kg7 Rc7+ Kf6 Rd7 Bg2 Rd6+ Kg7"
+  },
+  {
+   "n": 24,
+   "brancas": "Kline",
+   "pretas": "Capablanca",
+   "local": "Nova York",
+   "ano": 1913,
+   "abertura": "Sistema Londres",
+   "resultado": "0-1",
+   "lances": "d4 Nf6 Nf3 d6 c3 Nbd7 Bf4 c6 Qc2 Qc7 e4 e5 Bg3 Be7 Bd3 O-O Nbd2 Re8 O-O Nh5 Nc4 Bf6 Ne3 Nf8 dxe5 dxe5 Bh4 Qe7 Bxf6 Qxf6 Ne1 Nf4 g3 Nh3+ Kh1 h5 N3g2 g5 f3 Ng6 Ne3 h4 g4 Nhf4 Rf2 Nxd3 Nxd3 Be6 Rd1 Red8 b3 Nf4 Ng2 Nxd3 Rxd3 Rxd3 Qxd3 Rd8 Qe2 h3 Ne3 a5 Rf1 a4 c4 Rd4 Nc2 Rd7 Ne3 Qd8 Rd1 Rxd1+ Nxd1 Qd4 Nf2 b5 cxb5 axb3 axb3 Bxb3 Nxh3 Bd1 Qf1 cxb5 Kg2 b4 Qb5 b3 Qe8+ Kg7 Qe7 b2 Nxg5 Bb3 Nxf7 Bxf7 Qg5+ Kf8 Qh6+ Ke7 Qg5+ Ke8"
+  },
+  {
+   "n": 28,
+   "brancas": "Capablanca",
+   "pretas": "Em. Lasker",
+   "local": "Havana (match)",
+   "ano": 1921,
+   "abertura": "Gambito da Dama recusado",
+   "resultado": "1-0",
+   "lances": "d4 d5 Nf3 e6 c4 Nf6 Bg5 Nbd7 e3 Be7 Nc3 O-O Rc1 Re8 Qc2 c6 Bd3 dxc4 Bxc4 Nd5 Bxe7 Rxe7 O-O Nf8 Rfd1 Bd7 e4 Nb6 Bf1 Rc8 b4 Be8 Qb3 Rec7 a4 Ng6 a5 Nd7 e5 b6 Ne4 Rb8 Qc3 Nf4 Nd6 Nd5 Qa3 f6 Nxe8 Qxe8 exf6 gxf6 b5 Rbc8 bxc6 Rxc6 Rxc6 Rxc6 axb6 axb6 Re1 Qc8 Nd2 Nf8 Ne4 Qd8 h4 Rc7 Qb3 Rg7 g3 Ra7 Bc4 Ra5 Nc3 Nxc3 Qxc3 Kf7 Qe3 Qd6 Qe4 Ra4 Qb7+ Kg6 Qc8 Qb4 Rc1 Qe7 Bd3+ Kh6 Rc7 Ra1+ Kg2 Qd6 Qxf8+"
+  },
+  {
+   "n": 29,
+   "brancas": "Capablanca",
+   "pretas": "Bogoljubow",
+   "local": "Londres",
+   "ano": 1922,
+   "abertura": "Ruy Lopez",
+   "resultado": "1-0",
+   "lances": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O d4 exd4 cxd4 Bg4 Be3 Na5 Bc2 Nc4 Bc1 c5 b3 Na5 Bb2 Nc6 d5 Nb4 Nbd2 Nxc2 Qxc2 Re8 Qd3 h6 Nf1 Nd7 h3 Bh5 N3d2 Bf6 Bxf6 Qxf6 a4 c4 bxc4 Nc5 Qe3 bxa4 f4 Qe7 g4 Bg6 f5 Bh7 Ng3 Qe5 Kg2 Rab8 Rab1 f6 Nf3 Rb2+ Rxb2 Qxb2+ Re2 Qb3 Nd4 Qxe3 Rxe3 Rb8 Rc3 Kf7 Kf3 Rb2 Nge2 Bg8 Ne6 Nb3 c5 dxc5 Nxc5 Nd2+ Kf2 Ke7 Ke1 Nb1 Rd3 a3 d6+ Kd8 Nd4 Rb6 Nde6+ Bxe6 fxe6 Rb8 e7+ Ke8 Nxa6"
+  },
+  {
+   "n": 30,
+   "brancas": "Capablanca",
+   "pretas": "Treybal",
+   "local": "Karlsbad",
+   "ano": 1929,
+   "abertura": "Defesa Semi-Eslava",
+   "resultado": "1-0",
+   "lances": "d4 d5 c4 c6 Nf3 e6 Bg5 Be7 Bxe7 Qxe7 Nbd2 f5 e3 Nd7 Bd3 Nh6 O-O O-O Qc2 g6 Rab1 Nf6 Ne5 Nf7 f4 Bd7 Ndf3 Rfd8 b4 Be8 Rfc1 a6 Qf2 Nxe5 Nxe5 Nd7 Nf3 Rdc8 c5 Nf6 a4 Ng4 Qe1 Nh6 h3 Nf7 g4 Bd7 Rc2 Kh8 Rg2 Rg8 g5 Qd8 h4 Kg7 h5 Rh8 Rh2 Qc7 Qc3 Qd8 Kf2 Qc7 Rbh1 Rag8 Qa1 Rb8 Qa3 Rbg8 b5 axb5 h6+ Kf8 axb5 Ke7 b6 Qb8 Ra1 Rc8 Qb4 Rhd8 Ra7 Kf8 Rh1 Be8 Rha1 Kg8 R1a4 Kf8 Qa3 Kg8 Kg3 Bd7 Kh4 Kh8 Qa1 Kg8 Kg3 Kf8 Kg2 Be8 Nd2 Bd7 Nb3 Re8 Na5 Nd8 Ba6 bxa6 Rxd7 Re7 Rxd8+ Rxd8 Nxc6"
+  },
+  {
+   "n": 31,
+   "brancas": "Capablanca",
+   "pretas": "Menchik",
+   "local": "Moscou",
+   "ano": 1935,
+   "abertura": "Defesa Índia do Rei",
+   "resultado": "1-0",
+   "lances": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 e5 Nge2 a6 Qd2 Bd7 d5 Ne8 g4 h6 h4 Kh7 Ng3 c5 Bd3 Qa5 Qe2 Rh8 a3 Qd8 b4 b6 Qb2 Bc8 Ke2 Nd7 Rag1 Rb8 b5 a5 Kd1 Kg8 Qd2 Nf8 Kc2 f6 g5 fxg5 hxg5 h5 Nf5 Kf7 Nh4 Qe7 Qh2 Nc7 Rf1 Ke8 f4 exf4 Bxf4 Kd7 Bxd6"
+  },
+  {
+   "n": 32,
+   "brancas": "Capablanca",
+   "pretas": "Burn",
+   "local": "San Sebastián",
+   "ano": 1911,
+   "abertura": "Ruy Lopez",
+   "resultado": "1-0",
+   "lances": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 d3 d6 c3 Be7 Nbd2 O-O Nf1 b5 Bc2 d5 Qe2 dxe4 dxe4 Bc5 Bg5 Be6 Ne3 Re8 O-O Qe7 Nd5 Bxd5 exd5 Nb8 a4 b4 cxb4 Bxb4 Bxf6 Qxf6 Qe4 Bd6 Qxh7+ Kf8 Nh4 Qh6 Qxh6 gxh6 Nf5 h5 Bd1 Nd7 Bxh5 Nf6 Be2 Nxd5 Rfd1 Nf4 Bc4 Red8 h4 a5 g3 Ne6 Bxe6 fxe6 Ne3 Rdb8 Nc4 Ke7 Rac1 Ra7 Re1 Kf6 Re4 Rb4 g4 Ra6 Rc3 Bc5 Rf3+ Kg7 b3 Bd4 Kg2 Ra8 g5 Ra6 h5 Rxc4 bxc4 Rc6 g6"
+  },
+  {
+   "n": 33,
+   "brancas": "Capablanca",
+   "pretas": "Alekhine",
+   "local": "São Petersburgo (exibição)",
+   "ano": 1913,
+   "abertura": "Defesa Semi-Eslava",
+   "resultado": "1-0",
+   "lances": "d4 d5 c4 c6 e3 Nf6 Nf3 e6 Nbd2 Nbd7 Bd3 Be7 O-O O-O Qc2 dxc4 Nxc4 c5 Nce5 cxd4 exd4 Nb6 Ng5 g6 Ngf3 Kg7 Bg5 Nbd5 Rac1 Bd7 Qd2 Ng8 Bxe7 Qxe7 Be4 Bb5 Rfe1 Qd6 Bxd5 exd5 Qa5 a6 Qc7 Qxc7 Rxc7 h6 Rxb7 Rac8 b3 Rc2 a4 Be2 Nh4 h5 Nhxg6 Re8 Rxf7+ Kh6 f4 a5 Nh4 Rxe5 fxe5 Kg5 g3 Kg4 Rg7+ Kh3 Ng2"
+  },
+  {
+   "n": 34,
+   "brancas": "Dus Chotimirsky",
+   "pretas": "Capablanca",
+   "local": "São Petersburgo (exibição)",
+   "ano": 1913,
+   "abertura": "Sistema Londres",
+   "resultado": "0-1",
+   "lances": "d4 d5 Nf3 Nf6 Bf4 c5 c3 Qb6 Qc2 cxd4 cxd4 Nc6 Nc3 Bd7 e3 Rc8 Rc1 e6 Be2 Be7 O-O O-O Qb1 Qa5 Nd2 a6 Nb3 Qb4 Nc5 Nxd4 exd4 Bxc5 a3 Qxd4 Bg3 Be7 Rcd1 Qb6 Be5 Bc6 Rd3 Nd7 Rh3 f5 Bf4 d4 Qa2 Rf6 Bg5 dxc3 Bxf6 Bd5 Qxd5 exd5"
+  },
+  {
+   "n": 35,
+   "brancas": "Nimzowitsch",
+   "pretas": "Capablanca",
+   "local": "São Petersburgo",
+   "ano": 1914,
+   "abertura": "Ruy Lopez (por transposição)",
+   "resultado": "0-1",
+   "lances": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 d6 d4 Bd7 Bxc6 Bxc6 Qd3 exd4 Nxd4 g6 Nxc6 bxc6 Qa6 Qd7 Qb7 Rc8 Qxa7 Bg7 O-O O-O Qa6 Rfe8 Qd3 Qe6 f3 Nd7 Bd2 Ne5 Qe2 Nc4 Rab1 Ra8 a4 Nxd2 Qxd2 Qc4 Rfd1 Reb8 Qe3 Rb4 Qg5 Bd4+ Kh1 Rab8 Rxd4 Qxd4 Rd1 Qc4 h4 Rxb2 Qd2 Qc5 Re1 Qh5 Ra1 Qxh4+ Kg1 Qh5 a5 Ra8 a6 Qc5+ Kh1 Qc4 a7 Qc5 e5 Qxe5 Ra4 Qh5+ Kg1 Qc5+ Kh2 d5 Rh4 Rxa7 Nd1"
+  },
+  {
+   "n": 37,
+   "brancas": "Em. Lasker",
+   "pretas": "Capablanca",
+   "local": "Havana (match)",
+   "ano": 1921,
+   "abertura": "Gambito da Dama recusado",
+   "resultado": "0-1",
+   "lances": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Be7 e3 O-O Nf3 Nbd7 Qc2 c5 Rd1 Qa5 Bd3 h6 Bh4 cxd4 exd4 dxc4 Bxc4 Nb6 Bb3 Bd7 O-O Rac8 Ne5 Bb5 Rfe1 Nbd5 Bxd5 Nxd5 Bxe7 Nxe7 Qb3 Bc6 Nxc6 bxc6 Re5 Qb6 Qc2 Rfd8 Ne2 Rd5 Rxd5 cxd5 Qd2 Nf5 b3 h5 h3 h4 Qd3 Rc6 Kf1 g6 Qb1 Qb4 Kg1 a5 Qb2 a4 Qd2 Qxd2 Rxd2 axb3 axb3 Rb6 Rd3 Ra6 g4 hxg3 fxg3 Ra2 Nc3 Rc2 Nd1 Ne7 Nc3 Rc1+ Kf2 Nc6 Nd1 Rb1 Ke2 Rxb3 Ke3 Rb4 Nc3 Ne7 Ne2 Nf5+ Kf2 g5 g4 Nd6 Ng1 Ne4+ Kf1 Rb1+ Kg2 Rb2+ Kf1 Rf2+ Ke1 Ra2 Kf1 Kg7 Re3 Kg6 Rd3 f6 Re3 Kf7 Rd3 Ke7 Re3 Kd6 Rd3 Rf2+ Ke1 Rg2 Kf1 Ra2 Re3 e5 Rd3 exd4 Rxd4 Kc5 Rd1 d4 Rc1+ Kd5"
+  },
+  {
+   "n": 38,
+   "brancas": "Bogoljubow",
+   "pretas": "Capablanca",
+   "local": "Nova York",
+   "ano": 1924,
+   "abertura": "Sistema Colle",
+   "resultado": "0-1",
+   "lances": "d4 Nf6 Nf3 d5 e3 e6 Bd3 c5 b3 Nc6 O-O Bd6 Bb2 O-O Nbd2 Qe7 Ne5 cxd4 exd4 Ba3 Bxa3 Qxa3 Ndf3 Bd7 Nxc6 Bxc6 Qd2 Rac8 c3 a6 Ne5 Bb5 f3 Bxd3 Nxd3 Rc7 Rac1 Rfc8 Rc2 Ne8 Rfc1 Nd6 Ne5 Qa5 a4 Qb6 Nd3 Qxb3 Nc5 Qb6 Rb2 Qa7 Qe1 b6 Nd3 Rc4 a5 bxa5 Nc5 Nb5 Re2 Nxd4 cxd4 R8xc5"
+  },
+  {
+   "n": 39,
+   "brancas": "Capablanca",
+   "pretas": "Alekhine",
+   "local": "Buenos Aires (match)",
+   "ano": 1927,
+   "abertura": "Defesa Índia da Dama",
+   "resultado": "1-0",
+   "lances": "d4 Nf6 Nf3 b6 g3 Bb7 Bg2 c5 O-O cxd4 Nxd4 Bxg2 Kxg2 d5 c4 e6 Qa4+ Qd7 Nb5 Nc6 cxd5 exd5 Bf4 Rc8 Rc1 Bc5 b4 Bxb4 Rxc6 Rxc6 Qxb4 Ne4 Nd2 Nxd2 Qxd2 O-O Rd1 Rc5 Nd4 Re8 Nb3 Rcc8 e3 Qa4 Qxd5 Rc2 Rd2 Rxa2 Rxa2 Qxa2 Qc6 Rf8 Nd4 Kh8 Be5 f6 Ne6 Rg8 Bd4 h6 h4 Qb1 Nxg7 Qg6 h5 Qf7 Nf5 Kh7 Qe4 Re8 Qf4 Qf8 Nd6 Re7 Bxf6 Qa8+ e4 Rg7 Bxg7 Kxg7 Nf5+ Kf7 Qc7+"
+  },
+  {
+   "n": 40,
+   "brancas": "Capablanca",
+   "pretas": "Ragozin",
+   "local": "Moscou",
+   "ano": 1935,
+   "abertura": "Defesa Nimzoíndia",
+   "resultado": "1-0",
+   "lances": "d4 Nf6 c4 e6 Nc3 Bb4 a3 Bxc3+ bxc3 d6 Qc2 O-O e4 e5 Bd3 c5 Ne2 Nc6 d5 Ne7 f3 Nd7 h4 Nb6 g4 f6 Ng3 Kf7 g5 Ng8 f4 Ke8 f5 Qe7 Qg2 Kd8 Nh5 Kc7 gxf6 gxf6 Ng7 Bd7 h5 Rac8 h6 Kb8 Rg1 Rf7 Rb1 Qf8 Be2 Ka8 Bh5 Re7 Qa2 Qd8 Bd2 Na4 Qb3 Nb6 a4 Rb8 a5 Nc8 Qa2 Qf8 Be3 b6 a6 Qd8 Kd2 Qf8 Rb2 Qd8 Qb1 b5 cxb5 Nb6 Qa2 c4 Qa3 Qc7 Kc1 Rf8 Rbg2 Qb8 Qb4 Rd8 Rg3 Rf8 Ne6 Bxe6 dxe6 Rc7 Qxd6 Ne7 Rd1"
+  },
+  {
+   "n": 41,
+   "brancas": "Capablanca",
+   "pretas": "Euwe",
+   "local": "Holanda (torneio AVRO)",
+   "ano": 1938,
+   "abertura": "Defesa Nimzoíndia",
+   "resultado": "1-0",
+   "lances": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 d5 cxd5 Qxd5 Nf3 c5 Bd2 Bxc3 Bxc3 cxd4 Nxd4 e5 Nf5 Bxf5 Qxf5 Nc6 e3 O-O Be2 Qe4 Qf3 Qc2 O-O Rad8 Bb5 Rd5 Rac1 Qe4 Qe2 Rd6 f3 Qf5 Bxc6 Rxc6 Qb5 Rfc8 Qxb7 Qd3 e4 Nh5 g3 Qe3+ Kg2 Qg5 Kf2 f5 exf5 Qxf5 g4 Qf4 gxh5 Qxh2+ Ke3 Qf4+ Ke2 Qc4+ Ke1 Qd3 Qb3+ Kh8 Rc2 Rf6 Rd2 Qf5 Qc2 Qf4 Qe4 Qg3+ Rff2 Qg1+ Ke2 Rff8 h6"
+  },
+  {
+   "n": 42,
+   "brancas": "Capablanca",
+   "pretas": "Conde",
+   "local": "Hastings",
+   "ano": 1919,
+   "abertura": "Ruy Lopez",
+   "resultado": "1-0",
+   "lances": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O d6 Bxc6+ bxc6 d4 exd4 Nxd4 Be7 Nc3 Bd7 Bg5 O-O Qd3 Re8 Rfe1 h6 Bh4 c5 Nf5 Bxf5 exf5 Qd7 h3 a5 Re2 Nh7 Bxe7 Rxe7 Rxe7 Qxe7 Nd5 Qd7 Re1 Re8 Rxe8+ Qxe8 Qe3 Qd7 Qe7 Qxe7 Nxe7+ Kf8 Nd5 Ke8 Nxc7+ Kd7 Nd5 Kc6 c4 Nf6 Nxf6 gxf6 a4 d5 b3 d4 f4 Kd6 g4 Ke7 Kf2 Kd6 Kf3 Ke7 Ke4 Kd6 h4 Kd7 b4 axb4 a5 Kc7 g5 fxg5 fxg5 hxg5 hxg5 b3 Kd3 Kd7 g6 fxg6 fxg6"
+  },
+  {
+   "n": 43,
+   "brancas": "Duras",
+   "pretas": "Capablanca",
+   "local": "Nova York",
+   "ano": 1913,
+   "abertura": "Gambito da Dama aceito",
+   "resultado": "0-1",
+   "lances": "d4 d5 Nf3 Nf6 c4 e6 Nc3 dxc4 e3 a6 Bxc4 b5 Bd3 Bb7 a4 b4 Nb1 c5 O-O Nc6 dxc5 Bxc5 Qe2 Qd5 Rd1 Qh5 Nbd2 Na5 Nf1 O-O Ng3 Qg4 e4 Nb3 Rb1 Rfd8 Be3 Nxe4 Bc2 Bxe3 Qxe3 Nbc5 h3 Qg6 Nxe4 Rxd1+ Rxd1 Bxe4 Bxe4 Nxe4 Qd4 h6 Qxb4 Nf6 Qb7 Qe4 Qxe4 Nxe4 b4 Nc3 Rd3 Nxa4 Ra3 Nb6 Ne5 Kf8 Nd3 Nd5 Ra4 Rb8 Rxa6 Nxb4 Nxb4 Rxb4 Ra7 h5 g3 h4 gxh4 Rxh4 Kg2 e5 Kg3 Rd4 Ra5 f6 Ra7 Kg8 Rb7 Kh7 Ra7 Kg6 Re7 Rd3+ Kg2 Rd5 Kg3 f5 Ra7 Rd3+ Kg2 e4 Ra4 Kg5 Ra5 g6 Rb5 Kf4 Ra5 Rd2 Ra4 Kg5 Kg1 Kf4 Kg2 g5 Rb4 Ke5 Rb5+ Rd5 Rb8 f4 Rg8 Kd4 Kf1 Kd3 Ra8 e3 Ra3+ Ke4 fxe3 f3 Kg1 Rd3 Ra8 Kxe3 Re8+ Kf4 Rg8 Rd1+ Kf2 Rd2+ Kf1 Rh2 Kg1 Rxh3 Rg7 g4 Rg8 Kg3"
+  },
+  {
+   "n": 44,
+   "brancas": "Capablanca",
+   "pretas": "Alekhine",
+   "local": "Buenos Aires (match)",
+   "ano": 1927,
+   "abertura": "Gambito da Dama recusado",
+   "resultado": "1-0",
+   "lances": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 e3 c6 Nf3 Qa5 Nd2 Bb4 Qc2 dxc4 Bxf6 Nxf6 Nxc4 Qc7 a3 Be7 g3 O-O Bg2 Bd7 b4 b6 O-O a5 Ne5 axb4 axb4 Rxa1 Rxa1 Rc8 Nxd7 Qxd7 Na4 Qd8 Qb3 Nd5 b5 cxb5 Qxb5 Ra8 Rc1 Ra5 Qc6 Ba3 Rb1 Bf8 Bxd5 Rxd5 Nxb6 Rd6 Qb7 h5 Nc4 Rd7 Qe4 Rc7 Ne5 Qc8 Kg2 Bd6 Ra1 Rb7 Nd3 g6 Ra6 Bf8 Rc6 Rc7 Rxc7 Qxc7 Ne5 Bg7 Qa8+ Kh7 Nf3 Bf6 Qa6 Kg7 Qd3 Qb7 e4 Qc6 h3 Qc7 d5 exd5 exd5 Qc3 Qxc3 Bxc3 Kf1 Kf6 Ke2 Bb4 Nd4 Bc5 Nc6 Kf5 Kf3 Kf6 g4 hxg4+ hxg4 Kg5 Ne5 Bd4 Nxf7+ Kf6 Nd8 Bb6 Nc6 Bc5 Kf4 Bxf2 g5+ Kf7 Ne5+ Ke7 Nxg6+ Kd6 Ke4 Bg3 Nf4 Ke7 Ke5 Be1 d6+ Kd7 g6 Bb4 Kd5 Ke8 d7+"
+  },
+  {
+   "n": 45,
+   "brancas": "Capablanca",
+   "pretas": "Tartakower",
+   "local": "Nova York",
+   "ano": 1924,
+   "abertura": "Defesa Holandesa",
+   "resultado": "1-0",
+   "lances": "d4 e6 Nf3 f5 c4 Nf6 Bg5 Be7 Nc3 O-O e3 b6 Bd3 Bb7 O-O Qe8 Qe2 Ne4 Bxe7 Nxc3 bxc3 Qxe7 a4 Bxf3 Qxf3 Nc6 Rfb1 Rae8 Qh3 Rf6 f4 Na5 Qf3 d6 Re1 Qd7 e4 fxe4 Qxe4 g6 g3 Kf8 Kg2 Rf7 h4 d5 cxd5 exd5 Qxe8+ Qxe8 Rxe8+ Kxe8 h5 Rf6 hxg6 hxg6 Rh1 Kf8 Rh7 Rc6 g4 Nc4 g5 Ne3+ Kf3 Nf5 Bxf5 gxf5 Kg3 Rxc3+ Kh4 Rf3 g6 Rxf4+ Kg5 Re4 Kf6 Kg8 Rg7+ Kh8 Rxc7 Re8 Kxf5 Re4 Kf6 Rf4+ Ke5 Rg4 g7+ Kg8 Rxa7 Rg1 Kxd5 Rc1 Kd6 Rc2 d5 Rc1 Rc7 Ra1 Kc6 Rxa4 d6"
+  },
+  {
+   "n": 46,
+   "brancas": "Capablanca",
+   "pretas": "Reshevsky",
+   "local": "Nottingham",
+   "ano": 1936,
+   "abertura": "Gambito da Dama aceito",
+   "resultado": "1-0",
+   "lances": "d4 d5 Nf3 Nf6 c4 dxc4 Qa4+ Nbd7 Qxc4 e6 g3 a6 Bg2 b5 Qc6 Ra7 Bf4 Bb7 Qc1 c5 dxc5 Bxc5 O-O O-O Nbd2 Qe7 Nb3 Bb6 Be3 Rc8 Qd2 Ne4 Qd3 Nec5 Nxc5 Nxc5 Qd1 Ba8 Rc1 Rac7 b3 Nd7 Rxc7 Rxc7 Bxb6 Nxb6 Qd4 Nd5 Rd1 f6 Ne1 Bb7 Bxd5 exd5 e3 Qe4 h4 a5 f3 Qxd4 Rxd4 Rc1 Kf2 Ra1 Rd2 a4 Nd3 Rb1 Rb2 Rxb2+ Nxb2 Bc6 Nd3 g5 hxg5 fxg5 Nb4 axb3 axb3 Bb7 g4 Kg7 Ke2 Kg6 Kd3 h5 gxh5+ Kxh5 Kd4 Kh4 Nxd5 Kg3 f4 g4 f5 Bc8 Ke5 Bd7 e4 Be8 Kd4 Kf3 e5 g3 Ne3 Kf4 e6 g2 Nxg2+ Kxf5 Kd5 Kg4 Ne3+ Kf4 Kd4"
+  },
+  {
+   "n": 47,
+   "brancas": "Capablanca",
+   "pretas": "Réti",
+   "local": "Viena (exibição)",
+   "ano": 1914,
+   "abertura": "Ruy Lopez",
+   "resultado": "1-0",
+   "lances": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nxe4 d4 Be7 Qe2 Nd6 Bxc6 bxc6 dxe5 Nb7 Nc3 O-O Re1 Nc5 Nd4 Ne6 Be3 Nxd4 Bxd4 c5 Be3 d5 exd6 Bxd6 Rad1 Qf6 Qh5 Rb8 Bc1 Qf5 Qxf5 Bxf5 Ne4 Rfe8 Nxd6 cxd6 Rxe8+ Rxe8 Be3 Re6 c3 a6 b4 cxb4 cxb4 h6 a4 Bc2 Ra1 Re4 b5 Rxa4 Rc1 Be4 b6 Kf8 f3 Bd5 Rc8+ Ke7 b7 Bxb7 Rc7+ Ke6 Rxb7 Ra1+ Kf2 Ra2+ Kg3 a5 Ra7 a4 Ra6 g5 Bc5 Rd2 Ba7 f5 h4 f4+ Kh3 Kf5 hxg5 hxg5 Rxa4 Rd1 g4+ fxg3 Kxg3"
+  },
+  {
+   "n": 48,
+   "brancas": "Marshall",
+   "pretas": "Capablanca",
+   "local": "São Petersburgo",
+   "ano": 1914,
+   "abertura": "Defesa Francesa",
+   "resultado": "0-1",
+   "lances": "d4 e6 e4 d5 exd5 exd5 Nf3 Bg4 h3 Bh5 Be2 Nc6 O-O Bd6 Nc3 Nge7 Be3 f6 Qd2 Bf7 Rae1 a6 a3 Qd7 Nh4 O-O-O f4 Nb8 Bg4 Be6 f5 Bf7 Ne2 Rde8 Bf4 Nec6 Bxd6 Qxd6 Nf4 Nd8 c3 Nbc6 g3 Na5 Rxe8 Rxe8 Nhg2 Nc4 Qf2 Qb6 Nd3 Qb5 Re1 Nxa3 Rxe8 Bxe8 Ngf4 Nc4 Bf3 Bf7 Qe2 Qd7 Nc5 Qd6 Nce6 g5 Nxd5 Nxe6 fxe6 Bxe6 Bg4 Qxg3+ Kh1 Kb8 Bxe6 Nxb2 Ne3 Na4 Qd2 Qf3+ Kg1 Qc6 d5 Qxc3 Qxc3 Nxc3 Ng4 a5 Nxf6 a4 Nxh7 a3 d6 cxd6 Bb3 Ne4 Bd5 b5 Nf8 Kc7 Ne6+ Kb6 Kg2 b4 Kf3 Nd2+ Ke2 b3 Kxd2 a2 Bxb3 a1=Q Kd3 Qf1+ Kd4 Qxh3 Bd5 Qf5 Kc4 g4 Kd4 g3"
+  },
+  {
+   "n": 49,
+   "brancas": "Capablanca",
+   "pretas": "Em. Lasker",
+   "local": "Nova York",
+   "ano": 1924,
+   "abertura": "Defesa Eslava",
+   "resultado": "1-0",
+   "lances": "d4 Nf6 c4 c6 Nc3 d5 cxd5 cxd5 Nf3 Nc6 Bf4 e6 e3 Be7 Bd3 O-O O-O Nh5 Be5 f5 Rc1 Nf6 Bxf6 gxf6 Nh4 Kh8 f4 Rg8 Rf3 Bd7 Rh3 Be8 a3 Rg7 Rg3 Rxg3 hxg3 Rc8 Kf2 Na5 Qf3 Nc4 Qe2 Nd6 Rh1 Ne4+ Bxe4 fxe4 Qg4 f5 Nxf5 exf5 Qxf5 h5 g4 Rc6 g5 Kg8 Nxd5 Bf7 Nxe7+ Qxe7 g4 hxg4 Qh7+ Kf8 Rh6 Bg8 Qf5+ Kg7 Rxc6 bxc6 Kg3 Qe6 Kxg4 Qxf5+ Kxf5 Bd5 b4 a6 Kg4 Bc4 f5 Bb3 Kf4 Bc2 Ke5 Kf7 a4 Kg7 d5 Bxa4 d6 c5 bxc5 Bc6 Ke6 a5 f6+"
+  },
+  {
+   "n": 50,
+   "brancas": "Capablanca",
+   "pretas": "Kupchik",
+   "local": "Havana",
+   "ano": 1913,
+   "abertura": "Partida dos Quatro Cavalos",
+   "resultado": "1-0",
+   "lances": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bb5 Bb4 O-O O-O Bxc6 bxc6 Nxe5 Qe8 Nd3 Bxc3 dxc3 Qxe4 Re1 Qh4 Qf3 Ba6 Bf4 Rac8 Be5 Bxd3 cxd3 Qg4 Bxf6 Qxf3 gxf3 gxf6 Re4 Rfe8 Rae1 Re6 R1e3 Rce8 Kf1 Kf8 Ke2 Ke7 Ra4 Ra8 Ra5 d5 c4 Kd6 c5+ Kd7 d4 f5 Rxe6 fxe6 f4 Kc8 Kd2 Kb7 Ra3 Rg8 Rh3 Rg7 Ke2 Ka6 Rh6 Re7 Kd3 Kb7 h4 Kc8 Rh5 Kd7 Rg5 Rf7 Kc3 Kc8 Kb4 Rf6 Ka5 Kb7 a4 a6 h5 Rh6 b4 Rf6 b5 axb5 axb5 Rf8 Rg7 Ra8+ Kb4 cxb5 Kxb5 Ra2 c6+ Kb8 Rxh7 Rb2+ Ka5 Ra2+ Kb4 Rxf2 Re7 Rxf4 h6 Rxd4+ Kb5 Rd1 h7 Rb1+ Kc5 Rc1+ Kd4 Rd1+ Ke5 Re1+ Kf6 Rh1 Re8+ Ka7 h8=Q Rxh8 Rxh8 Kb6 Kxe6 Kxc6 Kxf5 Kc5 Ke5 c6 Rh6 Kb5 Kd4"
+  },
+  {
+   "n": 52,
+   "brancas": "Capablanca",
+   "pretas": "Rubinstein",
+   "local": "Berlim",
+   "ano": 1928,
+   "abertura": "Peão da Dama",
+   "resultado": "1-0",
+   "lances": "d4 d5 Nf3 c5 dxc5 e6 e4 Bxc5 exd5 exd5 Bb5+ Nc6 O-O Ne7 Nbd2 O-O Nb3 Bb6 Re1 Bg4 Bd3 Ng6 h3 Bxf3 Qxf3 Nce5 Qf5 Nxd3 Qxd3 d4 Bd2 Qf6 Re4 Rad8 Rae1 Qc6 g3 Rfe8 Ba5 Rxe4 Qxe4 Nf8 Qxc6 bxc6 Re7 Rd5 Bxb6 axb6 Rb7 Nd7 Rc7 Rd6 Rc8+ Nf8 Nd2 c5 Nc4 Re6 Rb8 Re1+ Kg2 g5 a4 Ra1 Nxb6 Kg7 Rc8 Ne6 Nd7 Rxa4 Nxc5 Rb4 Nd3 Rb5 Kf3 h6 b4 h5 g4 hxg4+ hxg4 f6 Rc4 Kf7 Nc5 Nd8 Nb3"
+  },
+  {
+   "n": 54,
+   "brancas": "Merényi",
+   "pretas": "Capablanca",
+   "local": "Budapeste",
+   "ano": 1928,
+   "abertura": "Defesa Siciliana",
+   "resultado": "0-1",
+   "lances": "e4 c5 Nf3 g6 c3 d5 Bb5+ Bd7 Bxd7+ Qxd7 exd5 Qxd5 d4 cxd4 Qxd4 Qxd4 Nxd4 e5 Nb5 Kd7 Ke2 Kc6 a4 Nd7 Be3 a6 Rd1 Ngf6 Nd2 Rd8 Na3 Nd5 Ndc4 b6 Rd2 Bxa3 Rxa3 Rhe8 Nd6 Re7 c4 Nxe3 fxe3 Nc5 Ne4 Rxd2+ Nxd2 a5 Nb1 Rd7 Nd2 e4 Nb3 Nd3 Nd4+ Kc5 b3 f5 Ra1 Rxd4 exd4+ Kxd4 g3 g5 b4 f4 c5 f3+ Kf1 e3 Re1 bxc5 Rxe3 Kxe3 bxa5 c4"
+  },
+  {
+   "n": 55,
+   "brancas": "Capablanca",
+   "pretas": "G. A. Thomas",
+   "local": "Hastings",
+   "ano": 1929,
+   "abertura": "Defesa Bogoíndia",
+   "resultado": "1-0",
+   "lances": "Nf3 Nf6 c4 e6 d4 Bb4+ Nbd2 b6 e3 Bb7 Bd3 Ne4 a3 Bxd2+ Nxd2 Nxd2 Bxd2 f5 Qh5+ g6 Qh6 Qe7 f3 d6 e4 Nd7 O-O-O O-O-O exf5 exf5 Bg5 Qf8 Qh4 Re8 Rde1 Qf7 Kc2 a5 b3 Bc6 Kc3 h5 Rxe8+ Rxe8 Re1 Bb7 Qf2 Kb8 Rxe8+ Qxe8 Qe2 Qxe2 Bxe2 Bc8 Be7 b5 cxb5 Nb6 Bc4 Nxc4 bxc4 Kb7 d5 f4 a4 Bf5 Bg5 Kc8 Bxf4 Kb7 h3 Bb1 g4 hxg4 hxg4 Ka7 Bd2 Kb6 f4 Be4 f5 gxf5 g5 f4 Bxf4 Bg6 Be3+ Kb7 c5 dxc5 Kc4 Bc2 Kxc5 Bxa4 Bd2 Bc2 Bxa5 Bg6 d6 cxd6+ Kxd6"
+  },
+  {
+   "n": 56,
+   "brancas": "Capablanca",
+   "pretas": "Vidmar",
+   "local": "Nova York",
+   "ano": 1927,
+   "abertura": "Ruy Lopez",
+   "resultado": "1-0",
+   "lances": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 Na5 Bc2 c5 d4 Qc7 Nbd2 O-O h3 Nc6 d5 Nd8 a4 b4 Nc4 a5 Nfxe5 Ba6 Bb3 dxe5 d6 Bxd6 Qxd6 Qxd6 Nxd6 Nb7 Nxb7 Bxb7 cxb4 cxb4 f3 Rfd8 Be3 h6 Red1 Bc6 Rac1 Be8 Kf2 Rxd1 Rxd1 Rc8 g4 Bd7 Bb6 Be6 Bxe6 fxe6 Rd8+ Rxd8 Bxd8 Nd7 Bxa5 Nc5 b3 Nxb3 Bxb4 Nd4 a5"
+  },
+  {
+   "n": 57,
+   "brancas": "Bogoljubow",
+   "pretas": "Capablanca",
+   "local": "Bad Kissingen",
+   "ano": 1928,
+   "abertura": "Defesa Índia da Dama",
+   "resultado": "0-1",
+   "lances": "d4 Nf6 c4 e6 Nf3 b6 Nc3 Bb7 Bg5 Be7 e3 Ne4 Bxe7 Qxe7 Nxe4 Bxe4 Nd2 Bb7 Be2 Qg5 Bf3 Bxf3 Qxf3 Nc6 Qg3 Qxg3 hxg3 Ke7 g4 h6 a3 a6 Ke2 Rhb8 Ne4 b5 c5 d5 cxd6+ cxd6 f4 Rc8 f5 Na5 Kd3 Nc4 Rab1 d5 Nc3 Rc6 fxe6 fxe6 g5 hxg5 Rh5 Kf6 Rh3 Rac8 Ne2 a5 Rf3+ Kg6 g4 Nd6 Nc3 b4 axb4 axb4 Nd1 Rc2 Rf2 b3 Ra1 Ne4 Re2 R8c6 Rb1 e5 Ra1 R6c4 Ra5 Nc5+"
+  },
+  {
+   "n": 58,
+   "brancas": "Capablanca",
+   "pretas": "Yates",
+   "local": "Nova York",
+   "ano": 1924,
+   "abertura": "Peão da Dama",
+   "resultado": "1-0",
+   "lances": "d4 Nf6 Nf3 g6 Nc3 d5 Bf4 Bg7 e3 O-O h3 c5 dxc5 Qa5 Nd2 Qxc5 Nb3 Qb6 Be5 e6 Nb5 Ne8 Bxg7 Nxg7 h4 a6 Nc3 Nc6 Bd3 f5 Qd2 Ne5 Be2 Nc4 Bxc4 dxc4 Qd4 Qc7 Qc5 Qxc5 Nxc5 b6 N5a4 Rb8 O-O-O b5 Nc5 Rb6 a4 Nh5 b3 cxb3 cxb3 bxa4 N3xa4 Rc6 Kb2 Nf6 Rd2 a5 Rhd1 Nd5 g3 Rf7 Nd3 Rb7 Ne5 Rcc7 Rd4 Kg7 e4 fxe4 Rxe4 Rb5 Rc4 Rxc4 Nxc4 Bd7 Nc3 Rc5 Ne4 Rb5 Ned6 Rc5 Nb7 Rc7 Nbxa5 Bb5 Nd6 Bd7 Nac4 Ra7 Ne4 h6 f4 Be8 Ne5 Ra8 Rc1 Bf7 Rc6 Bg8 Nc5 Re8 Ra6 Re7 Ka3 Bf7 b4 Nc7 Rc6 Nb5+ Kb2 Nd4 Ra6 Be8 g4 Kf6 Ne4+ Kg7 Nd6 Bb5 Ra5 Bf1 Ra8 g5 fxg5 hxg5 hxg5 Bg2 Re8 Rc7 Rd8 Nc6 Ne8+ Kf8 Nxc7+ Nxd8 Kc3 Bb7 Kd4 Bc8 g6 Nb7 Ne8 Nd8 b5 Kg8 g5 Kf8 g7+ Kg8 g6"
+  },
+  {
+   "n": 59,
+   "brancas": "Capablanca",
+   "pretas": "Ed. Lasker",
+   "local": "Nova York",
+   "ano": 1915,
+   "abertura": "Ruy Lopez",
+   "resultado": "1-0",
+   "lances": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Nxe4 d4 exd4 Re1 d5 Nxd4 Bd6 Nxc6 Bxh2+ Kh1 Qh4 Rxe4+ dxe4 Qd8+ Qxd8 Nxd8+ Kxd8 Kxh2 Be6 Be3 f5 Nc3 Ke7 g4 g6 Kg3 h5 gxf5 h4+ Kh2 gxf5 Ne2 b5 Bb3 Bxb3 axb3 Rhg8 Rd1 Rad8 Rxd8 Kxd8 Nd4 Kd7 Nxf5 a5 Nxh4 a4 bxa4 bxa4 Ng2 Rb8 Bd4 Rb4 Bg7 Rc4 Ne3 Rc6 c4 Rg6 Bc3 Kd6 Bd4 Kd7 Nd5 Rc6 c5 Rg6 Be3 c6 Nc3 Ke6 Nxa4 Rg8 b4 Ke5 Nb6 Rg7 Nc4+ Kd5 Nd6 Rg8 b5 cxb5 Nxb5 Rg6 Nc3+ Ke5 Ne2 Ra6 Nd4 Kd5 c6 Ra7 Kg3 Rg7+ Kf4 Rf7+ Kg5 Rg7+ Kf6 Rh7 Kg6 Rc7 Bf4 Rc8 Be3 Rc7 Kf5 Rf7+ Kg4 Rg7+ Kh3 Rh7+ Kg2 Rg7+ Kf1 Ra7 Ke2 Ra2+ Kd1 Kc4 c7 Ra8 Nf5 Kd3 Nd6 Rh8 Kc1"
   }
  ]
 }

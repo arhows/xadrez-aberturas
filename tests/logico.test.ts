@@ -61,9 +61,9 @@ describe('Lance a lance: Capablanca: Move by Move', () => {
       expect(p.n).toBeLessThanOrEqual(59)
       const jogo = new Chess()
       for (const san of p.lances.split(' ')) expect(() => jogo.move(san), `partida ${p.n}: ${san}`).not.toThrow()
-      expect(['1-0', '0-1']).toContain(p.resultado)
-      expect([p.brancas, p.pretas]).toContain('Capablanca')
-      expect(p.resultado === '1-0' ? p.brancas : p.pretas, `partida ${p.n}: Capablanca é quem vence`).toBe('Capablanca')
+      expect(['1-0', '0-1', '1/2-1/2']).toContain(p.resultado)
+      if (p.resultado === '1/2-1/2') expect(p.lado, `partida ${p.n}: empate precisa indicar o lado`).toBeTruthy()
+      expect(corDoVencedorLogico(p) === 'w' ? p.brancas : p.pretas, `partida ${p.n}: você joga com Capablanca`).toBe('Capablanca')
     }
   })
 
