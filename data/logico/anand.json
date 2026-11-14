@@ -4647,6 +4647,673 @@
      ]
     }
    }
+  },
+  {
+   "n": 19,
+   "brancas": "Kramnik",
+   "pretas": "Anand",
+   "local": "Bonn (match pelo título mundial)",
+   "ano": 2008,
+   "abertura": "Defesa Semi-Eslava",
+   "resultado": "0-1",
+   "lances": "d4 d5 c4 c6 Nf3 Nf6 Nc3 e6 e3 Nbd7 Bd3 dxc4 Bxc4 b5 Bd3 a6 e4 c5 e5 cxd4 Nxb5 axb5 exf6 gxf6 O-O Qb6 Qe2 Bb7 Bxb5 Rg8 Bf4 Bd6 Bg3 f5 Rfc1 f4 Bh4 Be7 a4 Bxh4 Nxh4 Ke7 Ra3 Rac8 Rxc8 Rxc8 Ra1 Qc5 Qg4 Qe5 Nf3 Qf6 Re1 Rc5 b4 Rc3 Nxd4 Qxd4 Rd1 Nf6 Rxd4 Nxg4 Rd7+ Kf6 Rxb7 Rc1+ Bf1 Ne3 fxe3 fxe3",
+   "tema": "Iniciativa com o rei no centro e o golpe final",
+   "introducao": "Bonn, 2008, quinta partida do match pelo título mundial contra Kramnik. Na Semi-Eslava Meran, as pretas ficam com peões dobrados em f6, mas ganham a coluna g e um peão d4 avançado. Anand deixa o rei em e7, avança os peões f e leva a torre até c3. Quando Kramnik come o peão d4, a dama preta retoma, o cavalo come a dama branca e, no fim, ...Ne3 abre caminho para o peão f.",
+   "conclusao": "O rei preto ficou no centro a partida toda, protegido pelas próprias peças, e isso deixou as torres livres para as colunas c e g. Anand manteve a pressão até Kramnik errar com 29.Nxd4, e depois finalizou com precisão: o xeque ...Rc1+ e o sacrifício ...Ne3 foram os únicos lances fortes. Lição: com as peças ativas, o rei no centro pode ser seguro; e, quando o adversário erra, procure o lance mais forçado.",
+   "notas": {
+    "1...d5": {
+     "texto": "O peão disputa o centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "2...c6": {
+     "texto": "A Defesa Eslava: o peão c protege o d5.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "3...Nf6": {
+     "texto": "Desenvolve o cavalo.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "4...e6": {
+     "texto": "A Semi-Eslava: os peões c6, d5 e e6 formam uma cadeia sólida.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "5...Nbd7": {
+     "texto": "Desenvolve o outro cavalo.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "6...dxc4": {
+     "texto": "Come o peão c4: a Variante Meran.",
+     "principios": [
+      "material"
+     ]
+    },
+    "7...b5": {
+     "texto": "O peão b ganha espaço com tempo, atacando o bispo de c4.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "8...a6": {
+     "texto": "Protege o peão b5 e prepara ...c5.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "9...c5": {
+     "texto": "O peão c ataca o d4.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "10...cxd4": {
+     "texto": "Troca no d4.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "11...axb5": {
+     "texto": "O peão come o cavalo de b5.",
+     "alternativa": "Dar antes o xeque ...Bb4+ também era bom; ...axb5 é o mais direto.",
+     "principios": [
+      "material"
+     ]
+    },
+    "12...gxf6": {
+     "texto": "Retoma com o peão g: a coluna g se abre para a torre preta.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "13...Qb6": {
+     "texto": "A dama protege os peões b5 e d4.",
+     "alternativa": "...Rg8 ou ...Ra5 eram mais fracos, segundo o Stockfish.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "14...Bb7": {
+     "texto": "O bispo vai para a grande diagonal, contra o cavalo de f3 e o rei branco.",
+     "principios": [
+      "desenvolvimento",
+      "ataque"
+     ]
+    },
+    "15...Rg8": {
+     "texto": "A torre ocupa a coluna g, aberta, contra o rei branco.",
+     "alternativa": "...Bd6 tinha o mesmo valor.",
+     "principios": [
+      "colunas",
+      "ataque"
+     ]
+    },
+    "16...Bd6": {
+     "texto": "O bispo enfrenta o bispo de f4.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "17...f5": {
+     "texto": "O peão f avança, preparando ...f4.",
+     "alternativa": "...Ke7, com o rei protegendo as peças, era um pouco melhor, segundo o Stockfish.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "18...f4": {
+     "texto": "O peão ataca o bispo de g3.",
+     "alternativa": "...Ke7 tinha o mesmo valor.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "19...Be7": {
+     "texto": "O bispo oferece a troca do bispo de h4.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "20...Bxh4": {
+     "texto": "Troca os bispos.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "21...Ke7": {
+     "texto": "O rei vai para e7, onde liga as torres e protege as peças da sétima fileira.",
+     "alternativa": "...Qd6 tinha praticamente o mesmo valor.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "22...Rac8": {
+     "texto": "A torre ocupa a coluna c.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "23...Rxc8": {
+     "texto": "Retoma a torre.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "24...Qc5": {
+     "texto": "A dama ataca o bispo de b5.",
+     "alternativa": "...Rc5 tinha o mesmo valor.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "25...Qe5": {
+     "texto": "A dama vai para e5 e protege o peão f4.",
+     "alternativa": "...Be4 era um pouco mais preciso, segundo o Stockfish.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "26...Qf6": {
+     "texto": "A dama recua para f6, ainda protegendo o f4.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "27...Rc5": {
+     "texto": "A torre ataca o bispo de b5.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "28...Rc3": {
+     "texto": "A torre entra na terceira fileira e ataca o cavalo de f3.",
+     "alternativa": "Era o melhor lance: ...h5 ou ...Ne5 eram mais fracos.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "29.Nxd4": {
+     "texto": "Um erro grave das brancas: o Stockfish preferia Bxd7."
+    },
+    "29...Qxd4": {
+     "texto": "A dama come o cavalo de d4.",
+     "alternativa": "Era preciso comer: ...Ne5 ou ...f3 deixavam as brancas melhor.",
+     "principios": [
+      "material"
+     ]
+    },
+    "30...Nf6": {
+     "texto": "O cavalo ataca a dama de g4.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "31...Nxg4": {
+     "texto": "O cavalo come a dama.",
+     "principios": [
+      "material"
+     ]
+    },
+    "32...Kf6": {
+     "texto": "O rei sai do xeque.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "33...Rc1+": {
+     "texto": "Xeque com a torre.",
+     "alternativa": "...Rc2 deixava o jogo igual: o xeque, seguido de ...Ne3, é muito mais forte.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "34...Ne3": {
+     "texto": "O cavalo se oferece em e3: se fxe3, o peão f4 retoma e chega perto da promoção.",
+     "alternativa": "Era o único lance forte: ...Ra1 ou ...h5 deixavam o jogo igual.",
+     "principios": [
+      "tatica",
+      "peoes"
+     ]
+    },
+    "35...fxe3": {
+     "texto": "O peão retoma em e3: com a torre em c1, a ameaça é ...e2. As brancas abandonaram.",
+     "principios": [
+      "peoes"
+     ]
+    }
+   }
+  },
+  {
+   "n": 20,
+   "brancas": "Anand",
+   "pretas": "Svidler",
+   "local": "Moscou (Memorial Tal)",
+   "ano": 2009,
+   "abertura": "Defesa Grünfeld",
+   "resultado": "1-0",
+   "lances": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Nxd5 Bd2 Bg7 e4 Nb6 Be3 O-O h3 e5 Nf3 exd4 Bxd4 Bxd4 Qxd4 Qe7 Qe3 Nc6 Bb5 Nb4 Rc1 Be6 b3 a6 Be2 Nc6 O-O f6 Rfe1 Rad8 Bf1 Bf7 Nh2 Be6 f4 Nd4 f5 Bf7 Ng4 gxf5 Nh6+ Kh8 Qf2 fxe4 Rxe4 Qd6 Rd1 c5 Nxf7+ Rxf7 b4 f5 bxc5 fxe4 Qxf7 Nf3+ Qxf3",
+   "tema": "Peões do lado do rei e um cavalo em h6",
+   "introducao": "Moscou, 2009, no Memorial Tal. Contra a Grünfeld, Anand evita os peões dobrados com 5.Bd2 e, depois das trocas no centro, avança os peões f e leva o cavalo de f3 até h6, perto do rei preto. Quando Svidler abre o lado do rei com ...fxe4, a torre branca retoma com tempo, o peão b ataca o c5, que protegia o cavalo de d4, e a dama come a torre de f7.",
+   "conclusao": "Anand jogou por posição: trocou peças, fechou as diagonais dos bispos pretos e só depois avançou os peões f. O cavalo em h6 e a dama em f2 deixaram o rei preto sem defensores, e o golpe 29.b4 tirou o apoio do cavalo central. Lição: antes de atacar, tire do caminho as peças que defendem o rei adversário.",
+   "notas": {
+    "1.d4": {
+     "texto": "Abre com o peão da dama, ocupando o centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "2.c4": {
+     "texto": "O peão c ganha espaço no centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "3.Nc3": {
+     "texto": "Desenvolve o cavalo, pressionando d5.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "4.cxd5": {
+     "texto": "Troca no d5.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "5.Bd2": {
+     "texto": "O bispo protege o cavalo de c3: se ...Nxc3, o bispo retoma e as brancas não ficam com peões dobrados.",
+     "alternativa": "e4, a linha principal, era um pouco mais forte; Bd2 é uma escolha menos comum.",
+     "principios": [
+      "desenvolvimento",
+      "peoes"
+     ]
+    },
+    "6.e4": {
+     "texto": "O peão expulsa o cavalo de d5.",
+     "principios": [
+      "tempo",
+      "centro"
+     ]
+    },
+    "7.Be3": {
+     "texto": "O bispo vai para e3, protegendo o d4.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "8.h3": {
+     "texto": "Tira a casa g4 das peças pretas.",
+     "alternativa": "a4 ou Be2 tinham o mesmo valor.",
+     "principios": [
+      "profilaxia"
+     ]
+    },
+    "9.Nf3": {
+     "texto": "Desenvolve o cavalo.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "10.Bxd4": {
+     "texto": "Retoma no d4.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "11.Qxd4": {
+     "texto": "Troca os bispos: a dama fica no centro.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "12.Qe3": {
+     "texto": "A dama recua para e3.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "13.Bb5": {
+     "texto": "O bispo ataca o cavalo de c6.",
+     "alternativa": "Be2 ou Bd3 eram um pouco mais fracos.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "14.Rc1": {
+     "texto": "A torre protege a casa c2, atacada pelo cavalo de b4.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "15.b3": {
+     "texto": "O peão fecha a diagonal do bispo de e6 até a2.",
+     "alternativa": "Rocar logo permitia ...Bxa2.",
+     "principios": [
+      "profilaxia"
+     ]
+    },
+    "16.Be2": {
+     "texto": "O bispo recua diante do peão a6.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "17.O-O": {
+     "texto": "O rei vai para a segurança.",
+     "principios": [
+      "roque"
+     ]
+    },
+    "18.Rfe1": {
+     "texto": "A torre protege o peão e4.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "19.Bf1": {
+     "texto": "O bispo recua para f1, protegendo o lado do rei.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "20.Nh2": {
+     "texto": "O cavalo vai para g4, passando por h2.",
+     "alternativa": "Ne2 tinha o mesmo valor.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "21.f4": {
+     "texto": "O peão f ganha espaço no lado do rei.",
+     "alternativa": "Ne2, levando o cavalo para f4, era um pouco melhor, segundo o Stockfish.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "22.f5": {
+     "texto": "O peão ataca o bispo de e6 e o g6.",
+     "alternativa": "Ne2 ou Qf2 eram um pouco melhores; f5 é o mais direto.",
+     "principios": [
+      "ataque",
+      "peoes"
+     ]
+    },
+    "23.Ng4": {
+     "texto": "O cavalo vai para g4, de onde ataca os peões f6 e h6.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "24.Nh6+": {
+     "texto": "Xeque com o cavalo.",
+     "alternativa": "Retomar com exf5 deixava o jogo igual; Nh6+ mantém a iniciativa.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "25.Qf2": {
+     "texto": "A dama ataca o cavalo de d4.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "25...fxe4": {
+     "texto": "Um erro grave: o Stockfish preferia ...f4."
+    },
+    "26.Rxe4": {
+     "texto": "A torre retoma no e4 e ataca o cavalo de d4.",
+     "alternativa": "Nxe4 ou Rcd1 eram muito mais fracos.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "27.Rd1": {
+     "texto": "A outra torre também ataca o cavalo de d4.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "28.Nxf7+": {
+     "texto": "O cavalo come o bispo de f7 com xeque.",
+     "principios": [
+      "material"
+     ]
+    },
+    "29.b4": {
+     "texto": "O peão ataca o c5, que protege o cavalo de d4.",
+     "alternativa": "Rh4 ou Rf4 deixavam o jogo quase igual; b4 é muito mais forte.",
+     "principios": [
+      "tatica"
+     ]
+    },
+    "30.bxc5": {
+     "texto": "Come o c5 e ataca a dama de d6.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "31.Qxf7": {
+     "texto": "A dama come a torre de f7.",
+     "alternativa": "Era o único bom lance: cxd6 ou Qh4 jogavam fora a vantagem.",
+     "principios": [
+      "material"
+     ]
+    },
+    "32.Qxf3": {
+     "texto": "A dama come o cavalo de f3. As pretas abandonaram.",
+     "principios": [
+      "material"
+     ]
+    }
+   }
+  },
+  {
+   "n": 21,
+   "brancas": "Anand",
+   "pretas": "Kempinski",
+   "local": "Liga alemã",
+   "ano": 2010,
+   "abertura": "Defesa Siciliana",
+   "resultado": "1-0",
+   "lances": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e6 O-O Be7 a4 Nc6 Be3 O-O f4 Qc7 Kh1 Re8 Bf3 Nd7 Qe1 Bf8 Qf2 Rb8 Rad1 Nxd4 Bxd4 b6 e5 dxe5 fxe5 Bc5 Bh5 Rf8 Bxf7+ Kh8 Ne4 Nxe5 Nxc5 bxc5 Bxe5 Qxe5 Bg6 Rg8 Bxh7 Kxh7 Qh4+ Kg6 Rd3 Qh5 Rg3+",
+   "tema": "A ruptura e5 e os bispos contra o rei",
+   "introducao": "Liga alemã, 2010. Na Siciliana Scheveningen, Anand monta a mesma estrutura da partida contra Kasparov em 1995: a4, f4, Kh1 e o bispo em f3. Depois rompe o centro com e5, abre a coluna f e leva os bispos para f7 e g6, perto do rei preto. O sacrifício em h7 abre o rei, e a dama e a torre entram com xeques.",
+   "conclusao": "A ruptura e5 abriu a coluna f e as diagonais para os bispos brancos, que passaram a atacar o rei preto de perto. Anand trocou o bispo preto de casas pretas e, com o rei adversário sem defensores, sacrificou em h7 no momento exato. Lição: na Siciliana, a ruptura central e5 costuma abrir caminho para o ataque ao rei.",
+   "notas": {
+    "1.e4": {
+     "texto": "Abre com o peão do rei, ocupando o centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "2.Nf3": {
+     "texto": "Desenvolve o cavalo, controlando d4.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "3.d4": {
+     "texto": "Abre o centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "4.Nxd4": {
+     "texto": "O cavalo retoma e se centraliza.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "5.Nc3": {
+     "texto": "Desenvolve o outro cavalo, protegendo o e4.",
+     "principios": [
+      "desenvolvimento",
+      "defesa"
+     ]
+    },
+    "6.Be2": {
+     "texto": "Um desenvolvimento tranquilo: o bispo vai para e2.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "7.O-O": {
+     "texto": "O rei vai para a segurança.",
+     "principios": [
+      "roque"
+     ]
+    },
+    "8.a4": {
+     "texto": "Impede ...b5, que daria espaço às pretas na ala da dama.",
+     "principios": [
+      "profilaxia"
+     ]
+    },
+    "9.Be3": {
+     "texto": "Desenvolve o bispo.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "10.f4": {
+     "texto": "O peão f ganha espaço no lado do rei e controla e5.",
+     "principios": [
+      "peoes",
+      "centro"
+     ]
+    },
+    "11.Kh1": {
+     "texto": "Tira o rei da diagonal a7-g1, onde poderia levar xeque.",
+     "principios": [
+      "profilaxia"
+     ]
+    },
+    "12.Bf3": {
+     "texto": "O bispo vai para f3, apoiando o e4.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "13.Qe1": {
+     "texto": "A dama vai para e1, a caminho do lado do rei.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "14.Qf2": {
+     "texto": "A dama se coloca em f2, pronta para o lado do rei.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "15.Rad1": {
+     "texto": "A torre ocupa a coluna d, contra o peão d6.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "16.Bxd4": {
+     "texto": "Retoma com o bispo, que fica forte em d4.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "17.e5": {
+     "texto": "A ruptura no centro: o peão ataca o d6.",
+     "alternativa": "f5 era um pouco mais forte, segundo o Stockfish; e5 abre as linhas para os bispos.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "18.fxe5": {
+     "texto": "Retoma: a coluna f fica aberta para a torre e a dama.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "19.Bh5": {
+     "texto": "O bispo vai para h5, contra o peão f7.",
+     "alternativa": "Trocar logo com Bxc5 era bem mais fraco.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "20.Bxf7+": {
+     "texto": "O bispo come o f7 com xeque.",
+     "alternativa": "Trocar antes com Bxc5 tinha o mesmo valor.",
+     "principios": [
+      "material",
+      "ataque"
+     ]
+    },
+    "21.Ne4": {
+     "texto": "O cavalo ataca o bispo de c5.",
+     "alternativa": "Bxc5 ou Qh4 tinham praticamente o mesmo valor.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "21...Nxe5": {
+     "texto": "Um erro grave: o Stockfish preferia ...Bxd4."
+    },
+    "22.Nxc5": {
+     "texto": "Troca o cavalo pelo bispo de c5.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "23.Bxe5": {
+     "texto": "O bispo come o cavalo de e5.",
+     "alternativa": "Bxc5 ou Bc3 eram mais fracos.",
+     "principios": [
+      "material"
+     ]
+    },
+    "24.Bg6": {
+     "texto": "O bispo vai para g6, perto do rei preto.",
+     "alternativa": "Bh5 era mais fraco, e b3 jogava fora a vantagem.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "25.Bxh7": {
+     "texto": "Sacrifício: o bispo come o h7 e abre o rei preto.",
+     "alternativa": "Bf7 ou Qh4 eram mais fracos; o sacrifício é o mais forte.",
+     "principios": [
+      "tatica",
+      "ataque"
+     ]
+    },
+    "26.Qh4+": {
+     "texto": "Xeque com a dama.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "27.Rd3": {
+     "texto": "A torre vai para a terceira fileira, a caminho de g3.",
+     "alternativa": "Rf3 ou Qg4+ eram mais fracos.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "28.Rg3+": {
+     "texto": "Xeque com a torre: depois de ...Kh6, Qf4+ ganha a torre de b8. As pretas abandonaram.",
+     "alternativa": "Qe4+ era um pouco mais forte; todas as opções ganham.",
+     "principios": [
+      "ataque",
+      "tatica"
+     ]
+    }
+   }
   }
  ]
 }
