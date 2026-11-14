@@ -7972,7 +7972,316 @@
    "ano": 1929,
    "abertura": "Defesa Nimzoíndia",
    "resultado": "0-1",
-   "lances": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 d5 Nf3 c5 cxd5 Qxd5 a3 Bxc3+ bxc3 Nc6 e3 O-O Be2 cxd4 cxd4 b6 Nd2 Bb7 Bf3 Qd7 O-O Rac8 Qb1 Na5 Bxb7 Qxb7 Bb2 Qa6 Re1 Nd5 Ra2 Rc6 e4 Nc3 Bxc3 Rxc3 Nf3 Rfc8 h3 Nc4 a4 Na3 Qb2 Qxa4 Re2 b5 d5 exd5 exd5 b4 Qd2 b3 Rb2 Rc2 Qe3 Rxb2 Rxb2 Nc4 Qc1 Qa3 Rb1 Qxc1+"
+   "lances": "d4 Nf6 c4 e6 Nc3 Bb4 Qc2 d5 Nf3 c5 cxd5 Qxd5 a3 Bxc3+ bxc3 Nc6 e3 O-O Be2 cxd4 cxd4 b6 Nd2 Bb7 Bf3 Qd7 O-O Rac8 Qb1 Na5 Bxb7 Qxb7 Bb2 Qa6 Re1 Nd5 Ra2 Rc6 e4 Nc3 Bxc3 Rxc3 Nf3 Rfc8 h3 Nc4 a4 Na3 Qb2 Qxa4 Re2 b5 d5 exd5 exd5 b4 Qd2 b3 Rb2 Rc2 Qe3 Rxb2 Rxb2 Nc4 Qc1 Qa3 Rb1 Qxc1+",
+   "tema": "A coluna c, o cavalo que invade e o peão passado",
+   "introducao": "Budapeste, 1929. Capablanca, de pretas, contra a Nimzoíndia com 4.Qc2. As pretas trocam o bispo pelo cavalo, deixam as brancas com peões fracos e usam a coluna c e a casa c4 para invadir. A partida termina com um peão passado preto avançando até b2. Você joga com as pretas.",
+   "conclusao": "Capablanca venceu com movimentos simples e precisos: trocou os bispos de casas claras, ocupou a coluna c com as torres e levou o cavalo a casas fortes (a5, c4, c3, a3). Cada salto do cavalo atacava algo, e as brancas foram perdendo peões. No fim, o peão passado de b avançou com o apoio da dama e do cavalo. Lições: um cavalo numa casa forte, perto do campo adversário, é muito difícil de desalojar, e colunas abertas são estradas para as torres.",
+   "notas": {
+    "1...Nf6": {
+     "texto": "Controla e4.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "2.c4": {
+     "texto": "As brancas ganham espaço."
+    },
+    "2...e6": {
+     "texto": "Abre o bispo de f8.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "3.Nc3": {
+     "texto": "Prepara e4."
+    },
+    "3...Bb4": {
+     "texto": "A Nimzoíndia: o bispo crava o cavalo e impede e4.",
+     "principios": [
+      "desenvolvimento",
+      "tatica"
+     ]
+    },
+    "4.Qc2": {
+     "texto": "A dama defende o c3."
+    },
+    "4...d5": {
+     "texto": "Ocupa o centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "5.Nf3": {
+     "texto": "Desenvolvimento."
+    },
+    "5...c5": {
+     "texto": "Ataca o d4 e abre o jogo.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "6.cxd5": {
+     "texto": "As brancas trocam."
+    },
+    "6...Qxd5": {
+     "texto": "A dama retoma, centralizada. Ela não pode ser atacada com tempo por nenhuma peça branca.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "7.a3": {
+     "texto": "Ataca o bispo."
+    },
+    "7...Bxc3+": {
+     "texto": "O bispo troca o cavalo.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "8.bxc3": {
+     "texto": "As brancas ficam com peões em c3 e d4, que podem virar alvos."
+    },
+    "8...Nc6": {
+     "texto": "Desenvolve e pressiona o d4.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "9.e3": {
+     "texto": "Defende o d4."
+    },
+    "9...O-O": {
+     "texto": "Rei em segurança.",
+     "principios": [
+      "roque"
+     ]
+    },
+    "10.Be2": {
+     "texto": "Desenvolvimento."
+    },
+    "10...cxd4": {
+     "texto": "Abre a coluna c.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "11.cxd4": {
+     "texto": "As brancas retomam com o peão."
+    },
+    "11...b6": {
+     "texto": "Prepara o bispo em b7, na grande diagonal.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "12.Nd2": {
+     "texto": "O cavalo prepara Bf3 para trocar os bispos."
+    },
+    "12...Bb7": {
+     "texto": "O bispo ocupa a grande diagonal.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "13.Bf3": {
+     "texto": "O bispo ataca a dama."
+    },
+    "13...Qd7": {
+     "texto": "A dama recua, mantendo o bispo de b7 defendido.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "14.O-O": {
+     "texto": "Rei em segurança."
+    },
+    "14...Rac8": {
+     "texto": "A torre ocupa a coluna c aberta.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "15.Qb1": {
+     "texto": "A dama sai da coluna c."
+    },
+    "15...Na5": {
+     "texto": "O cavalo vai para a5, a caminho de c4, uma casa forte que nenhum peão branco pode atacar.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "16.Bxb7": {
+     "texto": "As brancas trocam os bispos."
+    },
+    "16...Qxb7": {
+     "texto": "A dama retoma.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "17.Bb2": {
+     "texto": "O bispo se desenvolve."
+    },
+    "17...Qa6": {
+     "texto": "A dama mira a casa e2 e o peão de a3, pontos fracos do campo branco.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "18.Re1": {
+     "texto": "A torre defende e2."
+    },
+    "18...Nd5": {
+     "texto": "O outro cavalo vai para d5, de olho em c3 e f4.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "19.Ra2": {
+     "texto": "A torre defende a segunda fileira."
+    },
+    "19...Rc6": {
+     "texto": "A torre se prepara para dobrar na coluna c.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "20.e4": {
+     "texto": "Ataca o cavalo de d5."
+    },
+    "20...Nc3": {
+     "texto": "O cavalo invade c3, atacando a dama de b1 e a torre de a2. As brancas são obrigadas a trocá-lo pelo bispo.",
+     "principios": [
+      "tatica",
+      "tempo"
+     ]
+    },
+    "21.Bxc3": {
+     "texto": "O bispo troca o cavalo."
+    },
+    "21...Rxc3": {
+     "texto": "A torre retoma e ocupa a terceira fileira das brancas.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "22.Nf3": {
+     "texto": "O cavalo se desenvolve."
+    },
+    "22...Rfc8": {
+     "texto": "As torres se dobram na coluna c.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "23.h3": {
+     "texto": "As brancas dão uma casa ao rei."
+    },
+    "23...Nc4": {
+     "texto": "O cavalo chega a c4, uma casa forte de onde ataca a3, b2, d2 e e3.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "24.a4": {
+     "texto": "O peão avança."
+    },
+    "24...Na3": {
+     "texto": "O cavalo ataca a dama de b1.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "25.Qb2": {
+     "texto": "A dama foge."
+    },
+    "25...Qxa4": {
+     "texto": "A dama pega o peão de a4: as pretas ficam com um peão a mais.",
+     "principios": [
+      "material"
+     ]
+    },
+    "26.Re2": {
+     "texto": "A torre defende."
+    },
+    "26...b5": {
+     "texto": "O peão de b vira passado e começa a avançar.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "27.d5": {
+     "texto": "As brancas tentam um contra-ataque no centro."
+    },
+    "27...exd5": {
+     "texto": "As pretas capturam."
+    },
+    "28.exd5": {
+     "texto": "As brancas retomam."
+    },
+    "28...b4": {
+     "texto": "O peão avança.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "29.Qd2": {
+     "texto": "A dama se reposiciona."
+    },
+    "29...b3": {
+     "texto": "O peão chega a b3, a duas casas da promoção.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "30.Rb2": {
+     "texto": "A torre bloqueia o peão."
+    },
+    "30...Rc2": {
+     "texto": "A torre invade a segunda fileira e ataca a dama de d2.",
+     "principios": [
+      "colunas",
+      "tempo"
+     ]
+    },
+    "31.Qe3": {
+     "texto": "A dama foge."
+    },
+    "31...Rxb2": {
+     "texto": "A torre troca a torre que bloqueava o peão.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "32.Rxb2": {
+     "texto": "A outra torre retoma."
+    },
+    "32...Nc4": {
+     "texto": "Garfo: o cavalo ataca a dama de e3 e a torre de b2.",
+     "principios": [
+      "tatica"
+     ]
+    },
+    "33.Qc1": {
+     "texto": "A dama defende a torre."
+    },
+    "33...Qa3": {
+     "texto": "A dama ataca a torre de b2 pela segunda vez, junto com o cavalo.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "34.Rb1": {
+     "texto": "A torre recua."
+    },
+    "34...Qxc1+": {
+     "texto": "As pretas trocam as damas: depois de 35.Rxc1 b2, o peão vai coroar, com o cavalo ajudando a controlar b1. As brancas abandonaram.",
+     "principios": [
+      "troca",
+      "peoes"
+     ]
+    }
+   }
   },
   {
    "n": 32,
@@ -7982,7 +8291,511 @@
    "ano": 1929,
    "abertura": "Defesa Índia da Dama",
    "resultado": "0-1",
-   "lances": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Bb4+ Bd2 Bxd2+ Nbxd2 O-O O-O c5 dxc5 bxc5 Qc2 Nc6 Rfd1 Qb6 a3 Rab8 Rab1 Rfc8 e4 e5 Qd3 d6 Nf1 Nd4 Nxd4 exd4 b4 Qc6 bxc5 dxc5 Rxb7 Qxb7 e5 Qb3 exf6 Qxd3 Rxd3 Rb1 Bd5 Rcb8 Kg2 R8b3 Rxb3 Rxb3 Nd2 Rxa3 Ne4 a5 Nxc5 gxf6 Kf1 a4 Ke2 Ra1 Nd3 a3 c5 a2 Kf3 Rd1 Bxa2 Rxd3+ Ke4 Rd2 Bc4 Kf8 f3 Rxh2 Kxd4 Ke7 Bd3 h5 Ke3 Rg2 Kf4 Rg1 Be4 Rc1 c6 Rc3 c7 Rxc7 Bd5 Rc5 Ba2 Rb5 Ke3 Ra5 Bc4 Rc5 Ba6 Ke6 Kf4 Rc3 Bf1 f5 Ba6 Kf6 Bb7 Rc4+ Ke3 Kg5 Kf2 f4 Kg2 f5"
+   "lances": "d4 Nf6 c4 e6 Nf3 b6 g3 Bb7 Bg2 Bb4+ Bd2 Bxd2+ Nbxd2 O-O O-O c5 dxc5 bxc5 Qc2 Nc6 Rfd1 Qb6 a3 Rab8 Rab1 Rfc8 e4 e5 Qd3 d6 Nf1 Nd4 Nxd4 exd4 b4 Qc6 bxc5 dxc5 Rxb7 Qxb7 e5 Qb3 exf6 Qxd3 Rxd3 Rb1 Bd5 Rcb8 Kg2 R8b3 Rxb3 Rxb3 Nd2 Rxa3 Ne4 a5 Nxc5 gxf6 Kf1 a4 Ke2 Ra1 Nd3 a3 c5 a2 Kf3 Rd1 Bxa2 Rxd3+ Ke4 Rd2 Bc4 Kf8 f3 Rxh2 Kxd4 Ke7 Bd3 h5 Ke3 Rg2 Kf4 Rg1 Be4 Rc1 c6 Rc3 c7 Rxc7 Bd5 Rc5 Ba2 Rb5 Ke3 Ra5 Bc4 Rc5 Ba6 Ke6 Kf4 Rc3 Bf1 f5 Ba6 Kf6 Bb7 Rc4+ Ke3 Kg5 Kf2 f4 Kg2 f5",
+   "tema": "Virar uma posição pior com peças ativas e um peão passado",
+   "introducao": "Budapeste, 1929. Capablanca, de pretas, na Defesa Índia da Dama. Esta partida é diferente das outras: na metade dela, Esteban Canal faz uma boa combinação e fica com vantagem. Capablanca, então, usa as torres ativas, ganha peões na ala da dama e cria um peão passado em a. Com técnica de final, transforma a posição pior numa vitória. Você joga com as pretas.",
+   "conclusao": "Uma lição de final. Depois da combinação 20.Rxb7 e 21.e5, as brancas ficaram com bispo e cavalo contra uma torre, e o Stockfish dava vantagem a elas. Capablanca não se abalou: ativou as torres na coluna b, pegou o peão de a3, criou um peão passado e, com a ameaça dupla 34...Rd1, ganhou o cavalo. No final de torre contra bispo, as torres foram mais fortes que o bispo. Lições: mesmo numa posição pior, peças ativas criam chances, e um peão passado avançado obriga o adversário a gastar peças para pará-lo.",
+   "notas": {
+    "1...Nf6": {
+     "texto": "Controla e4.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "2.c4": {
+     "texto": "As brancas ganham espaço."
+    },
+    "2...e6": {
+     "texto": "Abre o bispo de f8.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "3.Nf3": {
+     "texto": "Desenvolvimento."
+    },
+    "3...b6": {
+     "texto": "A Índia da Dama: o bispo vai para b7 controlar e4.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "4.g3": {
+     "texto": "Prepara o fianqueto."
+    },
+    "4...Bb7": {
+     "texto": "O bispo ocupa a grande diagonal.",
+     "principios": [
+      "desenvolvimento",
+      "centro"
+     ]
+    },
+    "5.Bg2": {
+     "texto": "O bispo branco disputa a mesma diagonal."
+    },
+    "5...Bb4+": {
+     "texto": "Xeque para trocar o bispo de casas escuras das brancas.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "6.Bd2": {
+     "texto": "As brancas bloqueiam."
+    },
+    "6...Bxd2+": {
+     "texto": "Troca os bispos.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "7.Nbxd2": {
+     "texto": "O cavalo retoma."
+    },
+    "7...O-O": {
+     "texto": "Rei em segurança.",
+     "principios": [
+      "roque"
+     ]
+    },
+    "8.O-O": {
+     "texto": "Rei em segurança."
+    },
+    "8...c5": {
+     "texto": "Disputa o centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "9.dxc5": {
+     "texto": "As brancas trocam."
+    },
+    "9...bxc5": {
+     "texto": "Retoma com o peão de b, abrindo a coluna b para as torres.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "10.Qc2": {
+     "texto": "A dama se desenvolve."
+    },
+    "10...Nc6": {
+     "texto": "Desenvolvimento.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "11.Rfd1": {
+     "texto": "A torre ocupa a coluna d."
+    },
+    "11...Qb6": {
+     "texto": "A dama vai para a coluna b, de olho em b2.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "12.a3": {
+     "texto": "Firma a ala da dama."
+    },
+    "12...Rab8": {
+     "texto": "A torre se junta na coluna b.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "13.Rab1": {
+     "texto": "As brancas defendem b2."
+    },
+    "13...Rfc8": {
+     "texto": "A outra torre se prepara para defender o c5."
+    },
+    "14.e4": {
+     "texto": "As brancas ganham espaço no centro."
+    },
+    "14...e5": {
+     "texto": "Fixa o centro e cria a casa d4 para o cavalo.",
+     "principios": [
+      "centro",
+      "peoes"
+     ]
+    },
+    "15.Qd3": {
+     "texto": "A dama defende e4 e mira d6."
+    },
+    "15...d6": {
+     "texto": "Firma o e5 e o c5.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "16.Nf1": {
+     "texto": "O cavalo se reposiciona."
+    },
+    "16...Nd4": {
+     "texto": "O cavalo ocupa d4, uma casa forte no centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "17.Nxd4": {
+     "texto": "As brancas trocam o cavalo forte."
+    },
+    "17...exd4": {
+     "texto": "O peão retoma e fica em d4, protegido pelo c5.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "18.b4": {
+     "texto": "As brancas atacam o c5."
+    },
+    "18...Qc6": {
+     "texto": "A dama defende, mas deixa o bispo de b7 numa posição perigosa. O Stockfish preferia 18...Qc7."
+    },
+    "19.bxc5": {
+     "texto": "As brancas capturam."
+    },
+    "19...dxc5": {
+     "texto": "As pretas retomam."
+    },
+    "20.Rxb7": {
+     "texto": "A combinação de Canal: a torre se entrega pelo bispo de b7."
+    },
+    "20...Qxb7": {
+     "texto": "A dama captura."
+    },
+    "21.e5": {
+     "texto": "O peão ataca o cavalo de f6 e, ao sair de e4, abre a diagonal do bispo de g2 até a dama de b7."
+    },
+    "21...Qb3": {
+     "texto": "A melhor defesa: a dama sai do ataque e oferece a troca das damas. As brancas ficam com bispo e cavalo pela torre, mas as pretas mantêm chances.",
+     "alternativa": "Qualquer outro lance deixava as pretas pior ainda, segundo o Stockfish.",
+     "principios": [
+      "defesa",
+      "troca"
+     ]
+    },
+    "22.exf6": {
+     "texto": "O peão captura o cavalo."
+    },
+    "22...Qxd3": {
+     "texto": "As damas são trocadas.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "23.Rxd3": {
+     "texto": "A torre retoma."
+    },
+    "23...Rb1": {
+     "texto": "A torre invade a primeira fileira, prendendo o cavalo de f1 e o rei branco.",
+     "alternativa": "O Stockfish preferia retomar o peão com 23...gxf6 antes.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "24.Bd5": {
+     "texto": "O bispo se centraliza e mira f7."
+    },
+    "24...Rcb8": {
+     "texto": "A outra torre se junta na coluna b.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "25.Kg2": {
+     "texto": "O rei libera o cavalo."
+    },
+    "25...R8b3": {
+     "texto": "A torre ataca a torre de d3 e o peão de a3.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "26.Rxb3": {
+     "texto": "As brancas trocam."
+    },
+    "26...Rxb3": {
+     "texto": "A torre retoma, atacando o peão de a3.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "27.Nd2": {
+     "texto": "O cavalo ataca a torre."
+    },
+    "27...Rxa3": {
+     "texto": "A torre pega o peão de a3. Agora as pretas têm um peão passado em a.",
+     "principios": [
+      "material",
+      "peoes"
+     ]
+    },
+    "28.Ne4": {
+     "texto": "O cavalo ataca o c5."
+    },
+    "28...a5": {
+     "texto": "O peão passado começa a avançar.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "29.Nxc5": {
+     "texto": "O cavalo pega o peão de c5."
+    },
+    "29...gxf6": {
+     "texto": "As pretas recuperam o peão de f6.",
+     "principios": [
+      "material"
+     ]
+    },
+    "30.Kf1": {
+     "texto": "O rei vai para o centro."
+    },
+    "30...a4": {
+     "texto": "O peão avança.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "31.Ke2": {
+     "texto": "O rei se aproxima."
+    },
+    "31...Ra1": {
+     "texto": "A torre se coloca atrás do peão passado: a melhor posição para ela.",
+     "principios": [
+      "colunas",
+      "peoes"
+     ]
+    },
+    "32.Nd3": {
+     "texto": "O cavalo bloqueia o peão de d4 e se prepara para defender."
+    },
+    "32...a3": {
+     "texto": "O peão avança.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "33.c5": {
+     "texto": "As brancas avançam o próprio peão passado."
+    },
+    "33...a2": {
+     "texto": "O peão chega a a2, a uma casa da promoção.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "34.Kf3": {
+     "texto": "O rei sai da primeira fileira."
+    },
+    "34...Rd1": {
+     "texto": "Ameaça dupla: a torre ataca o cavalo de d3 e libera a casa a1 para o peão coroar. Se 35.Bxa2, a torre pega o cavalo com xeque.",
+     "principios": [
+      "tatica"
+     ]
+    },
+    "35.Bxa2": {
+     "texto": "O bispo pega o peão."
+    },
+    "35...Rxd3+": {
+     "texto": "A torre captura o cavalo com xeque. Agora é torre contra bispo.",
+     "principios": [
+      "material"
+     ]
+    },
+    "36.Ke4": {
+     "texto": "O rei ataca a torre."
+    },
+    "36...Rd2": {
+     "texto": "A torre ataca o peão de f2.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "37.Bc4": {
+     "texto": "O bispo se reposiciona."
+    },
+    "37...Kf8": {
+     "texto": "O rei se aproxima do centro.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "38.f3": {
+     "texto": "O peão foge."
+    },
+    "38...Rxh2": {
+     "texto": "A torre pega o peão de h2.",
+     "principios": [
+      "material"
+     ]
+    },
+    "39.Kxd4": {
+     "texto": "O rei pega o peão de d4."
+    },
+    "39...Ke7": {
+     "texto": "O rei preto vai bloquear o peão de c.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "40.Bd3": {
+     "texto": "O bispo defende."
+    },
+    "40...h5": {
+     "texto": "O peão de h avança.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "41.Ke3": {
+     "texto": "O rei defende os peões."
+    },
+    "41...Rg2": {
+     "texto": "A torre ataca o peão de g3.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "42.Kf4": {
+     "texto": "O rei defende."
+    },
+    "42...Rg1": {
+     "texto": "A torre se reposiciona."
+    },
+    "43.Be4": {
+     "texto": "O bispo se centraliza."
+    },
+    "43...Rc1": {
+     "texto": "A torre vai para trás do peão de c, para pará-lo.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "44.c6": {
+     "texto": "O peão avança."
+    },
+    "44...Rc3": {
+     "texto": "A torre ataca o peão de f3.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "45.c7": {
+     "texto": "O peão chega a c7."
+    },
+    "45...Rxc7": {
+     "texto": "A torre captura o peão de c7.",
+     "principios": [
+      "material"
+     ]
+    },
+    "46.Bd5": {
+     "texto": "O bispo se centraliza."
+    },
+    "46...Rc5": {
+     "texto": "A torre ataca o bispo.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "47.Ba2": {
+     "texto": "O bispo recua."
+    },
+    "47...Rb5": {
+     "texto": "A torre se reposiciona."
+    },
+    "48.Ke3": {
+     "texto": "O rei defende."
+    },
+    "48...Ra5": {
+     "texto": "A torre ataca o bispo.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "49.Bc4": {
+     "texto": "O bispo foge."
+    },
+    "49...Rc5": {
+     "texto": "A torre ataca de novo.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "50.Ba6": {
+     "texto": "O bispo foge."
+    },
+    "50...Ke6": {
+     "texto": "O rei avança.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "51.Kf4": {
+     "texto": "O rei defende."
+    },
+    "51...Rc3": {
+     "texto": "A torre ataca o peão de f3.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "52.Bf1": {
+     "texto": "O bispo defende."
+    },
+    "52...f5": {
+     "texto": "O peão avança para abrir a ala do rei.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "53.Ba6": {
+     "texto": "O bispo se reposiciona."
+    },
+    "53...Kf6": {
+     "texto": "O rei se aproxima dos peões brancos.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "54.Bb7": {
+     "texto": "O bispo se reposiciona."
+    },
+    "54...Rc4+": {
+     "texto": "Xeque, afastando o rei branco.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "55.Ke3": {
+     "texto": "O rei recua."
+    },
+    "55...Kg5": {
+     "texto": "O rei preto avança.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "56.Kf2": {
+     "texto": "O rei defende."
+    },
+    "56...f4": {
+     "texto": "O peão ataca o g3.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "57.Kg2": {
+     "texto": "O rei defende."
+    },
+    "57...f5": {
+     "texto": "O outro peão também avança. Com torre e dois peões contra o bispo, as pretas vão abrir caminho até a promoção. As brancas abandonaram.",
+     "principios": [
+      "peoes"
+     ]
+    }
+   }
   },
   {
    "n": 33,
@@ -7992,7 +8805,331 @@
    "ano": 1920,
    "abertura": "Gambito da Dama recusado",
    "resultado": "1-0",
-   "lances": "d4 Nf6 Nf3 d5 c4 e6 Bg5 Be7 e3 Nbd7 Nc3 O-O Rc1 Re8 Qc2 dxc4 Bxc4 c5 O-O cxd4 Nxd4 a6 Rfd1 Qa5 Bh4 Ne5 Be2 Ng6 Bg3 e5 Nb3 Qc7 Qb1 Qb8 Bf3 Qa7 Na5 Bb4 Nc4 Bd7 Nd5 Nxd5 Bxd5 Be6 Qe4 Bxd5 Rxd5 Rac8 Rcd1 Bf8 b3 b5 Nd6 Bxd6 Rxd6 Rc7 h4 f6 Qd5+ Kh8 h5 Nf8 h6 Ng6 Qe6 Rf8 Rd7 gxh6 Bh4"
+   "lances": "d4 Nf6 Nf3 d5 c4 e6 Bg5 Be7 e3 Nbd7 Nc3 O-O Rc1 Re8 Qc2 dxc4 Bxc4 c5 O-O cxd4 Nxd4 a6 Rfd1 Qa5 Bh4 Ne5 Be2 Ng6 Bg3 e5 Nb3 Qc7 Qb1 Qb8 Bf3 Qa7 Na5 Bb4 Nc4 Bd7 Nd5 Nxd5 Bxd5 Be6 Qe4 Bxd5 Rxd5 Rac8 Rcd1 Bf8 b3 b5 Nd6 Bxd6 Rxd6 Rc7 h4 f6 Qd5+ Kh8 h5 Nf8 h6 Ng6 Qe6 Rf8 Rd7 gxh6 Bh4",
+   "tema": "Torre na sétima, a dama em e6 e o peão de h que abre o rei",
+   "introducao": "Gotemburgo, 1920. A última partida do livro: Rubinstein, de brancas, contra Géza Maróczy. As brancas manobram com paciência, trocam o bispo forte das pretas, levam uma torre para a coluna d e depois avançam o peão de h até h6. Com a dama em e6 e a torre na sétima fileira, o rei preto não tem salvação. Você joga com as brancas.",
+   "conclusao": "Rubinstein juntou várias lições do livro numa só partida: manobrou os cavalos até casas fortes (c4, d5, d6), trocou o bispo que defendia as casas escuras, ocupou a coluna d com as torres, invadiu com a dama em e6 e, por fim, usou o peão de h como aríete contra o roque preto. No final, a torre na sétima fileira e o bispo em h4 completaram o mate inevitável. Lições: coordene todas as peças antes de atacar e use os peões para abrir o rei adversário.",
+   "notas": {
+    "1.d4": {
+     "texto": "Ocupa o centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "1...Nf6": {
+     "texto": "Controla e4."
+    },
+    "2.Nf3": {
+     "texto": "Desenvolvimento.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "2...d5": {
+     "texto": "Ocupa o centro."
+    },
+    "3.c4": {
+     "texto": "O Gambito da Dama.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "3...e6": {
+     "texto": "As pretas recusam."
+    },
+    "4.Bg5": {
+     "texto": "Crava o cavalo.",
+     "principios": [
+      "desenvolvimento",
+      "tatica"
+     ]
+    },
+    "4...Be7": {
+     "texto": "Desfaz a cravada."
+    },
+    "5.e3": {
+     "texto": "Firma o d4.",
+     "principios": [
+      "peoes"
+     ]
+    },
+    "5...Nbd7": {
+     "texto": "Desenvolvimento."
+    },
+    "6.Nc3": {
+     "texto": "Pressão sobre d5.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "6...O-O": {
+     "texto": "As pretas fazem o roque."
+    },
+    "7.Rc1": {
+     "texto": "A torre vai para a coluna c, que vai se abrir.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "7...Re8": {
+     "texto": "A torre se prepara para apoiar ...e5."
+    },
+    "8.Qc2": {
+     "texto": "A dama apoia a coluna c.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "8...dxc4": {
+     "texto": "As pretas trocam."
+    },
+    "9.Bxc4": {
+     "texto": "O bispo retoma.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "9...c5": {
+     "texto": "As pretas atacam o centro."
+    },
+    "10.O-O": {
+     "texto": "Rei em segurança.",
+     "principios": [
+      "roque"
+     ]
+    },
+    "10...cxd4": {
+     "texto": "As pretas trocam."
+    },
+    "11.Nxd4": {
+     "texto": "O cavalo retoma, centralizado.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "11...a6": {
+     "texto": "Prepara ...b5."
+    },
+    "12.Rfd1": {
+     "texto": "A outra torre ocupa a coluna d.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "12...Qa5": {
+     "texto": "A dama sai da coluna d."
+    },
+    "13.Bh4": {
+     "texto": "O bispo mantém a pressão sobre o cavalo de f6.",
+     "principios": [
+      "tatica"
+     ]
+    },
+    "13...Ne5": {
+     "texto": "O cavalo ataca o bispo de c4."
+    },
+    "14.Be2": {
+     "texto": "O bispo recua.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "14...Ng6": {
+     "texto": "O cavalo ataca o bispo de h4."
+    },
+    "15.Bg3": {
+     "texto": "O bispo recua, mas fica de olho na diagonal b8–h2.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "15...e5": {
+     "texto": "As pretas atacam o cavalo de d4."
+    },
+    "16.Nb3": {
+     "texto": "O cavalo foge atacando a dama de a5.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "16...Qc7": {
+     "texto": "A dama recua."
+    },
+    "17.Qb1": {
+     "texto": "A dama sai da coluna c e se prepara para agir pela diagonal b1–h7.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "17...Qb8": {
+     "texto": "A dama se reposiciona."
+    },
+    "18.Bf3": {
+     "texto": "O bispo vai para a grande diagonal, de olho em b7.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "18...Qa7": {
+     "texto": "A dama vai para a diagonal a7–g1."
+    },
+    "19.Na5": {
+     "texto": "O cavalo ataca o peão de b7.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "19...Bb4": {
+     "texto": "O bispo ataca o cavalo de c3."
+    },
+    "20.Nc4": {
+     "texto": "O cavalo vai para c4, de onde mira b6, d6 e e5.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "20...Bd7": {
+     "texto": "O bispo se desenvolve."
+    },
+    "21.Nd5": {
+     "texto": "O outro cavalo ocupa d5, ameaçando 22.Nxf6+ e depois Rxd7.",
+     "alternativa": "O Stockfish preferia 21.Ne4, mas o lance da partida também mantém a vantagem.",
+     "principios": [
+      "centro",
+      "tatica"
+     ]
+    },
+    "21...Nxd5": {
+     "texto": "As pretas trocam."
+    },
+    "22.Bxd5": {
+     "texto": "O bispo retoma e ameaça 23.Bxf7+, seguido de Rxd7.",
+     "principios": [
+      "tatica"
+     ]
+    },
+    "22...Be6": {
+     "texto": "O bispo bloqueia a diagonal."
+    },
+    "23.Qe4": {
+     "texto": "A dama se centraliza e ataca o peão de e5.",
+     "principios": [
+      "centro",
+      "ataque"
+     ]
+    },
+    "23...Bxd5": {
+     "texto": "As pretas trocam os bispos."
+    },
+    "24.Rxd5": {
+     "texto": "A torre retoma, centralizada na quinta fileira.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "24...Rac8": {
+     "texto": "A torre ocupa a coluna c."
+    },
+    "25.Rcd1": {
+     "texto": "As torres se dobram na coluna d.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "25...Bf8": {
+     "texto": "O bispo recua para defender o roque."
+    },
+    "26.b3": {
+     "texto": "Protege o cavalo de c4.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "26...b5": {
+     "texto": "O peão ataca o cavalo."
+    },
+    "27.Nd6": {
+     "texto": "O cavalo invade d6, atacando as torres de c8 e e8.",
+     "principios": [
+      "tempo"
+     ]
+    },
+    "27...Bxd6": {
+     "texto": "O bispo troca o cavalo."
+    },
+    "28.Rxd6": {
+     "texto": "A torre retoma e fica em d6, no campo preto. As pretas ficaram sem o bispo de casas escuras.",
+     "principios": [
+      "colunas"
+     ]
+    },
+    "28...Rc7": {
+     "texto": "A torre defende a sétima fileira."
+    },
+    "29.h4": {
+     "texto": "O peão de h começa a avançar contra o roque preto: o plano é h5 e h6.",
+     "principios": [
+      "peoes",
+      "ataque"
+     ]
+    },
+    "29...f6": {
+     "texto": "Firma o e5, mas enfraquece e6 e a diagonal a2–g8."
+    },
+    "30.Qd5+": {
+     "texto": "Xeque na diagonal enfraquecida.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "30...Kh8": {
+     "texto": "O rei vai para o canto."
+    },
+    "31.h5": {
+     "texto": "O peão ataca o cavalo de g6.",
+     "principios": [
+      "tempo",
+      "peoes"
+     ]
+    },
+    "31...Nf8": {
+     "texto": "O cavalo recua."
+    },
+    "32.h6": {
+     "texto": "O peão chega a h6 e ameaça hxg7+, abrindo o rei.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "32...Ng6": {
+     "texto": "O cavalo volta para defender."
+    },
+    "33.Qe6": {
+     "texto": "A dama invade e6, a casa enfraquecida, atacando a torre de e8. Ameaça 34.Qxe8+ Nf8 35.Qxf8#.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "33...Rf8": {
+     "texto": "A torre sai do ataque."
+    },
+    "34.Rd7": {
+     "texto": "A torre invade a sétima fileira. Ameaça 35.hxg7#: o peão dá xeque protegido pela torre.",
+     "principios": [
+      "colunas",
+      "ataque"
+     ]
+    },
+    "34...gxh6": {
+     "texto": "As pretas capturam o peão."
+    },
+    "35.Bh4": {
+     "texto": "O bispo entra no ataque contra o peão de f6. Ameaça 36.Bxf6+, com mate em poucos lances. As pretas abandonaram.",
+     "principios": [
+      "ataque"
+     ]
+    }
+   }
   }
  ]
 }
