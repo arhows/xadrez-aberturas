@@ -31,7 +31,18 @@ export interface Configuracoes {
   fonteExplorador: 'masters' | 'lichess'
   ratingExplorador: number
   /** Últimas escolhas da tela Jogar. */
-  jogo: { adversario: 'motor'; cor: 'w' | 'b' | 'sorteio'; nivel: number; modo: 'partida' | 'treino'; tempo: string; aoVivo?: boolean }
+  jogo: {
+    adversario: 'motor'
+    cor: 'w' | 'b' | 'sorteio'
+    nivel: number
+    modo: 'partida' | 'treino'
+    tempo: string
+    aoVivo?: boolean
+    /** Qual computador: o Stockfish (padrão) ou a Maia, que joga como uma pessoa daquele rating. */
+    motor?: 'stockfish' | 'maia'
+    /** Rating da Maia (1100 a 1900). */
+    nivelMaia?: number
+  }
   /** Duração do modo relâmpago, em minutos. */
   minutosRelampago: number
   /** De onde saem as posições do relâmpago. */

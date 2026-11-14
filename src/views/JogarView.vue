@@ -7,6 +7,7 @@ import HistoricoLances from '../components/HistoricoLances.vue'
 import SeloQualidade from '../components/SeloQualidade.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { lanceDoComputador, NIVEIS, nivelPorNumero, pararComputador, type LanceUci } from '../lib/adversario'
+import { fensDaPartida, NIVEIS_MAIA, type NivelMaia } from '../lib/maia'
 import { avaliarPosicao, type Avaliacao } from '../lib/avaliador'
 import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
 import { baixarTexto } from '../lib/download'
@@ -26,6 +27,7 @@ const route = useRoute()
 const escolhas = progresso.config.jogo
 // Jogar contra amigo agora é on-line (tela própria); aqui é sempre contra o computador.
 escolhas.adversario = 'motor'
+escolhas.nivelMaia ??= 1500
 // "Jogar daqui contra o computador" (fim do Treino, Explorar, Análise): sempre no modo treino.
 if (route.query.treino === '1') escolhas.modo = 'treino'
 
@@ -122,7 +124,7 @@ function marcarLanceNoRelogio(quemJogou: Cor) {
 }
 
 const nomeNoRelogio = (cor: Cor) =>
-  contraMotor.value ? (cor === minhaCor.value ? 'Você' : 'Stockfish') : cor === 'w' ? 'Brancas' : 'Pretas'
+  contraMotor.value ? (cor === minhaCor.value ? 'Você' : nomeCurtoDoMotor.value) : cor === 'w' ? 'Brancas' : 'Pretas'
 /** Relógio de cima e de baixo, conforme a orientação do tabuleiro. */
 const corEmCima = computed<Cor>(() => (orientacao.value === 'white' ? 'b' : 'w'))
 const corEmBaixo = computed<Cor>(() => (corEmCima.value === 'w' ? 'b' : 'w'))
@@ -214,6 +216,14 @@ async function pedirDica() {
 
 const contraMotor = computed(() => escolhas.adversario === 'motor')
 const nivel = computed(() => nivelPorNumero(escolhas.nivel))
+/** Contra a Maia (estilo humano) em vez do Stockfish. */
+const contraMaia = computed(() => contraMotor.value && escolhas.motor === 'maia')
+const nivelMaia = computed<NivelMaia>(() =>
+  (NIVEIS_MAIA as readonly number[]).includes(escolhas.nivelMaia ?? 0) ? (escolhas.nivelMaia as NivelMaia) : 1500,
+)
+const nomeCurtoDoMotor = computed(() => (contraMaia.value ? 'Maia' : 'Stockfish'))
+/** Baixando a Maia (só na primeira partida contra aquele nível neste aparelho). */
+const baixandoMaia = ref(false)
 const jogo = computed(() => jogoDosLances(sans.value, fenInicio))
 const fen = computed(() => jogo.value.fen())
 const situacao = computed(() => situacaoDoJogo(jogo.value))
@@ -276,7 +286,9 @@ function jogarDoAoVivo(san: string) {
   if (lance) jogar(lance)
 }
 
-const nomeDoMotor = computed(() => `Stockfish nível ${nivel.value.nivel} (${nivel.value.nome})`)
+const nomeDoMotor = computed(() =>
+  contraMaia.value ? `Maia ${nivelMaia.value}` : `Stockfish nível ${nivel.value.nivel} (${nivel.value.nome})`,
+)
 const textoInicio = computed(() =>
   inicio.map((san, i) => (i % 2 === 0 ? fmtLance(i + 1, san) : fmtSan(san))).join(' '),
 )
@@ -292,6 +304,14 @@ function comecar() {
   sans.value = [...inicio]
   abandono.value = null
   erroMotor.value = null
+  if (contraMaia.value) {
+    // Já começa a baixar a Maia, para o primeiro lance dela não demorar.
+    baixandoMaia.value = true
+    void import('../lib/maiaMotor')
+      .then((m) => m.prepararMaia(nivelMaia.value))
+      .catch(() => {})
+      .finally(() => (baixandoMaia.value = false))
+  }
   treinoAtivo.value = escolhas.modo === 'treino'
   jogoSalvo.value = false
   relogioAtivo.value = !daqui && !treinoAtivo.value && tempo.value.minutos > 0
@@ -341,7 +361,9 @@ async function vezDoComputador() {
   const comeco = performance.now()
   const pausa = PAUSA_MINIMA_MS + Math.random() * PAUSA_VARIACAO_MS
   try {
-    const lance = await lanceDoComputador(fen.value, nivel.value)
+    const lance = contraMaia.value
+      ? await (await import('../lib/maiaMotor')).lanceDaMaia(fensDaPartida(fenInicio, sans.value), nivelMaia.value)
+      : await lanceDoComputador(fen.value, nivel.value)
     const falta = pausa - (performance.now() - comeco)
     if (falta > 0) await new Promise((resolver) => setTimeout(resolver, falta))
     // Cancelada (desfazer, abandonar, nova partida): quem cancelou já cuidou do estado.
@@ -351,7 +373,7 @@ async function vezDoComputador() {
     if (lance) fazer(lance)
   } catch (erro) {
     pensando.value = false
-    erroMotor.value = erro instanceof Error ? erro.message : 'O Stockfish não respondeu.'
+    erroMotor.value = erro instanceof Error ? erro.message : contraMaia.value ? 'A Maia não respondeu.' : 'O Stockfish não respondeu.'
   }
 }
 
@@ -458,7 +480,8 @@ watch(fase, (agora) => {
     inicio: inicio.length,
     fen: fenInicio,
     adversario: escolhas.adversario,
-    nivel: contraMotor.value ? nivel.value.nivel : undefined,
+    nivel: contraMotor.value && !contraMaia.value ? nivel.value.nivel : undefined,
+    maia: contraMaia.value ? nivelMaia.value : undefined,
     cor: contraMotor.value ? minhaCor.value : undefined,
     tempo: relogioAtivo.value ? tempo.value.id : 'livre',
     resultado: resultado.value,
@@ -533,7 +556,29 @@ onBeforeUnmount(() => {
           </div>
         </div>
 
-        <label class="campo">
+        <div class="campo" role="group" aria-labelledby="rotulo-motor">
+          <span id="rotulo-motor">Computador</span>
+          <div class="segmentado">
+            <button type="button" :aria-pressed="escolhas.motor !== 'maia'" @click="escolhas.motor = 'stockfish'">Stockfish</button>
+            <button type="button" :aria-pressed="escolhas.motor === 'maia'" @click="escolhas.motor = 'maia'">Maia (estilo humano)</button>
+          </div>
+          <span v-if="escolhas.motor === 'maia'" class="ajuda">
+            A Maia foi treinada com milhões de partidas do lichess para jogar o lance que uma pessoa daquele rating
+            jogaria, com os acertos e os erros típicos do nível. Na primeira partida em cada nível ela baixa cerca de 4 MB
+            (mais uns 12 MB do motor, uma vez só).
+          </span>
+        </div>
+
+        <label v-if="escolhas.motor === 'maia'" class="campo">
+          <span>Rating da Maia</span>
+          <select v-model.number="escolhas.nivelMaia">
+            <option v-for="n in NIVEIS_MAIA" :key="n" :value="n">{{ n }}</option>
+          </select>
+          <span class="ajuda">
+            Maia 1, do CSSLab da Universidade de Toronto (<a href="https://www.maiachess.com" target="_blank" rel="noopener">maiachess.com</a>), licença GPL-3.0.
+          </span>
+        </label>
+        <label v-else class="campo">
           <span>Nível do computador</span>
           <select v-model.number="escolhas.nivel">
             <option v-for="n in NIVEIS" :key="n.nivel" :value="n.nivel">{{ n.nivel }} · {{ n.nome }}</option>
@@ -588,7 +633,7 @@ onBeforeUnmount(() => {
       <CartaoDica v-else-if="erroMotor" tipo="errado" :texto="erroMotor" />
       <CartaoDica
         v-else
-        :texto="pensando ? 'O computador está pensando…' : contraMotor ? (vez === minhaCor ? `Sua vez. ${situacao.texto}` : situacao.texto) : situacao.texto"
+        :texto="pensando ? (baixandoMaia ? 'Baixando a Maia (só na primeira vez)…' : `${nomeCurtoDoMotor === 'Maia' ? 'A Maia' : 'O computador'} está pensando…`) : contraMotor ? (vez === minhaCor ? `Sua vez. ${situacao.texto}` : situacao.texto) : situacao.texto"
       />
 
       <div v-if="promocaoPendente" class="promocao">

@@ -8,6 +8,15 @@ import { ARQUIVO_COMPARTILHADO, CACHE_COMPARTILHADO } from '../../src/lib/compar
 const IGNORAR = new Set(['sw.js'])
 
 /**
+ * Arquivos grandes que só a Maia usa (os modelos de cada nível e o motor do onnxruntime): ficam
+ * fora da instalação e entram num cache próprio na primeira vez que alguém joga contra a Maia,
+ * e esse cache sobrevive às atualizações do app.
+ */
+const PADRAO_DA_MAIA = /(^|\/)maia\/|ort-wasm[^/]*\.(wasm|mjs)$/
+export const ehArquivoDaMaia = (arquivo: string) => PADRAO_DA_MAIA.test(arquivo)
+export const CACHE_DA_MAIA = 'maia-modelos'
+
+/**
  * Monta o texto do service worker: guarda todos os arquivos do site na instalação,
  * responde do cache (o site inteiro funciona offline, inclusive o Stockfish) e
  * deixa passar direto as chamadas a outros sites (chess.com, lichess).
@@ -16,6 +25,7 @@ export function textoServiceWorker(arquivos: string[], versao: string): string {
   const lista = ['./', ...arquivos.map((a) => `./${a}`)]
   return `// Gerado no build por scripts/pwa/serviceWorker.ts. Não editar.
 const CACHE = 'xadrez-${versao}'
+const CACHE_DA_MAIA = '${CACHE_DA_MAIA}'
 const ARQUIVOS = ${JSON.stringify(lista)}
 
 self.addEventListener('install', (evento) => {
@@ -69,6 +79,22 @@ self.addEventListener('fetch', (evento) => {
     )
     return
   }
+  if (${PADRAO_DA_MAIA}.test(url.pathname)) {
+    // Modelos da Maia e motor do onnxruntime: baixados na primeira partida contra ela e guardados.
+    evento.respondWith(
+      caches.open(CACHE_DA_MAIA).then((cache) =>
+        cache.match(pedido, { ignoreSearch: true }).then(
+          (r) =>
+            r ||
+            fetch(pedido).then((resposta) => {
+              if (resposta.ok) cache.put(pedido, resposta.clone())
+              return resposta
+            }),
+        ),
+      ),
+    )
+    return
+  }
   evento.respondWith(
     caches.match(pedido, { cacheName: CACHE, ignoreSearch: true }).then((r) => r || fetch(pedido)),
   )
@@ -95,7 +121,7 @@ export function pluginServiceWorker(): Plugin {
     },
     closeBundle() {
       const arquivos = listar(saida)
-        .filter((a) => !IGNORAR.has(a))
+        .filter((a) => !IGNORAR.has(a) && !ehArquivoDaMaia(a))
         .sort()
       const hash = createHash('sha256')
       for (const arquivo of arquivos) hash.update(arquivo).update(readFileSync(join(saida, arquivo)))

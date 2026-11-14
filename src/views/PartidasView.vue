@@ -99,7 +99,11 @@ const porAbertura = computed(() => resumoPorAbertura(noRepertorio.value))
 const jogos = computed(() => jogosVisiveis(progresso.jogos))
 const confirmandoApagar = ref<string | null>(null)
 const nomeDoAdversario = (j: JogoSalvo) =>
-  j.adversario === 'online' ? (j.oponente ?? 'amigo on-line') : `Stockfish nível ${j.nivel} (${NIVEIS.find((n) => n.nivel === j.nivel)?.nome ?? ''})`
+  j.adversario === 'online'
+    ? (j.oponente ?? 'amigo on-line')
+    : j.maia
+      ? `Maia ${j.maia}`
+      : `Stockfish nível ${j.nivel} (${NIVEIS.find((n) => n.nivel === j.nivel)?.nome ?? ''})`
 const dataCurta = (iso: string) => new Date(iso).toLocaleDateString('pt-BR')
 const numeroDeLances = (j: JogoSalvo) => Math.ceil((j.lances.split(' ').length - j.inicio) / 2)
 function exportarJogo(j: JogoSalvo) {

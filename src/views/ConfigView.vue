@@ -224,6 +224,25 @@ function resetar() {
         </div>
       </div>
     </section>
+
+    <section class="grupo">
+      <h3>Sobre</h3>
+      <div class="cartao">
+        <div class="linha">
+          <p class="suave">
+            Código aberto, sob a licença GPL-3.0
+            (<a href="https://github.com/arhows/xadrez-aberturas" target="_blank" rel="noopener">repositório no GitHub</a>).
+          </p>
+        </div>
+        <div class="linha">
+          <p class="suave">
+            Motores: <a href="https://stockfishchess.org" target="_blank" rel="noopener">Stockfish</a> (GPL-3.0) e
+            <a href="https://www.maiachess.com" target="_blank" rel="noopener">Maia</a>, do CSSLab da Universidade de
+            Toronto (GPL-3.0), rodando no próprio aparelho.
+          </p>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 

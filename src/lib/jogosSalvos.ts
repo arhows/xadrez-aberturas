@@ -25,6 +25,8 @@ export interface JogoSalvo {
   /** Conta do amigo, para mostrar a foto dele. */
   oponenteUid?: string
   nivel?: number
+  /** Rating da Maia, quando o computador foi a Maia (sem ele, o nível é do Stockfish). */
+  maia?: number
   /** Cor da pessoa contra o computador. */
   cor?: Cor
   /** Id do tempo ("5+3", "livre"). */
