@@ -30,7 +30,8 @@
      "texto": "O cavalo vai para d4, de onde oferece a troca pelo cavalo de f3.",
      "principios": [
       "troca"
-     ]
+     ],
+     "alternativa": "...e6 ou ...g6, desenvolvendo, eram um pouco melhores segundo o Stockfish; ...Nd4 gasta um tempo, mas troca o cavalo que controlava d4."
     },
     "4...Nxf3+": {
      "texto": "Troca os cavalos com xeque.",
@@ -90,7 +91,8 @@
      "texto": "O peão expulsa o cavalo de c3.",
      "principios": [
       "tempo"
-     ]
+     ],
+     "alternativa": "...Bb7 também era bom; ...b4 expulsa o cavalo de c3 e ganha espaço, mas fecha a ala da dama por um tempo."
     },
     "14...a5": {
      "texto": "O peão a protege o b4.",
@@ -109,7 +111,8 @@
      "texto": "O peão h impede o avanço g4.",
      "principios": [
       "profilaxia"
-     ]
+     ],
+     "alternativa": "...Rb7 ou ...Ne8 tinham o mesmo valor; ...h5 deixa clara a ideia de impedir g4."
     },
     "17...Ne8": {
      "texto": "O cavalo recua para seguir até c7 e e6.",
@@ -169,7 +172,8 @@
      "texto": "O peão f ataca o e4.",
      "principios": [
       "centro"
-     ]
+     ],
+     "alternativa": "Trocar antes com ...exf4 deixava o jogo igual; ...f5 abre o centro e é o melhor, segundo o Stockfish."
     },
     "27...gxf5": {
      "texto": "Retoma no f5.",
@@ -195,7 +199,8 @@
      "principios": [
       "centro",
       "colunas"
-     ]
+     ],
+     "alternativa": "...Qd7, mais calmo, também era bom, mas ...e4 abre a coluna e e a diagonal do bispo e é bem mais forte."
     },
     "31...Rxe4": {
      "texto": "A torre retoma em e4.",
@@ -243,7 +248,8 @@
      "texto": "A dama oferece a troca: o final de bispo contra cavalo é bom para as pretas.",
      "principios": [
       "troca"
-     ]
+     ],
+     "alternativa": "...Qg8 tinha o mesmo valor; ...Qf6 oferece a troca de damas e simplifica para um final melhor."
     },
     "39.Qxf6+": {
      "texto": "Um erro grave das brancas: o Stockfish preferia Qe2."
@@ -276,7 +282,8 @@
      "texto": "O peão d ataca o c4.",
      "principios": [
       "peoes"
-     ]
+     ],
+     "alternativa": "Trazer antes o rei com ...Kf7 também era bom; o Stockfish vê os dois caminhos como equivalentes."
     },
     "44...Kxd5": {
      "texto": "O rei retoma e entra no centro.",
@@ -365,7 +372,8 @@
      "principios": [
       "defesa",
       "desenvolvimento"
-     ]
+     ],
+     "alternativa": "Trocar o cavalo com ...Nxe4 também era jogável; ...b6 protege o bispo e mantém as peças no tabuleiro."
     },
     "10...Qxc5": {
      "texto": "Retoma com a dama.",
@@ -414,13 +422,15 @@
      "principios": [
       "material",
       "ataque"
-     ]
+     ],
+     "alternativa": "Trocar as damas com ...Qxe2 era mais tranquilo, mas ...Qxa2 ganha um peão e põe a dama perto do rei branco."
     },
     "18...Bg6": {
      "texto": "O bispo sai do ataque da torre de e3; o bispo branco em f6 pode ser comido depois.",
      "principios": [
       "defesa"
-     ]
+     ],
+     "alternativa": "Retomar logo com ...gxf6 perdia: depois de Rxe4, o rei preto fica sob ataque pela coluna g. Pegar a torre com ...Qa1+ e ...Qxh1 também perdia."
     },
     "19...Qd5": {
      "texto": "A dama sai do ataque da torre de a3.",
@@ -432,7 +442,8 @@
      "texto": "Come o bispo de f6.",
      "principios": [
       "material"
-     ]
+     ],
+     "alternativa": "Era preciso comer o bispo agora: ...h5 ou ...Qxg2 deixavam as brancas melhor."
     },
     "21...Qxd4": {
      "texto": "A dama come o cavalo de d4.",
@@ -512,7 +523,8 @@
      "principios": [
       "tatica",
       "tempo"
-     ]
+     ],
+     "alternativa": "...Rxd4 também era bom; ...e5 ataca as duas torres de uma vez."
     },
     "34...Rxd8": {
      "texto": "Retoma a torre.",
@@ -569,7 +581,8 @@
      "principios": [
       "peoes",
       "ataque"
-     ]
+     ],
+     "alternativa": "Lances de espera como ...Qd6 ou ...Qe6 também mantinham a vantagem; ...b4 abre o rei branco e é o mais forte."
     },
     "43...Qa4+": {
      "texto": "Xeque: a dama entra perto do rei branco.",
@@ -728,14 +741,16 @@
      "texto": "Troca as damas.",
      "principios": [
       "troca"
-     ]
+     ],
+     "alternativa": "Era preciso trocar: ...Qd8 ou ...Nxd5 deixavam as brancas bem melhor."
     },
     "17...gxf6": {
      "texto": "Retoma com o peão g: os peões f ficam dobrados, mas a coluna g se abre.",
      "principios": [
       "troca",
       "colunas"
-     ]
+     ],
+     "alternativa": "...Bxf6 era equivalente, segundo o Stockfish."
     },
     "18...h5": {
      "texto": "O peão h ataca o g4.",
@@ -766,13 +781,15 @@
      "principios": [
       "ataque",
       "colunas"
-     ]
+     ],
+     "alternativa": "...Rh4 era um pouco melhor; nos dois casos, a torre preta entra no campo branco pela coluna h aberta."
     },
     "23...Kd7": {
      "texto": "Sem damas, o rei sai para o centro, perto da ação.",
      "principios": [
       "centro"
-     ]
+     ],
+     "alternativa": "Sem damas, levar o rei para o centro é o melhor plano, segundo o Stockfish."
     },
     "24...Ke6": {
      "texto": "O rei chega a e6.",
@@ -802,7 +819,8 @@
      "texto": "O peão d avança e abre o centro. O Stockfish preferia ...Rhh8.",
      "principios": [
       "centro"
-     ]
+     ],
+     "alternativa": "Lances de espera como ...Rhh8 eram mais precisos; ...d5 abre o centro para o rei preto, mas devolve um pouco da vantagem."
     },
     "29...Kxd5": {
      "texto": "O rei retoma no d5.",
@@ -887,7 +905,8 @@
      "texto": "O peão sai de e5 e abre a diagonal do bispo de d6, que agora ataca a torre de g3.",
      "principios": [
       "tatica"
-     ]
+     ],
+     "alternativa": "...f5 também era bom, mas ...e4 é bem mais forte: abre a diagonal do bispo contra a torre de g3."
     },
     "43.Rxe4+": {
      "texto": "Um erro grave das brancas: o Stockfish preferia a4."
@@ -1735,7 +1754,8 @@
      "texto": "O peão ataca o bispo de f5.",
      "principios": [
       "tempo"
-     ]
+     ],
+     "alternativa": "Desenvolver com Bd2 ou Qe2 era mais calmo; g4 ganha tempo contra o bispo e é o mais forte, segundo o Stockfish."
     },
     "9.h4": {
      "texto": "O peão h ameaça h5, que atacaria o bispo de g6.",
@@ -1760,7 +1780,8 @@
      "texto": "A torre sobe para h3, de onde pode ir para o centro pela terceira fileira.",
      "principios": [
       "colunas"
-     ]
+     ],
+     "alternativa": "O roque era um pouco melhor, segundo o Stockfish; Rh3 é mais ambicioso: a torre entra no jogo pela terceira fileira."
     },
     "13.Re3": {
      "texto": "A torre sai do ataque do bispo de g2 e vai para e3, onde protege o cavalo de c3.",
@@ -1779,7 +1800,8 @@
      "texto": "O peão fecha a diagonal do bispo de g2, que fica longe das outras peças pretas.",
      "principios": [
       "profilaxia"
-     ]
+     ],
+     "alternativa": "Rg3 deixava a vantagem quase sumir, e Bd2 era ruim; f3 fecha o bispo de g2 e é o melhor."
     },
     "16.Kf2": {
      "texto": "O rei ataca o bispo de g2.",
@@ -1791,7 +1813,8 @@
      "texto": "Retoma no c3. As brancas vão entregar esse peão em troca da coluna b aberta.",
      "principios": [
       "colunas"
-     ]
+     ],
+     "alternativa": "Era preciso retomar: Re4 ou Re2 deixavam as pretas melhor. Com bxc3, as brancas entregam o peão c3, mas abrem a coluna b para a torre."
     },
     "18.Rb1": {
      "texto": "A torre ocupa a coluna b, aberta, contra o peão b7.",
@@ -1811,7 +1834,8 @@
      "principios": [
       "ataque",
       "peoes"
-     ]
+     ],
+     "alternativa": "Qg1, atacando o bispo de g2, também era bom, mas h6 é mais forte: abre o rei preto."
     },
     "20...gxh6": {
      "texto": "Um erro grave: o Stockfish preferia ...Nxe3."
@@ -1821,7 +1845,8 @@
      "principios": [
       "tatica",
       "ataque"
-     ]
+     ],
+     "alternativa": "Lances defensivos como Qg1 ou Qe1 eram bem mais fracos; Bg6 abre a coluna d e ataca o f7 ao mesmo tempo."
     },
     "22.Qxd4": {
      "texto": "Troca as damas.",
@@ -1909,7 +1934,8 @@
      "texto": "O peão ataca o d5, que apoia o cavalo de e4.",
      "principios": [
       "centro"
-     ]
+     ],
+     "alternativa": "Re1 ou Nc3 também eram bons; c4 ataca logo a base do cavalo de e4."
     },
     "9.Re1": {
      "texto": "A torre pressiona o cavalo de e4 pela coluna e.",
@@ -1935,7 +1961,8 @@
      "principios": [
       "desenvolvimento",
       "tempo"
-     ]
+     ],
+     "alternativa": "Trocar as torres com Rxe8+ ou avançar com c5 tinha o mesmo valor, segundo o Stockfish."
     },
     "13.Qxe1": {
      "texto": "Retoma a torre.",
@@ -1948,7 +1975,8 @@
      "principios": [
       "tempo",
       "peoes"
-     ]
+     ],
+     "alternativa": "Ne5 também era bom, mas c5 ganha espaço com tempo e é bem mais forte."
     },
     "15.Nh4": {
      "texto": "O cavalo vai para h4, de olho em f5. O Stockfish preferia Ne5.",
@@ -1967,7 +1995,8 @@
      "principios": [
       "peoes",
       "tempo"
-     ]
+     ],
+     "alternativa": "Lances mais calmos, como Bf5 ou h3, também eram possíveis; f4 é o mais forte, porque ameaça prender o bispo de g4."
     },
     "18.Qg3": {
      "texto": "A dama vai para g3, contra o peão g7.",
@@ -1997,14 +2026,16 @@
      "texto": "O bispo chega à grande diagonal, contra o peão g7.",
      "principios": [
       "ataque"
-     ]
+     ],
+     "alternativa": "Ng6 era ainda mais forte, segundo o Stockfish: depois de ...fxg6, Qxg6 ataca o rei preto."
     },
     "23.Qf2": {
      "texto": "A dama protege o cavalo de h4: se ...gxh4, a dama retoma e fica perto do rei preto, já sem proteção. As pretas abandonaram.",
      "principios": [
       "ataque",
       "defesa"
-     ]
+     ],
+     "alternativa": "Era o melhor lance; Nf3 ou Be5 eram mais fracos."
     }
    }
   },
@@ -2116,14 +2147,16 @@
      "principios": [
       "centro",
       "peoes"
-     ]
+     ],
+     "alternativa": "Trocar com axb5 ou continuar com Ra3 deixava a posição igual; d5 fecha o centro e é o melhor, segundo o Stockfish."
     },
     "17.Ra3": {
      "texto": "A torre sobe pela terceira fileira, a caminho do lado do rei.",
      "principios": [
       "colunas",
       "ataque"
-     ]
+     ],
+     "alternativa": "Nf1, o caminho clássico do cavalo para o lado do rei, também era jogável; Ra3 traz a torre para o ataque pela terceira fileira."
     },
     "18.axb5": {
      "texto": "Troca no b5 e abre a coluna a.",
@@ -2141,7 +2174,8 @@
      "texto": "O cavalo se instala em f5, perto do rei preto.",
      "principios": [
       "ataque"
-     ]
+     ],
+     "alternativa": "Trocar as torres com Rxa8, ou jogar N2f3, deixava as pretas melhor; Nf5 mantém a iniciativa."
     },
     "21.Rg3": {
      "texto": "A torre chega a g3, contra o rei preto.",
@@ -2156,10 +2190,11 @@
      ]
     },
     "23.Qd2": {
-     "texto": "A dama vai para d2, de olho na casa h6. O Stockfish preferia Be3.",
+     "texto": "A dama vai para d2, de olho na casa h6.",
      "principios": [
       "ataque"
-     ]
+     ],
+     "alternativa": "Be3 era mais preciso: depois de Qd2, as pretas podiam pegar a torre de e1, e a partida ficou equilibrada até o erro de Adams no lance seguinte."
     },
     "23...Bxd5": {
      "texto": "Um erro grave: o Stockfish preferia ...Nxe1."
