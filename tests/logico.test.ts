@@ -81,6 +81,12 @@ describe('Lance a lance: The Most Instructive Games', () => {
     }
   })
 
+  it('partidas omitidas (fonte incerta) nunca ficam prontas', () => {
+    const omitidas = partidasInstrutivas.filter((p) => p.omitida)
+    expect(omitidas.map((p) => p.n)).toContain(27)
+    for (const p of omitidas) expect(partidaPronta(p)).toBe(false)
+  })
+
   it('no livro de todos os lances, todo lance do vencedor é pergunta; chaves separadas por livro', () => {
     const p = partidas[0]
     const vencedor = corDoVencedorLogico(p)

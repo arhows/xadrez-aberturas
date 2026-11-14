@@ -24,7 +24,8 @@ const dados = computed(() => LIVROS[livro.value])
 function escolher(id: IdDoLivro) {
   router.replace({ query: id === 'logico' ? {} : { livro: id } })
 }
-const partidas = computed(() => obterLogico(livro.value))
+/** As partidas omitidas (fonte incerta) ficam de fora da lista. */
+const partidas = computed(() => obterLogico(livro.value).filter((p) => !p.omitida))
 const partes = computed(() =>
   dados.value.partes.map((parte) => ({ ...parte, partidas: partidas.value.filter((p) => p.n >= parte.de && p.n <= parte.ate) })),
 )

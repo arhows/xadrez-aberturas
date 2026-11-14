@@ -41,9 +41,9 @@ export const LIVROS: Record<IdDoLivro, Livro> = {
     id: 'instrutivas',
     titulo: 'The Most Instructive Games of Chess Ever Played',
     descricao:
-      '62 partidas, cada uma com uma lição de estratégia. Os lances andam sozinhos e o app para nos momentos-chave para você achar o lance e entender a ideia.',
+      'Partidas de mestres, cada uma com uma lição de estratégia. Os lances andam sozinhos e o app para nos momentos-chave para você achar o lance e entender a ideia.',
     perguntas: 'chave',
-    partes: [{ titulo: '62 partidas instrutivas', de: 1, ate: 62 }],
+    partes: [{ titulo: 'As partidas', de: 1, ate: 62 }],
   },
 }
 
@@ -100,6 +100,8 @@ export interface PartidaLogica {
   tema?: string
   introducao?: string
   conclusao?: string
+  /** Partida deixada de fora (lances ou jogadores incertos na fonte): não aparece no app. */
+  omitida?: string
   /** Por rótulo do lance ("1...e5", "4.c3"). Sem notas, a partida ainda não está pronta. */
   notas?: Record<string, NotaDoLance>
 }
@@ -128,7 +130,7 @@ export function carregarLogico(livro: IdDoLivro = 'logico'): Promise<PartidaLogi
 
 export const obterLogico = (livro: IdDoLivro = 'logico'): PartidaLogica[] => carregados.get(livro) ?? []
 export const buscarPartidaLogica = (n: number, livro: IdDoLivro = 'logico') => carregados.get(livro)?.find((p) => p.n === n)
-export const partidaPronta = (p: PartidaLogica) => !!p.notas && Object.keys(p.notas).length > 0
+export const partidaPronta = (p: PartidaLogica) => !p.omitida && !!p.notas && Object.keys(p.notas).length > 0
 export const corDoVencedorLogico = (p: PartidaLogica): Cor => (p.resultado === '0-1' ? 'b' : 'w')
 /** Chave do resultado no progresso (as do primeiro livro continuam "logico/N"). */
 export const chaveDoLogico = (n: number, livro: IdDoLivro = 'logico') => `${livro}/${n}`
