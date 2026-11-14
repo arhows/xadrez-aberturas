@@ -145,3 +145,33 @@ describe('repertório na sincronização', () => {
     expect(normalizarProgresso({ cartoes: {} })!.repertorio).toEqual({ capitulos: [], atualizado: '' })
   })
 })
+
+describe('evolução por semana', () => {
+  it('as semanas começam no domingo e terminam na atual', async () => {
+    const { semanas } = await import('../src/lib/painel')
+    expect(semanas(3, '2026-11-13')).toEqual(['2026-10-25', '2026-11-01', '2026-11-08'])
+  })
+
+  it('soma a atividade de cada semana', async () => {
+    const { atividadePorSemana } = await import('../src/lib/painel')
+    const dias = new Map([
+      ['2026-11-09', { linhas: 2, exercicios: 3 }],
+      ['2026-11-13', { linhas: 1, exercicios: 0 }],
+      ['2026-11-02', { linhas: 0, exercicios: 4 }],
+    ])
+    expect(atividadePorSemana(dias, 2, '2026-11-13').map((p) => p.valor)).toEqual([4, 6])
+  })
+
+  it('acumula as linhas começadas até o fim de cada semana', async () => {
+    const { linhasComecadasAteCadaSemana } = await import('../src/lib/painel')
+    const cartao = (criado: string) => ({ repeticoes: 1, intervalo: 1, facilidade: 2.5, proxima: criado, criado })
+    const cartoes = { a: cartao('2026-10-30'), b: cartao('2026-11-03'), c: cartao('2026-11-10') }
+    expect(linhasComecadasAteCadaSemana(cartoes, 3, '2026-11-13').map((p) => p.valor)).toEqual([1, 2, 3])
+  })
+
+  it('% de primeira nos exercícios do dia; semana sem exercícios fica sem valor', async () => {
+    const { acertoDePrimeiraPorSemana } = await import('../src/lib/painel')
+    const diario = { '2026-11-10': { '0': 'primeira', '1': 'ajuda', '2': 'primeira', '3': 'primeira' } }
+    expect(acertoDePrimeiraPorSemana(diario, 2, '2026-11-13').map((p) => p.valor)).toEqual([null, 75])
+  })
+})

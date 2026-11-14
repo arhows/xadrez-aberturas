@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import BarraRevisaoRapida from '../components/BarraRevisaoRapida.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import {
@@ -20,6 +21,7 @@ import { corDoPly, numeroDoPly } from '../lib/lances'
 import { somarAtividade } from '../lib/painel'
 import { AUTORES_DOS_LIVROS, conferirLanceTatico, EXPLICACOES, NOMES_DAS_FAIXAS } from '../lib/problemasTaticos'
 import { progresso } from '../lib/progresso'
+import { revisaoRapida, seguirRevisaoRapida } from '../lib/revisaoRapida'
 import { notaDoExercicio, registrarResultado, revisoesPendentes } from '../lib/revisaoExercicios'
 import { tocar } from '../lib/som'
 
@@ -33,6 +35,8 @@ const FAIXAS: Faixa[] = ['facil', 'medio', 'dificil']
 
 const route = useRoute()
 const router = useRouter()
+/** Aberto pela revisão rápida: resolvido o problema, o botão Seguir leva ao próximo item. */
+const rapida = route.query.rapida === '1' && revisaoRapida.ativa
 const conjunto = buscarConjunto(route.params.conjunto as string)!
 const config = progresso.config
 progresso.exercicios[conjunto.id] ??= {}
@@ -277,6 +281,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
     </div>
 
     <div class="painel">
+      <BarraRevisaoRapida v-if="rapida" />
       <div class="cabeca-painel so-computador">
         <RouterLink to="/exercicios" class="trilha">‹ Táticas e mates</RouterLink>
         <h1 class="titulo-pagina">{{ autorDoLivro ?? "Táticas" }} · {{ conjunto.nome }}</h1>
@@ -324,7 +329,8 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
         <button v-if="podeRecomecar" type="button" class="botao fantasma" :disabled="aguardando" @click="recomecar">↺ Recomeçar do início</button>
         <template v-if="resolvido">
           <button type="button" class="botao" @click="refazer">↺ Refazer</button>
-          <button v-if="revisando && proximaRevisao" type="button" class="botao primario" @click="irParaRevisao">Próxima revisão</button>
+          <button v-if="rapida" type="button" class="botao primario" @click="seguirRevisaoRapida(router)">Seguir na revisão rápida</button>
+          <button v-else-if="revisando && proximaRevisao" type="button" class="botao primario" @click="irParaRevisao">Próxima revisão</button>
           <button v-else-if="proximoPendente" type="button" class="botao primario" @click="irPara(proximoPendente.n)">Próximo problema</button>
           <p v-else class="concluido">Todos desta faixa resolvidos de primeira!</p>
           <a v-if="problema.lichess" class="botao fantasma" :href="`https://lichess.org/training/${problema.lichess}`" target="_blank" rel="noopener">Ver no lichess</a>

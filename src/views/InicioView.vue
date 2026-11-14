@@ -116,6 +116,7 @@ const partesDaRevisao = computed(() => {
         <p class="apoio suave">{{ totalHoje || carregado ? partesDaRevisao : 'Contando as revisões…' }}</p>
         <div class="acoes">
           <RouterLink v-if="destinoDaRevisao" class="botao primario largo-celular" :to="destinoDaRevisao">Revisar agora</RouterLink>
+          <RouterLink v-if="destinoDaRevisao" class="botao largo-celular" to="/revisao-rapida">⚡ Só 5 minutos</RouterLink>
           <RouterLink v-else class="botao largo-celular" to="/praticar">Praticar algo novo</RouterLink>
         </div>
       </section>

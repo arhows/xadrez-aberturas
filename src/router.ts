@@ -94,6 +94,13 @@ export const router = createRouter({
       },
     },
     {
+      path: '/revisao-rapida',
+      name: 'revisao-rapida',
+      component: () => import('./views/RevisaoRapidaView.vue'),
+      beforeEnter: () => carregarConjuntos().then(() => true),
+      meta: { secao: 'praticar' },
+    },
+    {
       path: '/diario',
       name: 'diario',
       component: () => import('./views/DiarioView.vue'),

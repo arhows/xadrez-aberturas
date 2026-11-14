@@ -2,6 +2,7 @@
 import { somarAtividade } from '../lib/painel'
 import { computed, onBeforeUnmount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import BarraRevisaoRapida from '../components/BarraRevisaoRapida.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import {
@@ -22,6 +23,7 @@ import {
 import { fmtSan } from '../lib/formato'
 import { corDoPly, numeroDoPly } from '../lib/lances'
 import { progresso } from '../lib/progresso'
+import { revisaoRapida, seguirRevisaoRapida } from '../lib/revisaoRapida'
 import { notaDoExercicio, registrarResultado, revisoesPendentes } from '../lib/revisaoExercicios'
 import { tocar } from '../lib/som'
 
@@ -33,6 +35,8 @@ const POR_BLOCO = 100
 
 const route = useRoute()
 const router = useRouter()
+/** Aberto pela revisão rápida: resolvido o problema, o botão Seguir leva ao próximo item. */
+const rapida = route.query.rapida === '1' && revisaoRapida.ativa
 const conjunto = buscarConjunto(route.params.conjunto as string)!
 const config = progresso.config
 
@@ -420,6 +424,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
     </div>
 
     <div class="painel">
+      <BarraRevisaoRapida v-if="rapida" />
       <div class="cabeca-painel so-computador">
         <RouterLink to="/exercicios" class="trilha">‹ {{ livro }}</RouterLink>
         <h1 class="titulo-pagina">{{ conjunto.nome }} · problema {{ problema.n }}</h1>
@@ -448,6 +453,9 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
       <div class="acoes">
         <button v-if="!resolvido" type="button" class="botao grande largo-celular" :disabled="pista >= 2 || aguardando" @click="pedirPista">
           {{ pista === 0 ? 'Pista: qual peça?' : 'Mostrar o lance' }}
+        </button>
+        <button v-else-if="rapida" type="button" class="botao primario grande largo-celular" @click="seguirRevisaoRapida(router)">
+          Seguir na revisão rápida
         </button>
         <template v-else-if="revisando">
           <button v-if="proximaRevisao" type="button" class="botao primario grande largo-celular" @click="irParaRevisao">

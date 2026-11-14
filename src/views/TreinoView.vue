@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, shallowRef } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import Avaliacao from '../components/Avaliacao.vue'
+import BarraRevisaoRapida from '../components/BarraRevisaoRapida.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import EstadoVazio from '../components/EstadoVazio.vue'
 import Ilustracao from '../components/Ilustracao.vue'
@@ -28,6 +29,7 @@ import { somarAtividade } from '../lib/painel'
 import { chaveDaNota, lerNota } from '../lib/anotacoes'
 import { marcasDoCapitulo } from '../lib/qualidade'
 import { progresso } from '../lib/progresso'
+import { revisaoRapida, seguirRevisaoRapida } from '../lib/revisaoRapida'
 import { tocar } from '../lib/som'
 import {
   aplicarResultado,
@@ -55,6 +57,9 @@ import {
 import type { Aresta } from '../lib/arvore'
 
 const route = useRoute()
+const router = useRouter()
+/** Aberto pela revisão rápida: uma linha da fila de hoje e depois o botão Seguir leva ao próximo item. */
+const rapida = route.query.rapida === '1' && revisaoRapida.ativa
 const capitulo = buscarCapitulo(route.params.cap as string)!
 const { arvore } = capitulo
 const idCapitulo = capitulo.capitulo.id
@@ -210,6 +215,8 @@ function iniciarSessao(livre = false) {
     }
   }
 
+  // Na revisão rápida, capítulo que já ficou em dia é pulado sem contar.
+  if (rapida && fila.value.length === 0) return seguirRevisaoRapida(router, false)
   if (fila.value.length === 0) fase.value = 'vazio'
   else proximaPartida()
 }
@@ -639,6 +646,7 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
     </div>
 
     <div class="painel">
+      <BarraRevisaoRapida v-if="rapida" />
       <template v-if="fase === 'jogando'">
         <div class="so-computador cabeca-painel">
           <RouterLink :to="voltarPara" class="trilha">‹ {{ capitulo.capitulo.nome }}</RouterLink>
@@ -754,8 +762,11 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
           <PlanoMeioJogo :plano="titulo.plano" />
         </CartaoDica>
 
+        <div v-if="rapida" class="acoes">
+          <button type="button" class="botao primario grande largo-celular" @click="seguirRevisaoRapida(router, !pulada || sabida)">Seguir na revisão rápida</button>
+        </div>
         <!-- Um caminho principal à vista; o resto fica numa lista curta logo abaixo. -->
-        <div class="acoes">
+        <div v-else class="acoes">
           <button v-if="fila.length" type="button" class="botao primario grande largo-celular" @click="proximaPartida">
             {{ escopoEscolhido.tipo === 'linha' ? 'Próxima variante' : 'Próxima' }} ({{ fila.length }})
           </button>
@@ -778,7 +789,7 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
           >Próxima coluna{{ colunaSeguinte.coluna ? ` (${colunaSeguinte.coluna})` : '' }} →</RouterLink>
         </div>
 
-        <div class="lista mais-opcoes">
+        <div v-if="!rapida" class="lista mais-opcoes">
           <button type="button" class="linha-lista" @click="revisarLinha">
             <span class="nome">Revisar esta linha</span>
             <span class="meta">Repetir agora, sem mexer na agenda</span>
@@ -800,7 +811,7 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
             <span class="meta">Recomeçar a sessão com o mesmo escopo</span>
           </button>
         </div>
-        <nav v-if="!fila.length && (vizinhas.anterior || vizinhas.proxima)" class="outras-aberturas" aria-label="Outras aberturas">
+        <nav v-if="!rapida && !fila.length && (vizinhas.anterior || vizinhas.proxima)" class="outras-aberturas" aria-label="Outras aberturas">
           <RouterLink v-if="vizinhas.anterior" class="botao" :to="{ name: 'treino', params: { cap: vizinhas.anterior.capitulo.id } }">
             ← {{ vizinhas.anterior.capitulo.nome }}
           </RouterLink>

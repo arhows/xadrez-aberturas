@@ -205,3 +205,81 @@ export function linhasDificeis(
     .sort((a, b) => a.cartao.facilidade - b.cartao.facilidade || a.cartao.repeticoes - b.cartao.repeticoes)
     .slice(0, limite)
 }
+
+// ---------- Evolução por semana ----------
+
+/** Uma semana (domingo a sábado) com o valor do gráfico; `valor` null = sem dados naquela semana. */
+export interface PontoSemanal {
+  /** Domingo que abre a semana (AAAA-MM-DD). */
+  inicio: string
+  valor: number | null
+  /** Texto do tooltip. */
+  detalhe: string
+}
+
+/** Domingos das últimas `n` semanas, da mais antiga à atual. */
+export function semanas(n: number, hoje = dataLocal()): string[] {
+  const [ano, mes, dia] = hoje.split('-').map(Number)
+  const domingo = somarDias(hoje, -new Date(ano, mes - 1, dia).getDay())
+  return Array.from({ length: n }, (_, i) => somarDias(domingo, (i - n + 1) * 7))
+}
+
+const naSemana = (data: string, inicio: string) => data >= inicio && data <= somarDias(inicio, 6)
+const plural = (n: number, um: string, varios: string) => `${n} ${n === 1 ? um : varios}`
+
+/** Linhas de abertura treinadas e exercícios resolvidos em cada semana. */
+export function atividadePorSemana(dias: Map<string, Atividade>, n: number, hoje = dataLocal()): PontoSemanal[] {
+  return semanas(n, hoje).map((inicio) => {
+    let linhas = 0
+    let exercicios = 0
+    for (const [data, a] of dias) {
+      if (!naSemana(data, inicio)) continue
+      linhas += a.linhas
+      exercicios += a.exercicios
+    }
+    return { inicio, valor: linhas + exercicios, detalhe: `${plural(linhas, 'linha', 'linhas')}, ${plural(exercicios, 'exercício', 'exercícios')}` }
+  })
+}
+
+/**
+ * Linhas de abertura já começadas (com cartão), acumulado até o fim de cada semana: mostra o
+ * repertório crescendo. `conta` filtra os cartões (só os do repertório, por exemplo).
+ */
+export function linhasComecadasAteCadaSemana(
+  cartoes: Record<string, Cartao>,
+  n: number,
+  hoje = dataLocal(),
+  conta: (id: string) => boolean = () => true,
+): PontoSemanal[] {
+  const criados = Object.entries(cartoes)
+    .filter(([id]) => conta(id))
+    .map(([, c]) => c.criado)
+  return semanas(n, hoje).map((inicio) => {
+    const fim = somarDias(inicio, 6)
+    const total = criados.filter((data) => data <= fim).length
+    const naquela = criados.filter((data) => naSemana(data, inicio)).length
+    return { inicio, valor: total, detalhe: `${plural(total, 'linha', 'linhas')} no total (${naquela} nesta semana)` }
+  })
+}
+
+/** % dos exercícios do dia resolvidos de primeira em cada semana (null se não fez nenhum). */
+export function acertoDePrimeiraPorSemana(
+  diario: Record<string, Record<string, string>>,
+  n: number,
+  hoje = dataLocal(),
+): PontoSemanal[] {
+  return semanas(n, hoje).map((inicio) => {
+    let feitos = 0
+    let primeira = 0
+    for (const [data, serie] of Object.entries(diario)) {
+      if (!naSemana(data, inicio)) continue
+      for (const estado of Object.values(serie)) {
+        feitos++
+        if (estado === 'primeira') primeira++
+      }
+    }
+    if (!feitos) return { inicio, valor: null, detalhe: 'Sem exercícios do dia nesta semana' }
+    const pct = Math.round((primeira / feitos) * 100)
+    return { inicio, valor: pct, detalhe: `${pct}% de primeira (${primeira} de ${feitos})` }
+  })
+}

@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import GraficoSemanal from '../components/GraficoSemanal.vue'
 import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
 import { descreverUnidade } from '../lib/escopo'
 import { livroDoConjunto, obterConjuntos } from '../lib/exercicios'
 import { FAMILIAS } from '../lib/familias'
 import { fmtTexto } from '../lib/formato'
 import {
+  acertoDePrimeiraPorSemana,
   atividadePorDia,
+  atividadePorSemana,
+  linhasComecadasAteCadaSemana,
   calendario,
   linhasDificeis,
   melhorSequencia,
@@ -42,6 +46,15 @@ function descreverDia(dia: { data: string; atividade: { linhas: number; exercici
   const partes = [plural(dia.atividade.linhas, 'linha', 'linhas'), plural(dia.atividade.exercicios, 'exercício', 'exercícios')]
   return `${dataCurta(dia.data)}: ${partes.join(', ')}`
 }
+
+// ---------- Evolução ----------
+const SEMANAS_EVOLUCAO = 12
+const porSemana = computed(() => atividadePorSemana(dias.value, SEMANAS_EVOLUCAO, hoje))
+const linhasComecadas = computed(() =>
+  linhasComecadasAteCadaSemana(progresso.cartoes, SEMANAS_EVOLUCAO, hoje, (id) => idsRevisados.has(id.split('/')[0])),
+)
+const deprimeira = computed(() => acertoDePrimeiraPorSemana(progresso.diario, SEMANAS_EVOLUCAO, hoje))
+const temDePrimeira = computed(() => deprimeira.value.some((p) => p.valor !== null))
 
 // ---------- Repertório ----------
 const resumos = computed(() => resumoDosCapitulos(capitulos, progresso.cartoes, progresso.corPorCapitulo, hoje))
@@ -146,6 +159,15 @@ const livros = computed(() => {
         <span>{{ ativosNoPeriodo }} dias com estudo nas últimas {{ SEMANAS }} semanas</span>
         <span class="escala" aria-hidden="true">menos <i class="dia nivel-0"></i><i class="dia nivel-1"></i><i class="dia nivel-2"></i><i class="dia nivel-3"></i><i class="dia nivel-4"></i> mais</span>
       </div>
+    </section>
+
+    <!-- Evolução -->
+    <section class="cartao evolucao">
+      <h2 class="titulo-secao">Evolução</h2>
+      <p class="apoio suave">As últimas {{ SEMANAS_EVOLUCAO }} semanas. Toque numa semana para ver os números.</p>
+      <GraficoSemanal :pontos="porSemana" titulo="Itens estudados por semana" />
+      <GraficoSemanal :pontos="linhasComecadas" tipo="linha" titulo="Linhas de abertura começadas (acumulado)" />
+      <GraficoSemanal v-if="temDePrimeira" :pontos="deprimeira" tipo="linha" :maximo="100" sufixo="%" titulo="Exercícios do dia resolvidos de primeira" />
     </section>
 
     <!-- Repertório -->
@@ -268,6 +290,12 @@ const livros = computed(() => {
 </template>
 
 <style scoped>
+.evolucao {
+  gap: var(--espaco-4);
+}
+.evolucao .apoio {
+  margin: calc(-1 * var(--espaco-2)) 0 0;
+}
 .progresso-pagina {
   display: grid;
   gap: var(--espaco-4);
