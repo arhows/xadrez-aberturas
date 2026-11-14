@@ -15,6 +15,14 @@ service cloud.firestore {
       allow read, write: if logado() && eu() == uid;
     }
 
+    // Contador de contas: ficha vazia (sem nome, e-mail nem progresso) que só o dono cria.
+    // Qualquer conta pode listar, para a contagem em Eu; os documentos não têm conteúdo.
+    match /contas/{uid} {
+      allow list: if logado();
+      allow get: if logado() && eu() == uid;
+      allow create, update: if logado() && eu() == uid && request.resource.data.keys().size() == 0;
+    }
+
     // Foto ou avatar de cada conta: qualquer conta lê (partidas on-line e ranking);
     // só o dono grava, e só foto pequena (128×128 em JPEG) ou link da foto do Google.
     match /perfis/{uid} {

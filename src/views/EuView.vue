@@ -6,7 +6,7 @@ import ListaDeAtalhos from '../components/ListaDeAtalhos.vue'
 import { meuNome } from '../lib/apelido'
 import { obterCapitulos } from '../lib/capitulos'
 import { diasSeguidos } from '../lib/diario'
-import { nuvem, sair } from '../lib/nuvem'
+import { nuvem, obterFirebase, sair } from '../lib/nuvem'
 import { progresso } from '../lib/progresso'
 import { capitulosDoRepertorio } from '../lib/repertorio'
 import { dominadoNasLinhasAtivas } from '../lib/resumoAberturas'
@@ -16,6 +16,13 @@ import { dataLocal } from '../lib/srs'
 const trocandoFoto = ref(false)
 const dias = diasSeguidos(progresso.diario, dataLocal())
 const dominado = dominadoNasLinhasAtivas(capitulosDoRepertorio(obterCapitulos()))
+
+/** Quantas contas o app tem; some se a contagem falhar (sem rede ou sem a regra no Firestore). */
+const contas = ref<number | null>(null)
+obterFirebase()
+  .then((fb) => fb.contarContas())
+  .then((n) => (contas.value = n))
+  .catch(() => {})
 </script>
 
 <template>
@@ -39,6 +46,10 @@ const dominado = dominadoNasLinhasAtivas(capitulosDoRepertorio(obterCapitulos())
       <div class="cartao"><span class="titulo-pagina">{{ progresso.sequencia }}</span><span class="apoio suave">recorde da Sequência</span></div>
       <div class="cartao"><span class="titulo-pagina">{{ dominado }}%</span><span class="apoio suave">das aberturas dominado</span></div>
     </div>
+
+    <p v-if="contas" class="contas suave">
+      {{ contas === 1 ? '1 pessoa registrada' : `${contas.toLocaleString('pt-BR')} pessoas registradas` }} no app
+    </p>
 
     <ListaDeAtalhos tom="eu" :grupos="EU.grupos" />
 
@@ -100,6 +111,11 @@ h1 {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--espaco-2);
+}
+.contas {
+  margin: 0;
+  font-size: 0.875rem;
+  text-align: center;
 }
 .numeros .cartao {
   gap: var(--espaco-1);

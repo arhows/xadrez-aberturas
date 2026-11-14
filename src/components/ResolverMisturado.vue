@@ -29,7 +29,8 @@ import { tocar } from '../lib/som'
  * certo. O tema da tática só aparece depois, para não entregar o padrão. Monte de novo (`key`)
  * a cada exercício.
  */
-const props = defineProps<{ item: ItemMisturado; modo: 'serie' | 'sequencia' }>()
+/** `treino`: refazendo a série do dia; não conta de novo no progresso nem na revisão. */
+const props = defineProps<{ item: ItemMisturado; modo: 'serie' | 'sequencia'; treino?: boolean }>()
 const emit = defineEmits<{ resolvido: [dePrimeira: boolean]; falhou: [] }>()
 
 const TEMPO_PREVIO_MS = 900
@@ -252,11 +253,13 @@ function concluir(lance: LanceVerificado, ply: number) {
   }
   jaResolvido.value = true
   const dePrimeira = erros.value === 0 && !usouPista.value
-  somarAtividade(progresso.atividade, 'exercicios')
-  // Conta também no conjunto de origem (sem rebaixar um "de primeira" de antes) e na revisão.
-  const estados = (progresso.exercicios[conjunto.id] ??= {})
-  if (estados[problema.n] !== 'primeira') estados[problema.n] = dePrimeira ? 'primeira' : 'ajuda'
-  registrarResultado(conjunto.id, problema.n, notaDoExercicio(erros.value, usouPista.value))
+  if (!props.treino) {
+    somarAtividade(progresso.atividade, 'exercicios')
+    // Conta também no conjunto de origem (sem rebaixar um "de primeira" de antes) e na revisão.
+    const estados = (progresso.exercicios[conjunto.id] ??= {})
+    if (estados[problema.n] !== 'primeira') estados[problema.n] = dePrimeira ? 'primeira' : 'ajuda'
+    registrarResultado(conjunto.id, problema.n, notaDoExercicio(erros.value, usouPista.value))
+  }
   const explicacao = problema.explicacao ? ` ${problema.explicacao}` : ''
   aviso.value = {
     tipo: 'certo',

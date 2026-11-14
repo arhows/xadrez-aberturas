@@ -5,6 +5,7 @@
  * A configuração abaixo é pública por natureza (vai no site de qualquer forma);
  * quem protege os dados são as regras do Firestore: cada conta só lê e grava
  * o documento usuarios/{uid}, e só o dono grava o próprio perfis/{uid} (foto ou avatar).
+ * contas/{uid} é uma ficha vazia, só para contar quantas contas existem.
  */
 import { initializeApp } from 'firebase/app'
 import {
@@ -19,7 +20,7 @@ import {
   updateProfile,
   type User,
 } from 'firebase/auth'
-import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore/lite'
+import { collection, doc, getCount, getDoc, getFirestore, setDoc } from 'firebase/firestore/lite'
 
 export const app = initializeApp({
   apiKey: 'AIzaSyBfJMwoRy1GBlDHCrOQSSfrvRdQMd0clzM',
@@ -96,4 +97,14 @@ export async function lerPerfil(uid: string): Promise<PerfilPublico | null> {
 
 export async function gravarPerfil(uid: string, perfil: PerfilPublico): Promise<void> {
   await setDoc(doc(banco, 'perfis', uid), { foto: perfil.foto, avatar: perfil.avatar, atualizado: new Date().toISOString() })
+}
+
+/** Marca a conta como registrada (contas/{uid}, documento vazio: sem nome, e-mail nem progresso). */
+export async function registrarConta(uid: string): Promise<void> {
+  await setDoc(doc(banco, 'contas', uid), {})
+}
+
+/** Quantas contas já entraram no app (contagem feita no servidor, sem baixar as fichas). */
+export async function contarContas(): Promise<number> {
+  return (await getCount(collection(banco, 'contas'))).data().count
 }

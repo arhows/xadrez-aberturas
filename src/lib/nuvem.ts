@@ -62,6 +62,8 @@ function aoMudarUsuario(usuario: { uid: string; displayName: string | null; emai
     nuvem.perguntarSemConta =
       progressoSemConta() !== null && !ler<string[]>(CHAVE_RECUSARAM, []).includes(usuario.uid)
     void sincronizar()
+    // Para o contador de contas (em Eu); sem a regra no Firestore, só não conta.
+    firebase?.registrarConta(usuario.uid).catch(() => {})
   } else {
     fecharProgresso()
     nuvem.uid = null

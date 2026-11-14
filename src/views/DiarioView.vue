@@ -26,7 +26,6 @@ const modo = computed<'serie' | 'sequencia'>(() => (route.query.modo === 'sequen
 
 /** Volta para a tela de onde veio (Início, Praticar ou Táticas e mates); sem origem conhecida, Praticar. */
 const { para: voltarPara, nome: nomeDaVolta } = useVolta('/praticar')
-const textoDoBotao = voltarPara === '/' ? 'Voltar ao Início' : `Voltar a ${nomeDaVolta}`
 
 function trocarModo(novo: 'serie' | 'sequencia') {
   router.replace({ name: 'diario', query: novo === 'sequencia' ? { modo: novo } : {} })
@@ -35,7 +34,12 @@ function trocarModo(novo: 'serie' | 'sequencia') {
 // ---------- Exercícios do dia ----------
 const hoje = dataLocal()
 const serie = serieDoDia(obterConjuntos(), hoje)
-const feitos = computed(() => progresso.diario[hoje] ?? {})
+const feitosDoDia = computed(() => progresso.diario[hoje] ?? {})
+/** Refazendo a série depois de completa: só treino, o placar do dia fica como estava. */
+const refazendo = ref(false)
+const feitosNoTreino = ref<Record<string, 'primeira' | 'ajuda'>>({})
+/** Marcas mostradas nas bolinhas e no contador: as do dia, ou as da nova tentativa. */
+const feitos = computed(() => (refazendo.value ? feitosNoTreino.value : feitosDoDia.value))
 const primeiroPendente = () => {
   const i = serie.findIndex((_, j) => !feitos.value[String(j)])
   return i < 0 ? null : i
@@ -44,15 +48,23 @@ const primeiroPendente = () => {
 const indice = ref<number | null>(primeiroPendente())
 const resolvidoAgora = ref(false)
 const dias = computed(() => diasSeguidos(progresso.diario, hoje))
-const dePrimeira = computed(() => Object.values(feitos.value).filter((e) => e === 'primeira').length)
+const dePrimeira = computed(() => Object.values(feitosDoDia.value).filter((e) => e === 'primeira').length)
 const completos = computed(() => Object.keys(feitos.value).length)
+const completosNoDia = computed(() => Object.keys(feitosDoDia.value).length)
+const dePrimeiraNoTreino = computed(() => Object.values(feitosNoTreino.value).filter((e) => e === 'primeira').length)
+/** A nova tentativa chegou ao fim (para mostrar o resultado dela no resumo). */
+const treinoCompleto = computed(() => refazendo.value && Object.keys(feitosNoTreino.value).length === serie.length)
 
 function aoResolverNaSerie(primeira: boolean) {
   const i = String(indice.value)
+  resolvidoAgora.value = true
+  if (refazendo.value) {
+    feitosNoTreino.value[i] ??= primeira ? 'primeira' : 'ajuda'
+    return
+  }
   const dia = (progresso.diario[hoje] ??= {})
   // Vale o primeiro resultado do dia: refazer depois de ver a solução não vira "de primeira".
   dia[i] ??= primeira ? 'primeira' : 'ajuda'
-  resolvidoAgora.value = true
 }
 function abrir(i: number | null) {
   indice.value = i
@@ -60,6 +72,11 @@ function abrir(i: number | null) {
 }
 function seguirNaSerie() {
   abrir(primeiroPendente())
+}
+function refazerSerie() {
+  refazendo.value = true
+  feitosNoTreino.value = {}
+  abrir(0)
 }
 
 // ---------- Sequência ----------
@@ -123,6 +140,7 @@ function aoFalharNaSeq() {
       :key="`serie-${indice}`"
       :item="serie[indice]"
       modo="serie"
+      :treino="refazendo"
       @resolvido="aoResolverNaSerie"
     >
       <template #topo>
@@ -130,6 +148,7 @@ function aoFalharNaSeq() {
           <RouterLink :to="voltarPara" class="trilha">‹ {{ nomeDaVolta }}</RouterLink>
           <h1 class="titulo-pagina">Exercícios do dia</h1>
         </div>
+        <p v-if="refazendo" class="aviso-treino suave">Refazendo a série de hoje: é só treino, o resultado do dia não muda.</p>
         <div class="segmentado abas" role="tablist">
           <button type="button" role="tab" aria-selected="true" aria-pressed="true">Do dia</button>
           <button type="button" role="tab" aria-selected="false" aria-pressed="false" @click="trocarModo('sequencia')">Sequência</button>
@@ -168,16 +187,23 @@ function aoFalharNaSeq() {
       </div>
       <dl class="placar-final">
         <div><dt>De primeira</dt><dd class="ok">{{ dePrimeira }}</dd></div>
-        <div><dt>Com ajuda</dt><dd>{{ completos - dePrimeira }}</dd></div>
+        <div><dt>Com ajuda</dt><dd>{{ completosNoDia - dePrimeira }}</dd></div>
         <div><dt>Dias seguidos</dt><dd>{{ dias }}</dd></div>
       </dl>
       <p class="suave">Amanhã tem uma série nova. Os que você errou ou fez com pista voltam na Revisão de hoje dos exercícios.</p>
       <div class="bolinhas">
         <button v-for="(_, i) in serie" :key="i" type="button" class="bolinha" :class="feitos[String(i)]" @click="abrir(i)">{{ i + 1 }}</button>
       </div>
+      <p v-if="treinoCompleto" class="treino-feito">
+        Na nova tentativa: {{ dePrimeiraNoTreino }} de {{ serie.length }} de primeira.
+      </p>
       <div class="acoes">
-        <button type="button" class="botao primario grande largo-celular" @click="trocarModo('sequencia')">Jogar a Sequência</button>
-        <RouterLink class="botao grande largo-celular" :to="voltarPara">{{ textoDoBotao }}</RouterLink>
+        <button type="button" class="botao grande largo-celular" @click="refazerSerie">Refazer os exercícios de hoje</button>
+        <div class="opcao-sequencia">
+          <button type="button" class="botao grande largo-celular" @click="trocarModo('sequencia')">Desafio: Sequência</button>
+          <span class="suave">Exercícios sem fim, cada vez mais difíceis, até o primeiro erro.</span>
+        </div>
+        <RouterLink class="botao primario grande largo-celular" :to="voltarPara">Concluir</RouterLink>
       </div>
     </div>
   </template>
@@ -366,7 +392,32 @@ function aoFalharNaSeq() {
 .acoes {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
   gap: var(--espaco-2);
+}
+.opcao-sequencia {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  max-width: 22rem;
+}
+.opcao-sequencia .suave {
+  font-size: 0.8125rem;
+}
+.treino-feito {
+  margin: 0;
+  font-weight: 600;
+}
+.aviso-treino {
+  margin: 0;
+  font-size: 0.875rem;
+}
+@media (max-width: 799.98px) {
+  .acoes,
+  .opcao-sequencia {
+    width: 100%;
+    max-width: none;
+  }
 }
 @media (max-width: 799.98px) {
   .so-computador {
