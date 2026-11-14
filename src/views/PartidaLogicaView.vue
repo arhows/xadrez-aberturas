@@ -65,6 +65,8 @@ const resposta = ref<{
   acertou: boolean
   mostrou: boolean
   palpite?: string
+  /** Casas do seu lance, para a seta vermelha ao rever a posição de antes. */
+  casasDoPalpite?: [string, string]
   lance: string
   nota?: NotaDoLance
   veredicto?: VeredictoDoPalpite | 'avaliando' | null
@@ -89,6 +91,7 @@ onBeforeUnmount(() => clearTimeout(temporizador))
 const rotulo = (p: number) => fmtLance(p + 1, sans[p])
 
 function comecar() {
+  revendo.value = null
   clearTimeout(temporizador)
   versao++
   ply.value = 0
@@ -146,7 +149,7 @@ function aoJogar(de: string, para: string) {
   respondidas.value++
   if (acertou) acertos.value++
   tocar(acertou ? 'certo' : 'errado')
-  resposta.value = { acertou, mostrou: false, palpite, lance: rotulo(p), nota: notas[p], veredicto: acertou ? null : 'avaliando' }
+  resposta.value = { acertou, mostrou: false, palpite, casasDoPalpite: [de, para], lance: rotulo(p), nota: notas[p], veredicto: acertou ? null : 'avaliando' }
   lanceDoAdversario.value = null
   ply.value = p + 1
   fase.value = 'resposta'
@@ -176,6 +179,7 @@ async function compararComStockfish(p: number, palpite: string) {
 /** "Mostrar o lance": conta como pergunta respondida, sem acerto. */
 function mostrarLance() {
   if (fase.value !== 'pergunta') return
+  revendo.value = null
   const p = ply.value
   respondidas.value++
   resposta.value = { acertou: false, mostrou: true, lance: rotulo(p), nota: notas[p] }
@@ -186,6 +190,7 @@ function mostrarLance() {
 
 function continuar() {
   if (fase.value !== 'resposta') return
+  revendo.value = null
   resposta.value = null
   if (ply.value >= sans.length) return terminar()
   fase.value = 'pergunta'
@@ -208,26 +213,65 @@ function terminar() {
 function ir(p: number) {
   if (fase.value === 'fim') ply.value = Math.max(0, Math.min(sans.length, p))
 }
+
+/**
+ * Durante a partida: voltar e avançar pelas posições já jogadas sem mexer no andamento. Útil depois
+ * de errar, para ver como estava a posição (e a peça capturada) antes do lance.
+ */
+const revendo = ref<number | null>(null)
+const podeRever = computed(() => (fase.value === 'pergunta' || fase.value === 'resposta') && ply.value > 0)
+function voltarPosicao() {
+  if (!podeRever.value) return
+  revendo.value = Math.max(0, (revendo.value ?? ply.value) - 1)
+}
+function avancarPosicao() {
+  if (revendo.value === null) return
+  const proxima = revendo.value + 1
+  revendo.value = proxima >= ply.value ? null : proxima
+}
+function voltarAoAtual() {
+  revendo.value = null
+}
 function aoTeclar(e: KeyboardEvent) {
   if ((e.target as HTMLElement)?.tagName === 'INPUT') return
   if (fase.value === 'resposta' && e.key === 'Enter') continuar()
   if (pausado.value && e.key === 'Enter') seguirDaNota()
-  if (fase.value !== 'fim') return
+  if (fase.value !== 'fim') {
+    if (e.key === 'ArrowLeft') voltarPosicao()
+    if (e.key === 'ArrowRight') avancarPosicao()
+    return
+  }
   if (e.key === 'ArrowLeft') ir(ply.value - 1)
   if (e.key === 'ArrowRight') ir(ply.value + 1)
 }
 onMounted(() => window.addEventListener('keydown', aoTeclar))
 onBeforeUnmount(() => window.removeEventListener('keydown', aoTeclar))
 
-const fen = computed(() => posicoes[ply.value].fen)
-const ultimoLance = computed(() => posicoes[ply.value].ultimo)
-/** Quando o seu lance foi outro, a seta verde mostra o lance da partida. */
+/** A posição no tabuleiro: a atual, ou a que está sendo revista. */
+const mostrado = computed(() => revendo.value ?? ply.value)
+const fen = computed(() => posicoes[mostrado.value].fen)
+const ultimoLance = computed(() => posicoes[mostrado.value].ultimo)
+/**
+ * Quando o seu lance foi outro, a seta verde mostra o lance da partida. Revendo a posição de antes
+ * do lance, aparecem as duas: verde (o da partida) e vermelha (o seu).
+ */
 const formas = computed<Forma[]>(() => {
   const r = resposta.value
-  const ultimo = posicoes[ply.value].ultimo
-  return fase.value === 'resposta' && r && !r.acertou && ultimo ? [{ de: ultimo[0], para: ultimo[1], cor: 'green' }] : []
+  if (fase.value !== 'resposta' || !r || r.acertou) return []
+  const daPartida = posicoes[ply.value].ultimo
+  if (revendo.value === null) return daPartida ? [{ de: daPartida[0], para: daPartida[1], cor: 'green' }] : []
+  if (revendo.value !== ply.value - 1) return []
+  const setas: Forma[] = daPartida ? [{ de: daPartida[0], para: daPartida[1], cor: 'green' }] : []
+  if (r.casasDoPalpite) setas.push({ de: r.casasDoPalpite[0], para: r.casasDoPalpite[1], cor: 'red' })
+  return setas
 })
-const jogavel = computed(() => fase.value === 'pergunta' && pergunta(ply.value) && ply.value < sans.length)
+const jogavel = computed(() => revendo.value === null && fase.value === 'pergunta' && pergunta(ply.value) && ply.value < sans.length)
+/** Texto da barra de revisão: qual posição está no tabuleiro. */
+const textoRevendo = computed(() => {
+  if (revendo.value === null) return ''
+  if (revendo.value === 0) return 'Posição inicial'
+  return `Depois de ${rotulo(revendo.value - 1)}`
+})
 const historico = computed(() => (fase.value === 'fim' ? sans : sans.slice(0, ply.value)))
 const nota = computed(() => (fase.value === 'fim' && ply.value > 0 ? notas[ply.value - 1] : undefined))
 const porcentagem = computed(() => (respondidas.value ? Math.round((acertos.value / respondidas.value) * 100) : 0))
@@ -254,6 +298,15 @@ const textoDoVeredicto = (v: VeredictoDoPalpite | 'avaliando' | null | undefined
         :jogavel="jogavel"
         @lance="aoJogar"
       />
+      <div v-if="podeRever" class="rever" role="group" aria-label="Rever as posições anteriores">
+        <button type="button" class="botao fantasma" :disabled="revendo === 0" aria-label="Posição anterior" @click="voltarPosicao">‹</button>
+        <span class="suave">
+          <template v-if="revendo !== null">{{ textoRevendo }}</template>
+          <template v-else>Rever as posições anteriores</template>
+        </span>
+        <button type="button" class="botao fantasma" :disabled="revendo === null" aria-label="Próxima posição" @click="avancarPosicao">›</button>
+        <button v-if="revendo !== null" type="button" class="botao" @click="voltarAoAtual">Voltar ao lance atual</button>
+      </div>
     </div>
 
     <div class="painel">
@@ -423,6 +476,21 @@ const textoDoVeredicto = (v: VeredictoDoPalpite | 'avaliando' | null | undefined
   flex-wrap: wrap;
   align-items: center;
   gap: var(--espaco-2);
+}
+.rever {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espaco-2);
+  margin-top: var(--espaco-2);
+}
+.rever .botao.fantasma {
+  min-width: 44px;
+  font-size: 20px;
+}
+.rever .suave {
+  font-size: 14px;
 }
 .mais-acoes {
   padding-top: var(--espaco-3);
