@@ -25,7 +25,7 @@ import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
 import { Chess } from 'chess.js'
 import { casasDoLance } from '../lib/lances'
 import { carregarMotor, type DadosMotor } from '../lib/motor'
-import { compartilharPosicao, linkDaPosicao } from '../lib/compartilharPosicao'
+import { compartilharPosicao, copiarTexto, linkDaPosicao, podeCompartilhar } from '../lib/compartilharPosicao'
 import { aproveitamento, indiceDePosicoes } from '../lib/partidasRepertorio'
 import { progresso } from '../lib/progresso'
 import { tocar } from '../lib/som'
@@ -189,13 +189,24 @@ const marcaDe = (aresta: Aresta) => marcas.get(aresta.id) ?? null
 const motorDe = (aresta: Aresta) => qualidadeDoMotor(aresta, dadosMotor.value?.posicoes)
 
 const avisoCompartilhar = ref('')
-async function compartilhar() {
+const temCompartilhar = podeCompartilhar()
+function dadosDoLink() {
   const sans = [...caminho.value.map((a) => a.san), ...fora.value.map((l) => l.san)]
   const link = linkDaPosicao(`${location.origin}${location.pathname}`, capitulo.capitulo.id, sans)
   const titulo = sans.length ? `${capitulo.capitulo.nome}: ${sans.map((san, i) => fmtLance(i + 1, san)).join(' ')}` : capitulo.capitulo.nome
+  return { link, titulo }
+}
+function avisar(texto: string) {
+  avisoCompartilhar.value = texto
+  if (texto) setTimeout(() => (avisoCompartilhar.value = ''), 2500)
+}
+async function compartilhar() {
+  const { link, titulo } = dadosDoLink()
   const resultado = await compartilharPosicao(titulo, link)
-  avisoCompartilhar.value = resultado === 'copiado' ? 'Link copiado.' : resultado === 'falhou' ? 'Não deu para copiar o link.' : ''
-  if (avisoCompartilhar.value) setTimeout(() => (avisoCompartilhar.value = ''), 2500)
+  avisar(resultado === 'copiado' ? 'Link copiado.' : resultado === 'falhou' ? 'Não deu para copiar o link.' : '')
+}
+async function copiarLink() {
+  avisar((await copiarTexto(dadosDoLink().link)) ? '✓ Link copiado.' : 'Não deu para copiar o link.')
 }
 
 /** Volta à posição inicial para praticar a linha de novo do começo. */
@@ -477,7 +488,8 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
           :to="{ name: 'jogar', query: { c: [...caminho.map((a) => a.san), ...fora.map((l) => l.san)].join(' '), cap: capitulo.capitulo.id } }"
         >Jogar daqui</RouterLink>
         <RouterLink class="botao fantasma" :to="{ name: 'editor', query: { fen } }" title="Abrir esta posição no editor">Editar posição</RouterLink>
-        <button type="button" class="botao fantasma" title="Compartilhar o link desta posição" @click="compartilhar">Compartilhar</button>
+        <button type="button" class="botao fantasma" title="Copiar o link desta posição" @click="copiarLink">Copiar link</button>
+        <button v-if="temCompartilhar" type="button" class="botao fantasma" title="Compartilhar o link desta posição" @click="compartilhar">Compartilhar</button>
         <span v-if="avisoCompartilhar" class="aviso-compartilhar" role="status">{{ avisoCompartilhar }}</span>
       </div>
 

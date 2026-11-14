@@ -25,6 +25,7 @@ import {
   responderOferta,
   type PartidaComId,
 } from '../lib/servidorOnline'
+import { copiarTexto } from '../lib/compartilharPosicao'
 import { tocar } from '../lib/som'
 
 /** Partida on-line em tempo real com um amigo. */
@@ -163,12 +164,10 @@ async function compartilhar() {
   }
 }
 async function copiarLink() {
-  try {
-    await navigator.clipboard.writeText(link.value)
-  } catch {
-    // Navegador sem acesso à área de transferência: seleciona o campo e usa o copiar antigo.
+  if (!(await copiarTexto(link.value))) {
+    // Não copiou: deixa o link selecionado para a pessoa copiar à mão.
     campoDoLink.value?.select()
-    document.execCommand('copy')
+    return
   }
   copiado.value = true
   setTimeout(() => (copiado.value = false), 2000)

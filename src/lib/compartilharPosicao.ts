@@ -25,3 +25,25 @@ export async function compartilharPosicao(titulo: string, link: string): Promise
     return 'falhou'
   }
 }
+
+/** Há o "Compartilhar" do aparelho (celular, e também alguns navegadores de computador). */
+export const podeCompartilhar = () => typeof navigator !== 'undefined' && typeof navigator.share === 'function'
+
+/** Copia um texto; sem acesso à área de transferência, usa o copiar antigo do navegador. */
+export async function copiarTexto(texto: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(texto)
+    return true
+  } catch {
+    const campo = document.createElement('textarea')
+    campo.value = texto
+    campo.setAttribute('readonly', '')
+    campo.style.position = 'fixed'
+    campo.style.opacity = '0'
+    document.body.appendChild(campo)
+    campo.select()
+    const ok = document.execCommand('copy')
+    campo.remove()
+    return ok
+  }
+}

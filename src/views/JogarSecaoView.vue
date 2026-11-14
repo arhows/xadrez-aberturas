@@ -1,6 +1,16 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import ListaDeAtalhos from '../components/ListaDeAtalhos.vue'
+import { avisosOnline } from '../lib/avisosOnline'
 import { JOGAR } from '../lib/secoes'
+
+const selos = computed(() => {
+  const partes = [
+    avisosOnline.desafios ? `${avisosOnline.desafios} ${avisosOnline.desafios === 1 ? 'DESAFIO' : 'DESAFIOS'}` : '',
+    avisosOnline.minhaVez ? (avisosOnline.minhaVez === 1 ? 'SUA VEZ' : `SUA VEZ EM ${avisosOnline.minhaVez}`) : '',
+  ].filter(Boolean)
+  return { online: partes.join(' · ') || undefined }
+})
 </script>
 
 <template>
@@ -9,7 +19,7 @@ import { JOGAR } from '../lib/secoes'
       <h1>{{ JOGAR.nome }}</h1>
       <p class="corpo suave">{{ JOGAR.descricao }}</p>
     </header>
-    <ListaDeAtalhos tom="jogar" :grupos="JOGAR.grupos" />
+    <ListaDeAtalhos tom="jogar" :grupos="JOGAR.grupos" :selos="selos" />
   </div>
 </template>
 

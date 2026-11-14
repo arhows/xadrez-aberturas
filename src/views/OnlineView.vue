@@ -8,6 +8,7 @@ import type { Cor } from '../lib/lances'
 import { TEMPOS } from '../lib/relogio'
 import {
   adversarioDe,
+  corDe,
   cancelarPartida,
   criarPartida,
   entrarNaPartida,
@@ -79,6 +80,7 @@ const nomeDoOutro = (p: PartidaComId) => {
   const outro = uidDoOutro(p)
   return outro ? (p.nomes[outro] ?? 'Amigo') : 'aguardando amigo'
 }
+const minhaVez = (p: PartidaComId) => corDe(p, uid) === (p.lances.length % 2 === 0 ? 'w' : 'b')
 const ritmo = (id: string) => TEMPOS.find((t) => t.id === id)?.ritmo ?? ''
 const textoTempo = (id: string) => (id === 'livre' ? 'sem relógio' : `${id} (${ritmo(id)})`)
 
@@ -131,7 +133,7 @@ function abrirCodigo() {
       <h2>Partidas em andamento</h2>
       <ul class="lista">
         <li v-for="p in emAndamento" :key="p.id">
-          <span class="quem"><Avatar :uid="uidDoOutro(p)" :nome="nomeDoOutro(p)" :tamanho="28" />contra <strong>{{ nomeDoOutro(p) }}</strong> <span class="suave">· {{ textoTempo(p.tempo) }} · {{ p.lances.length }} meios-lances</span></span>
+          <span class="quem"><Avatar :uid="uidDoOutro(p)" :nome="nomeDoOutro(p)" :tamanho="28" />contra <strong>{{ nomeDoOutro(p) }}</strong> <span v-if="minhaVez(p)" class="selo">SUA VEZ</span> <span class="suave">· {{ textoTempo(p.tempo) }} · {{ p.lances.length }} meios-lances</span></span>
           <RouterLink class="botao primario" :to="{ name: 'partida-online', params: { id: p.id } }">Continuar</RouterLink>
         </li>
       </ul>

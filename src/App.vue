@@ -3,6 +3,7 @@ import { computed, watch, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Avatar from './components/Avatar.vue'
 import { meuNome } from './lib/apelido'
+import { totalDeAvisos } from './lib/avisosOnline'
 import { juntarProgressoSemConta, nuvem, recusarProgressoSemConta } from './lib/nuvem'
 import { progresso } from './lib/progresso'
 import { atualizarAgora, pwa } from './lib/pwa'
@@ -58,7 +59,10 @@ const LINKS: { secao: Secao; para: string; nome: string }[] = [
           <Avatar :uid="nuvem.uid" :nome="meuNome()" :tamanho="28" />
           <span>{{ meuNome().split(' ')[0] }}</span>
         </template>
-        <template v-else>{{ link.nome }}</template>
+        <template v-else>
+          {{ link.nome }}
+          <span v-if="link.secao === 'jogar' && totalDeAvisos" class="contador" :aria-label="`${totalDeAvisos} esperando você`">{{ totalDeAvisos }}</span>
+        </template>
       </RouterLink>
     </nav>
     <header v-if="!foco" class="marca-movel so-celular">
@@ -107,6 +111,7 @@ const LINKS: { secao: Secao; para: string; nome: string }[] = [
         <svg v-else-if="link.secao === 'praticar'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5" /><circle cx="12" cy="12" r="4.5" /><circle cx="12" cy="12" r="0.8" fill="currentColor" /></svg>
         <svg v-else-if="link.secao === 'jogar'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="2" /><path d="M3.5 12h17M12 3.5v17" /></svg>
         <Avatar v-else :uid="nuvem.uid" :nome="meuNome()" :tamanho="26" />
+        <span v-if="link.secao === 'jogar' && totalDeAvisos" class="contador" :aria-label="`${totalDeAvisos} esperando você`">{{ totalDeAvisos }}</span>
       </span>
       {{ link.nome }}
     </RouterLink>
@@ -138,6 +143,30 @@ const LINKS: { secao: Secao; para: string; nome: string }[] = [
   width: 28px;
   height: 28px;
   border-radius: 7px;
+}
+.contador {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  margin-left: 4px;
+  padding: 0 5px;
+  border-radius: var(--raio-pill);
+  background: var(--erro);
+  color: #fff;
+  font: 700 11px/1 var(--font-texto);
+  vertical-align: 2px;
+}
+.barra-inferior .icone {
+  position: relative;
+}
+.barra-inferior .contador {
+  position: absolute;
+  top: -2px;
+  right: 8px;
+  margin: 0;
+  box-shadow: 0 0 0 2px var(--superficie);
 }
 .topo .eu {
   display: inline-flex;
