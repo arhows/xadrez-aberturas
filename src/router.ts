@@ -1,5 +1,6 @@
 import type { Secao } from './lib/secoes'
 import { createRouter, createWebHashHistory, type RouteLocationNormalized } from 'vue-router'
+import { ehArquivoDeVersaoAntiga, recarregarNaVersaoNova } from './lib/versaoNova'
 import { buscarCapitulo, carregarCapitulos } from './lib/capitulos'
 import { buscarConjunto, carregarConjuntos } from './lib/exercicios'
 import { esperarSessao, nuvem } from './lib/nuvem'
@@ -192,4 +193,9 @@ router.beforeEach(async (destino) => {
     atualizarAnalises(progresso.partidas, await carregarCapitulos())
   }
   return true
+})
+
+// Tela de uma versão que já saiu do site (aba aberta antes da publicação): recarrega no destino.
+router.onError((erro, destino) => {
+  if (ehArquivoDeVersaoAntiga(erro)) recarregarNaVersaoNova(destino.fullPath)
 })

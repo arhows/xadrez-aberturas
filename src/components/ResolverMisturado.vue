@@ -55,6 +55,8 @@ const fen = ref(problema.fen)
 const ultimoLance = ref<[string, string] | null>(null)
 const aguardando = ref(!!previo)
 const terminado = ref(false)
+/** Já resolvido uma vez: refazer do início (para memorizar) não conta de novo. */
+const jaResolvido = ref(false)
 const falhou = ref(false)
 const erros = ref(0)
 const pista = ref(0)
@@ -244,6 +246,11 @@ function concluir(lance: LanceVerificado, ply: number) {
   ultimoLance.value = [lance.from, lance.to]
   terminado.value = true
   pista.value = 0
+  if (jaResolvido.value) {
+    aviso.value = { tipo: 'certo', lance: rotulo(ply, lance.san), texto: 'Resolvido de novo! Refaça quantas vezes quiser para memorizar.' }
+    return
+  }
+  jaResolvido.value = true
   const dePrimeira = erros.value === 0 && !usouPista.value
   somarAtividade(progresso.atividade, 'exercicios')
   // Conta também no conjunto de origem (sem rebaixar um "de primeira" de antes) e na revisão.
@@ -271,6 +278,22 @@ async function pedirPista() {
   pista.value++
   aviso.value = { tipo: 'neutro', texto: pista.value === 1 ? 'A peça destacada faz o lance.' : 'Jogue o lance da seta.' }
 }
+
+/**
+ * Volta à posição do enunciado para refazer os lances (na série do dia). Vale no meio do exercício,
+ * depois de uma pista, e também depois de resolvido, para memorizar o caminho.
+ */
+function recomecar() {
+  clearTimeout(temporizador)
+  jogadas.value = []
+  terminado.value = false
+  pista.value = 0
+  alvoDaPista.value = null
+  promocaoPendente.value = null
+  mostrarPasso()
+  aviso.value = { tipo: 'neutro', texto: `De volta ao início. ${enunciado.value}` }
+}
+const podeRecomecar = computed(() => props.modo === 'serie' && !falhou.value && (jogadas.value.length > 0 || terminado.value || pista.value > 0))
 
 const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
   { peca: 'q', nome: 'Dama' },
@@ -313,7 +336,10 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
         <button v-if="modo === 'serie' && !terminado" type="button" class="botao grande largo-celular" :disabled="pista >= 2 || aguardando" @click="pedirPista">
           {{ pista === 0 ? 'Pista: qual peça?' : 'Mostrar o lance' }}
         </button>
-        <slot name="acoes" :terminado="terminado" :falhou="falhou" />
+        <slot name="acoes" :terminado="terminado || jaResolvido" :falhou="falhou" />
+        <button v-if="podeRecomecar" type="button" class="botao fantasma recomecar" :disabled="aguardando && !terminado" @click="recomecar">
+          ↺ Recomeçar do início
+        </button>
         <a
           v-if="terminado && problema.lichess"
           class="botao fantasma"
