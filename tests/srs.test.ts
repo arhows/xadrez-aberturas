@@ -123,3 +123,19 @@ describe('fila do dia', () => {
     expect(esgotada.novas).toEqual([])
   })
 })
+
+describe('já sei esta linha', () => {
+  it('conta como dominada e volta só daqui a 30 dias', async () => {
+    const { marcarComoSabida, estaDominado, estaPendente } = await import('../src/lib/srs')
+    const nova = marcarComoSabida(undefined, '2026-11-13')
+    expect(estaDominado(nova)).toBe(true)
+    expect(nova.proxima).toBe('2026-12-13')
+    expect(estaPendente(nova, '2026-12-12')).toBe(false)
+  })
+
+  it('não encurta um intervalo que já era maior', async () => {
+    const { marcarComoSabida } = await import('../src/lib/srs')
+    const longa = { repeticoes: 6, intervalo: 60, facilidade: 2.6, proxima: '2026-11-13', criado: '2026-01-01' }
+    expect(marcarComoSabida(longa, '2026-11-13')).toMatchObject({ repeticoes: 6, intervalo: 60, proxima: '2027-01-12' })
+  })
+})

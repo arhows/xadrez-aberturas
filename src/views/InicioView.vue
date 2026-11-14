@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import Icone from '../components/Icone.vue'
+import SugestoesDasPartidas from '../components/SugestoesDasPartidas.vue'
 import { diasSeguidos, semanaDoDiario, TAMANHO_DA_SERIE } from '../lib/diario'
 import { carregarConjuntos, type ConjuntoExercicios } from '../lib/exercicios'
 import { progresso } from '../lib/progresso'
@@ -119,6 +120,8 @@ const partesDaRevisao = computed(() => {
         </div>
       </section>
     </div>
+
+    <SugestoesDasPartidas :limite="1" titulo="Sugestão das suas partidas" />
 
     <RouterLink v-if="ultimo" class="continuar" :to="{ name: 'exercicio', params: { conjunto: ultimo.id } }">
       <span class="ladrilho tom-praticar"><Icone nome="seguir" /></span>

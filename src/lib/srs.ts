@@ -78,6 +78,25 @@ export function aplicarResultado(cartao: Cartao | undefined, nota: Nota, hoje: s
   return revisar(cartao, nota, hoje)
 }
 
+/** Dias até uma linha marcada como "já sei" voltar à revisão. */
+export const DIAS_JA_SEI = 30
+
+/**
+ * "Já sei esta linha": a linha conta como dominada e só volta daqui a DIAS_JA_SEI dias (ou
+ * mais, se o intervalo dela já era maior). Se a pessoa errar quando ela voltar, o SM-2 a
+ * traz de volta para o começo, como qualquer erro.
+ */
+export function marcarComoSabida(cartao: Cartao | undefined, hoje: string): Cartao {
+  const anterior = cartao ?? { repeticoes: 0, intervalo: 0, facilidade: FACILIDADE_INICIAL, proxima: hoje, criado: hoje }
+  const intervalo = Math.max(DIAS_JA_SEI, anterior.intervalo)
+  return {
+    ...anterior,
+    repeticoes: Math.max(REPETICOES_DOMINADO, anterior.repeticoes),
+    intervalo,
+    proxima: somarDias(hoje, intervalo),
+  }
+}
+
 export function estaPendente(cartao: Cartao | undefined, hoje: string): boolean {
   return cartao !== undefined && cartao.proxima <= hoje
 }

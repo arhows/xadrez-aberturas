@@ -34,7 +34,9 @@ import {
   dataLocal,
   estaPendente,
   filaDoDia,
+  DIAS_JA_SEI,
   idCartao,
+  marcarComoSabida,
   notaDaPartida,
   type UnidadeRevisao,
 } from '../lib/srs'
@@ -216,6 +218,8 @@ function iniciarSessao(livre = false) {
 let unidadeSorteada: UnidadeRevisao | null = null
 /** A última linha foi pulada: a tela final não mostra placar nem altera a agenda. */
 const pulada = ref(false)
+/** A última linha foi marcada como "já sei" (some da revisão por um mês). */
+const sabida = ref(false)
 
 function proximaPartida() {
   const unidade = sortear(fila.value, (u) => pesoDaLinha(u.linha, u.cor))
@@ -260,6 +264,30 @@ function pularLinha() {
   }
 }
 
+/**
+ * "Já sei esta linha": pede um segundo toque (sem janela do navegador); depois marca a linha
+ * sorteada como dominada, só volta daqui a um mês, e segue para a próxima.
+ */
+const confirmandoJaSei = ref(false)
+let temporizadorJaSei: ReturnType<typeof setTimeout> | undefined
+function jaSeiALinha() {
+  const sorteada = unidadeSorteada
+  if (!sorteada) return
+  if (!confirmandoJaSei.value) {
+    confirmandoJaSei.value = true
+    clearTimeout(temporizadorJaSei)
+    temporizadorJaSei = setTimeout(() => (confirmandoJaSei.value = false), 4000)
+    return
+  }
+  confirmandoJaSei.value = false
+  clearTimeout(temporizadorJaSei)
+  const id = idCartao(sorteada)
+  progresso.cartoes[id] = marcarComoSabida(progresso.cartoes[id], dataLocal())
+  // Se ainda houver fila, a próxima linha começa e apaga a marca; senão a tela final a mostra.
+  sabida.value = true
+  pularLinha()
+}
+
 /** Joga de novo a linha que acabou de terminar, sem afetar a agenda nem a fila. */
 function revisarLinha() {
   const { alvo, cor } = partida.value!
@@ -278,6 +306,7 @@ function comecarPartida(linha: string, cor: UnidadeRevisao['cor'], pularRepetido
     ? { tipo: 'neutro', texto: `Esta variante repete o começo que você acabou de jogar: ela continua a partir do lance ${Math.floor(pulados / 2) + 1}.` }
     : null
   pulada.value = false
+  sabida.value = false
   fase.value = 'jogando'
   prepararJogada(0)
 }
@@ -689,6 +718,14 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
             title="Deixa esta linha para a próxima revisão, sem contar como erro"
             @click="pularLinha"
           >Pular linha</button>
+          <button
+            v-if="!revisando"
+            type="button"
+            class="botao fantasma secundaria"
+            :class="{ confirmar: confirmandoJaSei }"
+            :title="`Conta a linha como dominada; ela só volta à revisão daqui a ${DIAS_JA_SEI} dias`"
+            @click="jaSeiALinha"
+          >{{ confirmandoJaSei ? 'Toque de novo: já sei' : 'Já sei esta linha' }}</button>
         </div>
         <p class="apoio suave so-celular">Pistas usadas: {{ placar.pistas }}</p>
       </template>
@@ -699,7 +736,8 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
           <h1 class="titulo-pagina">{{ titulo?.titulo }}</h1>
           <p v-if="titulo?.nome" class="suave">{{ titulo.nome }}</p>
           <p v-if="revisando" class="suave">Revisão: não altera a agenda de repetição.</p>
-          <p v-if="pulada" class="suave">Linha pulada: ela continua na fila e volta na próxima revisão.</p>
+          <p v-if="pulada && sabida" class="suave">Linha marcada como sabida: ela volta à revisão daqui a {{ DIAS_JA_SEI }} dias.</p>
+          <p v-else-if="pulada" class="suave">Linha pulada: ela continua na fila e volta na próxima revisão.</p>
         </div>
 
         <dl v-if="!pulada" class="placar-final">
@@ -834,6 +872,10 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
   flex-wrap: wrap;
   gap: var(--espaco-2);
 }
+.rodape-acoes > .confirmar {
+  border-color: var(--aviso);
+  color: var(--aviso);
+}
 .ajustes {
   display: grid;
   gap: var(--espaco-4);
@@ -904,9 +946,10 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
   .largo-celular {
     width: 100%;
   }
-  /* Debaixo do tabuleiro: a pista em cima, as duas saídas lado a lado. */
+  /* Debaixo do tabuleiro: a pista em cima, as saídas lado a lado. */
   .rodape-acoes > .secundaria {
     flex: 1 1 0;
+    padding-inline: var(--espaco-2);
   }
 }
 @media (min-width: 800px) {

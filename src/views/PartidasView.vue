@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 import Avatar from '../components/Avatar.vue'
 import EstadoVazio from '../components/EstadoVazio.vue'
 import Icone from '../components/Icone.vue'
+import SugestoesDasPartidas from '../components/SugestoesDasPartidas.vue'
 import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
 import { pgnDoCompartilhado, retirarCompartilhado } from '../lib/compartilhado'
 import { fmtLance } from '../lib/formato'
@@ -283,6 +284,8 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
     </div>
 
     <template v-if="todas.length">
+      <SugestoesDasPartidas titulo="O que estudar a partir delas" />
+
       <section>
         <h2>Resumo</h2>
         <p>
