@@ -66,7 +66,7 @@ let carregado: PartidaLogica[] | null = null
 
 /** O arquivo só é baixado quando a tela abre. */
 export function carregarLogico(): Promise<PartidaLogica[]> {
-  carregando ??= import('../../data/logico/partidas.json').then((m) => (carregado = m.default.partidas as PartidaLogica[]))
+  carregando ??= import('../../data/logico/partidas.json').then((m) => (carregado = m.default.partidas as unknown as PartidaLogica[]))
   return carregando
 }
 

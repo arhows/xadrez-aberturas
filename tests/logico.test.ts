@@ -12,7 +12,7 @@ import {
   type PartidaLogica,
 } from '../src/lib/logico'
 
-const partidas = dados.partidas as PartidaLogica[]
+const partidas = dados.partidas as unknown as PartidaLogica[]
 
 describe('Lance a lance: dados', () => {
   it('tem as 33 partidas do livro, em ordem, com lances legais', () => {
