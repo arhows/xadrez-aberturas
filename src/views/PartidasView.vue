@@ -175,7 +175,7 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
     <section v-if="jogos.length">
       <h2>Jogadas no app</h2>
       <ul class="lista">
-        <li v-for="j in jogos" :key="j.id">
+        <li v-for="j in jogos" :key="j.id" class="jogo">
           <Avatar v-if="j.adversario === 'online'" class="quem-jogou" :uid="j.oponenteUid" :nome="j.oponente ?? 'Amigo'" :tamanho="40" />
           <span v-else class="ladrilho tom-jogar quem-jogou" title="Contra o computador"><Icone nome="chip" /></span>
           <div class="sobre-jogo">
@@ -498,6 +498,28 @@ p {
   flex-wrap: wrap;
   gap: var(--espaco-2) !important;
   justify-content: flex-end;
+}
+/* Partida jogada no app: foto | texto | botões; no celular os botões descem para uma linha própria. */
+.lista li.jogo {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+}
+@media (max-width: 639.98px) {
+  .lista li.jogo {
+    grid-template-columns: 40px minmax(0, 1fr);
+  }
+  .lista li.jogo .acoes-jogo {
+    grid-column: 1 / -1;
+    justify-content: flex-start;
+  }
+}
+/* Nas outras listas, os botões passam para baixo do texto quando não cabem ao lado. */
+.lista li:not(.jogo) {
+  flex-wrap: wrap;
+}
+.lista li:not(.jogo) > div:first-child {
+  flex: 1 1 14rem;
 }
 .lista li div {
   display: grid;
