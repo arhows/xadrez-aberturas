@@ -22,6 +22,14 @@ import { dataLocal } from '../lib/srs'
 const route = useRoute()
 const router = useRouter()
 const modo = computed<'serie' | 'sequencia'>(() => (route.query.modo === 'sequencia' ? 'sequencia' : 'serie'))
+
+/** Volta para a tela de onde veio (Início, Praticar ou Exercícios); sem origem conhecida, Praticar. */
+const ORIGENS: Record<string, string> = { '/': 'Início', '/praticar': 'Praticar', '/exercicios': 'Exercícios' }
+const anterior = (window.history.state as { back?: unknown } | null)?.back
+const voltarPara = typeof anterior === 'string' && anterior in ORIGENS ? anterior : '/praticar'
+const nomeDaVolta = ORIGENS[voltarPara]
+const textoDoBotao = { '/': 'Voltar ao Início', '/praticar': 'Voltar a Praticar', '/exercicios': 'Voltar aos Exercícios' }[voltarPara]
+
 function trocarModo(novo: 'serie' | 'sequencia') {
   router.replace({ name: 'diario', query: novo === 'sequencia' ? { modo: novo } : {} })
 }
@@ -103,7 +111,7 @@ function aoFalharNaSeq() {
 
 <template>
   <header class="cabecalho-movel so-celular">
-    <RouterLink class="voltar" to="/praticar" aria-label="Voltar">
+    <RouterLink class="voltar" :to="voltarPara" aria-label="Voltar">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6" /></svg>
     </RouterLink>
     <h1>{{ modo === 'serie' ? 'Exercícios do dia' : 'Sequência' }}</h1>
@@ -121,7 +129,7 @@ function aoFalharNaSeq() {
     >
       <template #topo>
         <div class="cabeca so-computador">
-          <RouterLink to="/praticar" class="trilha">‹ Praticar</RouterLink>
+          <RouterLink :to="voltarPara" class="trilha">‹ {{ nomeDaVolta }}</RouterLink>
           <h1 class="titulo-pagina">Exercícios do dia</h1>
         </div>
         <div class="segmentado abas" role="tablist">
@@ -154,7 +162,7 @@ function aoFalharNaSeq() {
     </ResolverMisturado>
 
     <div v-else class="pagina resumo">
-      <RouterLink to="/praticar" class="trilha so-computador">‹ Praticar</RouterLink>
+      <RouterLink :to="voltarPara" class="trilha so-computador">‹ {{ nomeDaVolta }}</RouterLink>
       <h1 class="titulo-pagina so-computador">Exercícios do dia</h1>
       <div class="conquista">
         <Ilustracao peca="king" tom="praticar" festa />
@@ -171,7 +179,7 @@ function aoFalharNaSeq() {
       </div>
       <div class="acoes">
         <button type="button" class="botao primario grande largo-celular" @click="trocarModo('sequencia')">Jogar a Sequência</button>
-        <RouterLink class="botao grande largo-celular" to="/praticar">Voltar a Praticar</RouterLink>
+        <RouterLink class="botao grande largo-celular" :to="voltarPara">{{ textoDoBotao }}</RouterLink>
       </div>
     </div>
   </template>
@@ -188,7 +196,7 @@ function aoFalharNaSeq() {
     >
       <template #topo>
         <div class="cabeca so-computador">
-          <RouterLink to="/praticar" class="trilha">‹ Praticar</RouterLink>
+          <RouterLink :to="voltarPara" class="trilha">‹ {{ nomeDaVolta }}</RouterLink>
           <h1 class="titulo-pagina">Sequência</h1>
         </div>
         <div class="segmentado abas" role="tablist">
@@ -218,7 +226,7 @@ function aoFalharNaSeq() {
     </ResolverMisturado>
 
     <div v-else class="pagina resumo">
-      <RouterLink to="/praticar" class="trilha so-computador">‹ Praticar</RouterLink>
+      <RouterLink :to="voltarPara" class="trilha so-computador">‹ {{ nomeDaVolta }}</RouterLink>
       <h1 class="titulo-pagina so-computador">Sequência</h1>
       <div class="segmentado abas" role="tablist">
         <button type="button" role="tab" aria-selected="false" aria-pressed="false" @click="trocarModo('serie')">Do dia</button>
