@@ -1863,7 +1863,173 @@
    "ano": 1889,
    "abertura": "Defesa Francesa",
    "resultado": "1-0",
-   "lances": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3 Nc6 Ne2 Qb6 Nf3 Be7 O-O O-O Nf4 Nd8 Qc2 f5 exf6 Nxf6 Ng5 g6 Bxg6 hxg6 Qxg6+ Kh8 Qh6+ Kg8 Ng6"
+   "lances": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3 Nc6 Ne2 Qb6 Nf3 Be7 O-O O-O Nf4 Nd8 Qc2 f5 exf6 Nxf6 Ng5 g6 Bxg6 hxg6 Qxg6+ Kh8 Qh6+ Kg8 Ng6",
+   "tema": "Quando o adversário abre o roque: o sacrifício em g6",
+   "introducao": "Nuremberg, 1889. Siegbert Tarrasch, um dos grandes professores da história do xadrez, de brancas, numa Defesa Francesa. As brancas ganham espaço com e5, apontam as peças para o roque preto e esperam. Quando as pretas abrem a posição do próprio rei com ...f5, Tarrasch está pronto para atacar. Você joga com as brancas.",
+   "conclusao": "Tarrasch montou o ataque antes de precisar dele: o peão de e5 tirou a casa f6 das peças pretas, o bispo e a dama formaram uma bateria contra h7 e os cavalos chegaram a f4 e g5. Quando as pretas jogaram 11...f5 e depois 13...g6, enfraquecendo o próprio roque, o sacrifício 14.Bxg6 abriu o rei de vez. Lições: o espaço no centro facilita o ataque ao rei, e cada avanço de peão diante do próprio roque cria casas que o adversário pode invadir.",
+   "notas": {
+    "1.e4": {
+     "texto": "Ocupa o centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "1...e6": {
+     "texto": "A Defesa Francesa."
+    },
+    "2.d4": {
+     "texto": "O segundo peão no centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "2...d5": {
+     "texto": "As pretas atacam o e4."
+    },
+    "3.Nd2": {
+     "texto": "A Variante Tarrasch: o cavalo defende o e4 sem ficar exposto à cravada ...Bb4, que seria possível com Nc3. O preço é tapar o bispo de c1 por um tempo.",
+     "principios": [
+      "defesa",
+      "desenvolvimento"
+     ]
+    },
+    "3...Nf6": {
+     "texto": "Ataca o e4."
+    },
+    "4.e5": {
+     "texto": "Avança e expulsa o cavalo de f6, o melhor defensor do roque preto. O peão de e5 também ganha espaço e tira das pretas a casa f6.",
+     "principios": [
+      "centro",
+      "tempo"
+     ]
+    },
+    "4...Nfd7": {
+     "texto": "O cavalo recua."
+    },
+    "5.Bd3": {
+     "texto": "O bispo vai para a diagonal b1–h7, apontando para onde o rei preto vai fazer o roque.",
+     "principios": [
+      "desenvolvimento",
+      "ataque"
+     ]
+    },
+    "5...c5": {
+     "texto": "As pretas atacam a base da cadeia de peões brancos, como é típico na Francesa."
+    },
+    "6.c3": {
+     "texto": "Reforça o d4: a cadeia de peões c3–d4–e5 fica sólida e garante o espaço das brancas.",
+     "principios": [
+      "peoes",
+      "centro"
+     ]
+    },
+    "6...Nc6": {
+     "texto": "Mais pressão sobre o d4."
+    },
+    "7.Ne2": {
+     "texto": "O cavalo sai por e2 para defender o d4 e, mais tarde, ir para f4, perto do roque preto.",
+     "principios": [
+      "desenvolvimento",
+      "defesa"
+     ]
+    },
+    "7...Qb6": {
+     "texto": "A dama ataca o d4 e o b2."
+    },
+    "8.Nf3": {
+     "texto": "O outro cavalo também defende o d4, e o bispo de c1 fica livre.",
+     "principios": [
+      "desenvolvimento",
+      "defesa"
+     ]
+    },
+    "8...Be7": {
+     "texto": "Prepara o roque."
+    },
+    "9.O-O": {
+     "texto": "Rei em segurança antes de atacar.",
+     "principios": [
+      "roque"
+     ]
+    },
+    "9...O-O": {
+     "texto": "As pretas fazem o roque do lado para onde aponta o bispo de d3."
+    },
+    "10.Nf4": {
+     "texto": "O cavalo chega a f4, de onde pode saltar para h5 ou e6 e ajudar no ataque.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "10...Nd8": {
+     "texto": "Lance passivo: o cavalo recua para defender e6 e f7."
+    },
+    "11.Qc2": {
+     "texto": "A dama forma com o bispo de d3 uma bateria contra h7 e ameaça 12.Bxh7+, ganhando um peão com ataque.",
+     "alternativa": "O Stockfish preferia 11.h4, ainda com mais força, mas a ideia é a mesma: preparar o ataque contra h7.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "11...f5": {
+     "texto": "As pretas bloqueiam a diagonal, mas o peão sai de f7 e deixa e6 e g6 enfraquecidas."
+    },
+    "12.exf6": {
+     "texto": "Captura en passant! Quando um peão avança duas casas e para ao lado de um peão adversário, este pode capturá-lo como se ele tivesse andado só uma casa. A captura abre a posição do roque preto.",
+     "alternativa": "Sem a captura, o peão de f5 fecharia a diagonal do bispo de d3 para sempre.",
+     "principios": [
+      "colunas",
+      "ataque"
+     ]
+    },
+    "12...Nxf6": {
+     "texto": "O cavalo retoma."
+    },
+    "13.Ng5": {
+     "texto": "O segundo cavalo entra no ataque. Ameaça 14.Bxh7+ Kh8 15.Ng6#, um mate bonito com dois cavalos.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "13...g6": {
+     "texto": "Bloqueia a diagonal, mas enfraquece ainda mais o roque."
+    },
+    "14.Bxg6": {
+     "texto": "Sacrifício! O bispo destrói o peão de g6, o último escudo do rei. Se 14...hxg6, a dama entra com xeque em g6.",
+     "principios": [
+      "ataque",
+      "tatica"
+     ]
+    },
+    "14...hxg6": {
+     "texto": "As pretas aceitam."
+    },
+    "15.Qxg6+": {
+     "texto": "A dama entra com xeque e o rei preto fica completamente exposto.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "15...Kh8": {
+     "texto": "A única casa."
+    },
+    "16.Qh6+": {
+     "texto": "Mais um xeque, para trazer o rei de volta a g8.",
+     "alternativa": "16.Nh5 era ainda mais rápido, mas o lance da partida também dá mate em poucos lances.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "16...Kg8": {
+     "texto": "A única casa."
+    },
+    "17.Ng6": {
+     "texto": "O cavalo entra em g6, ameaçando 18.Nxe7# e 18.Qh8#. Não há como defender as duas ameaças, e as pretas abandonaram.",
+     "principios": [
+      "ataque"
+     ]
+    }
+   }
   },
   {
    "n": 11,
@@ -1873,7 +2039,171 @@
    "ano": 1930,
    "abertura": "Sistema Colle",
    "resultado": "0-1",
-   "lances": "d4 Nf6 Nf3 e6 Nbd2 c5 e3 b6 Bd3 Bb7 O-O Be7 c4 O-O b3 d5 Qc2 Nc6 a3 cxd4 cxd5 Qxd5 exd4 Nxd4 Qb1 Rfd8 Ne1 Qh5 Bb2 Bd6 g3 Ng4 h4 Qxh4"
+   "lances": "d4 Nf6 Nf3 e6 Nbd2 c5 e3 b6 Bd3 Bb7 O-O Be7 c4 O-O b3 d5 Qc2 Nc6 a3 cxd4 cxd5 Qxd5 exd4 Nxd4 Qb1 Rfd8 Ne1 Qh5 Bb2 Bd6 g3 Ng4 h4 Qxh4",
+   "tema": "A bateria na grande diagonal e o ataque contra h2",
+   "introducao": "Bílina, 1930. Salo Flohr, um dos melhores jogadores do mundo naquela época, de brancas, perde para Pitschak numa posição que parecia tranquila. As pretas colocam o bispo e a dama na grande diagonal a8–h1, apontando para g2, e depois trazem tudo para a ala do rei. Você joga com as pretas.",
+   "conclusao": "As pretas venceram usando uma diagonal: com o bispo em b7 e a dama em d5, o cavalo branco de f3 ficou preso à defesa de g2, e por isso 12...Nxd4 ganhou um peão de graça. Depois, as pretas trouxeram a dama, o bispo e o cavalo para a ala do rei e atacaram h2 até o mate. Lições: uma bateria numa diagonal longa prende as peças que estão no caminho, e um peão a mais é ótimo, mas um ataque ao rei é ainda melhor.",
+   "notas": {
+    "1...Nf6": {
+     "texto": "Desenvolve e controla e4.",
+     "principios": [
+      "desenvolvimento",
+      "centro"
+     ]
+    },
+    "2.Nf3": {
+     "texto": "As brancas desenvolvem."
+    },
+    "2...e6": {
+     "texto": "Abre a diagonal do bispo de f8 e mantém a flexibilidade.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "3.Nbd2": {
+     "texto": "Um esquema do tipo Colle, preparando e4."
+    },
+    "3...c5": {
+     "texto": "Pressiona o d4 e disputa o centro com um peão lateral.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "4.e3": {
+     "texto": "Apoia o d4."
+    },
+    "4...b6": {
+     "texto": "Prepara o bispo em b7, na grande diagonal a8–h1. De lá ele controla e4 e mira g2, perto do rei branco.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "5.Bd3": {
+     "texto": "O bispo vai para a diagonal do rei preto."
+    },
+    "5...Bb7": {
+     "texto": "O bispo ocupa a diagonal longa e impede o e4 das brancas.",
+     "principios": [
+      "desenvolvimento",
+      "centro"
+     ]
+    },
+    "6.O-O": {
+     "texto": "Rei em segurança."
+    },
+    "6...Be7": {
+     "texto": "Prepara o roque.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "7.c4": {
+     "texto": "As brancas ganham espaço na ala da dama."
+    },
+    "7...O-O": {
+     "texto": "Rei em segurança antes de abrir o jogo.",
+     "principios": [
+      "roque"
+     ]
+    },
+    "8.b3": {
+     "texto": "Prepara o bispo em b2."
+    },
+    "8...d5": {
+     "texto": "Agora sim, as pretas ocupam o centro com um peão.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "9.Qc2": {
+     "texto": "A dama reforça e4 e a diagonal b1–h7."
+    },
+    "9...Nc6": {
+     "texto": "Mais uma peça em jogo, pressionando o d4.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "10.a3": {
+     "texto": "Impede ...Nb4, mas é lento. O Stockfish preferia 10.dxc5."
+    },
+    "10...cxd4": {
+     "texto": "Abre o jogo no centro aproveitando o lance lento das brancas.",
+     "principios": [
+      "centro",
+      "tempo"
+     ]
+    },
+    "11.cxd5": {
+     "texto": "As brancas trocam no centro."
+    },
+    "11...Qxd5": {
+     "texto": "Retoma com a dama, que fica na grande diagonal na frente do bispo de b7. Juntos, os dois miram g2: é uma bateria.",
+     "alternativa": "11...exd5 também era bom, mas a retomada com a dama cria a bateria que decide a partida.",
+     "principios": [
+      "ataque",
+      "colunas"
+     ]
+    },
+    "12.exd4": {
+     "texto": "As brancas recuperam o peão, mas caem numa tática."
+    },
+    "12...Nxd4": {
+     "texto": "O cavalo pega o peão de d4 e ataca a dama de c2. O cavalo de f3 não pode capturá-lo: se ele sair de f3, a dama preta dá mate com 13...Qxg2#. É a força da bateria na diagonal.",
+     "principios": [
+      "tatica",
+      "material"
+     ]
+    },
+    "13.Qb1": {
+     "texto": "A dama foge. O Stockfish preferia 13.Qc4, oferecendo a troca das damas."
+    },
+    "13...Rfd8": {
+     "texto": "A torre ocupa a coluna d, onde está o bispo de d3. Agora as pretas ameaçam trocar o cavalo de f3 e capturar esse bispo.",
+     "principios": [
+      "colunas",
+      "desenvolvimento"
+     ]
+    },
+    "14.Ne1": {
+     "texto": "O cavalo defende g2 e se afasta do ataque."
+    },
+    "14...Qh5": {
+     "texto": "A dama muda de alvo: vai para a ala do rei, de olho em h2.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "15.Bb2": {
+     "texto": "As brancas desenvolvem o bispo."
+    },
+    "15...Bd6": {
+     "texto": "O bispo se junta à dama contra h2 e ameaça 16...Qxh2#.",
+     "alternativa": "O Stockfish acha 15...Ne2+ ainda mais forte, mas o lance da partida leva a um ataque direto.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "16.g3": {
+     "texto": "Bloqueia a diagonal do bispo de d6."
+    },
+    "16...Ng4": {
+     "texto": "Mais uma peça contra h2: dama e cavalo atacam a casa juntos, e a ameaça é de novo 17...Qxh2#.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "17.h4": {
+     "texto": "As brancas tentam fechar a coluna h."
+    },
+    "17...Qxh4": {
+     "texto": "A dama captura o peão mesmo assim. Se 18.gxh4, vem 18...Bh2#, com o bispo protegido pelo cavalo. E se as brancas não capturarem, a ameaça é 18...Qh2#. As brancas abandonaram.",
+     "principios": [
+      "ataque",
+      "tatica"
+     ]
+    }
+   }
   },
   {
    "n": 12,
@@ -1883,7 +2213,189 @@
    "ano": 1934,
    "abertura": "Abertura Inglesa",
    "resultado": "0-1",
-   "lances": "c4 e5 Nc3 Nf6 g3 d5 cxd5 Nxd5 Bg2 Nb6 Nf3 Nc6 O-O Be7 d3 O-O Be3 Bg4 h3 Bh5 Rc1 Qd7 Na4 Bxf3 Bxf3 Qxh3 Bxc6 bxc6 Rxc6 Nd5 Qe1 f5 Bc5 f4 Bxe7 fxg3 fxg3 Ne3"
+   "lances": "c4 e5 Nc3 Nf6 g3 d5 cxd5 Nxd5 Bg2 Nb6 Nf3 Nc6 O-O Be7 d3 O-O Be3 Bg4 h3 Bh5 Rc1 Qd7 Na4 Bxf3 Bxf3 Qxh3 Bxc6 bxc6 Rxc6 Nd5 Qe1 f5 Bc5 f4 Bxe7 fxg3 fxg3 Ne3",
+   "tema": "Trocar o bispo que defende o roque e atacar as casas brancas",
+   "introducao": "Liebwerda, 1934. A revanche: agora Flohr, de pretas, enfrenta Pitschak numa Abertura Inglesa, que é como uma Siciliana com as cores invertidas. As brancas fazem o fianqueto do bispo em g2, a melhor defesa do roque. Flohr consegue fazer as brancas trocarem esse bispo e depois invade as casas brancas em volta do rei. Você joga com as pretas.",
+   "conclusao": "Flohr venceu explorando as casas brancas em volta do rei: com o bispo de g2 fora do jogo (trocado em f3 e depois entregue em c6), as casas g2, h3 e f3 ficaram sem defesa. A dama entrou em h3, o peão de f avançou até abrir a coluna f, e o cavalo chegou a e3 para apoiar o mate em g2. As brancas ficaram ganhando peões na ala da dama enquanto o próprio rei ficava indefeso. Lições: o bispo do fianqueto é o melhor defensor do roque, e quando ele sai, as casas da cor dele ficam fracas.",
+   "notas": {
+    "1...e5": {
+     "texto": "Ocupa o centro: contra a Inglesa, as pretas jogam como as brancas numa Siciliana.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "2.Nc3": {
+     "texto": "As brancas controlam d5."
+    },
+    "2...Nf6": {
+     "texto": "Desenvolve e prepara ...d5.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "3.g3": {
+     "texto": "Prepara o fianqueto do bispo em g2."
+    },
+    "3...d5": {
+     "texto": "Ocupa o centro com o segundo peão.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "4.cxd5": {
+     "texto": "As brancas trocam."
+    },
+    "4...Nxd5": {
+     "texto": "O cavalo retoma no centro.",
+     "principios": [
+      "centro"
+     ]
+    },
+    "5.Bg2": {
+     "texto": "O bispo ataca o cavalo de d5 pela grande diagonal."
+    },
+    "5...Nb6": {
+     "texto": "O cavalo recua para b6, sem ficar exposto ao ataque do bispo de g2.",
+     "principios": [
+      "defesa"
+     ]
+    },
+    "6.Nf3": {
+     "texto": "Ataca o e5."
+    },
+    "6...Nc6": {
+     "texto": "Defende o e5 desenvolvendo.",
+     "principios": [
+      "desenvolvimento",
+      "defesa"
+     ]
+    },
+    "7.O-O": {
+     "texto": "O rei vai para trás do bispo de g2."
+    },
+    "7...Be7": {
+     "texto": "Prepara o roque.",
+     "principios": [
+      "desenvolvimento"
+     ]
+    },
+    "8.d3": {
+     "texto": "Libera o bispo de c1."
+    },
+    "8...O-O": {
+     "texto": "Rei em segurança.",
+     "principios": [
+      "roque"
+     ]
+    },
+    "9.Be3": {
+     "texto": "O bispo ataca o cavalo de b6."
+    },
+    "9...Bg4": {
+     "texto": "O bispo ataca o cavalo de f3, que defende h2 e pressiona e5, e ameaça trocá-lo para enfraquecer o roque branco.",
+     "principios": [
+      "desenvolvimento",
+      "tatica"
+     ]
+    },
+    "10.h3": {
+     "texto": "Pergunta ao bispo."
+    },
+    "10...Bh5": {
+     "texto": "O bispo mantém a pressão sobre o cavalo. O peão de h3 já é um ponto fraco: se o cavalo de f3 for trocado, o h3 fica sem defesa.",
+     "principios": [
+      "tatica"
+     ]
+    },
+    "11.Rc1": {
+     "texto": "A torre vai para a coluna c semiaberta."
+    },
+    "11...Qd7": {
+     "texto": "A dama mira h3. Se o cavalo de f3 for trocado, o peão de h3 cai.",
+     "principios": [
+      "ataque"
+     ]
+    },
+    "12.Na4": {
+     "texto": "O cavalo ataca o cavalo de b6, mas abandona a defesa do rei."
+    },
+    "12...Bxf3": {
+     "texto": "Troca o cavalo de f3. Depois de 13.Bxf3, o bispo de g2 sai de casa e o peão de h3 fica sem defesa.",
+     "principios": [
+      "troca",
+      "ataque"
+     ]
+    },
+    "13.Bxf3": {
+     "texto": "O bispo retoma, mas deixa g2."
+    },
+    "13...Qxh3": {
+     "texto": "A dama captura o peão e se instala ao lado do rei branco. As pretas ganham um peão, e a dama em h3 vai ser a base do ataque.",
+     "principios": [
+      "material",
+      "ataque"
+     ]
+    },
+    "14.Bxc6": {
+     "texto": "Erro: as brancas trocam o bispo, o melhor defensor das casas brancas do roque. O Stockfish preferia 14.Qb3."
+    },
+    "14...bxc6": {
+     "texto": "As pretas retomam, ficam com peões dobrados, mas o rei branco perdeu o seu protetor.",
+     "principios": [
+      "troca"
+     ]
+    },
+    "15.Rxc6": {
+     "texto": "A torre captura um peão."
+    },
+    "15...Nd5": {
+     "texto": "O cavalo volta ao centro, de onde ameaça entrar em e3 ou f4, perto do rei branco. Ameaça já 16...Nxe3, com a dama entrando em g3 com xeque.",
+     "principios": [
+      "centro",
+      "ataque"
+     ]
+    },
+    "16.Qe1": {
+     "texto": "A dama defende a primeira fileira."
+    },
+    "16...f5": {
+     "texto": "O peão de f vem para o ataque: o plano é f4, abrindo a coluna f para a torre de f8.",
+     "principios": [
+      "ataque",
+      "peoes"
+     ]
+    },
+    "17.Bc5": {
+     "texto": "O bispo foge e ataca o bispo de e7."
+    },
+    "17...f4": {
+     "texto": "O peão avança, atacando g3 e abrindo linhas contra o rei.",
+     "principios": [
+      "ataque",
+      "colunas"
+     ]
+    },
+    "18.Bxe7": {
+     "texto": "O bispo troca o bispo de e7."
+    },
+    "18...fxg3": {
+     "texto": "O peão chega a g3 e ameaça 19...Qh2#. A coluna f também se abre para a torre preta.",
+     "alternativa": "O Stockfish preferia retomar primeiro com 18...Nxe7, mas o lance da partida também vence.",
+     "principios": [
+      "ataque",
+      "colunas"
+     ]
+    },
+    "19.fxg3": {
+     "texto": "As brancas capturam o peão."
+    },
+    "19...Ne3": {
+     "texto": "O cavalo entra em e3 e ameaça 20...Qg2#, com a dama protegida por ele. Se 20.Rxf8+ Rxf8, a torre preta chega à coluna f e o ataque continua com vantagem decisiva. As brancas abandonaram.",
+     "principios": [
+      "ataque"
+     ]
+    }
+   }
   },
   {
    "n": 13,
