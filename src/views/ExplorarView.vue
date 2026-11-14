@@ -20,7 +20,7 @@ import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { CONTEXTO_ARVORE } from '../components/arvoreContexto'
 import { percorrer, type Aresta } from '../lib/arvore'
 import { buscarCapitulo } from '../lib/capitulos'
-import { descreverUnidade } from '../lib/escopo'
+import { corDoCapitulo, descreverUnidade } from '../lib/escopo'
 import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
 import { Chess } from 'chess.js'
 import { casasDoLance } from '../lib/lances'
@@ -98,6 +98,13 @@ provide(CONTEXTO_ARVORE, {
 
 const noAtual = computed(() => caminho.value.at(-1)?.para ?? arvore.raiz)
 const foraDoLivro = computed(() => fora.value.length > 0)
+/** Lances até a posição mostrada (livro + fora do livro), para Analisar ou Jogar daqui. */
+const lancesAteAqui = computed(() => [...caminho.value.map((a) => a.san), ...fora.value.map((l) => l.san)].join(' '))
+/** Com que cor jogar daqui: a treinada nesta abertura, ou o lado do tabuleiro quando treina as duas. */
+const corDaqui = computed(() => {
+  const cor = corDoCapitulo(capitulo, progresso.corPorCapitulo)
+  return cor === 'ambas' ? (orientacao.value === 'black' ? 'b' : 'w') : cor
+})
 const fen = computed(() => fora.value.at(-1)?.fen ?? arvore.nos.get(noAtual.value)!.fen)
 /** Último lance do livro; fora do livro, as dicas e notas dele deixam de valer. */
 const ultima = computed(() => (foraDoLivro.value ? undefined : caminho.value.at(-1)))
@@ -485,7 +492,13 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
       <div class="mais-acoes">
         <RouterLink
           class="botao fantasma"
-          :to="{ name: 'jogar', query: { c: [...caminho.map((a) => a.san), ...fora.map((l) => l.san)].join(' '), cap: capitulo.capitulo.id } }"
+          :to="{ name: 'analisar', query: { c: lancesAteAqui, cor: corDaqui, cap: capitulo.capitulo.id } }"
+          title="Testar as continuações com o Stockfish"
+        >Analisar daqui</RouterLink>
+        <RouterLink
+          class="botao fantasma"
+          :to="{ name: 'jogar', query: { c: lancesAteAqui, cor: corDaqui, cap: capitulo.capitulo.id, treino: '1' } }"
+          title="Jogar contra o computador no modo treino"
         >Jogar daqui</RouterLink>
         <RouterLink class="botao fantasma" :to="{ name: 'editor', query: { fen } }" title="Abrir esta posição no editor">Editar posição</RouterLink>
         <button type="button" class="botao fantasma" title="Copiar o link desta posição" @click="copiarLink">Copiar link</button>

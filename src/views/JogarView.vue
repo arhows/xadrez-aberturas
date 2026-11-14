@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
+import AnaliseAoVivo from '../components/AnaliseAoVivo.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import HistoricoLances from '../components/HistoricoLances.vue'
 import SeloQualidade from '../components/SeloQualidade.vue'
@@ -25,6 +26,8 @@ const route = useRoute()
 const escolhas = progresso.config.jogo
 // Jogar contra amigo agora é on-line (tela própria); aqui é sempre contra o computador.
 escolhas.adversario = 'motor'
+// "Jogar daqui contra o computador" (fim do Treino, Explorar, Análise): sempre no modo treino.
+if (route.query.treino === '1') escolhas.modo = 'treino'
 
 /** Posição montada no Editor de posição (FEN); a partida começa dela. */
 const fenInicio = (() => {
@@ -235,6 +238,8 @@ const formas = computed<Forma[]>(() => {
   const dica = dicaLance.value
   if (dica && jogavel.value && nivelDica.value === 1) return [{ de: dica.from, cor: 'yellow' }]
   if (dica && jogavel.value && nivelDica.value === 2) return [{ de: dica.from, para: dica.to, cor: 'green' }]
+  const melhor = aoVivoLigado.value && jogavel.value && melhorAoVivo.value ? casasDoSan(fen.value, melhorAoVivo.value) : null
+  if (melhor) return [{ de: melhor.from, para: melhor.to, cor: 'blue' }]
   return []
 })
 const jogavel = computed(
@@ -245,6 +250,32 @@ const jogavel = computed(
     !promocaoPendente.value &&
     (!contraMotor.value || vez.value === minhaCor.value),
 )
+// ---------- Stockfish ao vivo (só no modo treino) ----------
+/** As melhores opções da sua vez; enquanto o computador pensa, fica na última posição sua. */
+const aoVivoLigado = computed(() => treinoAtivo.value && fase.value === 'jogando' && !!escolhas.aoVivo)
+const fenAoVivo = ref('')
+watch(
+  [fen, jogavel],
+  () => {
+    if (jogavel.value) fenAoVivo.value = fen.value
+  },
+  { immediate: true },
+)
+const melhorAoVivo = ref<string | null>(null)
+function casasDoSan(fenPosicao: string, san: string): { from: string; to: string; promotion?: PecaPromocao } | null {
+  try {
+    const feito = new Chess(fenPosicao).move(san)
+    return { from: feito.from, to: feito.to, promotion: feito.promotion as PecaPromocao | undefined }
+  } catch {
+    return null
+  }
+}
+/** Tocar numa linha do Stockfish joga o primeiro lance dela (na sua vez). */
+function jogarDoAoVivo(san: string) {
+  const lance = jogavel.value ? casasDoSan(fen.value, san) : null
+  if (lance) jogar(lance)
+}
+
 const nomeDoMotor = computed(() => `Stockfish nível ${nivel.value.nivel} (${nivel.value.nome})`)
 const textoInicio = computed(() =>
   inicio.map((san, i) => (i % 2 === 0 ? fmtLance(i + 1, san) : fmtSan(san))).join(' '),
@@ -573,6 +604,11 @@ onBeforeUnmount(() => {
         <span v-if="!ultimaAvaliada.qualidade" class="suave">avaliando…</span>
         <SeloQualidade v-else :marca="ultimaAvaliada.qualidade.marca" :motor="ultimaAvaliada.qualidade.motor" />
       </div>
+
+      <label v-if="treinoAtivo && fase === 'jogando'" class="marcar">
+        <input v-model="escolhas.aoVivo" type="checkbox" /> Stockfish ao vivo: mostrar as melhores opções na sua vez
+      </label>
+      <AnaliseAoVivo v-if="aoVivoLigado && fenAoVivo" :fen="fenAoVivo" @melhor="melhorAoVivo = $event" @jogar="jogarDoAoVivo" />
 
       <HistoricoLances :lances="treinoAtivo ? sansMarcados : sans" :atual="sans.length" :antes="antes" />
 

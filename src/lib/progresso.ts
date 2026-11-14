@@ -31,7 +31,7 @@ export interface Configuracoes {
   fonteExplorador: 'masters' | 'lichess'
   ratingExplorador: number
   /** Últimas escolhas da tela Jogar. */
-  jogo: { adversario: 'motor'; cor: 'w' | 'b' | 'sorteio'; nivel: number; modo: 'partida' | 'treino'; tempo: string }
+  jogo: { adversario: 'motor'; cor: 'w' | 'b' | 'sorteio'; nivel: number; modo: 'partida' | 'treino'; tempo: string; aoVivo?: boolean }
   /** Duração do modo relâmpago, em minutos. */
   minutosRelampago: number
   /** De onde saem as posições do relâmpago. */

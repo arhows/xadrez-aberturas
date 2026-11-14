@@ -801,10 +801,18 @@ if (revisaoAutomatica || route.query.comecar === '1') iniciarSessao()
           <RouterLink
             v-if="partida"
             class="linha-lista"
-            :to="{ name: 'jogar', query: { c: partida.jogadas.map((j) => j.san).join(' '), cor: partida.cor, cap: idCapitulo } }"
+            :to="{ name: 'analisar', query: { c: partida.jogadas.map((j) => j.san).join(' '), cor: partida.cor, cap: idCapitulo } }"
           >
-            <span class="nome">Jogar daqui</span>
-            <span class="meta">Continuar a partida contra o computador</span>
+            <span class="nome">Analisar daqui com o Stockfish</span>
+            <span class="meta">Testar as continuações das duas cores e ver as melhores opções</span>
+          </RouterLink>
+          <RouterLink
+            v-if="partida"
+            class="linha-lista"
+            :to="{ name: 'jogar', query: { c: partida.jogadas.map((j) => j.san).join(' '), cor: partida.cor, cap: idCapitulo, treino: '1' } }"
+          >
+            <span class="nome">Jogar daqui contra o computador</span>
+            <span class="meta">No modo treino: dicas, voltar lance e Stockfish ao vivo</span>
           </RouterLink>
           <button v-if="!fila.length" type="button" class="linha-lista" @click="repetir">
             <span class="nome">Treinar de novo</span>

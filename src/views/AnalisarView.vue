@@ -6,10 +6,14 @@ import AnaliseAoVivo from '../components/AnaliseAoVivo.vue'
 import HistoricoLances from '../components/HistoricoLances.vue'
 import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { problemaDaPosicao } from '../lib/editor'
+import { buscarCapitulo } from '../lib/capitulos'
 import { jogoDosLances, lancesAntesDoFen, situacaoDoJogo } from '../lib/jogo'
-import { casasDoLance } from '../lib/lances'
+import { casasDoLance, separarLances } from '../lib/lances'
 
-/** Tabuleiro de análise: parte de uma posição do editor, joga lances livres com o Stockfish ao lado. */
+/**
+ * Tabuleiro de análise: parte de uma posição do editor (fen) ou dos lances de uma abertura (c),
+ * joga lances livres das duas cores com o Stockfish ao lado.
+ */
 
 type Peca = 'q' | 'r' | 'b' | 'n'
 
@@ -23,9 +27,28 @@ const fenInicial = (() => {
 })()
 const antes = lancesAntesDoFen(fenInicial)
 
-const sans = ref<string[]>([])
-const ply = ref(0)
-const orientacao = ref<'white' | 'black'>(route.query.orientacao === 'black' ? 'black' : 'white')
+/** Lances da abertura (vindo do Treino ou do Explorar): ficam no histórico, e dá para voltar neles. */
+const lancesDaAbertura = (() => {
+  if (typeof route.query.fen === 'string' && route.query.fen) return []
+  const pedidos = separarLances(String(route.query.c ?? ''))
+  try {
+    jogoDosLances(pedidos, fenInicial)
+    return pedidos
+  } catch {
+    return []
+  }
+})()
+const capitulo = route.query.cap ? buscarCapitulo(String(route.query.cap)) : undefined
+
+const sans = ref<string[]>([...lancesDaAbertura])
+const ply = ref(lancesDaAbertura.length)
+const orientacao = ref<'white' | 'black'>(route.query.orientacao === 'black' || route.query.cor === 'b' ? 'black' : 'white')
+/** Para onde o "voltar" leva: a abertura de onde veio, ou o editor. */
+const voltarPara = computed(() =>
+  capitulo
+    ? { rota: { name: 'abertura', params: { cap: capitulo.capitulo.id } }, nome: capitulo.capitulo.nome }
+    : { rota: { name: 'editor', query: { fen: fenInicial } }, nome: 'Editor de posição' },
+)
 const comMotor = ref(true)
 const melhorSan = ref<string | null>(null)
 const avaliacao = ref<number | null>(null)
@@ -87,6 +110,13 @@ function aoTeclar(evento: KeyboardEvent) {
 onMounted(() => window.addEventListener('keydown', aoTeclar))
 onBeforeUnmount(() => window.removeEventListener('keydown', aoTeclar))
 
+/** Jogar contra o computador a partir da posição mostrada (pelos lances, quando partiu do início). */
+function jogarDaqui() {
+  const cor = orientacao.value === 'black' ? 'b' : 'w'
+  if (typeof route.query.fen === 'string' && route.query.fen) void router.push({ name: 'jogar', query: { fen: fen.value } })
+  else void router.push({ name: 'jogar', query: { c: sans.value.slice(0, ply.value).join(' '), cor, cap: capitulo?.capitulo.id, treino: '1' } })
+}
+
 const copiado = ref(false)
 async function copiarFen() {
   try {
@@ -108,7 +138,7 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
 
 <template>
   <header class="cabecalho-movel so-celular">
-    <RouterLink class="voltar" :to="{ name: 'editor', query: { fen: fenInicial } }" aria-label="Voltar ao editor">
+    <RouterLink class="voltar" :to="voltarPara.rota" :aria-label="`Voltar: ${voltarPara.nome}`">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6" /></svg>
     </RouterLink>
     <h1>Análise</h1>
@@ -131,7 +161,7 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
 
     <div class="painel">
       <div class="cabeca-painel so-computador">
-        <RouterLink :to="{ name: 'editor', query: { fen: fenInicial } }" class="trilha">‹ Editor de posição</RouterLink>
+        <RouterLink :to="voltarPara.rota" class="trilha">‹ {{ voltarPara.nome }}</RouterLink>
         <h1 class="titulo-pagina">Análise da posição</h1>
       </div>
       <p class="situacao corpo-forte">{{ situacao.texto }}</p>
@@ -160,7 +190,9 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
       </div>
 
       <HistoricoLances :lances="sans" :atual="ply" :antes="antes" clicavel @ir="ir" />
-      <p v-if="!sans.length" class="suave">Faça lances no tabuleiro para explorar a posição. Tocar numa linha do Stockfish joga o primeiro lance dela.</p>
+      <p v-if="sans.length <= lancesDaAbertura.length" class="suave">
+        Faça lances das duas cores no tabuleiro para explorar a posição. Tocar numa linha do Stockfish joga o primeiro lance dela.
+      </p>
 
       <div class="acoes">
         <label class="marcar"><input v-model="comMotor" type="checkbox" /> Stockfish</label>
@@ -169,7 +201,7 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
       </div>
       <div class="acoes">
         <button type="button" class="botao" @click="router.push({ name: 'editor', query: { fen, orientacao } })">Editar esta posição</button>
-        <button v-if="!situacao.fim" type="button" class="botao primario" @click="router.push({ name: 'jogar', query: { fen } })">Jogar daqui</button>
+        <button v-if="!situacao.fim" type="button" class="botao primario" @click="jogarDaqui">Jogar daqui</button>
       </div>
     </div>
   </div>
