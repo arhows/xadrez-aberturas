@@ -37,7 +37,7 @@ cab.forEach((c, k) => {
   const fim = cab[k + 1]?.i ?? L.length
   const texto = ' ' + norm(L.slice(c.i, fim).join(' '))
   const sw = sobren(c.w), sb = sobren(c.b)
-  const cand = blocos.filter((b) => tag(b, 'White').includes(sw) && tag(b, 'Black').includes(sb) && tag(b, 'Date').startsWith(c.ano))
+  const cand = blocos.filter((b) => tag(b, 'White').includes(sw) && tag(b, 'Black').includes(sb) && Math.abs(Number(tag(b, 'Date').slice(0, 4)) - Number(c.ano)) <= 1)
   const res = []
   for (const b of cand) {
     const ch = new Chess(); try { ch.loadPgn(b) } catch { continue }
@@ -57,7 +57,7 @@ cab.forEach((c, k) => {
   console.log(`${c.jogo}. ${c.w} - ${c.b}, ${c.ev} ${c.ano} (${c.ab})`)
   if (!m) { console.log('   sem candidata no PGN Mentor'); return }
   console.log(`   PGN Mentor: ${m.w} - ${m.b} ${m.r} ${m.d}; ${m.achados}/${m.total}${m.falta ? '; primeiro não achado: ' + m.falta : ''}`)
-  if (m.faltas.length && m.faltas.length < 15) console.log('   faltam: ' + m.faltas.join(' '))
+  if (m.faltas.length && m.faltas.length < 25) console.log('   faltam: ' + m.faltas.join(' '))
   saida[c.jogo] = { ...c, ...m }
 })
 writeFileSync(process.argv[4], JSON.stringify(saida, null, 1))
