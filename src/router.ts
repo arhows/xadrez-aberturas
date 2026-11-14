@@ -27,6 +27,7 @@ import PreparacaoView from './views/PreparacaoView.vue'
 import JogadorView from './views/JogadorView.vue'
 import TaticaView from './views/TaticaView.vue'
 import { buscarEstrutura, carregarEstrategia } from './lib/estrategia'
+import { buscarPartidaLogica, carregarLogico, partidaPronta } from './lib/logico'
 import { buscarQuiz, carregarQuizzes } from './lib/quizzes'
 import { buscarArmadilha, carregarArmadilhas } from './lib/armadilhas'
 import ExerciciosView from './views/ExerciciosView.vue'
@@ -175,6 +176,24 @@ export const router = createRouter({
         await carregarEstrategia()
         const estrutura = buscarEstrutura(destino.params.id as string)
         return estrutura?.partidas.some((p) => p.n === Number(destino.params.n)) ? true : { name: 'estrategia' }
+      },
+    },
+    {
+      path: '/lance-a-lance',
+      name: 'lance-a-lance',
+      component: () => import('./views/LanceALanceView.vue'),
+      meta: { secao: 'aprender' },
+      beforeEnter: () => carregarLogico().then(() => true),
+    },
+    {
+      path: '/lance-a-lance/:n',
+      name: 'lance-a-lance-partida',
+      component: () => import('./views/PartidaLogicaView.vue'),
+      meta: { secao: 'aprender', foco: true },
+      beforeEnter: async (destino) => {
+        await carregarLogico()
+        const partida = buscarPartidaLogica(Number(destino.params.n))
+        return partida && partidaPronta(partida) ? true : { name: 'lance-a-lance' }
       },
     },
     { path: '/diagnostico', name: 'diagnostico', component: DiagnosticoView, meta: { secao: 'eu' } },

@@ -42,6 +42,7 @@ export const APRENDER: SecaoDoApp = {
         { id: 'aberturas', icone: 'livro', nome: 'Aberturas', descricao: 'As aberturas do MCO, coluna por coluna, com as ideias', para: '/aberturas' },
         { id: 'armadilhas', icone: 'alerta', nome: 'Armadilhas', descricao: 'As armadilhas de cada abertura: como armar e como escapar', para: '/armadilhas' },
         { id: 'estrategia', icone: 'mapa', nome: 'Estratégia', descricao: 'Estruturas de peões, planos e partidas-modelo (Grooten, Koblenz)', para: '/estrategia' },
+        { id: 'lance-a-lance', icone: 'lista', nome: 'Lance a lance', descricao: 'As 33 partidas do Chernev: adivinhe cada lance e entenda o porquê', para: '/lance-a-lance' },
       ],
     },
   ],
