@@ -39,6 +39,8 @@ export const NOME_PRINCIPIO: Record<Principio, string> = {
 
 export interface NotaDoLance {
   texto: string
+  /** "E se…?": o que acontece com a alternativa natural (ou o que o Stockfish prefere). */
+  alternativa?: string
   principios?: Principio[]
 }
 

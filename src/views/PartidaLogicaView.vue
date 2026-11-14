@@ -260,6 +260,7 @@ const textoDoVeredicto = (v: VeredictoDoPalpite | 'avaliando' | null | undefined
             <p class="na-partida">{{ nomeDoVencedor }} jogou <strong>{{ resposta.lance }}</strong> (seta verde).</p>
           </article>
           <CartaoDica v-if="resposta.nota" tipo="nota" :texto="resposta.nota.texto">
+            <p v-if="resposta.nota.alternativa" class="alternativa"><strong>E se…?</strong> {{ fmtTexto(resposta.nota.alternativa) }}</p>
             <p v-if="resposta.nota.principios?.length" class="principios">
               <span v-for="principio in resposta.nota.principios" :key="principio" class="selo">{{ NOME_PRINCIPIO[principio] }}</span>
             </p>
@@ -279,7 +280,9 @@ const textoDoVeredicto = (v: VeredictoDoPalpite | 'avaliando' | null | undefined
           <span class="rotulo">Princípios desta partida</span>
           <span v-for="item in principios" :key="item.principio" class="selo">{{ NOME_PRINCIPIO[item.principio] }} · {{ item.vezes }}</span>
         </div>
-        <CartaoDica v-if="nota && ply < sans.length" tipo="nota" :lance="rotulo(ply - 1)" :texto="nota.texto" />
+        <CartaoDica v-if="nota" tipo="nota" :lance="rotulo(ply - 1)" :texto="nota.texto">
+          <p v-if="nota.alternativa" class="alternativa"><strong>E se…?</strong> {{ fmtTexto(nota.alternativa) }}</p>
+        </CartaoDica>
         <div class="acoes">
           <button type="button" class="botao primario grande largo-celular" @click="comecar">↺ Jogar de novo</button>
           <RouterLink v-if="proxima" class="botao grande largo-celular" :to="{ name: 'lance-a-lance-partida', params: { n: proxima.n } }">
@@ -334,6 +337,11 @@ const textoDoVeredicto = (v: VeredictoDoPalpite | 'avaliando' | null | undefined
 .placar {
   color: var(--ok);
   font-weight: 700;
+}
+.alternativa {
+  margin: var(--espaco-2) 0 0;
+  padding-top: var(--espaco-2);
+  border-top: 1px dashed var(--borda);
 }
 .comparacao {
   display: grid;
