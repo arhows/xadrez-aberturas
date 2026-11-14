@@ -12,9 +12,6 @@ import {
   buscarPartidaLogica,
   chaveDoLogico,
   corDoVencedorLogico,
-  ehLivro,
-  ehPergunta,
-  LIVROS,
   NOME_PRINCIPIO,
   notasPorPly,
   partidaPronta,
@@ -33,9 +30,7 @@ import { tocar } from '../lib/som'
  * lê o porquê; jogou outro, o Stockfish compara o seu lance com o da partida.
  */
 const route = useRoute()
-const livro = ehLivro(route.params.livro) ? route.params.livro : 'logico'
-const momentosChave = LIVROS[livro].perguntas === 'chave'
-const partida = buscarPartidaLogica(Number(route.params.n), livro)!
+const partida = buscarPartidaLogica(Number(route.params.n))!
 const sans = partida.lances.split(' ')
 const posicoes = posicoesDaPartida(partida)
 const notas = notasPorPly(partida)
@@ -44,17 +39,14 @@ const nomeDoVencedor = vencedor === 'w' ? partida.brancas : partida.pretas
 const ladoDoVencedor = vencedor === 'w' ? 'brancas' : 'pretas'
 const principios = principiosDaPartida(partida)
 const proxima = (() => {
-  const seguinte = buscarPartidaLogica(partida.n + 1, livro)
+  const seguinte = buscarPartidaLogica(partida.n + 1)
   return seguinte && partidaPronta(seguinte) ? seguinte : null
 })()
 const PROFUNDIDADE = 12
 
-/** Lances em que o app pergunta: todos os do vencedor, ou só os momentos-chave. */
-const pergunta = (ply: number) => ehPergunta(partida, livro, ply)
-const total = sans.filter((_, ply) => pergunta(ply)).length
-const lista = livro === 'logico' ? { name: 'lance-a-lance' } : { name: 'lance-a-lance', query: { livro } }
-const destinoDaPartida = (n: number) =>
-  livro === 'logico' ? { name: 'lance-a-lance-partida', params: { n } } : { name: 'lance-a-lance-livro', params: { livro, n } }
+const moveDoVencedor = (ply: number) => (ply % 2 === 0 ? 'w' : 'b') === vencedor
+/** Lances do vencedor: as perguntas. */
+const total = sans.filter((_, ply) => moveDoVencedor(ply)).length
 
 const fase = ref<'intro' | 'pergunta' | 'resposta' | 'fim'>('intro')
 const ply = ref(0)
@@ -69,18 +61,8 @@ const resposta = ref<{
   nota?: NotaDoLance
   veredicto?: VeredictoDoPalpite | 'avaliando' | null
 } | null>(null)
-/**
- * Os lances que andaram sozinhos até a próxima pergunta (a resposta do adversário, ou, nos
- * momentos-chave, a sequência inteira), com a última nota que houver entre eles.
- */
+/** A resposta do adversário, com a nota quando houver. */
 const lanceDoAdversario = ref<{ lance: string; nota?: NotaDoLance } | null>(null)
-/** A sequência automática parou numa nota (nos momentos-chave) e espera o "Continuar". */
-const pausado = ref(false)
-function seguirDaNota() {
-  if (!pausado.value) return
-  pausado.value = false
-  vezDoAdversario()
-}
 const tabuleiro = ref<InstanceType<typeof Tabuleiro>>()
 let versao = 0
 let temporizador: ReturnType<typeof setTimeout> | undefined
@@ -96,40 +78,29 @@ function comecar() {
   respondidas.value = 0
   resposta.value = null
   lanceDoAdversario.value = null
-  pausado.value = false
   fase.value = 'pergunta'
   vezDoAdversario()
 }
 
-/** Joga os lances que não são pergunta (com uma pausa, para dar para ver) e para na próxima pergunta. */
+/** Joga o lance do adversário (com uma pausa, para dar para ver) e para na próxima pergunta. */
 function vezDoAdversario() {
   if (ply.value >= sans.length) return terminar()
-  if (pergunta(ply.value)) return
+  if (moveDoVencedor(ply.value)) return
   const minha = versao
-  const primeiro = ply.value
-  /** Os lances jogados nesta sequência; muitos (a abertura, nos momentos-chave) mostram só os 10 últimos. */
-  const texto = (ate: number) => {
-    const de = Math.max(primeiro, ate - 9)
-    const partes: string[] = de > primeiro ? ['…'] : []
-    for (let q = de; q <= ate; q++) partes.push(q === de || q % 2 === 0 ? rotulo(q) : fmtSan(sans[q]))
-    return partes.join(' ')
-  }
-  const passo = () => {
-    if (minha !== versao) return
-    const p = ply.value
-    lanceDoAdversario.value = { lance: texto(p), nota: notas[p] }
-    ply.value = p + 1
-    if (ply.value >= sans.length) return terminar()
-    if (pergunta(ply.value)) return
-    // Lance com nota no meio da sequência: para, para dar tempo de ler.
-    if (notas[p]) pausado.value = true
-    else temporizador = setTimeout(passo, 380)
-  }
-  temporizador = setTimeout(passo, ply.value === 0 ? 300 : 450)
+  temporizador = setTimeout(
+    () => {
+      if (minha !== versao) return
+      const p = ply.value
+      lanceDoAdversario.value = { lance: rotulo(p), nota: notas[p] }
+      ply.value = p + 1
+      if (ply.value >= sans.length) terminar()
+    },
+    ply.value === 0 ? 300 : 450,
+  )
 }
 
 function aoJogar(de: string, para: string) {
-  if (fase.value !== 'pergunta' || !pergunta(ply.value)) {
+  if (fase.value !== 'pergunta' || !moveDoVencedor(ply.value)) {
     tabuleiro.value?.sincronizar()
     return
   }
@@ -197,7 +168,7 @@ function terminar() {
   fase.value = 'fim'
   ply.value = sans.length
   if (!respondidas.value) return
-  const chave = chaveDoLogico(partida.n, livro)
+  const chave = chaveDoLogico(partida.n)
   const anterior = progresso.estrategia[chave]
   const atual = { acertos: acertos.value, total: respondidas.value, data: new Date().toISOString() }
   const taxa = (x: { acertos: number; total: number }) => x.acertos / x.total
@@ -211,7 +182,6 @@ function ir(p: number) {
 function aoTeclar(e: KeyboardEvent) {
   if ((e.target as HTMLElement)?.tagName === 'INPUT') return
   if (fase.value === 'resposta' && e.key === 'Enter') continuar()
-  if (pausado.value && e.key === 'Enter') seguirDaNota()
   if (fase.value !== 'fim') return
   if (e.key === 'ArrowLeft') ir(ply.value - 1)
   if (e.key === 'ArrowRight') ir(ply.value + 1)
@@ -227,7 +197,7 @@ const formas = computed<Forma[]>(() => {
   const ultimo = posicoes[ply.value].ultimo
   return fase.value === 'resposta' && r && !r.acertou && ultimo ? [{ de: ultimo[0], para: ultimo[1], cor: 'green' }] : []
 })
-const jogavel = computed(() => fase.value === 'pergunta' && pergunta(ply.value) && ply.value < sans.length)
+const jogavel = computed(() => fase.value === 'pergunta' && moveDoVencedor(ply.value) && ply.value < sans.length)
 const historico = computed(() => (fase.value === 'fim' ? sans : sans.slice(0, ply.value)))
 const nota = computed(() => (fase.value === 'fim' && ply.value > 0 ? notas[ply.value - 1] : undefined))
 const porcentagem = computed(() => (respondidas.value ? Math.round((acertos.value / respondidas.value) * 100) : 0))
@@ -237,7 +207,7 @@ const textoDoVeredicto = (v: VeredictoDoPalpite | 'avaliando' | null | undefined
 
 <template>
   <header class="cabecalho-movel so-celular">
-    <RouterLink class="voltar" :to="lista" aria-label="Voltar">
+    <RouterLink class="voltar" :to="{ name: 'lance-a-lance' }" aria-label="Voltar">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 6-6 6 6 6" /></svg>
     </RouterLink>
     <h1>{{ partida.n }}. {{ partida.brancas }} – {{ partida.pretas }}</h1>
@@ -258,19 +228,16 @@ const textoDoVeredicto = (v: VeredictoDoPalpite | 'avaliando' | null | undefined
 
     <div class="painel">
       <div class="cabeca-painel so-computador">
-        <RouterLink :to="lista" class="trilha">‹ Lance a lance</RouterLink>
+        <RouterLink :to="{ name: 'lance-a-lance' }" class="trilha">‹ Lance a lance</RouterLink>
         <h1 class="titulo-pagina">{{ partida.n }}. {{ partida.brancas }} – {{ partida.pretas }}</h1>
-        <p class="suave">{{ partida.abertura }} · {{ [partida.local, partida.ano].filter(Boolean).join(' ') }} · {{ partida.resultado.replace('1/2-1/2', '½-½') }}</p>
+        <p class="suave">{{ partida.abertura }} · {{ partida.local }} {{ partida.ano }} · {{ partida.resultado.replace('1/2-1/2', '½-½') }}</p>
       </div>
 
       <!-- Antes de começar -->
       <template v-if="fase === 'intro'">
         <p v-if="partida.tema" class="tema"><strong>Tema:</strong> {{ partida.tema }}</p>
         <p v-if="partida.introducao" class="texto">{{ fmtTexto(partida.introducao) }}</p>
-        <p class="suave">
-          São {{ total }} lances de {{ nomeDoVencedor }} para você achar<template v-if="momentosChave">, nos momentos-chave; os
-          outros lances andam sozinhos</template>. Leia cada explicação antes de seguir.
-        </p>
+        <p class="suave">São {{ total }} lances de {{ nomeDoVencedor }} para você achar. Leia cada explicação antes de seguir.</p>
         <button type="button" class="botao primario grande largo-celular" @click="comecar">Começar com as {{ ladoDoVencedor }}</button>
       </template>
 
@@ -279,7 +246,6 @@ const textoDoVeredicto = (v: VeredictoDoPalpite | 'avaliando' | null | undefined
         <p class="placar" aria-live="polite">✓ {{ acertos }} de {{ respondidas }}<span class="suave"> · {{ total }} lances no total</span></p>
 
         <CartaoDica v-if="lanceDoAdversario && fase === 'pergunta'" tipo="nota" :lance="lanceDoAdversario.lance" :texto="lanceDoAdversario.nota?.texto" />
-        <button v-if="pausado && fase === 'pergunta'" type="button" class="botao primario grande largo-celular" @click="seguirDaNota">Continuar</button>
 
         <template v-if="fase === 'pergunta' && jogavel">
           <p class="corpo-forte pergunta">Qual lance você jogaria com as {{ ladoDoVencedor }}?</p>
@@ -319,7 +285,7 @@ const textoDoVeredicto = (v: VeredictoDoPalpite | 'avaliando' | null | undefined
         </CartaoDica>
         <div class="acoes">
           <button type="button" class="botao primario grande largo-celular" @click="comecar">↺ Jogar de novo</button>
-          <RouterLink v-if="proxima" class="botao grande largo-celular" :to="destinoDaPartida(proxima.n)">
+          <RouterLink v-if="proxima" class="botao grande largo-celular" :to="{ name: 'lance-a-lance-partida', params: { n: proxima.n } }">
             Próxima: {{ proxima.brancas }} – {{ proxima.pretas }}
           </RouterLink>
         </div>

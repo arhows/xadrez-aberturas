@@ -27,7 +27,7 @@ import PreparacaoView from './views/PreparacaoView.vue'
 import JogadorView from './views/JogadorView.vue'
 import TaticaView from './views/TaticaView.vue'
 import { buscarEstrutura, carregarEstrategia } from './lib/estrategia'
-import { buscarPartidaLogica, carregarLogico, ehLivro, partidaPronta } from './lib/logico'
+import { buscarPartidaLogica, carregarLogico, partidaPronta } from './lib/logico'
 import { buscarQuiz, carregarQuizzes } from './lib/quizzes'
 import { buscarArmadilha, carregarArmadilhas } from './lib/armadilhas'
 import ExerciciosView from './views/ExerciciosView.vue'
@@ -183,7 +183,7 @@ export const router = createRouter({
       name: 'lance-a-lance',
       component: () => import('./views/LanceALanceView.vue'),
       meta: { secao: 'aprender' },
-      beforeEnter: () => Promise.all([carregarLogico('logico'), carregarLogico('instrutivas')]).then(() => true),
+      beforeEnter: () => carregarLogico().then(() => true),
     },
     {
       path: '/lance-a-lance/:n',
@@ -194,19 +194,6 @@ export const router = createRouter({
         await carregarLogico()
         const partida = buscarPartidaLogica(Number(destino.params.n))
         return partida && partidaPronta(partida) ? true : { name: 'lance-a-lance' }
-      },
-    },
-    {
-      path: '/lance-a-lance/:livro/:n',
-      name: 'lance-a-lance-livro',
-      component: () => import('./views/PartidaLogicaView.vue'),
-      meta: { secao: 'aprender', foco: true },
-      beforeEnter: async (destino) => {
-        const livro = destino.params.livro
-        if (!ehLivro(livro)) return { name: 'lance-a-lance' }
-        await carregarLogico(livro)
-        const partida = buscarPartidaLogica(Number(destino.params.n), livro)
-        return partida && partidaPronta(partida) ? true : { name: 'lance-a-lance', query: { livro } }
       },
     },
     { path: '/diagnostico', name: 'diagnostico', component: DiagnosticoView, meta: { secao: 'eu' } },
