@@ -3734,7 +3734,7 @@
      ]
     },
     "30...Qf5": {
-     "texto": "A dama ataca a torre de e4 e o peão f2.",
+     "texto": "A dama ataca o cavalo de e5 e o peão f2.",
      "alternativa": "Comer logo o cavalo com ...Rxe5 era bem mais fraco, segundo o Stockfish.",
      "principios": [
       "ataque"
