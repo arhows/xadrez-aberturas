@@ -1,5 +1,9 @@
 <script setup lang="ts">
+import { ref } from 'vue'
+import Avatar from '../components/Avatar.vue'
+import EditorDeFoto from '../components/EditorDeFoto.vue'
 import ListaDeAtalhos from '../components/ListaDeAtalhos.vue'
+import { meuNome } from '../lib/apelido'
 import { obterCapitulos } from '../lib/capitulos'
 import { diasSeguidos } from '../lib/diario'
 import { nuvem, sair } from '../lib/nuvem'
@@ -9,7 +13,7 @@ import { dominadoNasLinhasAtivas } from '../lib/resumoAberturas'
 import { EU } from '../lib/secoes'
 import { dataLocal } from '../lib/srs'
 
-const inicial = (nuvem.nome || nuvem.email || '?').trim().charAt(0).toUpperCase()
+const trocandoFoto = ref(false)
 const dias = diasSeguidos(progresso.diario, dataLocal())
 const dominado = dominadoNasLinhasAtivas(capitulosDoRepertorio(obterCapitulos()))
 </script>
@@ -17,12 +21,18 @@ const dominado = dominadoNasLinhasAtivas(capitulosDoRepertorio(obterCapitulos())
 <template>
   <div class="pagina secao-app">
     <header>
-      <span class="avatar" aria-hidden="true">{{ inicial }}</span>
+      <button type="button" class="foto" aria-label="Trocar a foto do perfil" @click="trocandoFoto = !trocandoFoto">
+        <Avatar :uid="nuvem.uid" :nome="meuNome()" :tamanho="64" />
+        <span class="lapis" aria-hidden="true">✎</span>
+      </button>
       <span>
-        <h1>{{ nuvem.nome || 'Eu' }}</h1>
+        <h1>{{ meuNome() }}</h1>
         <span class="apoio suave">{{ nuvem.email }}</span>
+        <button type="button" class="botao-texto" @click="trocandoFoto = !trocandoFoto">{{ trocandoFoto ? 'Fechar' : 'Trocar foto' }}</button>
       </span>
     </header>
+
+    <EditorDeFoto v-if="trocandoFoto" @fechar="trocandoFoto = false" />
 
     <div class="numeros">
       <div class="cartao"><span class="titulo-pagina">{{ dias }}</span><span class="apoio suave">{{ dias === 1 ? 'dia seguido' : 'dias seguidos' }}</span></div>
@@ -53,17 +63,38 @@ header > span:last-child {
 h1 {
   margin: 0;
 }
-.avatar {
+.foto {
+  position: relative;
   flex: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
-  border-radius: var(--raio-pill);
-  background: var(--destaque-suave);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+.lapis {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--fundo);
+  border-radius: 50%;
+  background: var(--destaque);
+  color: var(--sobre-destaque);
+  font-size: 13px;
+}
+.botao-texto {
+  justify-self: start;
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  background: none;
   color: var(--destaque);
-  font: 600 22px/1 var(--font-titulo);
+  font: 600 14px/20px var(--font-texto);
+  cursor: pointer;
 }
 .numeros {
   display: grid;

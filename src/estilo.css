@@ -537,6 +537,8 @@ button.linha-lista:hover { background: var(--superficie-2); }
 .tom-praticar { --tom: var(--cor-praticar); }
 .tom-jogar { --tom: var(--cor-jogar); }
 .tom-eu { --tom: var(--cor-eu); }
+.tom-aviso { --tom: var(--aviso); }
+.tom-erro { --tom: var(--erro); }
 
 /* ---------- Chip de lance ---------- */
 .chips { display: flex; flex-wrap: wrap; gap: var(--espaco-2); }

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, shallowRef } from 'vue'
 import { useRouter } from 'vue-router'
+import Avatar from '../components/Avatar.vue'
 import { meuNome } from '../lib/apelido'
 import { nuvem } from '../lib/nuvem'
 import { criarPartida, garantirJogador, lerRanking, type JogadorComId } from '../lib/servidorOnline'
@@ -65,8 +66,13 @@ async function desafiar(j: JogadorComId) {
         <tr v-for="(j, i) in lista" :key="j.uid" :class="{ eu: j.uid === uid }">
           <td>{{ i + 1 }}</td>
           <td>
-            <strong>{{ j.nome }}</strong><span v-if="j.uid === uid" class="suave"> (você)</span>
-            <span class="suave partidas">{{ j.partidas }} {{ j.partidas === 1 ? 'partida' : 'partidas' }}</span>
+            <span class="quem">
+              <Avatar :uid="j.uid" :nome="j.nome" :tamanho="32" />
+              <span>
+                <strong>{{ j.nome }}</strong><span v-if="j.uid === uid" class="suave"> (você)</span>
+                <span class="suave partidas">{{ j.partidas }} {{ j.partidas === 1 ? 'partida' : 'partidas' }}</span>
+              </span>
+            </span>
           </td>
           <td class="rating">{{ j.rating }}</td>
           <td class="numeros">{{ j.vitorias }} / {{ j.empates }} / {{ j.derrotas }}</td>
@@ -82,6 +88,11 @@ async function desafiar(j: JogadorComId) {
 </template>
 
 <style scoped>
+.quem {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+}
 .trilha {
   display: inline-flex;
   align-items: center;

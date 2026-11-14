@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, shallowRef, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import Avatar from '../components/Avatar.vue'
 import HistoricoLances from '../components/HistoricoLances.vue'
 import Tabuleiro from '../components/Tabuleiro.vue'
 import { meuNome } from '../lib/apelido'
@@ -178,6 +179,7 @@ watch(
         inicio: 0,
         adversario: 'online',
         oponente: nomeDe(adversarioDe(p, uid)),
+        oponenteUid: adversarioDe(p, uid) ?? undefined,
         cor,
         tempo: p.tempo,
         resultado: p.resultado,
@@ -277,7 +279,7 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
   <div v-else class="tela">
     <div class="area-tabuleiro">
       <div class="placa" :class="{ vez: partida.estado === 'jogando' && vezDe(partida) !== minhaCor }">
-        <span class="nome">{{ nomeDe(outro) }}</span>
+        <span class="quem"><Avatar :uid="outro" :nome="nomeDe(outro)" :tamanho="28" /><span class="nome">{{ nomeDe(outro) }}</span></span>
         <span v-if="comRelogio && minhaCor" class="relogio" :class="{ pouco: tempoDe(minhaCor === 'w' ? 'b' : 'w') < 20_000 }">
           {{ formatarRelogio(tempoDe(minhaCor === 'w' ? 'b' : 'w')) }}
         </span>
@@ -291,7 +293,7 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
         @lance="aoJogar"
       />
       <div class="placa" :class="{ vez: minhaVez }">
-        <span class="nome">{{ nomeDe(uid) }} (você)</span>
+        <span class="quem"><Avatar :uid="uid" :nome="nomeDe(uid)" :tamanho="28" /><span class="nome">{{ nomeDe(uid) }} (você)</span></span>
         <span v-if="comRelogio && minhaCor" class="relogio" :class="{ pouco: tempoDe(minhaCor) < 20_000 }">{{ formatarRelogio(tempoDe(minhaCor)) }}</span>
       </div>
     </div>
@@ -396,6 +398,12 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
 }
 .placa.vez {
   background: var(--superficie-2);
+}
+.quem {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  min-width: 0;
 }
 .nome {
   font-weight: 600;

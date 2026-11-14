@@ -25,6 +25,8 @@ export const nuvem = reactive({
   uid: null as string | null,
   nome: '',
   email: '',
+  /** Foto da conta Google (vazia no login por e-mail e senha). */
+  fotoGoogle: '',
   /** Hora (HH:MM) da última sincronização bem-sucedida. */
   ultima: '',
   erro: '',
@@ -45,7 +47,7 @@ export function esperarSessao(): Promise<void> {
   return sessaoPronta
 }
 
-function aoMudarUsuario(usuario: { uid: string; displayName: string | null; email: string | null } | null) {
+function aoMudarUsuario(usuario: { uid: string; displayName: string | null; email: string | null; photoURL?: string | null } | null) {
   clearTimeout(temporizador)
   temporizador = undefined
   ultimoSincronizado = ''
@@ -54,6 +56,7 @@ function aoMudarUsuario(usuario: { uid: string; displayName: string | null; emai
     nuvem.uid = usuario.uid
     nuvem.nome = usuario.displayName ?? nuvem.nome
     nuvem.email = usuario.email ?? ''
+    nuvem.fotoGoogle = usuario.photoURL ?? ''
     nuvem.estado = 'conectada'
     nuvem.erro = ''
     nuvem.perguntarSemConta =
@@ -64,11 +67,17 @@ function aoMudarUsuario(usuario: { uid: string; displayName: string | null; emai
     nuvem.uid = null
     nuvem.nome = ''
     nuvem.email = ''
+    nuvem.fotoGoogle = ''
     nuvem.ultima = ''
     nuvem.perguntarSemConta = false
     nuvem.estado = 'desligada'
   }
   avisarSessaoPronta()
+}
+
+/** O módulo do Firebase (já carregado na abertura); usado também pelo perfil. */
+export function obterFirebase(): Promise<Firebase> {
+  return carregar()
 }
 
 async function carregar(): Promise<Firebase> {

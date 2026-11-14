@@ -197,6 +197,11 @@ export interface Jogador {
   vitorias: number
   empates: number
   derrotas: number
+  /**
+   * Partida que mudou o rating por último. A regra do Firestore confere que ela acabou de ser
+   * contada para o ranking e que a conta é um dos jogadores (ninguém mexe no rating de outro à toa).
+   */
+  ultimaPartida?: string
 }
 
 export function jogadorNovo(nome: string): Jogador {

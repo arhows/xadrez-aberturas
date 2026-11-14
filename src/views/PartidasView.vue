@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import Avatar from '../components/Avatar.vue'
 import EstadoVazio from '../components/EstadoVazio.vue'
+import Icone from '../components/Icone.vue'
 import { buscarCapitulo, obterCapitulos } from '../lib/capitulos'
 import { pgnDoCompartilhado, retirarCompartilhado } from '../lib/compartilhado'
 import { fmtLance } from '../lib/formato'
@@ -173,7 +175,9 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
       <h2>Jogadas no app</h2>
       <ul class="lista">
         <li v-for="j in jogos" :key="j.id">
-          <div>
+          <Avatar v-if="j.adversario === 'online'" class="quem-jogou" :uid="j.oponenteUid" :nome="j.oponente ?? 'Amigo'" :tamanho="40" />
+          <span v-else class="ladrilho tom-jogar quem-jogou" title="Contra o computador"><Icone nome="chip" /></span>
+          <div class="sobre-jogo">
             <strong>{{ textoDoResultado(j) }} contra {{ nomeDoAdversario(j) }}</strong>
             <span class="suave">
               {{ dataCurta(j.data) }}<template v-if="j.cor"> · {{ j.cor === 'w' ? 'brancas' : 'pretas' }}</template>
@@ -496,6 +500,12 @@ p {
   display: grid;
   gap: 0.125rem;
   min-width: 0;
+}
+.quem-jogou {
+  align-self: flex-start;
+}
+.sobre-jogo {
+  flex: 1;
 }
 em {
   font-style: normal;

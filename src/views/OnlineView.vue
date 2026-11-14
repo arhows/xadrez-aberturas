@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, shallowRef } from 'vue'
 import { useRouter } from 'vue-router'
+import Avatar from '../components/Avatar.vue'
 import { meuNome, salvarApelido } from '../lib/apelido'
 import { nuvem } from '../lib/nuvem'
 import type { Cor } from '../lib/lances'
@@ -73,8 +74,9 @@ const aguardando = computed(() => lista.value.filter((p) => p.estado === 'aguard
 const emAndamento = computed(() => lista.value.filter((p) => p.estado === 'jogando'))
 const terminadas = computed(() => lista.value.filter((p) => p.estado === 'fim').slice(0, 10))
 
+const uidDoOutro = (p: PartidaComId) => adversarioDe(p, uid) ?? p.convidado ?? (p.criador !== uid ? p.criador : null)
 const nomeDoOutro = (p: PartidaComId) => {
-  const outro = adversarioDe(p, uid) ?? p.convidado ?? (p.criador !== uid ? p.criador : null)
+  const outro = uidDoOutro(p)
   return outro ? (p.nomes[outro] ?? 'Amigo') : 'aguardando amigo'
 }
 const ritmo = (id: string) => TEMPOS.find((t) => t.id === id)?.ritmo ?? ''
@@ -116,7 +118,7 @@ function abrirCodigo() {
       <h2>Desafios para você</h2>
       <ul class="lista">
         <li v-for="p in desafios" :key="p.id">
-          <span><strong>{{ p.nomes[p.criador] }}</strong> <span class="suave">· {{ textoTempo(p.tempo) }}{{ p.valendo ? ' · valendo ranking' : '' }}</span></span>
+          <span class="quem"><Avatar :uid="p.criador" :nome="p.nomes[p.criador] ?? 'Amigo'" :tamanho="28" /><strong>{{ p.nomes[p.criador] }}</strong> <span class="suave">· {{ textoTempo(p.tempo) }}{{ p.valendo ? ' · valendo ranking' : '' }}</span></span>
           <span class="acoes">
             <button type="button" class="botao primario" @click="aceitar(p)">Aceitar</button>
             <button type="button" class="botao fantasma" @click="recusarDesafio(p.id, uid)">Recusar</button>
@@ -129,7 +131,7 @@ function abrirCodigo() {
       <h2>Partidas em andamento</h2>
       <ul class="lista">
         <li v-for="p in emAndamento" :key="p.id">
-          <span>contra <strong>{{ nomeDoOutro(p) }}</strong> <span class="suave">· {{ textoTempo(p.tempo) }} · {{ p.lances.length }} meios-lances</span></span>
+          <span class="quem"><Avatar :uid="uidDoOutro(p)" :nome="nomeDoOutro(p)" :tamanho="28" />contra <strong>{{ nomeDoOutro(p) }}</strong> <span class="suave">· {{ textoTempo(p.tempo) }} · {{ p.lances.length }} meios-lances</span></span>
           <RouterLink class="botao primario" :to="{ name: 'partida-online', params: { id: p.id } }">Continuar</RouterLink>
         </li>
       </ul>
@@ -198,7 +200,7 @@ function abrirCodigo() {
       <h2>Últimas partidas on-line</h2>
       <ul class="lista">
         <li v-for="p in terminadas" :key="p.id">
-          <span><strong>{{ resultadoParaMim(p) }}</strong> contra {{ nomeDoOutro(p) }} <span class="suave">· {{ p.motivo }}</span></span>
+          <span class="quem"><Avatar :uid="uidDoOutro(p)" :nome="nomeDoOutro(p)" :tamanho="28" /><strong>{{ resultadoParaMim(p) }}</strong> contra {{ nomeDoOutro(p) }} <span class="suave">· {{ p.motivo }}</span></span>
           <RouterLink class="botao" :to="{ name: 'partida-online', params: { id: p.id } }">Ver</RouterLink>
         </li>
       </ul>
@@ -251,6 +253,12 @@ h2 {
   margin: 0;
   padding: 0;
   list-style: none;
+}
+.quem {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--espaco-2);
 }
 .lista li {
   display: flex;

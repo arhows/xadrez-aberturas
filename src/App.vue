@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, watch, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import Avatar from './components/Avatar.vue'
+import { meuNome } from './lib/apelido'
 import { juntarProgressoSemConta, nuvem, recusarProgressoSemConta } from './lib/nuvem'
 import { progresso } from './lib/progresso'
 import { atualizarAgora, pwa } from './lib/pwa'
@@ -51,7 +53,13 @@ const LINKS: { secao: Secao; para: string; nome: string }[] = [
         :to="link.para"
         :class="{ eu: link.secao === 'eu' }"
         :aria-current="secao === link.secao ? 'page' : undefined"
-      >{{ link.nome }}</RouterLink>
+      >
+        <template v-if="link.secao === 'eu'">
+          <Avatar :uid="nuvem.uid" :nome="meuNome()" :tamanho="28" />
+          <span>{{ meuNome().split(' ')[0] }}</span>
+        </template>
+        <template v-else>{{ link.nome }}</template>
+      </RouterLink>
     </nav>
     <header v-if="!foco" class="marca-movel so-celular">
       <RouterLink to="/" class="marca"><img :src="icone" alt="" />Xadrez</RouterLink>
@@ -98,7 +106,7 @@ const LINKS: { secao: Secao; para: string; nome: string }[] = [
         <svg v-else-if="link.secao === 'aprender'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 18V6a2.5 2.5 0 0 1 2.5-2.5H19v13H7.5A2.5 2.5 0 0 0 5 19a2 2 0 0 0 2 2h12v-4.5" /></svg>
         <svg v-else-if="link.secao === 'praticar'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5" /><circle cx="12" cy="12" r="4.5" /><circle cx="12" cy="12" r="0.8" fill="currentColor" /></svg>
         <svg v-else-if="link.secao === 'jogar'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="2" /><path d="M3.5 12h17M12 3.5v17" /></svg>
-        <svg v-else viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="3.5" /><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5" /></svg>
+        <Avatar v-else :uid="nuvem.uid" :nome="meuNome()" :tamanho="26" />
       </span>
       {{ link.nome }}
     </RouterLink>
@@ -132,6 +140,9 @@ const LINKS: { secao: Secao; para: string; nome: string }[] = [
   border-radius: 7px;
 }
 .topo .eu {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-2);
   margin-left: auto;
 }
 @media (max-width: 799.98px) {

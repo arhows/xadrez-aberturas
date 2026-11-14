@@ -22,6 +22,8 @@ export interface JogoSalvo {
   adversario: 'motor' | 'online'
   /** Nome do amigo, nas partidas on-line. */
   oponente?: string
+  /** Conta do amigo, para mostrar a foto dele. */
+  oponenteUid?: string
   nivel?: number
   /** Cor da pessoa contra o computador. */
   cor?: Cor

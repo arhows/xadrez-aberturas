@@ -134,8 +134,8 @@ export async function aplicarRanking(id: string): Promise<void> {
     const brancas = sb.exists() ? (sb.data() as Jogador) : jogadorNovo(p.nomes[p.brancas] ?? 'Jogador')
     const pretas = sp.exists() ? (sp.data() as Jogador) : jogadorNovo(p.nomes[p.pretas] ?? 'Jogador')
     const pontos = pontosDasBrancas(p.resultado)
-    const novoB = aplicarResultado(brancas, pretas, pontos)
-    const novoP = aplicarResultado(pretas, brancas, 1 - pontos)
+    const novoB = { ...aplicarResultado(brancas, pretas, pontos), ultimaPartida: id }
+    const novoP = { ...aplicarResultado(pretas, brancas, 1 - pontos), ultimaPartida: id }
     t.set(refB, novoB)
     t.set(refP, novoP)
     t.update(refPartida, {
