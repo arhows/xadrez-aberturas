@@ -18,7 +18,8 @@ import Tabuleiro, { type Forma } from '../components/Tabuleiro.vue'
 import { percorrer } from '../lib/arvore'
 import { LEGENDA } from '../lib/avaliacao'
 import { buscarCapitulo } from '../lib/capitulos'
-import { buscarLinha, proximaLinha } from '../lib/escopo'
+import { buscarLinha, corDoCapitulo, proximaLinha } from '../lib/escopo'
+import { deveResponder } from '../lib/estudo'
 import { fmtLance, fmtTexto } from '../lib/formato'
 import { casasDoLance } from '../lib/lances'
 import { carregarMotor, type DadosMotor } from '../lib/motor'
@@ -38,7 +39,8 @@ const tituloDaLinha = (l: { coluna: number | null }) =>
   l.coluna === null ? 'Bônus' : `Coluna ${l.coluna}`
 
 const ply = ref(0)
-const orientacao = ref<'white' | 'black'>('white')
+// Começa com o tabuleiro do lado que a pessoa treina nesta abertura (a Italiana, por exemplo, é de brancas).
+const orientacao = ref<'white' | 'black'>(corDoCapitulo(capitulo, progresso.corPorCapitulo) === 'b' ? 'black' : 'white')
 
 const lanceAtual = computed(() => lances[ply.value - 1])
 const noFim = computed(() => lances.length > 0 && ply.value === lances.length)
@@ -76,6 +78,7 @@ function aoJogar(de: string, para: string) {
   if (certo && certo.from === de && certo.to === para) {
     tocar('certo')
     ply.value++
+    responderSeForAVez()
     return
   }
   tocar('errado')
@@ -105,6 +108,27 @@ const setaDaAmeaca = computed<Forma[]>(() => {
   for (const de of xeque.value?.atacantes ?? []) formas.push({ de, para: xeque.value!.rei, cor: 'red' })
   return formas
 })
+
+// O outro lado responde sozinho: depois do lance da pessoa, o próximo lance da linha, se for do adversário,
+// é jogado após uma pausa curta. Só o lance jogado no tabuleiro dispara a resposta; ▶ e o histórico não.
+const PAUSA_RESPOSTA = 450
+let resposta: ReturnType<typeof setTimeout> | undefined
+
+function responderSeForAVez() {
+  clearTimeout(resposta)
+  const meuLado = orientacao.value === 'white' ? 'w' : 'b'
+  if (!deveResponder(fen.value, meuLado, progresso.config.responderAdversario, lances.length - ply.value)) return
+  const esperado = ply.value
+  resposta = setTimeout(() => {
+    if (ply.value === esperado && ply.value < lances.length) ply.value++
+  }, PAUSA_RESPOSTA)
+}
+
+// Estudando de pretas, o primeiro lance das brancas sai sozinho (também ao girar o tabuleiro no início).
+watch(orientacao, () => {
+  if (ply.value === 0) responderSeForAVez()
+}, { immediate: true })
+onBeforeUnmount(() => clearTimeout(resposta))
 
 function anterior() {
   if (ply.value > 0) ply.value--
@@ -194,6 +218,10 @@ function trocarLinha(evento: Event) {
       <label class="marcar" title="Esconde a seta do próximo lance até você tentar jogá-lo">
         <input v-model="progresso.config.adivinhar" type="checkbox" />
         Modo adivinhar: esconder o próximo lance
+      </label>
+      <label class="marcar" title="Depois do seu lance, o lance da linha do outro lado é jogado sozinho. Gire o tabuleiro para estudar com o outro lado.">
+        <input v-model="progresso.config.responderAdversario" type="checkbox" @change="responderSeForAVez()" />
+        O outro lado responde sozinho ({{ orientacao === 'white' ? 'você joga de brancas' : 'você joga de pretas' }})
       </label>
 
       <div v-if="!noFim && (errou || escondido)" class="adivinhe">

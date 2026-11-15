@@ -133,6 +133,10 @@ function resetar() {
           <input v-model="config.adivinhar" type="checkbox" />
           Adivinhar: esconder as setas e os lances do livro até eu tentar o lance
         </label>
+        <label class="marcar">
+          <input v-model="config.responderAdversario" type="checkbox" />
+          Estudo: o outro lado responde sozinho depois do meu lance
+        </label>
       </div>
     </section>
 
