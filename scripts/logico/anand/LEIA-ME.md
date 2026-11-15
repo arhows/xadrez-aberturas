@@ -10,4 +10,4 @@ principal do PDF do usuário (só os lances; nada do texto do livro é usado).
    Rbl = Rb1, lances grudados como "Qxc318.Rbl"): conferir os que faltam à mão.
 3. Análise, notas e verificação como no Capablanca (`../capablanca/analisar.mjs`, `verificar.mjs`).
 
-Teste (2026-11-14): partidas 7 (Lautier), 10 (Piket) e 13 (Adams), conferidas lance a lance.
+Concluído em 2026-11-14: as 32 partidas, conferidas lance a lance.
