@@ -78,8 +78,12 @@ function resetar() {
           Virar o tabuleiro conforme a cor treinada
         </label>
         <label class="marcar">
+          <input v-model="config.somPecas" type="checkbox" />
+          Som das peças (lance, captura, xeque e xeque-mate)
+        </label>
+        <label class="marcar">
           <input v-model="config.som" type="checkbox" />
-          Som
+          Som de acerto e erro
         </label>
       </div>
     </section>

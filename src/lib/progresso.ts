@@ -14,6 +14,8 @@ export interface Configuracoes {
   tempoDica: 'normal' | 'longo' | 'toque'
   animacaoMs: number
   som: boolean
+  /** Som das peças ao mexer, capturar, dar xeque e no fim da partida, como no lichess. */
+  somPecas: boolean
   orientacaoAutomatica: boolean
   novasPorDia: number
   tema: 'auto' | 'claro' | 'escuro'
@@ -134,6 +136,7 @@ export const CONFIG_PADRAO: Configuracoes = {
   tempoDica: 'normal',
   animacaoMs: 200,
   som: true,
+  somPecas: true,
   orientacaoAutomatica: true,
   novasPorDia: 5,
   tema: 'auto',

@@ -14,6 +14,8 @@ import { progresso } from '../lib/progresso'
 import { formatarAvaliacao } from '../lib/motor'
 import { chanceDasBrancas } from '../lib/probabilidade'
 import { cantoDaCasa, type SeloCasa } from '../lib/seloNoTabuleiro'
+import { somDoLance } from '../lib/somDoLance'
+import { tocarLance } from '../lib/som'
 
 export interface Forma {
   de: string
@@ -172,6 +174,16 @@ onBeforeUnmount(() => {
 
 watch(() => [props.fen, props.orientacao, props.ultimoLance, props.jogavel, props.destinos, props.editavel], sincronizar)
 watch(() => props.formas, desenhar)
+
+// Som das peças quando a posição muda por um lance (o editor de posição fica em silêncio).
+watch(
+  () => props.fen,
+  (novo, velho) => {
+    if (props.editavel || !velho) return
+    const som = somDoLance(velho, novo)
+    if (som) tocarLance(som)
+  },
+)
 
 // Trocou o tema (em Configurações ou no sistema): relê as cores das setas.
 const temaEscuro = window.matchMedia('(prefers-color-scheme: dark)')
