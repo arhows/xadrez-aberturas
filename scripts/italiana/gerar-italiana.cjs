@@ -47,7 +47,7 @@ const colunas = {
     'Desenvolvimento simples, comum entre iniciantes, mas lógico. As brancas cedem o par de bispos para atacar com Nd5 e d4, e a posição fica igual.'],
   c17: [`${T} 4 Nc3 Nf6 5 d3 d6 6 Bg5 Na5 7 Bb3 c6 8 d4 Nxb3 9 axb3 exd4 10 Nxd4 h6 11 Bh4 O-O`, 'incomuns', '4.Nc3 Nf6 5.d3 d6 6.Bg5 Na5', '=',
     'As pretas trocam o bispo ativo de c4 e ganham o par de bispos. As brancas ficam com a coluna a aberta, e o jogo é aproximadamente igual.'],
-  c18: [`${T} 4 O-O Nf6 5 d4 Bxd4 6 Nxd4 Nxd4 7 Bg5 d6 8 f4 Qe7 9 fxe5 dxe5 10 c3 Ne6 11 Bxe6 Bxe6`, 'incomuns', '4.O-O Nf6 5.d4 Bxd4', '=',
+  c18: [`${T} 4 O-O Nf6 5 d4 Bxd4 6 Nxd4 Nxd4 7 Bg5 d6 8 f4 Qe7 9 fxe5 dxe5 10 c3 Ne6 11 Bxe6 Bxe6`, 'incomuns', 'Gambito Deutz: 4.O-O Nf6 5.d4 Bxd4', '=',
     'As brancas sacrificam um peão por linhas abertas e desenvolvimento rápido. As chances ficam aproximadamente iguais.'],
 }
 
