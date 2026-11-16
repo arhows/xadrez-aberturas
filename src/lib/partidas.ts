@@ -290,6 +290,19 @@ function resumo(texto: string): string {
   return h.toString(36)
 }
 
+/**
+ * Código da partida no fim do endereço. Um endereço só com o domínio ("https://lichess.org")
+ * não identifica nada: sem isto, todas as partidas com ele virariam a mesma.
+ */
+function codigoDaPartida(endereco: string): string {
+  if (!endereco) return ''
+  try {
+    return new URL(endereco).pathname.split('/').filter(Boolean).pop() ?? ''
+  } catch {
+    return ''
+  }
+}
+
 function dataDoPgn(data: string | undefined): string {
   const m = data?.match(/^(\d{4})[.-](\d{2})[.-](\d{2})$/)
   return m ? `${m[1]}-${m[2]}-${m[3]}` : new Date().toISOString().slice(0, 10)
@@ -322,11 +335,11 @@ export function lerPgns(texto: string, nomesDoUsuario: string[]): { partidas: Pa
     }
     const brancas = c.White?.trim() || '?'
     const pretas = c.Black?.trim() || '?'
-    const site = c.Site?.trim() ?? ''
-    const ehEndereco = /^https?:\/\//.test(site)
+    // O chess.com põe o endereço da partida em [Link]; o lichess, em [Site].
+    const site = [c.Site, c.Link].map((v) => v?.trim() ?? '').find((v) => /^https?:\/\//.test(v)) ?? ''
+    const codigo = codigoDaPartida(site)
     // Partidas offline do app do lichess ("ocg_...") não existem no site.
-    const online = ehEndereco && !/\/ocg_/.test(site)
-    const codigo = ehEndereco ? site.replace(/\/+$/, '').split('/').pop()! : ''
+    const online = Boolean(codigo) && !codigo.startsWith('ocg_')
     const data = dataDoPgn(c.Date)
     partidas.push({
       partida: {

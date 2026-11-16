@@ -266,6 +266,10 @@ const SITE = { lichess: 'lichess', chesscom: 'chess.com', pgn: 'PGN' } as const
       <p v-if="resultadoPgn.lidas">
         {{ resultadoPgn.lidas }} {{ resultadoPgn.lidas === 1 ? 'partida lida' : 'partidas lidas' }}, {{ resultadoPgn.novas }}
         {{ resultadoPgn.novas === 1 ? 'nova' : 'novas' }}.
+        <template v-if="resultadoPgn.repetidas">
+          {{ resultadoPgn.repetidas === 1 ? '1 já tinha sido importada antes' : `${resultadoPgn.repetidas} já tinham sido importadas antes` }}
+          (foram só analisadas de novo).
+        </template>
         <template v-if="resultadoPgn.desviosNovos">
           {{ resultadoPgn.desviosNovos }} {{ resultadoPgn.desviosNovos === 1 ? 'desvio foi enviado' : 'desvios foram enviados' }} ao Treino.
         </template>

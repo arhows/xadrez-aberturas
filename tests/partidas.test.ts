@@ -120,3 +120,23 @@ describe('importar PGN', () => {
     expect(detectarCor('Fulano', 'Ciclano', [])).toBeNull()
   })
 })
+
+describe('identificador das partidas coladas em PGN', () => {
+  const pgn = (site: string, lances: string, extra = '') =>
+    `[Site "${site}"]\n[White "Eu"]\n[Black "Maia"]\n[Date "2026.11.16"]\n${extra}\n${lances}`
+  it('endereço só com o domínio não junta partidas diferentes', () => {
+    const a = lerPgns(pgn('https://lichess.org', '1. e4 e5 2. Nf3 *'), []).partidas[0].partida
+    const b = lerPgns(pgn('https://lichess.org/', '1. d4 d5 2. c4 *'), []).partidas[0].partida
+    expect(a.id).not.toBe(b.id)
+    expect(a.url).toBe('')
+  })
+  it('usa o código do endereço da partida', () => {
+    const a = lerPgns(pgn('https://lichess.org/AbCd1234', '1. e4 *'), []).partidas[0].partida
+    expect(a.id).toBe('pgn:AbCd1234')
+    expect(a.url).toBe('https://lichess.org/AbCd1234')
+  })
+  it('chess.com: endereço em [Link]', () => {
+    const a = lerPgns(pgn('Chess.com', '1. e4 *', '[Link "https://www.chess.com/game/live/987654"]'), []).partidas[0].partida
+    expect(a.id).toBe('pgn:987654')
+  })
+})
