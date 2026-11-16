@@ -24,7 +24,7 @@ const analisar = (p: PartidaBaixada, usuario: string, c: typeof capitulos) => an
 
 describe('análise das partidas importadas', () => {
   it('fica fora do repertório quem não chega à base de nenhum capítulo', () => {
-    const r = analisar(partida(['d4', 'd5', 'c4']), 'Arhows', capitulos)
+    const r = analisar(partida(['h4', 'a5', 'h5']), 'Arhows', capitulos)
     expect(r.capitulo).toBeNull()
   })
 
