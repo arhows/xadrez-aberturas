@@ -1,0 +1,81 @@
+// Transcrição do MCO 15ª ed. — Defesa Nimzo-Índia, Variante Rubinstein com 7.O-O: 7...dxc4 e 7...Nbd7 (pp. 549–550), colunas 25–30.
+// Gerar: node scripts/mco/gerar.cjs nimzo-e
+// Formato: ver gambito-do-rei.cjs. Dicas em nimzo-e-dicas.cjs.
+//
+// Só a coluna 29 traz avaliação no fim; as outras usam a da nota que as continua.
+// Errata: nota (e), "15 Qg4" entrega a dama para 15...Nxg4; linha cortada em 14...Qxd7.
+// Nota (r): o livro marca "13 Rxa7†", mas o lance não é xeque.
+// Notas só com comentário: (e) 13...Ne4, (r) 11...bxa3, (t).
+
+const S = '1 d4 Nf6 2 c4 e6 3 Nc3 Bb4 4 e3 O-O 5 Bd3 d5 6 Nf3 c5 7 O-O'
+
+const colunas = {
+  c25: [`${S} dxc4 8 Bxc4 cxd4 9 exd4 b6 10 Bg5 Bb7 11 Ne5 Bxc3 12 bxc3 Nbd7 13 Nxd7 Qxd7 14 Bxf6 gxf6`, 'dxc4', '7...dxc4 8.Bxc4 cxd4 9.exd4 b6', '=',
+    'Com 7...dxc4 8.Bxc4 cxd4 9.exd4 b6 as pretas deixam as brancas com o peão isolado em d4 e fazem o fianqueto: é a defesa preferida de Karpov. Depois de 10.Bg5 Bb7 11.Ne5 Bxc3 12.bxc3 Nbd7 13.Nxd7 Qxd7 14.Bxf6 gxf6 o roque preto fica aberto, mas, com 15.Re1 Kh8 16.Bf1 Rad8, o jogo é igual.'],
+  c26: [`${S} dxc4 8 Bxc4 Nbd7 9 Qe2 b6 10 d5 Bxc3 11 dxe6 Ne5 12 exf7+ Kh8 13 bxc3 Bg4 14 e4 Qe7`, 'dxc4', '8...Nbd7 9.Qe2', '=',
+    'Com 8...Nbd7 9.Qe2 b6 10.d5 as brancas abrem o jogo no centro. Depois de 10...Bxc3 11.dxe6 Ne5! 12.exf7+ Kh8 13.bxc3 Bg4 14.e4 Qe7 as pretas têm um peão a menos e muita atividade: com 15.Re1 b5! as chances são mais ou menos iguais numa posição aguda.'],
+  c27: [`${S} dxc4 8 Bxc4 Nbd7 9 a3 cxd4 10 exd4 Bxc3 11 bxc3 Qc7 12 Qd3 b6 13 Re1 Bb7 14 Ba2 Rac8`, 'dxc4', '9.a3', '=',
+    'Com 9.a3 cxd4! 10.exd4 Bxc3 11.bxc3 as brancas ficam com o par de bispos e os peões c3 e d4. Depois de 11...Qc7 12.Qd3 b6 13.Re1 Bb7 14.Ba2 Rac8 as pretas pressionam a coluna c e o jogo é igual.'],
+  c28: [`${S} dxc4 8 Bxc4 Qe7 9 a3 Ba5 10 Qc2 Bd7 11 Ba2 Rc8 12 Bd2 cxd4 13 exd4 h6 14 Rfe1 Qd8`, 'dxc4', '8...Qe7', '⩲',
+    'Com 8...Qe7 9.a3! Ba5 as pretas mantêm o bispo. Depois de 10.Qc2 Bd7 11.Ba2 Rc8 12.Bd2 cxd4 13.exd4 h6 14.Rfe1 Qd8, com 15.Qd3 Nc6 16.Rad1 as brancas ficam um pouco melhor.'],
+  c29: [`${S} Nbd7 8 cxd5 exd5 9 a3 Bxc3 10 bxc3 Re8 11 Nd2 c4 12 Bc2 Qa5 13 Bb2 b5 14 Re1`, 'nbd7', '7...Nbd7 8.cxd5', '⩲',
+    'Com 7...Nbd7 as pretas mantêm a tensão no centro. Depois de 8.cxd5 exd5 9.a3 Bxc3 10.bxc3 Re8 11.Nd2 c4 12.Bc2 Qa5 13.Bb2 b5 14.Re1 as brancas preparam f3 e e4 e ficam um pouco melhor.'],
+  c30: [`${S} Nbd7 8 a3 Bxc3 9 bxc3 dxc4 10 Bxc4 Qc7 11 Qe2 e5 12 Rd1 e4 13 Nd2 Nb6 14 Bb3 Ng4`, 'nbd7', '8.a3', '⩲',
+    'Com 8.a3 Bxc3 9.bxc3 dxc4 10.Bxc4 Qc7 as pretas preparam ...e5. Depois de 11.Qe2 e5 12.Rd1 e4 13.Nd2 Nb6 14.Bb3 Ng4, com 15.Nf1 c4 16.Bc2 f5 17.f3 as brancas ficam um pouco melhor.'],
+}
+
+const notas = [
+  // Coluna 25
+  ['c25', 'a', 'a', '(a)', '8... b6 9 a3 cxd4 10 axb4 dxc3 11 Qxd8 Rxd8 12 bxc3', { a: '⩲', c: 'Contra 8...b6 imediato as brancas têm 9.a3 cxd4 10.axb4 dxc3 11.Qxd8 Rxd8 12.bxc3, um pouco melhor para as brancas: o par de bispos é uma vantagem aqui.' }],
+  ['c25', 'b', 'b', '(b)', '9... a6 10 Bg5 b5 11 Bd3 Bb7 12 Rc1 Nbd7 13 Bb1 Rc8 14 Re1 Be7 15 a3 Re8 16 Qd3', { a: '⩲', r: 'I. Sokolov–Christiansen, Reykjavik 1998', c: '9...b6 é a defesa preferida de Karpov contra a Rubinstein há três décadas. Se 9...a6 10.Bg5 b5 11.Bd3 Bb7 12.Rc1 Nbd7 13.Bb1 Rc8 14.Re1 Be7 15.a3 Re8 16.Qd3, as brancas ficam um pouco melhor.' }],
+  ['c25', 'c', 'c', '(c)', '10 Qe2 Bb7 11 Rd1 Bxc3 12 bxc3 Qc7 13 Bb2 Bxf3 14 Qxf3 Qxc4 15 Qxa8 Nc6 16 Qb7 Nd5', { a: '=', r: 'Vladimirov–Kasparov, Eurasia (rápidas) 2001', c: '10.Qe2 Bb7 11.Rd1 Bxc3 12.bxc3 Qc7 13.Bb2 Bxf3! 14.Qxf3 Qxc4 15.Qxa8 Nc6 16.Qb7 Nd5 dá às pretas pelo menos a igualdade.' }],
+  ['c25-c', '1', 'c', '(c) 11.Bf4', '11 Bf4 Nbd7 12 Rac1 Bxc3 13 bxc3 Qe7', { a: '=', r: 'Sadler–Emms, Hastings 1999', c: '11.Bf4 Nbd7 12.Rac1 Bxc3 13.bxc3 Qe7 é mais ou menos igual.' }],
+  ['c25', 'd-A', 'd', '(d) A', '11 Qe2 Bxc3 12 bxc3 Nbd7 13 Bd3 Qc7 14 c4 Ng4 15 Be4 Bxe4 16 Qxe4 Ngf6 17 Qe2 Rac8 18 Rac1 Rfe8', { a: '=', r: 'van Wely–Karpov, Wijk aan Zee 1998', c: '11.Qe2 Bxc3 12.bxc3 Nbd7 13.Bd3 (13.Ne5 volta à coluna) 13...Qc7 14.c4 Ng4! 15.Be4 Bxe4 16.Qxe4 Ngf6 17.Qe2 Rac8 18.Rac1 Rfe8 é igual.' }],
+  ['c25', 'd-B', 'd', '(d) B', '11 Re1 Nbd7 12 Rc1 Rc8 13 Bd3 Bxc3 14 bxc3 Qc7 15 c4 Rfe8 16 Qe2 h6 17 Bd2 Bxf3 18 Qxf3 e5', { a: '=', r: 'Portisch–Karpov, Bugojno 1978', c: '11.Re1 Nbd7 12.Rc1 Rc8 13.Bd3 Bxc3 14.bxc3 Qc7 15.c4 Rfe8 16.Qe2 h6 17.Bd2 Bxf3! 18.Qxf3 e5 é igual.' }],
+  ['c25', 'e', 'e', '(e)', '12... Qc7 13 Bb3 Nbd7 14 Nxd7 Qxd7', { a: '⩲', r: 'Wells–Estremera Panos, Gibraltar 2005', c: '12...Qc7 13.Bb3!? Nbd7 14.Nxd7 Qxd7 é um pouco melhor para as brancas. O livro segue com 15.Qg4, que entrega a dama (15...Nxg4).' }],
+  ['c25-e', '1', 'e', '(e) 13.Bxf6', '13 Bxf6 gxf6', { a: '=', c: '13.Bxf6 gxf6 é igual.' }],
+  ['c25-e', '2', 'e', '(e) 13...Ne4', '13... Ne4 14 Bf4', { c: '13...Ne4 14.Bf4 é um sacrifício de peão ativo.' }],
+  ['c25', 'f', 'f', '(f)', '15 Re1 Kh8 16 Bf1 Rad8 17 Qg4 Rg8', { a: '=', r: 'Beliavsky–Volke, Bundesliga 2005', c: '15.Re1 Kh8 16.Bf1 Rad8 17.Qg4 Rg8 é igual.' }],
+  // Coluna 26
+  ['c26', 'g', 'g', '(g)', '9... a6 10 a3 cxd4 11 axb4 dxc3 12 bxc3 Qc7 13 Bb2 e5 14 Bb3 e4 15 Nd4 Ne5 16 h3 Re8 17 c4 Nd3 18 Ba3', { a: '⩲', r: 'Knaak–Enders, Campeonato da Alemanha Oriental 1986', c: '9...a6 10.a3 cxd4 11.axb4 dxc3 12.bxc3 Qc7 13.Bb2 e5 14.Bb3 e4 15.Nd4 Ne5 16.h3 Re8 17.c4 Nd3 18.Ba3 é um pouco melhor para as brancas.' }],
+  ['c26-g', '1', 'g', '(g) 10...Ba5', '10... Ba5 11 Bd3 b5 12 b4 cxb4 13 axb4 Bxb4 14 Nxb5', { a: '±', r: 'Taimanov–Kuzmin, URSS 1973', c: '10...Ba5 11.Bd3 b5 12.b4! cxb4 13.axb4 Bxb4 14.Nxb5 é melhor para as brancas.' }],
+  ['c26', 'h-A', 'h', '(h) A', '10 Rd1 cxd4 11 exd4 Bb7 12 d5 Bxc3 13 dxe6 Bxf3 14 gxf3 fxe6 15 bxc3 Qc7 16 Bxe6+ Kh8 17 Be3 Nc5', { a: '=', r: 'Gligorić–Unzicker, Leipzig 1960', c: '10.Rd1 cxd4 11.exd4 Bb7 12.d5 Bxc3 13.dxe6 Bxf3 14.gxf3 fxe6 15.bxc3 Qc7 16.Bxe6+ Kh8 17.Be3 Nc5 é igual.' }],
+  ['c26-h-A', '1', 'h', '(h) A 12.Bg5', '12 Bg5 Bxc3 13 bxc3 Qc7', { a: '=', c: '12.Bg5 Bxc3 13.bxc3 Qc7 é igual.' }],
+  ['c26', 'h-B', 'h', '(h) B', '10 Bd2 Bb7 11 Rfd1 cxd4 12 exd4 Rc8', { a: '=', r: 'Korchnoi–Hübner, Biel 1984', c: '10.Bd2 Bb7 11.Rfd1 cxd4 12.exd4 Rc8 é igual.' }],
+  ['c26', 'i', 'i', '(i)', '15 Re1 b5 16 Bxb5 Nh5 17 Bc4 Qf6', { a: '=', r: 'Korchnoi–Sax, Skellefteå 1989', c: '15.Re1 b5! 16.Bxb5 Nh5 17.Bc4 Qf6 dá chances mais ou menos iguais numa posição aguda.' }],
+  // Coluna 27
+  ['c27', 'j', 'j', '(j)', '9 Qb3 a6 10 a4 Qe7 11 Rd1 h6 12 Bd2 Rd8 13 Ne2 Bxd2 14 Rxd2 b6 15 Ng3 Bb7', { a: '=', r: 'Beliavsky–Sax, Maribor 1996', c: '9.Qb3 a6 10.a4 Qe7 11.Rd1 h6 12.Bd2 Rd8 13.Ne2 Bxd2 14.Rxd2 b6 15.Ng3 Bb7 é igual.' }],
+  ['c27', 'k-A', 'k', '(k) A', '10 Nb5 Be7 11 Nbxd4 e5 12 Nf5 Nb6 13 Nxe7+ Qxe7', { a: '=', r: 'Semkov–Kosten, Metz 1992', c: '10.Nb5 Be7 11.Nbxd4 e5 12.Nf5 Nb6 13.Nxe7+ Qxe7 é igual.' }],
+  ['c27', 'k-B', 'k', '(k) B', '10 axb4 dxc3 11 bxc3 Qc7 12 Qe2 Nb6 13 Bd3 e5', { a: '=', c: '10.axb4 dxc3 11.bxc3 Qc7 12.Qe2 Nb6 13.Bd3 e5 é igual.' }],
+  ['c27', 'l', 'l', '(l)', '15 Bd2 Bd5 16 Bb1 Rfd8 17 Ne5 Nf8', { a: '=', r: 'Göhring–Ribli, Bundesliga 1989', c: '15.Bd2 Bd5 16.Bb1 Rfd8 17.Ne5 Nf8 é igual.' }],
+  // Coluna 28
+  ['c28', 'm', 'm', '(m)', '8... Bd7 9 Qe2 Bc6 10 Rd1 Qe7 11 a3 Bxc3 12 bxc3 Nbd7 13 a4 Rfc8 14 Bb3 Qe8 15 c4', { a: '±', r: 'Gligorić–Taimanov, Montilla 1977', c: '8...Bd7 9.Qe2 Bc6 10.Rd1 Qe7 11.a3 Bxc3?! 12.bxc3 Nbd7 13.a4 Rfc8 14.Bb3 Qe8 15.c4 é melhor para as brancas.' }],
+  ['c28-m', '1', 'm', '(m) 11...Ba5', '11... Ba5', { a: '⩲', c: '11...Ba5 é um pouco melhor para as brancas.' }],
+  ['c28', 'n', 'n', '(n)', '10 Qd3 Nbd7 11 Ne4 Bc7 12 Nxf6+ Nxf6 13 Bd2 Rd8', { a: '=', r: 'Khasin–Weiner, correspondência 1984', c: '10.Qd3 Nbd7 11.Ne4 Bc7 12.Nxf6+ Nxf6 13.Bd2 Rd8 é igual.' }],
+  ['c28', 'o', 'o', '(o)', '12 Ne5 cxd4 13 exd4 Nc6 14 Bg5', { a: '⩲', r: 'Iotov–Kolev, Campeonato Búlgaro 2004', c: '12.Ne5 cxd4 13.exd4 Nc6 14.Bg5! também coloca as pretas sob pressão.' }],
+  ['c28', 'p', 'p', '(p)', '15 Qd3 Nc6 16 Rad1', { a: '⩲', r: 'Taimanov', c: '15.Qd3 Nc6 16.Rad1 é um pouco melhor para as brancas.' }],
+  // Coluna 29
+  ['c29', 'q', 'q', '(q)', '7... b6 8 cxd5 exd5 9 a3 Bxc3 10 bxc3 Ba6 11 Bxa6 Nxa6 12 Qd3 Qc8 13 Bb2 c4 14 Qc2 Re8 15 Rfe1 Qb7 16 Nd2', { a: '⩲', r: 'Salov–Hjartarson, Reykjavik 1991', c: '7...b6 8.cxd5 exd5 9.a3 Bxc3 10.bxc3 Ba6 11.Bxa6 Nxa6 12.Qd3 Qc8 13.Bb2 c4 14.Qc2 Re8 15.Rfe1! Qb7 16.Nd2 é um pouco melhor para as brancas.' }],
+  ['c29', 'r', 'r', '(r)', '9... Ba5 10 b4 cxb4 11 Nb5 Nb8 12 axb4 Bxb4 13 Rxa7', { a: '±', r: 'Tukmakov–Tal, URSS 1970', c: '9...Ba5 10.b4! cxb4 11.Nb5 Nb8 12.axb4 Bxb4 13.Rxa7 é melhor para as brancas.' }],
+  ['c29-r', '1', 'r', '(r) 11...bxa3', '11... bxa3 12 Bxa3 Re8 13 Nd6 Re6 14 Ng5', { c: '11...bxa3? 12.Bxa3 Re8 13.Nd6 Re6 14.Ng5 ganha.' }],
+  ['c29', 's', 's', '(s)', '11 a4 c4 12 Bc2 Ne4 13 Bxe4 dxe4 14 Nd2 b6 15 f3 Bb7 16 fxe4 Bxe4 17 Nxe4 Rxe4', { a: '⩱', r: 'Yusupov–Timman, Linares 1992', c: '11.a4?! c4 12.Bc2 Ne4 13.Bxe4 dxe4 14.Nd2 b6! 15.f3 Bb7 16.fxe4 Bxe4 17.Nxe4 Rxe4 é um pouco melhor para as pretas. A coluna é F. Olafsson–Barcza, Praga 1954; as brancas jogam f3 e e4.' }],
+  // Coluna 30
+  ['c30', 't', 't', '(t)', '8... Ba5 9 cxd5 exd5 10 b4', { c: '8...Ba5 9.cxd5! exd5 10.b4 transpõe para a nota (r) da coluna 29.' }],
+  ['c30', 'u', 'u', '(u)', '15 Nf1 c4 16 Bc2 f5 17 f3 Nf6 18 Ng3 Re8 19 Rf1', { a: '⩲', r: 'Lyberg–Koskela, Jyväskylä 1994', c: '15.Nf1 c4 16.Bc2 f5 17.f3 Nf6 18.Ng3 Re8 19.Rf1 é um pouco melhor para as brancas.' }],
+]
+
+const capitulo = {
+  id: 'nimzo-e',
+  arquivo: 'nimzo-e',
+  nome: 'Nimzo-Índia — Rubinstein 7...dxc4 e 7...Nbd7',
+  fonte: 'Modern Chess Openings — Nimzo-Indian Defense (pp. 549–550), colunas 25–30',
+  base: '1. d4 Nf6 2. c4 e6 3. Nc3 Bb4',
+  corPadrao: 'b',
+  ordem: 549,
+  grupos: [
+    { id: 'dxc4', nome: '7...dxc4 8.Bxc4', colunas: [25, 26, 27, 28] },
+    { id: 'nbd7', nome: '7...Nbd7', colunas: [29, 30] },
+  ],
+}
+
+module.exports = { capitulo, colunas, notas }
