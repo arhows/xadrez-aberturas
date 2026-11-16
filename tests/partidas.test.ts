@@ -140,3 +140,33 @@ describe('identificador das partidas coladas em PGN', () => {
     expect(a.id).toBe('pgn:987654')
   })
 })
+
+describe('partidas de outros sites (ex.: plataforma da Maia)', () => {
+  const pgn = (lances: string, data: string) =>
+    `[Site "https://www.maiachess.com/play"]\n[White "Maia-3 600"]\n[Black "You"]\n[Date "${data}"]\n\n${lances}`
+  it('o mesmo endereço em todas as partidas não as junta', () => {
+    const a = lerPgns(pgn('1. e4 e5 2. Nf3 0-1', '2026.11.16'), []).partidas[0]
+    const b = lerPgns(pgn('1. d4 d5 2. c4 1-0', '2026.11.16'), []).partidas[0]
+    expect(a.partida.id).not.toBe(b.partida.id)
+    expect(a.partida.url).toBe('')
+    expect(a.cor).toBe('b')
+  })
+  it('lichess com a cor no endereço usa o código da partida', () => {
+    const a = lerPgns(`[Site "https://lichess.org/AbCd1234/black"]\n\n1. e4 *`, []).partidas[0].partida
+    expect(a.id).toBe('pgn:AbCd1234')
+  })
+})
+
+describe('PGN da plataforma da Maia (maiachess.com)', () => {
+  const maia = (id: string, lances: string) =>
+    `[Event "Analysis"]\n[Site "https://maiachess.com/"]\n[Date "2026.11.16"]\n[White "Maia-3 600"]\n[Black "arhows"]\n[ID "${id}"]\n\n${lances}`
+  it('cada partida entra com o seu [ID]', () => {
+    const { partidas } = lerPgns(
+      `${maia('154e03fe-926', '1. d3 e5 2. Be3 d5 0-1')}\n\n${maia('aea17fa1-26a', '1. e4 e5 2. Nf3 Nc6 1-0')}`,
+      ['arhows'],
+    )
+    expect(partidas.map((p) => p.partida.id)).toEqual(['pgn:maiachess.com-154e03fe-926', 'pgn:maiachess.com-aea17fa1-26a'])
+    expect(partidas[0].cor).toBe('b')
+    expect(partidas[0].partida.url).toBe('')
+  })
+})

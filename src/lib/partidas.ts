@@ -291,16 +291,27 @@ function resumo(texto: string): string {
 }
 
 /**
- * Código da partida no fim do endereço. Um endereço só com o domínio ("https://lichess.org")
- * não identifica nada: sem isto, todas as partidas com ele virariam a mesma.
+ * Código da partida, só quando o endereço é de uma partida do lichess ou do chess.com.
+ * Outros sites (ex.: a plataforma da Maia) repetem o mesmo endereço em todas as partidas;
+ * usar o fim dele juntaria partidas diferentes numa só.
  */
 function codigoDaPartida(endereco: string): string {
-  if (!endereco) return ''
+  let url: URL
   try {
-    return new URL(endereco).pathname.split('/').filter(Boolean).pop() ?? ''
+    url = new URL(endereco)
   } catch {
     return ''
   }
+  const partes = url.pathname.split('/').filter(Boolean)
+  const host = url.hostname.replace(/^www\./, '')
+  if (host === 'lichess.org') {
+    // lichess.org/<id>[/cor] ou, nas partidas offline do app, lichess.org/game/ocg_<id>.
+    const ocg = partes.find((p) => /^ocg_\w+$/.test(p))
+    if (ocg) return ocg
+    if (partes.length && /^([A-Za-z0-9]{8}|[A-Za-z0-9]{12})$/.test(partes[0])) return partes[0].slice(0, 8)
+  }
+  if (host === 'chess.com' && partes[0] === 'game' && /^\d+$/.test(partes.at(-1) ?? '')) return partes.at(-1)!
+  return ''
 }
 
 function dataDoPgn(data: string | undefined): string {
@@ -337,13 +348,15 @@ export function lerPgns(texto: string, nomesDoUsuario: string[]): { partidas: Pa
     const pretas = c.Black?.trim() || '?'
     // O chess.com põe o endereço da partida em [Link]; o lichess, em [Site].
     const site = [c.Site, c.Link].map((v) => v?.trim() ?? '').find((v) => /^https?:\/\//.test(v)) ?? ''
-    const codigo = codigoDaPartida(site)
+    // Sem endereço de partida, vale o [ID] que alguns sites põem (ex.: a plataforma da Maia).
+    const idDoSite = c.ID?.trim() ? `${site.replace(/^https?:\/\/(www\.)?/, '').split('/')[0] || 'id'}-${c.ID.trim()}` : ''
+    const codigo = codigoDaPartida(site) || idDoSite
     // Partidas offline do app do lichess ("ocg_...") não existem no site.
-    const online = Boolean(codigo) && !codigo.startsWith('ocg_')
+    const online = Boolean(codigoDaPartida(site)) && !codigo.startsWith('ocg_')
     const data = dataDoPgn(c.Date)
     partidas.push({
       partida: {
-        id: `pgn:${codigo || resumo([brancas, pretas, data, sans.join(' ')].join('|'))}`,
+        id: `pgn:${codigo || resumo([site, brancas, pretas, c.Date ?? '', c.Time ?? c.UTCTime ?? '', c.Result ?? '', sans.join(' ')].join('|'))}`,
         site: 'pgn',
         url: online ? site : '',
         data,
