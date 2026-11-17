@@ -19,7 +19,7 @@ const colunas = {
   c51: [`${F} d5 6 f3 c5 7 cxd5 Nxd5 8 Qd3 b6 9 e4 Ba6 10 Qd2 Bxf1 11 Kxf1 Ne7 12 Ne2 Nbc6 13 dxc5 Qc7`, 'd5', '8.Qd3', '=',
     'Com 8.Qd3 as brancas protegem c3 e preparam e4. Depois de 8...b6 9.e4 Ba6 10.Qd2 Bxf1 11.Kxf1 Ne7 12.Ne2 Nbc6 13.dxc5 Qc7! as pretas entregam um peão, mas têm boa compensação pelo rei branco sem roque.'],
   c52: [`${F} c5 6 e3 O-O 7 Bd3 Nc6 8 Ne2 b6 9 e4 Ne8 10 O-O Ba6 11 f4 f5 12 Ng3 g6 13 Be3 cxd4`, 'c5', '5...c5 6.e3', '∓',
-    'Com 5...c5 6.e3 O-O 7.Bd3 Nc6 as pretas pressionam c4, o ponto fraco dos peões dobrados. Depois de 8.Ne2 b6 9.e4 Ne8! 10.O-O Ba6 11.f4 f5 as pretas freiam o ataque branco, e com 12.Ng3 g6 13.Be3 cxd4! ficam um pouco melhor.'],
+    'Com 5...c5 6.e3 O-O 7.Bd3 Nc6 as pretas pressionam c4, o ponto fraco dos peões dobrados. Depois de 8.Ne2 b6 9.e4 Ne8! 10.O-O Ba6 11.f4 f5 as pretas freiam o ataque branco, e com 12.Ng3 g6 13.Be3 cxd4! ficam melhor.'],
   c53: [`${F} c5 6 f3 Nc6 7 e4 d6 8 Be3 b6 9 Bd3 Na5 10 Ne2 Ba6 11 Ng3 Qc7 12 O-O O-O-O 13 Qe2 Nd7`, 'c5', '6.f3', '=',
     'Com 6.f3 Nc6 7.e4 d6 as pretas montam um Sistema Hübner contra o centro branco. Depois de 8.Be3 b6 9.Bd3 Na5 10.Ne2 Ba6 11.Ng3 Qc7 12.O-O O-O-O 13.Qe2 Nd7 os reis rocaram em lados opostos, e a posição é aguda e mais ou menos igual.'],
   c54: [`${F} O-O 6 f3 Ne8 7 e4 b6 8 Bd3 Ba6 9 Nh3 c5 10 d5 Qh4+ 11 Nf2 Nd6 12 Qe2 exd5 13 cxd5 Bxd3`, 'oo', '5...O-O', '⩲',
@@ -47,7 +47,7 @@ const notas = [
   // Coluna 51
   ['c51', 'j', 'j', '(j)', '8 Qd2 f5 9 Nh3 O-O 10 e3 Nc6 11 Bc4 Na5 12 Ba2 cxd4 13 cxd4 Bd7', { a: '=', r: 'Shirov–Beliavsky, Biel 1992', c: '8.Qd2 f5 9.Nh3 O-O 10.e3 Nc6 11.Bc4 Na5 12.Ba2 foi a partida; agora 12...cxd4 13.cxd4 Bd7 é bom para as pretas.' }],
   ['c51', 'k', 'k', '(k)', '8... cxd4 9 cxd4 Nc6 10 e4 Nb6 11 Be3 O-O 12 Be2 f5 13 Rd1 Kh8 14 Nh3 fxe4 15 Qxe4 Nd5 16 Ng5 Nf6 17 Qd3 Qa5+ 18 Rd2 Ne7 19 O-O Ned5', { a: '=', r: 'Savchenko–Gipslis, Gausdal 1992', c: 'Uma alternativa razoável é 8...cxd4 9.cxd4 Nc6 10.e4 Nb6 11.Be3 O-O 12.Be2 f5 13.Rd1 Kh8 14.Nh3 fxe4 15.Qxe4 Nd5 16.Ng5 Nf6 17.Qd3 Qa5+ 18.Rd2 Ne7! 19.O-O Ned5, com igualdade.' }],
-  ['c51', 'l', 'l', '(l)', '10 c4 Nc7 11 d5 exd5 12 exd5 O-O', { a: '∓', r: 'Saldano–Zarnicki, Buenos Aires 1994', c: '10.c4 Nc7 11.d5 exd5 12.exd5 O-O é um pouco melhor para as pretas.' }],
+  ['c51', 'l', 'l', '(l)', '10 c4 Nc7 11 d5 exd5 12 exd5 O-O', { a: '∓', r: 'Saldano–Zarnicki, Buenos Aires 1994', c: '10.c4 Nc7 11.d5 exd5 12.exd5 O-O é melhor para as pretas.' }],
   ['c51', 'm', 'm', '(m)', '14 Qf4 e5 15 Qg4 O-O', { a: '=', r: 'Shirov–Karpov, Biel 1992', c: '14.Qf4 e5 15.Qg4 O-O dá às pretas boa compensação pelo peão.' }],
   ['c51-m', '1', 'm', '(m) 14.Qd6', '14 Qd6 Qxd6 15 cxd6 Nc8', { a: '=', c: '14.Qd6 Qxd6 15.cxd6 Nc8 leva à igualdade.' }],
   // Coluna 52
@@ -56,7 +56,7 @@ const notas = [
   ['c52-o', '1', 'o', '(o) 11.dxc5', '11 dxc5 Ne5', { c: '11.dxc5?! Ne5 é duvidoso para as brancas.' }],
   ['c52', 'p', 'p', '(p)', '11 Qa4 Qc8 12 Be3 Na5 13 dxc5 d6 14 Ng3 dxc5 15 e5 f5', { a: '=', r: 'Szabo–Portisch, Hungria 1959', c: '11.Qa4 Qc8 12.Be3 Na5 13.dxc5 d6! 14.Ng3 dxc5 15.e5 f5 leva à igualdade.' }],
   ['c52', 'q', 'q', '(q)', '11... Na5 12 f5 exf5 13 exf5 Nf6 14 Bg5 h6 15 Bh4 Bxc4 16 Nf4 d5 17 Nh5', { a: '±', r: 'Hoi–Kveinys, Ostrava 1992', c: 'As brancas conseguem o ataque que procuram depois de 11...Na5?! 12.f5! exf5 13.exf5 Nf6 14.Bg5 h6 15.Bh4 Bxc4 16.Nf4 d5 17.Nh5, e ficam melhor.' }],
-  ['c52', 'r', 'r', '(r)', '14 cxd4 d5 15 cxd5 Bxd3 16 Qxd3 fxe4 17 Qxe4 Qxd5', { a: '∓', r: 'Yusupov–Karpov, Linares 1993', c: '14.cxd4 d5! 15.cxd5 Bxd3 16.Qxd3 fxe4 17.Qxe4 Qxd5 é um pouco melhor para as pretas.' }],
+  ['c52', 'r', 'r', '(r)', '14 cxd4 d5 15 cxd5 Bxd3 16 Qxd3 fxe4 17 Qxe4 Qxd5', { a: '∓', r: 'Yusupov–Karpov, Linares 1993', c: '14.cxd4 d5! 15.cxd5 Bxd3 16.Qxd3 fxe4 17.Qxe4 Qxd5 é melhor para as pretas.' }],
   // Coluna 53
   ['c53', 's', 's', '(s)', '6... d5', { c: '6...d5 é o mais jogado e transpõe para a coluna 49.' }],
   ['c53', 't', 't', '(t)', '8 Ne2 b6 9 Bg5 h6 10 Be3 Qd7 11 Ng3 Ba6 12 Bd3 O-O-O 13 a4 Kb8', { a: '=', r: 'Gutman–Spassky, Bundesliga 1986', c: '8.Ne2 b6 9.Bg5 h6 10.Be3 Qd7 11.Ng3 Ba6 12.Bd3 O-O-O 13.a4 Kb8 leva à igualdade.' }],

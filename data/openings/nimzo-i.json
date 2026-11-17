@@ -121,7 +121,7 @@
    "nome": "5...c5 6.e3",
    "lances": "1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. a3 Bxc3+ 5. bxc3 c5 6. e3 O-O 7. Bd3 Nc6 8. Ne2 b6 9. e4 Ne8 10. O-O Ba6 11. f4 f5 12. Ng3 g6 13. Be3 cxd4",
    "avaliacao": "∓",
-   "resumo": "Com 5...c5 6.e3 O-O 7.Bd3 Nc6 as pretas pressionam c4, o ponto fraco dos peões dobrados. Depois de 8.Ne2 b6 9.e4 Ne8! 10.O-O Ba6 11.f4 f5 as pretas freiam o ataque branco, e com 12.Ng3 g6 13.Be3 cxd4! ficam um pouco melhor.",
+   "resumo": "Com 5...c5 6.e3 O-O 7.Bd3 Nc6 as pretas pressionam c4, o ponto fraco dos peões dobrados. Depois de 8.Ne2 b6 9.e4 Ne8! 10.O-O Ba6 11.f4 f5 as pretas freiam o ataque branco, e com 12.Ng3 g6 13.Be3 cxd4! ficam melhor.",
    "dicas": {
     "5... c5": "O peão ataca d4.",
     "6. e3": "O peão firma d4 e abre o bispo de f1.",
@@ -139,7 +139,7 @@
     "12. Ng3": "O cavalo pressiona f5.",
     "12... g6": "O peão firma f5.",
     "13. Be3": "O bispo se desenvolve.",
-    "13... cxd4": "As pretas trocam em d4; elas ficam um pouco melhor."
+    "13... cxd4": "As pretas trocam em d4; as pretas ficam melhor."
    }
   },
   {
@@ -459,9 +459,9 @@
    "lances": "1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. a3 Bxc3+ 5. bxc3 d5 6. f3 c5 7. cxd5 Nxd5 8. Qd3 b6 9. e4 Ba6 10. c4 Nc7 11. d5 exd5 12. exd5 O-O",
    "avaliacao": "∓",
    "referencia": "Saldano–Zarnicki, Buenos Aires 1994",
-   "comentario": "10.c4 Nc7 11.d5 exd5 12.exd5 O-O é um pouco melhor para as pretas.",
+   "comentario": "10.c4 Nc7 11.d5 exd5 12.exd5 O-O é melhor para as pretas.",
    "dicas": {
-    "10. c4": "10.c4 Nc7 11.d5 exd5 é um pouco melhor para as pretas."
+    "10. c4": "10.c4 Nc7 11.d5 exd5 é melhor para as pretas."
    }
   },
   {
@@ -576,9 +576,9 @@
    "lances": "1. d4 Nf6 2. c4 e6 3. Nc3 Bb4 4. a3 Bxc3+ 5. bxc3 c5 6. e3 O-O 7. Bd3 Nc6 8. Ne2 b6 9. e4 Ne8 10. O-O Ba6 11. f4 f5 12. Ng3 g6 13. Be3 cxd4 14. cxd4 d5 15. cxd5 Bxd3 16. Qxd3 fxe4 17. Qxe4 Qxd5",
    "avaliacao": "∓",
    "referencia": "Yusupov–Karpov, Linares 1993",
-   "comentario": "14.cxd4 d5! 15.cxd5 Bxd3 16.Qxd3 fxe4 17.Qxe4 Qxd5 é um pouco melhor para as pretas.",
+   "comentario": "14.cxd4 d5! 15.cxd5 Bxd3 16.Qxd3 fxe4 17.Qxe4 Qxd5 é melhor para as pretas.",
    "dicas": {
-    "14. cxd4": "14.cxd4 d5! 15.cxd5 Bxd3 é um pouco melhor para as pretas."
+    "14. cxd4": "14.cxd4 d5! 15.cxd5 Bxd3 é melhor para as pretas."
    }
   },
   {

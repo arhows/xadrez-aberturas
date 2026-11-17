@@ -112,7 +112,7 @@ const linhas = {
 
 const notas = {
   'c43-a': '6...O-O 7.a3 Be7 8.d5 dá às brancas bom jogo pelo peão.',
-  'c43-b': '7.a3 Be7 8.c5 O-O 9.g3 b6 é um pouco melhor para as pretas.',
+  'c43-b': '7.a3 Be7 8.c5 O-O 9.g3 b6 é melhor para as pretas.',
   'c43-c': '9...Qd7?! 10.a3 Ba5 11.g3 perde tempo e as brancas ficam melhor.',
   'c43-d': '11...Bd7 12.Bd3 a4 13.O-O Nc6! leva à igualdade.',
   'c43-e': '13.cxb6 Qxb6 14.Bc2 Bd7 leva à igualdade.',
