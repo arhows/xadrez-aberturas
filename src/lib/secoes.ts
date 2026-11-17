@@ -68,6 +68,7 @@ export const PRATICAR: SecaoDoApp = {
         { id: 'repertorio', icone: 'repetir', nome: 'Treinar meu repertório', descricao: 'Jogue os lances do livro de memória', para: '/aberturas' },
         { id: 'armadilhas', icone: 'alerta', nome: 'Armadilhas', descricao: 'Arme e escape: teste o que estudou', para: '/armadilhas' },
         { id: 'quizzes', icone: 'lampada', nome: 'Planos por estrutura', descricao: 'Quizzes e partidas-modelo para adivinhar os lances', para: '/estrategia' },
+        { id: 'estudo-partidas', icone: 'lista', nome: 'Estudo de partidas', descricao: 'Partidas que você reproduziu: reveja e adivinhe os lances', para: '/estudo-partidas' },
       ],
     },
     {

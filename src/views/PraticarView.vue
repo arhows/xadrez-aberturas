@@ -6,6 +6,7 @@ import { obterConjuntos } from '../lib/exercicios'
 import { progresso } from '../lib/progresso'
 import { proximaFila, totalRevisoes } from '../lib/resumoAberturas'
 import { revisoesPendentes } from '../lib/revisaoExercicios'
+import { revisoesDeEstudo } from '../lib/estudoPartidas'
 import { PRATICAR } from '../lib/secoes'
 import { dataLocal } from '../lib/srs'
 
@@ -13,6 +14,7 @@ const hoje = dataLocal()
 const feitosHoje = Object.keys(progresso.diario[hoje] ?? {}).length
 const dias = diasSeguidos(progresso.diario, hoje)
 const revisoesExercicios = revisoesPendentes(obterConjuntos()).length
+const revisoesEstudo = revisoesDeEstudo(progresso.cartoesEstudos, progresso.estudos).length
 
 // Com revisões de abertura para hoje, "Treinar meu repertório" já abre o treino da primeira.
 const grupos = computed(() =>
@@ -29,6 +31,7 @@ const selos = computed(() => ({
   repertorio: totalRevisoes.value ? `${totalRevisoes.value} HOJE` : undefined,
   taticas: revisoesExercicios ? `${revisoesExercicios} HOJE` : undefined,
   sequencia: progresso.sequencia ? `RECORDE ${progresso.sequencia}` : undefined,
+  'estudo-partidas': revisoesEstudo ? `${revisoesEstudo} HOJE` : undefined,
 }))
 </script>
 

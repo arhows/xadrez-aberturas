@@ -9,6 +9,8 @@ import { problemaDaPosicao } from '../lib/editor'
 import { buscarCapitulo } from '../lib/capitulos'
 import { jogoDosLances, lancesAntesDoFen, situacaoDoJogo } from '../lib/jogo'
 import { casasDoLance, separarLances } from '../lib/lances'
+import { novoIdDeEstudo, type LadoDoEstudo } from '../lib/estudoPartidas'
+import { progresso } from '../lib/progresso'
 
 /**
  * Tabuleiro de análise: parte de uma posição do editor (fen) ou dos lances de uma abertura (c),
@@ -20,8 +22,11 @@ type Peca = 'q' | 'r' | 'b' | 'n'
 const route = useRoute()
 const router = useRouter()
 
+/** Partida do Estudo de partidas aberta para corrigir os lances. */
+const estudo = typeof route.query.estudo === 'string' ? progresso.estudos[route.query.estudo] : undefined
+
 const fenInicial = (() => {
-  const pedido = typeof route.query.fen === 'string' ? route.query.fen : ''
+  const pedido = typeof route.query.fen === 'string' ? route.query.fen : (estudo?.fen ?? '')
   if (!pedido || problemaDaPosicao(pedido)) return new Chess().fen()
   return new Chess(pedido).fen()
 })()
@@ -30,7 +35,7 @@ const antes = lancesAntesDoFen(fenInicial)
 /** Lances da abertura (vindo do Treino ou do Explorar): ficam no histórico, e dá para voltar neles. */
 const lancesDaAbertura = (() => {
   if (typeof route.query.fen === 'string' && route.query.fen) return []
-  const pedidos = separarLances(String(route.query.c ?? ''))
+  const pedidos = separarLances(estudo ? estudo.lances : String(route.query.c ?? ''))
   try {
     jogoDosLances(pedidos, fenInicial)
     return pedidos
@@ -45,9 +50,11 @@ const ply = ref(lancesDaAbertura.length)
 const orientacao = ref<'white' | 'black'>(route.query.orientacao === 'black' || route.query.cor === 'b' ? 'black' : 'white')
 /** Para onde o "voltar" leva: a abertura de onde veio, ou o editor. */
 const voltarPara = computed(() =>
-  capitulo
-    ? { rota: { name: 'abertura', params: { cap: capitulo.capitulo.id } }, nome: capitulo.capitulo.nome }
-    : { rota: { name: 'editor', query: { fen: fenInicial } }, nome: 'Editor de posição' },
+  estudo
+    ? { rota: { name: 'estudo-partida', params: { id: estudo.id } }, nome: estudo.nome }
+    : capitulo
+      ? { rota: { name: 'abertura', params: { cap: capitulo.capitulo.id } }, nome: capitulo.capitulo.nome }
+      : { rota: { name: 'editor', query: { fen: fenInicial } }, nome: 'Editor de posição' },
 )
 const comMotor = ref(true)
 const melhorSan = ref<string | null>(null)
@@ -128,6 +135,39 @@ async function copiarFen() {
   }
 }
 
+// ---------- Salvar no Estudo de partidas ----------
+const salvando = ref(false)
+const nomeEstudo = ref(estudo?.nome ?? '')
+const ladoEstudo = ref<LadoDoEstudo>(estudo?.lado ?? (orientacao.value === 'black' ? 'b' : 'w'))
+const videoEstudo = ref(estudo?.video ?? '')
+
+/**
+ * Guarda todos os lances do histórico (não só até a posição mostrada). Mudar os lances de uma
+ * partida já salva cria outra no lugar dela: as revisões antigas apontavam para outros lances.
+ */
+function salvarEstudo() {
+  const nome = nomeEstudo.value.trim()
+  if (!nome || !sans.value.length) return
+  const agora = new Date().toISOString()
+  const lances = sans.value.join(' ')
+  const fenDoEstudo = fenInicial === new Chess().fen() ? undefined : fenInicial
+  const mesmosLances = estudo && estudo.lances === lances && (estudo.fen ?? undefined) === fenDoEstudo
+  const id = mesmosLances ? estudo.id : novoIdDeEstudo()
+  if (estudo && !mesmosLances) progresso.estudos[estudo.id] = { ...estudo, apagada: true, atualizado: agora }
+  progresso.estudos[id] = {
+    id,
+    nome,
+    lances,
+    ...(fenDoEstudo ? { fen: fenDoEstudo } : {}),
+    lado: ladoEstudo.value,
+    ...(videoEstudo.value.trim() ? { video: videoEstudo.value.trim() } : {}),
+    criado: mesmosLances ? estudo.criado : agora,
+    atualizado: agora,
+    ...(mesmosLances && estudo.melhor ? { melhor: estudo.melhor } : {}),
+  }
+  void router.push({ name: 'estudo-partida', params: { id } })
+}
+
 const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
   { peca: 'q', nome: 'Dama' },
   { peca: 'r', nome: 'Torre' },
@@ -201,13 +241,45 @@ const PECAS_PROMOCAO: { peca: Peca; nome: string }[] = [
       </div>
       <div class="acoes">
         <button type="button" class="botao" @click="router.push({ name: 'editor', query: { fen, orientacao } })">Editar esta posição</button>
-        <button v-if="!situacao.fim" type="button" class="botao primario" @click="jogarDaqui">Jogar daqui</button>
+        <button v-if="!situacao.fim" type="button" class="botao" @click="jogarDaqui">Jogar daqui</button>
+        <button v-if="sans.length && !salvando" type="button" class="botao primario" @click="salvando = true">
+          {{ estudo ? 'Salvar alterações' : 'Salvar para treinar' }}
+        </button>
       </div>
+
+      <form v-if="salvando" class="cartao salvar" @submit.prevent="salvarEstudo">
+        <strong>{{ estudo ? 'Salvar alterações no Estudo de partidas' : 'Salvar no Estudo de partidas' }}</strong>
+        <span class="suave">Ficam guardados os {{ sans.length }} meios-lances do histórico, para rever e adivinhar depois.</span>
+        <label class="campo">
+          <span>Nome</span>
+          <input id="estudo-nome" v-model="nomeEstudo" type="text" maxlength="120" placeholder="Ex.: Capablanca × Marshall, 1918" required />
+        </label>
+        <label class="campo">
+          <span>Lado para adivinhar</span>
+          <select id="estudo-lado" v-model="ladoEstudo">
+            <option value="w">Brancas</option>
+            <option value="b">Pretas</option>
+            <option value="ambos">Os dois</option>
+          </select>
+        </label>
+        <label class="campo">
+          <span>Link do vídeo (opcional)</span>
+          <input id="estudo-video" v-model="videoEstudo" type="url" placeholder="https://www.youtube.com/..." />
+        </label>
+        <div class="acoes">
+          <button type="submit" class="botao primario" :disabled="!nomeEstudo.trim()">Salvar</button>
+          <button type="button" class="botao fantasma" @click="salvando = false">Cancelar</button>
+        </div>
+      </form>
     </div>
   </div>
 </template>
 
 <style scoped>
+.salvar {
+  display: grid;
+  gap: var(--espaco-2);
+}
 .cabeca-painel {
   display: grid;
   gap: var(--espaco-1);

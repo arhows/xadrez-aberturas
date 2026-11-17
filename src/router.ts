@@ -108,6 +108,23 @@ export const router = createRouter({
       beforeEnter: () => carregarConjuntos().then(() => true),
       meta: { secao: 'praticar', foco: true },
     },
+    { path: '/estudo-partidas', name: 'estudo-partidas', component: () => import('./views/EstudoPartidasView.vue'), meta: { secao: 'praticar' } },
+    {
+      path: '/estudo-partidas/revisao',
+      name: 'estudo-revisao',
+      component: () => import('./views/EstudoRevisaoView.vue'),
+      meta: { secao: 'praticar', foco: true },
+    },
+    {
+      path: '/estudo-partidas/:id',
+      name: 'estudo-partida',
+      component: () => import('./views/EstudoPartidaView.vue'),
+      meta: { secao: 'praticar', foco: true },
+      beforeEnter: (destino) => {
+        const estudo = progresso.estudos[destino.params.id as string]
+        return estudo && !estudo.apagada ? true : { name: 'estudo-partidas' }
+      },
+    },
     { path: '/fundamentos', name: 'fundamentos', component: FundamentosView, meta: { secao: 'aprender' } },
     {
       path: '/fundamentos/:licao',

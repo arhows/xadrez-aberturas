@@ -2,6 +2,7 @@ import type { Atividade, ErroAresta, EstadoExercicio, Progresso } from './progre
 import { somarDias, type Cartao } from './srs'
 import { juntarArmadilhas } from './armadilhas'
 import { juntarDiario } from './diario'
+import { juntarEstudos } from './estudoPartidas'
 import { juntarEstrategia } from './estrategia'
 import { juntarFundamentos } from './fundamentos'
 import { juntarJogos } from './jogosSalvos'
@@ -91,6 +92,8 @@ export function juntarProgresso(local: ProgressoSincronizado, nuvem: ProgressoSi
     armadilhas: juntarArmadilhas(nuvem.armadilhas ?? {}, local.armadilhas ?? {}),
     diario: juntarDiario(nuvem.diario ?? {}, local.diario ?? {}),
     sequencia: Math.max(nuvem.sequencia ?? 0, local.sequencia ?? 0),
+    estudos: juntarEstudos(nuvem.estudos ?? {}, local.estudos ?? {}),
+    cartoesEstudos: juntarPorChave(nuvem.cartoesEstudos ?? {}, local.cartoesEstudos ?? {}, cartaoMaisRecente),
     relampago: juntarPorChave(nuvem.relampago ?? {}, local.relampago ?? {}, (a, b) => Math.max(a, b)),
     anotacoes: juntarPorChave(nuvem.anotacoes ?? {}, local.anotacoes ?? {}, (a, b) => (b.atualizado > a.atualizado ? b : a)),
     // A escolha do repertório é uma lista inteira: vale a mudada por último.

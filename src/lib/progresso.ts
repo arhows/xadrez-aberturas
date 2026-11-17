@@ -6,6 +6,7 @@ import type { PartidaAnalisada } from './partidas'
 import type { Cartao } from './srs'
 import type { JogoSalvo } from './jogosSalvos'
 import type { ResultadoQuiz } from './estrategia'
+import type { EstudoPartida } from './estudoPartidas'
 
 export interface Configuracoes {
   notacao: Notacao
@@ -125,6 +126,10 @@ export interface Progresso {
   sequencia: number
   /** Atividade por dia (AAAA-MM-DD), para a sequência de dias e o calendário do painel. */
   atividade: Record<string, Atividade>
+  /** Estudo de partidas: partidas reproduzidas pela pessoa para rever e adivinhar. */
+  estudos: Record<string, EstudoPartida>
+  /** Revisão espaçada dos lances errados no Estudo de partidas (chave "id/meio-lance"). */
+  cartoesEstudos: Record<string, Cartao>
   config: Configuracoes
 }
 
@@ -174,6 +179,8 @@ function progressoVazio(): Progresso {
     armadilhas: {},
     diario: {},
     sequencia: 0,
+    estudos: {},
+    cartoesEstudos: {},
     repertorio: { capitulos: [], atualizado: '' },
     config: { ...CONFIG_PADRAO },
   }
@@ -208,6 +215,8 @@ export function normalizarProgresso(dados: unknown): Progresso | null {
     armadilhas: ehObjeto(parcial.armadilhas) ? parcial.armadilhas! : {},
     diario: ehObjeto(parcial.diario) ? parcial.diario! : {},
     sequencia: typeof parcial.sequencia === 'number' ? parcial.sequencia : 0,
+    estudos: ehObjeto(parcial.estudos) ? parcial.estudos! : {},
+    cartoesEstudos: ehObjeto(parcial.cartoesEstudos) ? parcial.cartoesEstudos! : {},
     repertorio:
       ehObjeto(parcial.repertorio) && Array.isArray(parcial.repertorio!.capitulos)
         ? { capitulos: parcial.repertorio!.capitulos, atualizado: String(parcial.repertorio!.atualizado ?? '') }
