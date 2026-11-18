@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Chess } from 'chess.js'
-import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import CartaoDica from '../components/CartaoDica.vue'
 import HistoricoLances from '../components/HistoricoLances.vue'
@@ -38,7 +38,41 @@ onBeforeUnmount(() => clearTimeout(temporizador))
 // ---------- Ver ----------
 const ply = ref(0)
 function ir(p: number) {
+  clearTimeout(temporizador)
   ply.value = Math.max(0, Math.min(sans.value.length, p))
+}
+
+// Jogar a sequência no tabuleiro: você joga o seu lado (o de baixo) e, com "Adversário joga sozinho",
+// o outro lado responde sozinho. Só o seu lance (e ⏮ / girar no início) dispara a resposta.
+const PAUSA_RESPOSTA = 450
+const errouVer = ref(false)
+watch(ply, () => (errouVer.value = false))
+const meuLado = computed(() => (orientacao.value === 'white' ? 'w' : 'b'))
+const vezDe = (p: number) => posicoes.value[p].fen.split(' ')[1]
+
+function responderSeForAVez() {
+  clearTimeout(temporizador)
+  if (modo.value !== 'ver' || !progresso.config.responderAdversario) return
+  if (ply.value >= sans.value.length || vezDe(ply.value) === meuLado.value) return
+  const esperado = ply.value
+  temporizador = setTimeout(() => {
+    if (modo.value === 'ver' && ply.value === esperado) ply.value++
+  }, PAUSA_RESPOSTA)
+}
+
+function recomecarVer() {
+  ir(0)
+  responderSeForAVez()
+}
+
+function jogarVer(san: string) {
+  if (semSinais(san) !== semSinais(sans.value[ply.value])) {
+    tocar('errado')
+    errouVer.value = true
+    return
+  }
+  ir(ply.value + 1)
+  responderSeForAVez()
 }
 function aoTeclar(e: KeyboardEvent) {
   if (modo.value !== 'ver') return
@@ -71,8 +105,9 @@ function comecar(m: ModoArmadilha) {
   mostrarDica.value = false
   ocupado.value = false
   retorno.value = null
-  ply.value = m === 'ver' ? armadilha.value.erro - 1 : 0
+  ply.value = 0
   if (route.query.modo !== m) router.replace({ query: { ...route.query, modo: m } })
+  if (m === 'ver') nextTick(responderSeForAVez)
 }
 
 const fen = computed(() => {
@@ -94,8 +129,14 @@ watch(
   },
   { immediate: true },
 )
+// Jogando de pretas no Ver, o primeiro lance das brancas sai sozinho (também ao girar no início).
+watch(orientacao, () => {
+  if (modo.value === 'ver' && ply.value === 0) responderSeForAVez()
+})
 
-const jogavel = computed(() => modo.value !== 'ver' && !resolvido.value && !ocupado.value)
+const jogavel = computed(() =>
+  modo.value === 'ver' ? ply.value < sans.value.length : !resolvido.value && !ocupado.value,
+)
 
 function sanDoLance(de: string, para: string): string | null {
   try {
@@ -111,7 +152,8 @@ function aoJogar(de: string, para: string) {
   const san = jogavel.value ? sanDoLance(de, para) : null
   tabuleiro.value?.sincronizar()
   if (!san) return
-  if (modo.value === 'armar') jogarArmar(san)
+  if (modo.value === 'ver') jogarVer(san)
+  else if (modo.value === 'armar') jogarArmar(san)
   else jogarDefender(san)
 }
 
@@ -171,6 +213,7 @@ const formas = computed<Forma[]>(() => {
       /* lance fora da posição */
     }
   }
+  if (modo.value === 'ver' && errouVer.value && ply.value < sans.value.length) seta(fen.value, sans.value[ply.value], 'green')
   if (modo.value === 'armar' && mostrarDica.value && !resolvido.value) seta(fen.value, punicao.value[passo.value], 'green')
   if (modo.value === 'defender' && (mostrarDica.value || (resolvido.value && retorno.value?.tipo === 'errado')))
     for (const d of armadilha.value.defesas.slice(0, 3)) seta(fen.value, d, 'green')
@@ -233,12 +276,18 @@ comecar(modo.value)
 
       <template v-if="modo === 'ver'">
         <div class="navegar" role="group" aria-label="Navegar nos lances">
-          <button type="button" class="botao" :disabled="ply === 0" aria-label="Início" @click="ir(0)">⏮</button>
+          <button type="button" class="botao" aria-label="Início" title="Recomeçar do início" @click="recomecarVer">⏮</button>
           <button type="button" class="botao" :disabled="ply === 0" aria-label="Lance anterior" @click="ir(ply - 1)">◀</button>
           <button type="button" class="botao" :disabled="ply >= sans.length" aria-label="Próximo lance" @click="ir(ply + 1)">▶</button>
           <button type="button" class="botao" :disabled="ply >= sans.length" aria-label="Fim" @click="ir(sans.length)">⏭</button>
           <button type="button" class="botao" aria-label="Girar o tabuleiro" title="Girar o tabuleiro" @click="orientacao = orientacao === 'white' ? 'black' : 'white'">⇅</button>
         </div>
+        <label class="marcar" :title="`Jogue os lances no tabuleiro; o outro lado responde sozinho. Gire o tabuleiro para trocar de lado.`">
+          <input v-model="progresso.config.responderAdversario" type="checkbox" @change="responderSeForAVez()" />
+          Adversário joga sozinho ({{ meuLado === 'w' ? 'você joga de brancas' : 'você joga de pretas' }})
+        </label>
+        <p v-if="errouVer" class="suave">Esse não é o lance da armadilha. Jogue o da seta verde.</p>
+        <p v-else-if="ply === 0" class="suave">Jogue os lances no tabuleiro (ou use ▶) até a armadilha.</p>
         <p class="suave">
           <template v-if="ply === armadilha.erro - 1">Posição antes do erro: {{ nomeDaCor(armadilha.erro % 2 === 1 ? 'w' : 'b') }} jogam.</template>
           <template v-else-if="ply === armadilha.erro">O erro: {{ fmtLance(armadilha.erro, lanceDoErro(armadilha)) }}??</template>
@@ -311,6 +360,12 @@ comecar(modo.value)
 }
 .acoes:empty {
   display: none;
+}
+.marcar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 44px;
 }
 .navegar {
   display: grid;
