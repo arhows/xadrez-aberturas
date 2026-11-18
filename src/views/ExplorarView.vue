@@ -21,6 +21,7 @@ import { CONTEXTO_ARVORE } from '../components/arvoreContexto'
 import { percorrer, type Aresta } from '../lib/arvore'
 import { buscarCapitulo } from '../lib/capitulos'
 import { corDoCapitulo, descreverUnidade } from '../lib/escopo'
+import { deveResponder, escolherResposta } from '../lib/estudo'
 import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
 import { Chess } from 'chess.js'
 import { casasDoLance } from '../lib/lances'
@@ -37,7 +38,8 @@ const { arvore } = capitulo
 const idsColunas = new Set(capitulo.capitulo.linhas.map((linha) => linha.id))
 
 const mostrarNotas = ref(true)
-const orientacao = ref<'white' | 'black'>('white')
+/** Abertura treinada de pretas começa com as pretas embaixo (é o seu lado quando o adversário joga sozinho). */
+const orientacao = ref<'white' | 'black'>(corDoCapitulo(capitulo, progresso.corPorCapitulo) === 'b' ? 'black' : 'white')
 const caminho = ref<Aresta[]>([])
 const abertos = reactive(new Set<string>())
 const tabuleiro = ref<InstanceType<typeof Tabuleiro>>()
@@ -220,6 +222,7 @@ async function copiarLink() {
 function voltarAoInicio() {
   fora.value = []
   caminho.value = []
+  responderSeForAVez()
 }
 
 function voltarAoLivro() {
@@ -251,7 +254,7 @@ const nasPartidas = computed(() => {
 const totalNasPartidas = computed(() => nasPartidas.value.reduce((soma, lance) => soma + lance.total, 0))
 
 function jogarDasPartidas(lance: { san: string; aresta?: Aresta }) {
-  if (lance.aresta) selecionar([...caminho.value, lance.aresta])
+  if (lance.aresta) jogarDoLivro(lance.aresta)
   else jogarFora(lance.san)
 }
 
@@ -268,7 +271,7 @@ function aoJogar(de: string, para: string) {
   const aresta = continuacoes.value.find((s) => s.from === de && s.to === para)
   if (aresta) {
     if (progresso.config.adivinhar) tocar('certo')
-    selecionar([...caminho.value, aresta])
+    jogarDoLivro(aresta)
   } else if (progresso.config.adivinhar && continuacoes.value.length) {
     // Adivinhando, um lance fora do livro não sai do livro: volta e mostra as setas.
     tocar('errado')
@@ -281,9 +284,39 @@ function aoJogar(de: string, para: string) {
 /** Toque numa linha do motor: segue o livro se o lance for dele, senão joga fora do livro. */
 function jogarSan(san: string) {
   const aresta = continuacoes.value.find((s) => s.san === san)
-  if (aresta) selecionar([...caminho.value, aresta])
+  if (aresta) jogarDoLivro(aresta)
   else jogarFora(san)
 }
+
+// O outro lado responde sozinho (a mesma opção do Estudo): depois do seu lance do livro, um lance do livro
+// do adversário é jogado após uma pausa curta. Seu lado é o de baixo do tabuleiro. Só o seu lance dispara
+// a resposta; ◀ ▶, o histórico e a árvore não, para dar para navegar livremente.
+const PAUSA_RESPOSTA = 450
+let resposta: ReturnType<typeof setTimeout> | undefined
+
+function jogarDoLivro(aresta: Aresta) {
+  selecionar([...caminho.value, aresta])
+  responderSeForAVez()
+}
+
+function responderSeForAVez() {
+  clearTimeout(resposta)
+  if (foraDoLivro.value) return
+  const meuLado = orientacao.value === 'white' ? 'w' : 'b'
+  if (!deveResponder(fen.value, meuLado, progresso.config.responderAdversario, continuacoes.value.length)) return
+  const esperado = chave(caminho.value)
+  resposta = setTimeout(() => {
+    if (foraDoLivro.value || chave(caminho.value) !== esperado) return
+    const escolhida = escolherResposta(continuacoes.value)
+    if (escolhida) selecionar([...caminho.value, escolhida])
+  }, PAUSA_RESPOSTA)
+}
+
+// Explorando de pretas, o primeiro lance das brancas sai sozinho (também ao girar o tabuleiro no início).
+watch(orientacao, () => {
+  if (!caminho.value.length && !foraDoLivro.value) responderSeForAVez()
+})
+onBeforeUnmount(() => clearTimeout(resposta))
 
 function aoTeclar(evento: KeyboardEvent) {
   if (evento.key === 'ArrowLeft') voltar()
@@ -325,6 +358,7 @@ while (noLivro > 0 && !percorrer(arvore, pedidos.slice(0, noLivro))) noLivro--
 const inicial = percorrer(arvore, pedidos.slice(0, noLivro))
 if (inicial) selecionar(inicial)
 for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
+if (!caminho.value.length && !foraDoLivro.value) responderSeForAVez()
 </script>
 
 <template>
@@ -370,6 +404,10 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
         <label class="marcar" title="Esconde as setas e os lances do livro até você tentar jogar">
           <input v-model="progresso.config.adivinhar" type="checkbox" />
           Adivinhar
+        </label>
+        <label class="marcar" :title="`Depois do seu lance, o outro lado joga sozinho um lance do livro. ${orientacao === 'white' ? 'Você joga de brancas' : 'Você joga de pretas'}: gire o tabuleiro para trocar.`">
+          <input v-model="progresso.config.responderAdversario" type="checkbox" @change="responderSeForAVez()" />
+          Adversário joga sozinho
         </label>
         <label class="marcar">
           <input v-model="progresso.config.motorAoVivo" type="checkbox" />
@@ -450,7 +488,7 @@ for (const san of pedidos.slice(noLivro)) if (!jogarFora(san)) break
             type="button"
             class="chip-lance"
             :class="{ livro: aresta === principal }"
-            @click="selecionar([...caminho, aresta])"
+            @click="jogarDoLivro(aresta)"
           >
             {{ fmtSan(aresta.san) }}<strong v-if="marcaDe(aresta)" class="marca-lance">{{ marcaDe(aresta) }}</strong>
             <small>{{ aresta.linhas.length }}</small>

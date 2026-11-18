@@ -52,7 +52,7 @@ export interface Configuracoes {
   fonteRelampago: 'treinadas' | 'repertorio' | 'todas'
   /** Estudo e Explorar: esconde as setas e os lances do livro até a pessoa tentar o lance. */
   adivinhar: boolean
-  /** Estudo: depois do seu lance, o lance da linha do outro lado é jogado sozinho. */
+  /** Estudo e Explorar: depois do seu lance, o lance do livro do outro lado é jogado sozinho. */
   responderAdversario: boolean
   /** Última escolha da tela de Treino, usada também por "Revisar agora". */
   profundidade: Profundidade

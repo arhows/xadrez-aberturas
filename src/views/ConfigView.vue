@@ -139,7 +139,7 @@ function resetar() {
         </label>
         <label class="marcar">
           <input v-model="config.responderAdversario" type="checkbox" />
-          Estudo: o outro lado responde sozinho depois do meu lance
+          Estudo e Explorar: o outro lado responde sozinho depois do meu lance
         </label>
       </div>
     </section>
