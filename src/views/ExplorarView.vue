@@ -22,6 +22,7 @@ import { percorrer, type Aresta } from '../lib/arvore'
 import { buscarCapitulo } from '../lib/capitulos'
 import { corDoCapitulo, descreverUnidade } from '../lib/escopo'
 import { deveResponder, escolherResposta } from '../lib/estudo'
+import { lanceInferior, type LanceInferior } from '../lib/recomendacao'
 import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
 import { Chess } from 'chess.js'
 import { casasDoLance } from '../lib/lances'
@@ -261,15 +262,42 @@ function jogarDasPartidas(lance: { san: string; aresta?: Aresta }) {
 // Modo Adivinhar: setas e lances do livro ficam escondidos até a pessoa tentar (ou pedir para ver).
 const revelado = ref(false)
 const errouAqui = ref(false)
+/** Adivinhando com o seu lado: lance do livro, mas inferior (o tabuleiro volta para tentar de novo). */
+const inferior = ref<(LanceInferior & { san: string }) | null>(null)
 watch([noAtual, () => fora.value.length], () => {
   revelado.value = false
   errouAqui.value = false
+  inferior.value = null
+})
+
+const contextoRecomendacao = {
+  colunas: idsColunas,
+  avaliacoes: new Map([...capitulo.capitulo.linhas, ...(capitulo.capitulo.notas ?? [])].map((l) => [l.id, l.avaliacao] as const)),
+  marca: marcaDe,
+}
+const NOME_DA_MARCA: Record<string, string> = { '?!': 'duvidoso', '?': 'um erro', '??': 'um erro grave' }
+const textoInferior = computed(() => {
+  const r = inferior.value
+  if (!r) return ''
+  const porque = NOME_DA_MARCA[r.motivo]
+    ? `o MCO marca o lance como ${NOME_DA_MARCA[r.motivo]} (${r.motivo})`
+    : `a avaliação do MCO é ${r.motivo}, pior para você`
+  const melhores = r.melhores.map((a) => fmtLance(plyAtual.value + 1, a.san)).join(' ou ')
+  return `${fmtLance(plyAtual.value + 1, r.san)} está no livro, mas é inferior: ${porque}. Recomendado: ${melhores}. Tente de novo.`
 })
 const escondido = computed(() => progresso.config.adivinhar && !revelado.value && continuacoes.value.length > 0)
 
 function aoJogar(de: string, para: string) {
   const aresta = continuacoes.value.find((s) => s.from === de && s.to === para)
-  if (aresta) {
+  const meuLado = orientacao.value === 'white' ? 'w' : 'b'
+  const ruim = aresta && progresso.config.adivinhar && fen.value.split(' ')[1] === meuLado
+    ? lanceInferior(aresta, continuacoes.value, contextoRecomendacao)
+    : null
+  if (aresta && ruim) {
+    // Não é erro: o lance existe no livro, só não é o recomendado para o seu lado.
+    inferior.value = { ...ruim, san: aresta.san }
+    tabuleiro.value?.sincronizar()
+  } else if (aresta) {
     if (progresso.config.adivinhar) tocar('certo')
     jogarDoLivro(aresta)
   } else if (progresso.config.adivinhar && continuacoes.value.length) {
@@ -440,8 +468,9 @@ if (!caminho.value.length && !foraDoLivro.value) responderSeForAVez()
         :lance="fmtLance(caminho.length, ultima.san)"
       />
 
-      <div v-if="escondido || (errouAqui && progresso.config.adivinhar)" class="adivinhe">
-        <p v-if="errouAqui">Esse lance não é do livro aqui. Veja as setas verdes.</p>
+      <div v-if="escondido || ((errouAqui || inferior) && progresso.config.adivinhar)" class="adivinhe">
+        <p v-if="inferior">{{ textoInferior }}</p>
+        <p v-else-if="errouAqui">Esse lance não é do livro aqui. Veja as setas verdes.</p>
         <p v-else>Qual é o lance do livro? Jogue no tabuleiro.</p>
         <button v-if="escondido" type="button" class="botao" @click="revelado = true">Mostrar lances</button>
       </div>
