@@ -72,3 +72,41 @@ export function lanceInferior(escolhido: Aresta, opcoes: readonly Aresta[], cont
   // Sem alternativa recomendada, não há o que corrigir.
   return melhores.length ? { motivo: deste, melhores } : null
 }
+
+// ---------- Melhoria do Stockfish sobre o livro ----------
+
+/** Perda de chance (pontos de 0 a 100) a partir da qual o lance do livro conta como imprecisão. */
+export const PERDA_MELHORIA = 10
+
+export interface MelhoriaDoMotor {
+  /** O lance que o Stockfish prefere (fora do livro). */
+  melhor: string
+  /** O lance do livro que menos perde, e quanto perde. */
+  livro: Aresta
+  perda: number
+}
+
+const limparSan = (san: string) => san.replace(/[+#!?]/g, '')
+
+/**
+ * Quando todos os lances do livro nesta posição perdem PERDA_MELHORIA ou mais pela análise guardada
+ * e o melhor lance do Stockfish não é do livro, devolve a melhoria. null quando o livro está de acordo
+ * ou quando falta análise.
+ */
+export function melhoriaDoMotor(
+  opcoes: readonly Aresta[],
+  melhorSan: string | null | undefined,
+  perdaDe: (aresta: Aresta) => number | null,
+): MelhoriaDoMotor | null {
+  if (!opcoes.length || !melhorSan) return null
+  if (opcoes.some((a) => limparSan(a.san) === limparSan(melhorSan))) return null
+  let menor: { aresta: Aresta; perda: number } | null = null
+  for (const aresta of opcoes) {
+    const perda = perdaDe(aresta)
+    if (perda === null) return null
+    if (!menor || perda < menor.perda) menor = { aresta, perda }
+  }
+  return menor && menor.perda >= PERDA_MELHORIA ? { melhor: melhorSan, livro: menor.aresta, perda: menor.perda } : null
+}
+
+export const mesmoLance = (a: string, b: string) => limparSan(a) === limparSan(b)

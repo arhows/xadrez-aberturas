@@ -141,6 +141,10 @@ function resetar() {
           <input v-model="config.responderAdversario" type="checkbox" />
           Estudo e Explorar: o outro lado responde sozinho depois do meu lance
         </label>
+        <label class="marcar">
+          <input v-model="config.melhoriasStockfish" type="checkbox" />
+          Explorar: avisar quando o Stockfish acha um lance melhor que o do livro para o meu lado
+        </label>
       </div>
     </section>
 

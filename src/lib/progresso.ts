@@ -54,6 +54,8 @@ export interface Configuracoes {
   adivinhar: boolean
   /** Estudo e Explorar: depois do seu lance, o lance do livro do outro lado é jogado sozinho. */
   responderAdversario: boolean
+  /** Explorar: avisa quando o Stockfish acha um lance melhor que o do livro para o seu lado, e o aceita no Adivinhar. */
+  melhoriasStockfish: boolean
   /** Última escolha da tela de Treino, usada também por "Revisar agora". */
   profundidade: Profundidade
 }
@@ -151,6 +153,7 @@ export const CONFIG_PADRAO: Configuracoes = {
   taticasAutomaticas: false,
   adivinhar: false,
   responderAdversario: true,
+  melhoriasStockfish: true,
   minutosRelampago: 3,
   fonteRelampago: 'treinadas',
   barraAvaliacao: true,

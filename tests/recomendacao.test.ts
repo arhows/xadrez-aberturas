@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { Aresta } from '../src/lib/arvore'
-import { lanceInferior, pontosDaAvaliacao } from '../src/lib/recomendacao'
+import { lanceInferior, melhoriaDoMotor, pontosDaAvaliacao } from '../src/lib/recomendacao'
 
 const DE_PRETAS = 'posicao b - - 0 9'
 const aresta = (san: string, linhas: string[], de = DE_PRETAS): Aresta =>
@@ -57,5 +57,28 @@ describe('lanceInferior (Ataque Möller, lance 9 das pretas)', () => {
   })
   it('sem alternativa recomendada, não corrige', () => {
     expect(lanceInferior(ne7, [ne7], contexto)).toBeNull()
+  })
+})
+
+describe('melhoriaDoMotor', () => {
+  const dxe4 = aresta('dxe4', ['c11-n-A-2'])
+  const outro = aresta('Re8', ['nota'])
+  const perdas: Record<string, number | null> = { dxe4: 13, Re8: 25 }
+  const perdaDe = (a: Aresta) => perdas[a.san] ?? null
+  it('todos os lances do livro perdem e o Stockfish tem outro: melhoria', () => {
+    const m = melhoriaDoMotor([dxe4, outro], 'Bh5', perdaDe)
+    expect(m?.melhor).toBe('Bh5')
+    expect(m?.livro.san).toBe('dxe4')
+    expect(m?.perda).toBe(13)
+  })
+  it('o melhor lance é do livro: sem melhoria', () => {
+    expect(melhoriaDoMotor([dxe4, outro], 'dxe4', perdaDe)).toBeNull()
+  })
+  it('algum lance do livro perde pouco: sem melhoria', () => {
+    expect(melhoriaDoMotor([dxe4], 'Bh5', () => 4)).toBeNull()
+  })
+  it('sem análise: sem melhoria', () => {
+    expect(melhoriaDoMotor([dxe4], 'Bh5', () => null)).toBeNull()
+    expect(melhoriaDoMotor([dxe4], null, perdaDe)).toBeNull()
   })
 })

@@ -23,7 +23,7 @@ import { percorrer, type Aresta } from '../lib/arvore'
 import { buscarCapitulo } from '../lib/capitulos'
 import { corDoCapitulo, descreverUnidade } from '../lib/escopo'
 import { deveResponder, escolherResposta } from '../lib/estudo'
-import { lanceInferior, type LanceInferior } from '../lib/recomendacao'
+import { lanceInferior, melhoriaDoMotor, mesmoLance, type LanceInferior } from '../lib/recomendacao'
 import { fmtLance, fmtSan, fmtTexto } from '../lib/formato'
 import { Chess } from 'chess.js'
 import { casasDoLance } from '../lib/lances'
@@ -153,6 +153,10 @@ const setas = computed<Forma[]>(() => {
   if (sugestao && !continuacoes.value.some((aresta) => aresta.san === melhor)) {
     doLivro.push({ de: sugestao.from, para: sugestao.to, cor: 'blue' })
   }
+  const casasMelhoria = !escondido.value && melhoriaAqui.value && casasDoLance(fen.value, melhoriaAqui.value.melhor)
+  if (casasMelhoria && !doLivro.some((f) => f.cor === 'blue' && f.de === casasMelhoria.from && f.para === casasMelhoria.to)) {
+    doLivro.push({ de: casasMelhoria.from, para: casasMelhoria.to, cor: 'blue' })
+  }
   const ameaca = ultima.value?.ameaca
   if (ameaca) doLivro.push({ de: ameaca.from, para: ameaca.to, cor: 'red' })
   for (const de of xeque.value?.atacantes ?? []) doLivro.push({ de, para: xeque.value!.rei, cor: 'red' })
@@ -212,6 +216,31 @@ function voltar() {
 const marcas = marcasDoCapitulo(capitulo)
 const marcaDe = (aresta: Aresta) => marcas.get(aresta.id) ?? null
 const motorDe = (aresta: Aresta) => qualidadeDoMotor(aresta, dadosMotor.value?.posicoes)
+
+// Melhoria do Stockfish: na vez do seu lado (o de baixo), quando todos os lances do livro perdem chance
+// pela análise guardada e o Stockfish prefere outro lance. Desliga com "Melhorias do Stockfish".
+const meuLado = computed(() => (orientacao.value === 'white' ? 'w' : 'b'))
+function melhoriaEm(no: string) {
+  const posicoes = dadosMotor.value?.posicoes
+  if (!progresso.config.melhoriasStockfish || !posicoes || arvore.nos.get(no)?.fen.split(' ')[1] !== meuLado.value) return null
+  return melhoriaDoMotor(saidas(no), posicoes[no]?.lance, (aresta) => motorDe(aresta)?.perda ?? null)
+}
+/** Na posição atual (ainda no livro). */
+const melhoriaAqui = computed(() => (foraDoLivro.value ? null : melhoriaEm(noAtual.value)))
+/** O último lance, do livro, tinha uma melhoria. */
+const melhoriaAnterior = computed(() => (ultima.value ? melhoriaEm(ultima.value.de) : null))
+/** A pessoa saiu do livro justamente pela melhoria. */
+const melhoriaJogada = computed(() => {
+  if (fora.value.length !== 1) return null
+  const m = melhoriaEm(noAtual.value)
+  return m && mesmoLance(m.melhor, fora.value[0].san) ? m : null
+})
+function verMelhoria() {
+  const m = melhoriaAnterior.value
+  if (!m) return
+  caminho.value = caminho.value.slice(0, -1)
+  jogarFora(m.melhor)
+}
 
 const avisoCompartilhar = ref('')
 const temCompartilhar = podeCompartilhar()
@@ -315,6 +344,11 @@ function aoJogar(de: string, para: string) {
   } else if (aresta) {
     if (progresso.config.adivinhar) tocar('certo')
     jogarDoLivro(aresta)
+  } else if (progresso.config.adivinhar && melhoriaAqui.value && casasDoLance(fen.value, melhoriaAqui.value.melhor)?.from === de
+    && casasDoLance(fen.value, melhoriaAqui.value.melhor)?.to === para) {
+    // A melhoria do Stockfish também vale como acerto; sai do livro.
+    tocar('certo')
+    jogarFora(melhoriaAqui.value.melhor)
   } else if (progresso.config.adivinhar && continuacoes.value.length) {
     // Adivinhando, um lance fora do livro não sai do livro: volta e mostra as setas.
     tocar('errado')
@@ -452,6 +486,10 @@ if (!caminho.value.length && !foraDoLivro.value) responderSeForAVez()
           <input v-model="progresso.config.responderAdversario" type="checkbox" @change="responderSeForAVez()" />
           Adversário joga sozinho
         </label>
+        <label class="marcar" title="Avisa (seta azul) quando o Stockfish acha um lance melhor que o do livro para o seu lado. Desligue para ver só o livro.">
+          <input v-model="progresso.config.melhoriasStockfish" type="checkbox" />
+          Melhorias do Stockfish
+        </label>
         <label class="marcar">
           <input v-model="progresso.config.motorAoVivo" type="checkbox" />
           Stockfish ao vivo
@@ -464,9 +502,11 @@ if (!caminho.value.length && !foraDoLivro.value) responderSeForAVez()
         v-if="foraDoLivro"
         tipo="nota"
         :lance="fmtLance(plyAtual, fora.at(-1)!.san)"
-        :texto="progresso.config.motorAoVivo
+        :texto="(melhoriaJogada
+          ? `Melhoria do Stockfish: o livro jogava ${fmtLance(plyAtual, melhoriaJogada.livro.san)}, que perde ${Math.round(melhoriaJogada.perda)} pontos de chance. `
+          : '') + (progresso.config.motorAoVivo
           ? 'Fora do livro: o Stockfish avalia a posição logo abaixo.'
-          : 'Fora do livro. Ligue “Stockfish ao vivo” para avaliar a posição.'"
+          : 'Fora do livro. Ligue “Stockfish ao vivo” para avaliar a posição.')"
       >
         <button type="button" class="botao voltar-livro" @click="voltarAoLivro">Voltar ao livro</button>
       </CartaoDica>
@@ -476,6 +516,20 @@ if (!caminho.value.length && !foraDoLivro.value) responderSeForAVez()
         :texto="ultima.dica"
       />
       <CartaoDica v-else texto="Escolha um lance na lista, nas setas ou movendo a peça no tabuleiro." />
+      <CartaoDica v-if="melhoriaAnterior && !foraDoLivro" tipo="nota">
+        <strong>O Stockfish prefere {{ fmtLance(caminho.length, melhoriaAnterior.melhor) }}</strong>
+        <p class="texto">
+          Este lance do livro perde {{ Math.round(melhoriaAnterior.perda) }} pontos de chance pela análise do Stockfish.
+        </p>
+        <button type="button" class="botao voltar-livro" @click="verMelhoria">Jogar {{ fmtSan(melhoriaAnterior.melhor) }}</button>
+      </CartaoDica>
+      <CartaoDica v-if="melhoriaAqui && !escondido" tipo="nota">
+        <strong>Melhoria do Stockfish: {{ fmtLance(plyAtual + 1, melhoriaAqui.melhor) }}</strong> (seta azul)
+        <p class="texto">
+          O livro joga {{ fmtLance(plyAtual + 1, melhoriaAqui.livro.san) }}, que perde {{ Math.round(melhoriaAqui.perda) }} pontos de
+          chance. A melhoria sai do livro: depois dela, siga com o Stockfish ao vivo.
+        </p>
+      </CartaoDica>
       <PlanoMeioJogo v-if="!foraDoLivro" :plano="planosNoFim.get(noAtual)" />
       <SeloQualidade v-if="ultima" :marca="marcaDe(ultima)" :motor="motorDe(ultima)" />
       <MinhaNota
