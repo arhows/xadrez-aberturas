@@ -2,6 +2,8 @@
 // Uso (na raiz do projeto): node scripts/mco/gerar.cjs <capitulo> [--sem-dicas]
 //   <capitulo>.cjs      — capítulo, colunas e notas (lances do livro);
 //   <capitulo>-dicas.cjs — dicas de cada lance (texto do app): { linhas: { c01: { '1. e4': '...' } }, notas: { 'c01-a': '...' } }.
+//   <capitulo>-planos.json — opcional: plano de meio-jogo do fim de colunas e notas (texto do app),
+//                            { "c01": { "brancas": "...", "pretas": "..." }, "c01-a": { ... } }.
 // Nas linhas, cada lance precisa de dica na própria linha ou numa linha anterior com o mesmo começo
 // (a árvore do app usa a primeira dica que encontrar). Cada nota precisa da dica do lance do desvio.
 // --sem-dicas só confere os lances (para revisar a transcrição antes de escrever as dicas).
@@ -18,6 +20,8 @@ const semDicas = process.argv.includes('--sem-dicas')
 if (!nome) throw new Error('uso: node scripts/mco/gerar.cjs <capitulo> [--sem-dicas]')
 const { capitulo: meta, colunas, notas } = require(`./${nome}.cjs`)
 const dicas = semDicas ? { linhas: {}, notas: {} } : require(`./${nome}-dicas.cjs`)
+const arquivoPlanos = path.join(__dirname, `${nome}-planos.json`)
+const planos = fs.existsSync(arquivoPlanos) ? JSON.parse(fs.readFileSync(arquivoPlanos, 'utf8')) : {}
 
 const erros = []
 const limpar = (san) => san.replace(/[!?]+$/, '')
@@ -79,6 +83,7 @@ for (const linha of linhas) {
   const chaves = new Set(sans.map((san, i) => chave(i + 1, san)))
   for (const k of Object.keys(proprias)) if (!chaves.has(k)) erros.push(`${linha.id}: dica para ${k}, que não é lance da linha`)
   linha.dicas = proprias
+  if (planos[linha.id]) linha.plano = planos[linha.id]
   if (semDicas) continue
   // Cobertura: cada ply precisa de dica aqui ou numa linha anterior com o mesmo começo.
   sans.forEach((san, i) => {
@@ -127,9 +132,11 @@ for (const [base, sufixo, letra, rotulo, texto, o] of notas) {
   const dica = dicas.notas[id]
   if (dica) nota.dicas = { [chave(desvio, sans[desvio - 1])]: dica }
   else if (!semDicas) erros.push(`${id}: falta a dica do desvio`)
+  if (planos[id]) nota.plano = planos[id]
   saidaNotas.push(nota)
 }
 for (const id of Object.keys(dicas.notas)) if (!sequencias[id] || !id.includes('-')) erros.push(`dica para a nota ${id}, que não existe`)
+for (const id of Object.keys(planos)) if (!sequencias[id]) erros.push(`plano para ${id}, que não existe`)
 
 if (erros.length) {
   console.error(erros.join('\n'))
