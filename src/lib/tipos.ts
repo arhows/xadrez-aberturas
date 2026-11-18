@@ -62,6 +62,8 @@ export interface Nota {
   dicas?: Record<string, string>
   /** Trecho cortado na foto: a nota precisa ser conferida antes de entrar no Treino. */
   conferir?: string
+  /** O que cada lado busca no meio-jogo depois da última posição da nota (texto do app). */
+  plano?: { brancas: string; pretas: string }
   /** Lances já conferidos no build (ver jogoPrecalculado.ts). */
   _jogo?: JogoPrecalculado
 }

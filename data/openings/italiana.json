@@ -982,6 +982,10 @@
    "comentario": "Alternativa razoável: 7...Nxe4 leva a um final igual.",
    "dicas": {
     "7... Nxe4": "Pega o peão de e4 e ataca o bispo de d2; após 8.Bxb4 Nxb4 9.Bxf7+ as brancas recuperam o material com xeques e o jogo se simplifica."
+   },
+   "plano": {
+    "brancas": "Rocar logo e disputar a coluna e com Re1, para expulsar ou trocar o forte cavalo de e4; o cavalo de b1 entra por a3 e c4 ou d2. O peão isolado de d4 pede atividade: d5 ganha espaço antes que as pretas o bloqueiem.",
+    "pretas": "Sustentar o cavalo central com ...d5 e ...Re8, abrigar o rei em f8 e desenvolver o bispo por f5. O bispo contra o cavalo e o peão isolado de d4 como alvo dão às pretas um final confortável."
    }
   },
   {
@@ -996,6 +1000,10 @@
    "comentario": "Em vez de 10...Kf8, 10...d5 também pode ser jogado.",
    "dicas": {
     "10... d5": "Bloqueia o xeque com um peão central, liberando o bispo de c8, em vez de mover o rei; o cavalo de b4 continua sem defesa diante da dama."
+   },
+   "plano": {
+    "brancas": "Recuperar a peça com Ne5+ e Qxb4, aproveitando que o cavalo de b4 está sem defesa. Depois, desenvolver com Nc3 para disputar o cavalo de e4, expulsá-lo com f3 e rocar; a posição fica igual.",
+    "pretas": "Responder ao xeque com ...Ke6, que protege o cavalo de e4, e oferecer a troca das damas com ...Qf8. Sem damas, o rei preto fica ativo no centro e o cavalo de e4 é uma peça forte; o bispo de c8 sai por f5."
    }
   },
   {
@@ -1011,6 +1019,10 @@
    "comentario": "Gambito promissor sugerido por Keres.",
    "dicas": {
     "8... Nxe4": "Pega o peão de e4; se 9.Nxe4, o garfo 9...d5 recupera a peça. Por isso Keres propõe 9.d5, entregando o peão para ganhar espaço e tempo."
+   },
+   "plano": {
+    "brancas": "Pelo peão entregue, a compensação é a dama de d6, que trava o peão de d7 e o bispo de c8. Rocar, levar as torres a e1 e d1 e manter a pressão sobre d7 e a coluna e; o bispo de c4 pode ir a d5 contra b7 e f7.",
+    "pretas": "Rocar já e expulsar a dama com ...Nf5, seguindo com ...Qf6 e ...d6 para libertar o bispo de c8. Com as peças desenvolvidas, trocar e fazer valer o peão a mais e a maioria de peões no centro."
    }
   },
   {
@@ -1026,6 +1038,10 @@
    "comentario": "As brancas entregam o peão de d4 por atividade e recuperam o material.",
    "dicas": {
     "10. O-O": "Roca e deixa o peão de d4 cair: depois de 11.Ne5 as peças brancas ficam muito ativas contra f7 e o cavalo de d5."
+   },
+   "plano": {
+    "brancas": "O cavalo de e5 está atacado, mas a dama de b3 crava a torre de f7 contra o rei. Depois de ...Qxe5, ocupar a coluna e com Rae1 e trocar as damas para um final de torres igual, buscando levar uma torre à sétima fileira.",
+    "pretas": "Capturar logo com ...Qxe5 e interpor ...Be6 contra a cravada e a torre na coluna e. Trocar as damas e ativar a torre pela coluna d (...Rd8-d2) leva a um final de torres equilibrado."
    }
   },
   {
@@ -1040,6 +1056,10 @@
    "comentario": "Pegar a torre expõe o rei preto.",
    "dicas": {
     "13... Nxa1": "Ganha a torre, mas o cavalo fica preso em a1; 14.Bxf7+ e a dama em h5 vão direto contra o rei preto."
+   },
+   "plano": {
+    "brancas": "A dama preta está atacada pela torre de d1: ganhá-la com Rxd8 e então atacar o rei de h8 com dama, bispo e cavalo, mirando g6 e h6. O cavalo de a1 está fora de jogo; recolhê-lo mais tarde deixa as brancas com vantagem decisiva.",
+    "pretas": "Entregar a dama por uma torre com ...Bf5 e ...Raxd8, ficando com duas torres ativas na coluna d. O bispo pode ir a b1 para ajudar o cavalo de a1 a sair; é preciso vigiar g6 e o próprio rei."
    }
   },
   {
@@ -1055,6 +1075,10 @@
    "comentario": "Reforça o cavalo de d5 e chega à igualdade.",
    "dicas": {
     "10... Nce7": "Recua o cavalo para e7, de onde ele sustenta o cavalo de d5 contra a pressão de Qb3 e Bc4; depois ...c6 reforça ainda mais essa casa."
+   },
+   "plano": {
+    "brancas": "Com o peão isolado de d4, jogar pela atividade: Ne4 mirando c5 e g5, o bispo em d3 apontado para o roque e a dama em a3 pressionando e7. O peão de d4 apoia o cavalo em e5.",
+    "pretas": "Manter o bloqueio em d5 e pressionar o peão de d4 com ...Nf5 ou ...Nb6. Desenvolver o bispo com ...Bg4 ou ...Bf5, de olho no cavalo de e4, e trocar peças leves: cada troca deixa o peão isolado mais fraco."
    }
   },
   {
@@ -1070,6 +1094,10 @@
    "comentario": "Depois do roque, 14...Nxe5 é o caminho mais simples.",
    "dicas": {
     "14. O-O": "Tira o rei da coluna e, onde a dama preta cravava o cavalo de e5; as pretas respondem trocando nesse cavalo e simplificam."
+   },
+   "plano": {
+    "brancas": "Retomar com dxe5, ganhando um peão avançado que tira a casa f6 das pretas. Recuar o bispo para d3 ou e4, de olho em h7, ocupar a coluna d e a coluna e com as torres e, se puder, pegar o peão de a7 com a dama.",
+    "pretas": "Depois de dxe5, expulsar o bispo com ...c6, rocar e levar uma torre a d8 contra a coluna aberta. O cavalo de d5 é a melhor peça: pode saltar para f4 e, com ...Qg5, criar ameaças no roque; o peão de e5 é um alvo."
    }
   },
   {
@@ -1085,6 +1113,10 @@
    "comentario": "Pegar o peão deu às brancas um ataque terrível.",
    "dicas": {
     "7... Nxe4": "Aceita o peão central, mas atrasa o desenvolvimento; 8.d5 e 9.Qd4 atacam o cavalo de e4 e o peão de g7, dando iniciativa às brancas."
+   },
+   "plano": {
+    "brancas": "Sem o roque, jogar pela atividade: Qe3 crava o cavalo de e7 na coluna e, Nbd2 e Rd1 completam o desenvolvimento, e h3 dá saída à torre de h1. O peão de d5 tira casas das peças pretas.",
+    "pretas": "Com um peão a mais, ...c5 defende o bispo de b4 com ganho de tempo sobre a dama. Depois, ...d6, rocar e cuidar da troca Bxf6 seguida de ataque a g7; com o rei seguro, o peão extra decide."
    }
   },
   {
@@ -1100,6 +1132,10 @@
    "comentario": "O ataque à dama não funciona aqui.",
    "dicas": {
     "10. Qb3": "Forma uma bateria contra d5 e b7, mas aqui 10...Na5 ataca dama e bispo, e após 11.Qa4+ Bd7 as brancas não conseguem manter a pressão."
+   },
+   "plano": {
+    "brancas": "Retomar com bxc3 e explorar as cravadas na diagonal a4–e8: o bispo de d7 está cravado, e o bispo de b4 e o cavalo de a5 ficam soltos diante da dama. Ganho o material, Bb2 e Re1+ aproveitam o rei preto no centro.",
+    "pretas": "Limitar o prejuízo: ...Bxc3 e ...c6 desfazem a cravada, e o roque curto tira o rei da coluna e. Com material a menos, buscar a troca das damas e contrajogo contra o peão isolado de d4."
    }
   },
   {
@@ -1115,6 +1151,10 @@
    "comentario": "As pretas seguem com o peão a mais.",
    "dicas": {
     "14. Rc1": "Leva a torre à coluna c, atrás do bispo, enquanto o bispo de a3 impede o roque curto preto; mesmo assim falta compensação pelo peão."
+   },
+   "plano": {
+    "brancas": "Faltando um peão, buscar atividade: Qe2 crava o bispo de e6 contra o rei, e Bxe6 fxe6 estraga a estrutura preta. Ativar a torre de h1 com h4 e Rh3 e levar o rei a g1.",
+    "pretas": "Com o roque curto proibido pelo bispo de a3, rocar longo (...O-O-O) e ocupar a coluna e com ...Rhe8. Depois, pressionar o peão de d4, que acaba caindo, e trocar peças rumo a um final com peão a mais."
    }
   },
   {
@@ -1129,6 +1169,10 @@
    "comentario": "Não adianta para as brancas: a dama pega o peão de a2.",
    "dicas": {
     "15. Bxd5": "Troca o cavalo de d5 para ganhar tempo com 16.Rc5 contra a dama, mas ela escapa capturando a2 e as pretas ficam com dois peões a mais."
+   },
+   "plano": {
+    "brancas": "Com dois peões a menos e o rei preso em f1, resta reagrupar: h3 e Kg1-h2 para ativar a torre de h1, Qc1 e o bispo de a3 impedindo o roque curto. Buscar complicações com d5 antes que as pretas coordenem as peças.",
+    "pretas": "Rocar longo, colocar a torre em e8 e usar ...Bd5 para trocar o cavalo de f3 e expor o rei branco. As brancas não têm peões no flanco da dama: trocar peças e empurrar os peões de a, b e c, que são passados."
    }
   },
   {
@@ -1144,6 +1188,10 @@
    "comentario": "As brancas recuperam o material com iniciativa.",
    "dicas": {
     "8... Nxc3": "Troca o cavalo em c3, mas 9.bxc3 ataca o bispo de b4 e as brancas abrem linhas contra o rei preto, que ainda não rocou."
+   },
+   "plano": {
+    "brancas": "Material igual e peças ativas: levar o cavalo a e4 e c5, as torres às colunas c e e contra c7, e avançar a4-a5 no flanco da dama. Evitar que o peão isolado de d4 fique sozinho diante de um bloqueio.",
+    "pretas": "Cobrir o xeque com ...Nd5, um cavalo bem centralizado em frente ao peão isolado. Seguir com ...Qd7, ...Be6 e ...Rhe8; com o rei abrigado, mirar os peões fracos de d4 e a2."
    }
   },
   {
@@ -1159,6 +1207,10 @@
    "comentario": "O bispo em a3 impede o roque preto.",
    "dicas": {
     "9... Bxc3": "Pega mais um peão e ataca a torre de a1, mas 10.Ba3! ignora a torre e prende o rei preto no centro, controlando f8."
+   },
+   "plano": {
+    "brancas": "Manter o rei preto no centro: o bispo de a3 proíbe o roque curto, Re1+ e, depois de ...d5, Bb5 cravando o cavalo de c6 aumentam a pressão. A torre de a1 pode ser entregue; Qc2 e Ne5 trazem mais peças contra o rei.",
+    "pretas": "Fechar a diagonal do bispo de c4 com ...d5 e só pegar a torre com ...Bxa1 se o rei aguentar. Depois, ...Be6 e ...Qd7 preparam o roque longo; devolver parte dos peões a mais para sair do centro é razoável."
    }
   },
   {
@@ -1174,6 +1226,10 @@
    "comentario": "Keres avalia que, após 13...fxg5 14.Qxc4, as brancas ficam melhor pela cravada na coluna e e pelo rei preto preso no centro.",
    "dicas": {
     "13... fxg5": "Ganha o bispo de g5, mas 14.Qxc4 recupera um peão com o cavalo de e7 cravado na coluna e e o rei preto ainda no centro."
+   },
+   "plano": {
+    "brancas": "Com uma peça a menos, manter o rei preto preso no centro: dobrar as torres na coluna e (Re5, Rae1) contra o cavalo cravado de e7, usar a diagonal da dama até g8 e saltar com o cavalo para g5 e h7.",
+    "pretas": "Desfazer a cravada e tirar o rei do centro: ...Rf8 e ...Rf7, ...Qd6 e ...g4 para expulsar o cavalo de f3. Com o bispo de c8 desenvolvido, a peça a mais deve prevalecer; devolver material é aceitável se o ataque apertar."
    }
   },
   {
@@ -1189,6 +1245,10 @@
    "comentario": "Retomar em c3 é bom para as pretas.",
    "dicas": {
     "9. bxc3": "Retoma a peça da forma natural, mas 9...d5 ataca o bispo de c4 e as pretas ficam com o peão a mais e uma posição sólida."
+   },
+   "plano": {
+    "brancas": "Manter o forte cavalo de e5 e reforçá-lo com f3 ou f4, recuar a torre para e1 e usar o bispo de a3 nas casas escuras (Bb4, Bd6). A dama de e2 pressiona c4; atividade é essencial, porque a2 e c3 são fracos.",
+    "pretas": "Com o peão a mais e o rei seguro em c8, trocar o cavalo de e5 (...Nxe5) e simplificar. A dama em a5 ataca a2 e c3, e ...Bd7 libera a coluna e para as torres. Cada troca aproxima um final favorável."
    }
   },
   {
@@ -1204,6 +1264,10 @@
    "comentario": "Alternativa a 9...Bf6.",
    "dicas": {
     "9... Ne7": "Salva o cavalo atacado pelo peão de d5, mas deixa o bispo de c3 ser retomado com 10.bxc3; as brancas ficam com o par de bispos e espaço."
+   },
+   "plano": {
+    "brancas": "As peças pretas estão emboladas. Pôr o bispo em b2 contra g7, dobrar torres na coluna e (Re3, Rae1) e trazer a dama a c2; c5 pode expulsar o cavalo de d6. O ataque vale mais que o peão.",
+    "pretas": "Desembaraçar as peças: ...Ne8, ...Ng6 e ...d6 libertam o bispo de c8, e ...Nf4 troca o bispo de d3. Com tudo desenvolvido, o peão a mais passa a contar."
    }
   },
   {
@@ -1219,6 +1283,10 @@
    "comentario": "Alternativa a 9...Bf6.",
    "dicas": {
     "9... Ba5": "Salva o bispo, mas entrega o cavalo de c6: após 10.dxc6 bxc6 os peões pretos ficam fracos e 11.Ne5 e 12.Qg4 pressionam o roque."
+   },
+   "plano": {
+    "brancas": "Com dois peões a menos, atacar g7 e f7 com a dama de g4, o cavalo de e5 e o bispo de c4, antes que o rei preto roque. b4 ganha tempo contra o bispo de a5, e o bispo de c1 entra por f4 ou a3.",
+    "pretas": "Defender g7 com ...Qf6, que também ataca o cavalo de e5, e eliminar o bispo de c4 com ...Nxc4. Com o rei seguro pelo roque, os dois peões a mais pesam; trocar as damas tira o ataque branco."
    }
   },
   {
@@ -1233,6 +1301,10 @@
    "comentario": "Não iguala.",
    "dicas": {
     "9... Nd6": "Recua o cavalo de e4 atacando o bispo de c4, mas não resolve o problema do cavalo de c6 nem do bispo de c3, ambos atacados."
+   },
+   "plano": {
+    "brancas": "Capturar o que está atacado: dxc6 e bxc3, e depois recuperar o bispo perdido com Bg5 e Qd5+, atacando o cavalo de c4. O jogo se abre com o rei preto sem toda a proteção.",
+    "pretas": "Rocar logo (...O-O) e pegar o bispo de c4 com ...Nxc4, devolvendo material para sair do centro. Depois das trocas, a posição fica igual, e os peões brancos de a2 e c3 viram alvos."
    }
   },
   {
@@ -1247,6 +1319,10 @@
    "comentario": "Não iguala.",
    "dicas": {
     "9... Na5": "Salva o cavalo de c6 com ataque ao bispo de c4, mas a peça vai para a borda e as brancas mantêm a iniciativa recuperando o bispo de c3."
+   },
+   "plano": {
+    "brancas": "Salvar o bispo com Bd3, recuperar a peça com bxc3 e atacar o cavalo de e4 com Re1, enquanto o rei preto está no centro. O avanço d6 desarticula c7 e d7, e o cavalo de a5, na borda, fica longe da defesa.",
+    "pretas": "Sustentar o cavalo de e4 com ...f5, rocar imediatamente e frear o peão de d5 com ...d6. Depois, trazer o cavalo de a5 de volta ao jogo por c4 ou b7; o peão a mais conta se as pretas sobreviverem à iniciativa."
    }
   },
   {
@@ -1261,6 +1337,10 @@
    "comentario": "Lance razoável, com chances aproximadamente iguais.",
    "dicas": {
     "11... O-O": "Põe o rei em segurança antes de ...d6; as brancas respondem com 12.d6, entregando o peão para atrapalhar o desenvolvimento da ala da dama preta."
+   },
+   "plano": {
+    "brancas": "As pretas têm dois peões a mais, mas estão atrasadas. Trocar em f6, levar a torre a d1 contra os peões dobrados em d e pressionar f7 com dama e bispo, recuperando material em d6 ou d7.",
+    "pretas": "...h6 resolve a situação do bispo de g5, e ...Ne5 troca uma peça ativa. Devolver um peão para desenvolver o bispo de c8 e a torre de a8 deixa um final igual."
    }
   },
   {
@@ -1275,6 +1355,10 @@
    "comentario": "Repete a posição; se não repetirem, as brancas permitem ...d5.",
    "dicas": {
     "13. Qxd6": "Recupera o peão na hora, mas o cavalo preto ganha tempo atacando a dama a partir de f5 e e7."
+   },
+   "plano": {
+    "brancas": "A dama em d6 bloqueia o peão de d7 e trava o bispo de c8; se o cavalo voltar a atacá-la, repetir com Qd5 e Qd6 é aceitável. Para jogar mais, desenvolver com Bf4 e levar a torre de e4 para g4 contra o roque.",
+    "pretas": "Evitar a repetição com ...b5, devolvendo o peão para desenvolver o bispo em b7 na grande diagonal, ou expulsar a dama e preparar ...d5. Com o par de bispos e peças ativas, as pretas ficam confortáveis."
    }
   },
   {
@@ -1290,6 +1374,10 @@
    "comentario": "Termina empatado.",
    "dicas": {
     "13... Bxg5": "Troca os bispos e prepara 14...d5, que ataca ao mesmo tempo o bispo de c4 e a torre de e4."
+   },
+   "plano": {
+    "brancas": "Com uma peça a menos, viver dos xeques: Qe5+, Qe4+ e Qe2+ perseguem o rei preto, e a torre de e8 prende o bispo de c8 e a torre de a8. Avançar h4 para abrir mais o rei; no mínimo, garantir o xeque perpétuo.",
+    "pretas": "Fugir dos xeques com ...Kg7 e buscar abrigo, e liberar a torre de a8 e o bispo de c8 com ...d6 ou ...b6 e ...Bb7. Se o rei não escapar dos xeques, aceitar o empate por repetição."
    }
   },
   {
@@ -1305,6 +1393,10 @@
    "comentario": "As pretas ficam melhor.",
    "dicas": {
     "12. g4": "Avança no flanco do rei para expulsar o bispo de f6 com g5, mas enfraquece seriamente o próprio rei."
+   },
+   "plano": {
+    "brancas": "O material é igual, mas o rei branco ficou exposto pelo avanço g4-g5. Recuar a torre para e1, desenvolver com Bd2 ou Be3 e usar o par de bispos e a dama em b3 contra b7 e f7; o peão de d5 pode avançar a d6 no momento certo.",
+    "pretas": "Expulsar a torre com ...Ng6, trocar torres na coluna e com ...Rfe8 e ...Rad8 e atacar as casas brancas em volta do rei: ...Bh3 e ...Qg4+ ou ...Qh3. O cavalo bloqueia bem o peão de d5 em d6."
    }
   },
   {
@@ -1320,6 +1412,10 @@
    "comentario": "Rocar em vez de 13...h6 expõe o rei a um sacrifício em h7.",
    "dicas": {
     "13... O-O": "Roca com o cavalo branco ainda em g5, e as brancas sacrificam com 14.Nxh7 Kxh7 15.Qh5+, trazendo depois a torre a h4."
+   },
+   "plano": {
+    "brancas": "Com uma peça a menos, a saída é forçar o xeque perpétuo: Qh7+, Rh6 e o sacrifício Bh5+ abrem o rei preto, e a dama dá xeques em g6 e h5. Lances lentos deixam as pretas consolidarem a peça.",
+    "pretas": "Defender com precisão: ...Kf7 e ...Nf4 cobrem as casas do rei, e a peça a mais compensa entregar material de volta. Contra o melhor ataque, aceitar o empate por xeque perpétuo."
    }
   },
   {
@@ -1335,6 +1431,10 @@
    "comentario": "As brancas vencem. O livro imprime \"(17...Bd 18) Qh7+\", com o lance cortado; transcrito como 17...Bd7 18.Qh7+.",
    "dicas": {
     "17... Bd7": "Desenvolve o bispo, mas ao contrário de 17...Ng6, que atacava a torre de h4, não ajuda a defesa: 18.Qh7+ e 19.Rh6 decidem."
+   },
+   "plano": {
+    "brancas": "O ataque é decisivo: Bh5+ traz o bispo, e a dama em h7 entra em g6 ou g7. Com o mate ou a dama preta como alvo, as brancas recuperam a peça com sobras.",
+    "pretas": "Não há defesa satisfatória. ...Qe8 cobre g6 e h5, e ...Ng6 bloqueia o xeque, mas é preciso devolver material para escapar do mate; capturar a torre de h6 abre ainda mais o rei. Resta buscar um final com algum material."
    }
   },
   {
@@ -1350,6 +1450,10 @@
    "comentario": "As pretas ficam talvez com uma pequena vantagem.",
    "dicas": {
     "14. Qe2": "Abandona o cavalo de g5 para dobrar dama e torres na coluna e contra o cavalo cravado de e7 e o rei preto no centro."
+   },
+   "plano": {
+    "brancas": "Pressionar o peão fraco de d6 com Rd1 e Qd2, e usar o peão de e6 e o bispo de c4 para prender as peças pretas. O avanço h4 abre linhas contra o rei preto.",
+    "pretas": "Levar o rei para a segurança com ...Kf8 e ...Kg7, já que a dama em d8 impede o roque longo. Com o peão a mais, trocar as damas; no final, o peão isolado de e6 vira alvo e ...d5 fecha a diagonal do bispo."
    }
   },
   {
@@ -1365,6 +1469,10 @@
    "comentario": "Com 16...f5 as pretas expulsam a torre e mantêm uma pequena vantagem.",
    "dicas": {
     "16... f5": "Ataca a torre de e4 com ganho de tempo e deixa o peão de e6 isolado no meio das peças pretas."
+   },
+   "plano": {
+    "brancas": "O peão de e6 é uma cunha que controla d7 e f7 e prende o rei preto no centro. Defender o flanco do rei com Rg3, abrir com gxf5 se houver chance e manter as duas torres e a dama apoiando e6, de olho nos peões fracos de f5 e g7.",
+    "pretas": "Usar a coluna h aberta e a diagonal da dama até h2: ...fxg4 e ...Qh2+ incomodam o rei branco. Rocar longo, colocar o rei em segurança e então cercar o peão de e6 com ...Nc8 ou ...Qxe6."
    }
   },
   {
@@ -1380,6 +1488,10 @@
    "comentario": "Depois de 14.Bb5+ as brancas trocam os bispos, mas as pretas tiram o rei da coluna e e ficam melhor.",
    "dicas": {
     "14. Bb5+": "Xeque que força a troca dos bispos de casas claras; sem o bispo de c4 o ataque branco perde força e o rei preto escapa com ...Kf8."
+   },
+   "plano": {
+    "brancas": "Com um peão a menos, dobrar as torres na coluna e contra o cavalo de e7 e reposicionar o cavalo por f3 e d4. Avançar h4-h5 para criar alvos no roque preto e buscar atividade antes de um final.",
+    "pretas": "Ganhar o peão de d5 com ...Nxd5 e firmar a posição com ...c6. Depois, ...g6 e ...Kg7 ligam as torres para disputar a coluna e com ...Rhe8; trocar peças favorece quem tem dois peões a mais."
    }
   },
   {
@@ -1395,6 +1507,10 @@
    "comentario": "Com 11...Ncd6 as pretas salvam os cavalos, mas perdem g7 e o roque, e as brancas ficam melhor.",
    "dicas": {
     "11... Ncd6": "Defende o cavalo de e4 com o outro cavalo, mas abandona g7: 12.Qxg7 e, após a troca das damas, o rei preto fica preso sem poder rocar."
+   },
+   "plano": {
+    "brancas": "A torre de h8 está presa pelo bispo de h6, e a última fileira é fraca: Re7 e Re8+ ameaçam ganhar a torre de h8. Depois de recuperar material, simplificar mantendo o rei preto preso.",
+    "pretas": "Criar uma saída para o rei com ...f6 e ...Kf7, libertando a torre de h8. Os cavalos de d6 e e4 devem buscar peões (c3 e d5) para compensar a qualidade que se perde."
    }
   },
   {
@@ -1410,6 +1526,10 @@
    "comentario": "Com 11...f5 as pretas devolvem a peça, mantêm o peão a mais e a posição fica igual.",
    "dicas": {
     "11... f5": "Sustenta o cavalo de e4 com o peão e devolve o de c4; as pretas ficam com um peão a mais, mas com o rei um pouco mais exposto."
+   },
+   "plano": {
+    "brancas": "Dominar a coluna e com Re1 e usar a casa e6, que ficou fraca depois de ...f5, para o cavalo. Desenvolver o bispo em f4 ou d2 e recuperar o peão com Nxf5 no momento certo.",
+    "pretas": "Disputar a coluna e com ...Re8 e trocar torres, levar o cavalo a e5 via d7 com tempo sobre a dama de c4 e defender o peão de f5. Trocar as damas deixa o peão a mais pesar."
    }
   },
   {
@@ -1425,6 +1545,10 @@
    "comentario": "O peão de b5 sustenta o cavalo de c4. O livro imprime \"14 axb5 axb5\", ilegal porque o peão preto está em a7; transcrito como 14...cxb5.",
    "dicas": {
     "12... b5": "Em vez de recuar o cavalo, defende-o com o peão; as brancas atacam esse apoio imediatamente com 13.a4."
+   },
+   "plano": {
+    "brancas": "Avançar d6 para prender o peão de d7 e o bispo de c8, e então atacar o roque com Ng5 e a dama em d4 ou h4. Torre em e1 e e7 completa o assédio; a coluna a aberta permite atacar o peão de a7.",
+    "pretas": "Manter o cavalo de c4 apoiado por b5, usar a torre em b8 e empurrar os peões de a e b, que são passados. Defender o roque com ...g6 e ...f6 contra Ng5 e liberar o bispo de c8 assim que o peão de d7 puder se mexer."
    }
   },
   {
@@ -1440,6 +1564,10 @@
    "comentario": "Com a ideia de 15.Bg5, as brancas obtêm compensação quase suficiente pelo peão.",
    "dicas": {
     "14. Qg3": "Leva a dama à coluna g, contra o roque preto, e prepara 15.Bg5 com ganho de tempo sobre a dama de d8."
+   },
+   "plano": {
+    "brancas": "Pelo peão, usar o desenvolvimento: Ba3 contra f8 e d6, Rfe1 e o cavalo em d4 ou g5. A dama mira o roque; manter as damas no tabuleiro e o peão de d5 cortando o jogo preto.",
+    "pretas": "Reposicionar o cavalo com ...Nd6 (rumo a c4 ou f5), depois ...Re8, ...d6 e ...Bf5 completam o desenvolvimento. Trocar as damas apaga o ataque e deixa o peão a mais decidir."
    }
   },
   {
@@ -1454,6 +1582,10 @@
    "comentario": "Rocar primeiro permite 8.e5, e as brancas ganham espaço.",
    "dicas": {
     "7... O-O": "Roca antes de reagir no centro e permite 8.e5, que expulsa o cavalo de f6 e dá espaço às brancas."
+   },
+   "plano": {
+    "brancas": "Capturar en passant com exd6, abrindo linhas para o par de bispos, e seguir com d5 contra o cavalo de c6. O bispo vai a d3 mirando h7, apoiado por Ng5.",
+    "pretas": "Dar casas fixas aos cavalos (c5, e4, ...Na5) e desenvolver o bispo de c8; o peão de c3 e o isolado de a2 são alvos. Trocar um dos bispos brancos reduz a força do par."
    }
   },
   {
@@ -1468,6 +1600,10 @@
    "comentario": "Também razoável.",
    "dicas": {
     "9... Nxc3": "Simplifica trocando os cavalos; 10.bxc3 ataca o bispo, que recua para e7, e as pretas rocam em seguida com jogo sólido."
+   },
+   "plano": {
+    "brancas": "A torre de h5 está atacada pelo peão de g6 e precisa voltar (Rb5 e Rb2, de olho em b7). Com o par de bispos, desenvolver o bispo de c1 em e3 e jogar c4 e d5 para livrar os peões fracos de c3 e a2.",
+    "pretas": "Expandir no flanco da dama com ...c6, ...b5, ...a5 e ...a4, ganhando tempo contra o bispo de c4 e fixando os peões de a2 e c3. Desenvolver o bispo de c8 em f5 ou e6 e ocupar a coluna e."
    }
   },
   {
@@ -1483,6 +1619,10 @@
    "comentario": "As brancas ficam com uma pequena vantagem.",
    "dicas": {
     "11. Bxe7": "Troca os bispos de casas escuras; depois de 11...Ncxe7 as brancas escolhem entre 12.Ne4, com o cavalo de olho em c5 e g5, e 12.Qb3, pressionando b7 e d5."
+   },
+   "plano": {
+    "brancas": "Com o peão isolado de d4, jogar pela atividade e evitar trocas: Nc5 ataca o bispo de e6 e b7, Re1 e Qb3 aumentam a pressão, e o cavalo pode ir a e5 ou g5. O bispo de c4 mira d5 e f7.",
+    "pretas": "Rocar, expulsar o cavalo de c5 com ...b6 e manter o bloqueio em d5. ...c6 e ...Nf5 pressionam d4; cada troca de peças menores deixa o peão isolado mais fraco num final."
    }
   },
   {
@@ -1498,6 +1638,10 @@
    "comentario": "As brancas ficam com uma pequena vantagem.",
    "dicas": {
     "11. Bxe7": "Troca os bispos de casas escuras; depois de 11...Ncxe7 as brancas escolhem entre 12.Ne4, com o cavalo de olho em c5 e g5, e 12.Qb3, pressionando b7 e d5."
+   },
+   "plano": {
+    "brancas": "Depois das trocas em c3 e c4, a estrutura vira c3+d4. Levar as torres à coluna e (Rfe1, Re4, Rae1), manter a dama ativa contra b7 e preparar c4 para dar vida aos peões centrais.",
+    "pretas": "Trocar com ...Nxc3 e ...Bxc4 para tirar peças de ataque, rocar e pôr a dama em d6. O cavalo volta a d5, bloqueando o centro; a longo prazo, mirar os peões de c3 e d4."
    }
   },
   {
@@ -1513,6 +1657,10 @@
    "comentario": "A célebre partida, com o rei preto ainda no centro.",
    "dicas": {
     "14. Re1": "Ocupa a coluna e e crava o cavalo de e7 contra o rei, que ainda não rocou; as pretas precisam de ...f6 e ...Kf7 para se desenrolar."
+   },
+   "plano": {
+    "brancas": "Manter o rei preto exposto: Nd2 abre caminho para Qh5+, que provoca ...g6, e o cavalo vai a e4 e c5. A torre de c1 pressiona c7, e o avanço d5 ganha espaço.",
+    "pretas": "Desfazer a cravada com ...Kf7, ligar as torres (...Rhe8) e centralizar o cavalo em d5. Num final, o peão isolado de d4 vira alvo, então trocar peças favorece as pretas."
    }
   },
   {
@@ -1527,6 +1675,10 @@
    "comentario": "Agora 16...Kf7 seria pouco claro.",
    "dicas": {
     "16... Kf7": "Tira o rei da coluna e e liga as torres, mas em f7 o rei fica exposto a xeques de cavalo: 17.Ne5+ (que ataca também a dama de d7) ou o sacrifício 17.Ng5+."
+   },
+   "plano": {
+    "brancas": "Depois de ...fxe5, dar xeques alternando Qf3+ e Qb3+ contra o rei aberto: o rei preto não escapa e o xeque perpétuo é garantido. As torres nas colunas c e e ajudam caso as pretas evitem a repetição.",
+    "pretas": "Pegar o cavalo com ...fxe5 e cobrir os xeques com a dama em f5 e e6. Com o rei exposto, não há como evitar a repetição: o empate é o resultado justo, e arriscar mais pode custar caro."
    }
   },
   {
@@ -1541,6 +1693,10 @@
    "comentario": "Agora 16...Kf7 seria pouco claro.",
    "dicas": {
     "16... Kf7": "Tira o rei da coluna e e liga as torres, mas em f7 o rei fica exposto a xeques de cavalo: 17.Ne5+ (que ataca também a dama de d7) ou o sacrifício 17.Ng5+."
+   },
+   "plano": {
+    "brancas": "O cavalo de g5 é um sacrifício: depois de ...fxg5, Qf3+ e Qxb7 recuperam peões, e Rxc7 coloca a torre na sétima. Com duas torres ativas e peões a mais, as brancas buscam um final com chances contra o cavalo.",
+    "pretas": "Aceitar com ...fxg5, levar o rei a g8 e oferecer a troca das damas com ...Qd5. No final, o cavalo vai para f5 ou d6, ataca o peão de d4 e defende os peões restantes; a peça a mais compensa os peões."
    }
   },
   {
@@ -1556,6 +1712,10 @@
    "comentario": "Sugestão de Romanovsky, com chances para os dois lados.",
    "dicas": {
     "16. d5": "Avança o peão isolado, ganha espaço e controla e6, casa de onde a dama branca pode dar xeque."
+   },
+   "plano": {
+    "brancas": "O peão passado de e6 e o rei preto exposto dão boa vantagem: Rd7 troca ou expulsa a torre, Rf7 ataca f6 e g7, e Nh4+ com f4 tece uma rede de mate. Coordenar torres e cavalo contra o rei.",
+    "pretas": "Bloquear com ...Nd5 e disputar a coluna e com ...Rhe8, tentando ganhar o peão de e6. Tirar o rei de g6 das casas de xeque, mas sem deixá-lo ir para a frente demais."
    }
   },
   {
@@ -1571,6 +1731,10 @@
    "comentario": "Com 6.O-O as brancas jogam em gambito, mas as pretas respondem com ...Nxe4 e ...d5 e o jogo fica igual.",
    "dicas": {
     "6. O-O": "Roca e oferece o peão de e4 em vez de retomar em d4; após 6...Nxe4 7.cxd4 d5 as pretas devolvem material e liberam o jogo."
+   },
+   "plano": {
+    "brancas": "O cavalo de e4 está cravado pela dama de e2 contra o rei: Nc3 aumenta a pressão e recupera o peão em e4. Depois, desenvolver o bispo por f4 e pressionar a coluna e enquanto o rei preto não roca.",
+    "pretas": "Rocar já para desfazer a cravada e aceitar devolver o peão de e4. Com ...Bf5, ...Rae8 e a dama ativa em d3 ou c2, as pretas compensam e seguram o peão de c4."
    }
   },
   {
@@ -1585,6 +1749,10 @@
    "comentario": "Trocar as damas não ajuda as brancas: o final é um pouco melhor para as pretas.",
    "dicas": {
     "9. Qxd8+": "Força o rei preto a mover com 9...Kxd8, mas sem damas o rei fica seguro no centro e as peças pretas ficam mais ativas."
+   },
+   "plano": {
+    "brancas": "Sem damas e com um peão a menos, trocar o cavalo ativo de e4 com Ng5 e ganhar tempo com Bg5+ ou Bf4. Desenvolver com Na3 contra o peão de c4 e Rac1, usando a cravada na coluna d.",
+    "pretas": "Sair da cravada com ...f6 ou com o rei em e7, e minar o peão de c5 com ...b6 ou ...b5. O rei centralizado e as peças ativas favorecem as pretas; ...Re8 e ...Re4 ocupam a coluna aberta."
    }
   },
   {
@@ -1600,6 +1768,10 @@
    "comentario": "Recuar para e7 deixa as brancas com o centro sólido e uma pequena vantagem.",
    "dicas": {
     "8... Be7": "Recua o bispo para e7, abrindo mão da pressão sobre d4; as brancas desenvolvem com 9.Nc3 e mantêm o centro forte."
+   },
+   "plano": {
+    "brancas": "Depois da recaptura em f6, rocar, desenvolver com Be3 e ocupar a coluna c com Rc1 contra c7. Trocar o forte cavalo de e4 (com Nxe4 ou Bxe4) tira o melhor apoio das pretas, e Ne5 é uma boa casa.",
+    "pretas": "Retomar com ...Bxf6, sustentar o cavalo de e4 com ...Bf5 e ...Qd7 e usar a coluna f aberta contra f2 e o cavalo de f3. Trocar o bispo de d3 (...Bxd3 ou ...Nb4) alivia a defesa; a posição é quase igual."
    }
   },
   {
@@ -1615,6 +1787,10 @@
    "comentario": "O xeque em b4 não resolve os problemas das pretas e as brancas ficam um pouco melhor.",
    "dicas": {
     "8... Bb4+": "Xeque que tira o bispo da pressão sobre d4; 9.Nbd2 bloqueia e já desafia o cavalo de e4."
+   },
+   "plano": {
+    "brancas": "Trocar o cavalo forte com Nxe4, perguntar ao bispo com a3 e completar o desenvolvimento com Be3 e as torres em c1 e d1. Os peões pretos de c5 e d5 podem virar alvos depois de dxc5.",
+    "pretas": "O par de bispos e a coluna b semiaberta pedem ...Rb8 e ...Bb7, mesmo devolvendo um peão em e4. Romper com ...cxd4 ou ...f6 abre linhas para os bispos."
    }
   },
   {
@@ -1630,6 +1806,10 @@
    "comentario": "Trocar em c6 dobra os peões pretos, mas com ...f5 as pretas ganham atividade e o jogo fica igual.",
    "dicas": {
     "10. Bxc6": "Entrega o bispo para eliminar o cavalo que pressionava d4 e dobrar os peões pretos na coluna c."
+   },
+   "plano": {
+    "brancas": "Ne5 ataca a dama e o peão de c6; se as pretas pegarem g2, rocar longo e usar a coluna g contra o rei. Os peões dobrados de c6 e c7 são alvos para a dama e as torres.",
+    "pretas": "Pressionar f2 pela coluna f aberta, aceitar o peão de g2 e desenvolver com ...Bf5. ...Nxc3 elimina um defensor, e ...c5 ativa o par de bispos."
    }
   },
   {
@@ -1645,6 +1825,10 @@
    "comentario": "5...d5 imediato é prematuro.",
    "dicas": {
     "5... d5": "Ruptura central precoce: após 6.exd5 Nxd5 7.Qb3 a bateria com o bispo pressiona d5 e f7, e as pretas não conseguem sustentar o centro."
+   },
+   "plano": {
+    "brancas": "Com um peão a mais, desviar a dama do ataque com Qa4 depois de ...Na5 e recolher o peão de f4 com Qxf4+. Depois, desenvolver com Nbd2 e levar o cavalo a e4 ou e5, cuidando do rei em f1.",
+    "pretas": "Trocar o bispo de c4 com ...Na5 e desenvolver com ...Be6, levando o rei para g8. Defender o peão de f4 o quanto for possível e usar o bispo de c5 contra f2; a posição é difícil."
    }
   },
   {
@@ -1660,6 +1844,10 @@
    "comentario": "Rocar já permite 7.d4.",
    "dicas": {
     "6... O-O": "Roca deixando o bispo em c5, onde 7.d4 o ataca com ganho de tempo e abre o centro."
+   },
+   "plano": {
+    "brancas": "Manter a cravada com Bh4, desenvolver com Re1 e Nbd2 e ganhar espaço no flanco da dama com c4 e b4 contra o cavalo de c5. O peão de e5 restringe as peças pretas, e o bispo de d5 domina o centro.",
+    "pretas": "Bloquear o bispo de g5 com ...Ne7, que também ataca o bispo de d5, e expulsá-lo com ...c6 e ...h6. Depois, ...d6 desafia e5 e libera o bispo de c8; o bispo de a7 mira f2."
    }
   },
   {
@@ -1675,6 +1863,10 @@
    "comentario": "8.Bg5 é uma alternativa: as pretas ganham espaço com ...h6 e ...g5 e a posição fica igual.",
    "dicas": {
     "8. Bg5": "Crava o cavalo de f6 contra a dama, mas sem h3 as pretas podem expulsar o bispo com ...h6 e ...g5."
+   },
+   "plano": {
+    "brancas": "Explorar a casa f5, enfraquecida por ...g5: Nf1-e3-f5. Ao mesmo tempo, a4 ataca o peão de b5 e abre a coluna a; h3 tira casas do bispo de c8.",
+    "pretas": "Fortalecer o roque com ...Kg7 e cobrir f5 com ...Bd7 ou ...Be6, trocando o bispo de b3. No flanco da dama, ...b4 e ...Rb8 dão contrajogo; ...Ne7-g6 reforça o centro."
    }
   },
   {
@@ -1690,6 +1882,10 @@
    "comentario": "8.Be3 neutraliza o bispo de a7; as pretas seguem com ...d6 e ...Ne7 e o jogo fica igual.",
    "dicas": {
     "8. Be3": "Desafia o bispo de a7, a peça mais ativa das pretas; se houver troca em e3, as brancas retomam com o peão f e abrem a coluna f."
+   },
+   "plano": {
+    "brancas": "Romper com d4 agora e retomar com o peão c; se as pretas responderem ...d5, avançar e5 e expulsar o cavalo de f6. Se houver ...Bxe3, retomar fxe3 abre a coluna f.",
+    "pretas": "Responder a d4 com ...exd4 e ...d5, disputando o centro, e levar o cavalo de e7 para g6. ...Ng4 contra o bispo de e3 e o bispo de a7 mirando f2 dão atividade."
    }
   },
   {
@@ -1705,6 +1901,10 @@
    "comentario": "Também iguala.",
    "dicas": {
     "9... Re8": "Mantém a tensão central e reforça e5, em vez de definir a estrutura com a troca em e4."
+   },
+   "plano": {
+    "brancas": "Atacar o peão de b5 com a4 e guardar o bispo em a2. Depois, abrir o centro com exd5 e levar o cavalo a e4, pressionando o peão de e5 pela coluna e; d4 é a ruptura mais tarde.",
+    "pretas": "Manter o centro e5+d5 e recolocar o bispo em b6, com ...h6 para evitar Ng5. Depois de exd5 Nxd5, as peças pretas ficam ativas; ...dxe4 abre a coluna d contra o peão de d3."
    }
   },
   {
@@ -1720,6 +1920,10 @@
    "comentario": "Mais ou menos igual.",
    "dicas": {
     "12. Re1": "Reforça e4 e libera f1 para o cavalo de d2, que segue na manobra típica para o flanco do rei."
+   },
+   "plano": {
+    "brancas": "Seguir o jogo de manobras: Ng3 rumo a f5, Ng4 para trocar o cavalo de f6, Qf3 e Be3 para trocar o bispo de a7. Ocupar a coluna d aberta com uma torre antes das pretas.",
+    "pretas": "Disputar a coluna d com ...Rd8 e usar o cavalo em c5 e d3 (ou f4) como posto avançado. Trocar o bispo de b3 com ...Be6 e manter a simetria; a posição é igual."
    }
   },
   {
@@ -1735,6 +1939,10 @@
    "comentario": "Com 7.Be3 as brancas trocam os bispos de casas escuras e o jogo fica igual.",
    "dicas": {
     "7. Be3": "Oferece a troca do bispo de a7; após 7...O-O 8.Bxa7 Rxa7 a torre preta fica deslocada por alguns lances."
+   },
+   "plano": {
+    "brancas": "Pressionar f7 com Qb3, ganhar espaço com a5 para fixar o peão de b7 e preparar a ruptura d4. A manobra Nf1-g3 continua sendo útil.",
+    "pretas": "Defender f7 e oferecer a troca do bispo de c4 com ...Be6, ou recuar a torre para f8. Depois, ...h6 evita Ng5, e a ruptura ...d5 libera as peças."
    }
   },
   {
@@ -1750,6 +1958,10 @@
    "comentario": "...d5 atrasado, mas eficaz neste momento.",
    "dicas": {
     "12. Be3": "Oferece a troca do bispo de a7, que mira f2; as pretas aproveitam o momento para a ruptura 12...d5."
+   },
+   "plano": {
+    "brancas": "Evitar a troca em d5 com Bc2 e atacar o bispo central com Ne3. Depois, Nd2, Qf3 e o avanço b4-a4 no flanco da dama; mais tarde, d4 contra o peão de e5.",
+    "pretas": "Trazer a torre de a7 de volta e levar as torres à coluna d contra o peão de d3. O cavalo encontra boas casas em d5 e f4, e o bispo pode recuar para e6, mantendo o peão de e5 firme."
    }
   },
   {
@@ -1765,6 +1977,10 @@
    "comentario": "Um plano direto.",
    "dicas": {
     "8... h6": "Lance profilático que impede Bg5 e Ng5, deixando ...d5 para quando estiver bem preparado."
+   },
+   "plano": {
+    "brancas": "Rocar logo e aceitar ...Bxb3 axb3, que abre a coluna a para a torre. Levar o cavalo de g3 a f5, atacando a dama de d6 e o peão de h6, e ganhar espaço com b4.",
+    "pretas": "Trocar o bispo de b3 com ...Bxb3, deixando peões dobrados, e ocupar a coluna d com ...Rad8 e ...Rd7. A dama em d3 oferece a troca e entra nas casas fracas; a posição é igual."
    }
   },
   {
@@ -1780,6 +1996,10 @@
    "comentario": "Trocar em e6 dá o par de bispos às brancas, mas as pretas ficam bem desenvolvidas e o jogo é igual.",
    "dicas": {
     "12. Nxe6": "Elimina o bispo de e6 antes que as pretas troquem o bispo de b3 com ...Nxb3; após 12...Rxe6 o bispo branco recua para c2."
+   },
+   "plano": {
+    "brancas": "Com o par de bispos, completar o desenvolvimento (Bd2, Rad1) e ganhar espaço no flanco da dama com b4. Preparar a ruptura d4 para abrir o jogo aos bispos e usar o cavalo de g3 na casa f5.",
+    "pretas": "Manter o centro d5+e5 e pressionar d3 pela coluna d, trocando em e4 quando convier. ...h6, ...Qc7 e ...a5 dão atividade; o cavalo pode ir a g6 e f4. As peças bem colocadas compensam os bispos."
    }
   },
   {
@@ -1795,6 +2015,10 @@
    "comentario": "Em posição análoga, Portisch jogou 10...Ne7 e ficou com boas chances.",
    "dicas": {
     "9. a5": "Ganha espaço no flanco da dama e expulsa o bispo de b6 antes de cravar o cavalo com Bg5."
+   },
+   "plano": {
+    "brancas": "O roque preto está enfraquecido pelos peões dobrados em f: Nf5 ocupa uma ótima casa, e Qf3, Nd2 e Bb3 trazem reforços. Evitar a ruptura ...d5 no momento errado.",
+    "pretas": "O par de bispos e a coluna g dão chances: ...Kh8, ...Rg8 e ...Nf4. A ruptura ...d5 abre o jogo para os bispos; ...Bxf5 elimina o cavalo se ele ficar forte demais."
    }
   },
   {
@@ -1810,6 +2034,10 @@
    "comentario": "A cravada 10...Bg4 permite a5 e g4, e as brancas ficam um pouco melhor.",
    "dicas": {
     "10... Bg4": "Responde com uma cravada sobre o cavalo de f3 em vez de enfraquecer o roque com ...g5, mas as brancas ganham tempo com a5, h3 e g4."
+   },
+   "plano": {
+    "brancas": "Abrir o flanco da dama com b5, aproveitando o peão de a5 que prende o bispo de a7, e completar com Nbd2 e Re1; d4 vem no momento certo. A cravada do cavalo de f6 continua incômoda.",
+    "pretas": "Recuar com ...Bg6, pressionando e4, e desfazer a cravada com ...Qe7 e ...Rae8. Os avanços g4 e h3 enfraqueceram o roque branco: o cavalo pode ir por d8 e e6 até f4."
    }
   },
   {
@@ -1825,6 +2053,10 @@
    "comentario": "As pretas ficam com uma posição plenamente igual.",
    "dicas": {
     "12. a5": "Expulsa o bispo de b6 para a7 e ganha espaço no flanco da dama."
+   },
+   "plano": {
+    "brancas": "Reagrupar com Re1 e Nf1-e3, de olho nas casas f5 e g4, enfraquecidas pelos avanços ...g5 e ...h6. Recolocar o bispo em h2 e preparar d4 no momento certo para abrir o centro.",
+    "pretas": "Ocupar a casa f4 com o cavalo (...Nh5-f4) e usar os peões avançados para atacar: ...Kh7 e ...Rg8 na coluna g. O bispo pode voltar a h5 para cravar o cavalo de f3."
    }
   },
   {
@@ -1840,6 +2072,10 @@
    "comentario": "Com 7...a6 as pretas evitam abrir o flanco da dama e o jogo fica igual.",
    "dicas": {
     "7... a6": "Prepara a retirada ...Ba7 e controla b5, em vez de desafiar o peão de b4 com ...a5."
+   },
+   "plano": {
+    "brancas": "Usar a coluna f semiaberta contra f7 com Rf2 e Raf1, levar o cavalo de a3 a c2 e e3, rumo a d5 e f5, e empurrar b5 para expulsar o cavalo de c6. A ruptura d4 vem quando as peças estiverem prontas.",
+    "pretas": "Reagrupar com ...Nd7 e minar o flanco da dama com ...a5, atacando b4 e a4. Manter o peão de e5, pressionar o peão atrasado de d3 com ...Rad8 e cobrir f7; o jogo é quase igual."
    }
   },
   {
@@ -1855,6 +2091,10 @@
    "comentario": "Jogo agudo, mas igual.",
    "dicas": {
     "11. Bb3": "Recua o bispo para b3, preservando-o de ...d5, e prepara a abertura do centro com d4."
+   },
+   "plano": {
+    "brancas": "Com um peão a mais, tirar o bispo de e2 com Re1 e defender g2 com Nd4, f3 e Kf1. Depois, Be3 troca o cavalo de f4, e os peões fracos de a5 e c6 viram alvos.",
+    "pretas": "Atacar antes que as brancas consolidem: ...N6h5, ...Bxf3 para tirar um defensor e a dama em g4 ou g5 contra g2, com o cavalo de f4. Em posição calma, o peão a menos pesa."
    }
   },
   {
@@ -1870,6 +2110,10 @@
    "comentario": "A ruptura 11...d5 dá às brancas uma pequena vantagem depois de 12.Ba3.",
    "dicas": {
     "11... d5": "Ruptura central imediata, mas 12.Ba3 aproveita a diagonal aberta até a torre de f8."
+   },
+   "plano": {
+    "brancas": "Expulsar o cavalo de d5 com c4 e seguir com c5 para afastar o bispo de b6; o cavalo de e4 mira d6 e g5. O bispo de a3 continua forte na diagonal até f8.",
+    "pretas": "Tirar a casa g5 com ...h6 e levar os cavalos a f4, de onde atacam d3 e g2. ...Be6 oferece a troca do bispo de b3, e ...f5 expulsa o cavalo de e4."
    }
   },
   {
@@ -1885,6 +2129,10 @@
    "comentario": "Com 12.d4 as brancas mantêm a tensão nos dois flancos e o jogo fica pouco claro.",
    "dicas": {
     "12. d4": "Abre o centro sem resolver a tensão no flanco da dama, aproveitando o bispo de b3 apontado para f7."
+   },
+   "plano": {
+    "brancas": "Expulsar o bispo de f5 com Ng3; depois da troca em e6, o peão de e6 fica fraco. Levar o bispo a a3, na diagonal até a torre de f8, e atacar e6 com Ng5. dxe5 abre a coluna d para a dama.",
+    "pretas": "Trocar os bispos de casas brancas com ...Be6 e defender e6 e a torre de f8 com ...Rf7 e ...Rd7. O contrajogo vem de ...cxb5, abrindo a coluna c, e de ...exd4; a posição é difícil."
    }
   },
   {
@@ -1900,6 +2148,10 @@
    "comentario": "Outro plano, provavelmente um pouco melhor para as pretas.",
    "dicas": {
     "10. h3": "Lance profilático contra ...Bg4 e ...Ng4, mas lento: as pretas trazem o cavalo a g6 e jogam ...c6."
+   },
+   "plano": {
+    "brancas": "Abrir o centro com d4 para ativar os bispos e o cavalo de a3 (via c4, atacando b6 e e5). Trocar em d5 com o bispo de b3 cria um peão fraco em d5 para as pretas. Cuidar de c3 e de f2.",
+    "pretas": "As peças pretas estão mais ativas: ...Nf4 e ...Bf5 ou ...Be6 controlam o centro, e o bispo de b6 pressiona f2. Se as brancas jogarem d4, ...Nxc3 ganha material; os peões de c3 e a4 são alvos."
    }
   },
   {
@@ -1915,6 +2167,10 @@
    "comentario": "Depois de 12.Re1 Bc5 as pretas trocam os bispos de casas escuras e igualam.",
    "dicas": {
     "12. Re1": "Reforça e4 e prepara a manobra do cavalo de d2 pelo flanco do rei; as pretas respondem 12...Bc5 para trocar o bispo de a3."
+   },
+   "plano": {
+    "brancas": "Romper com d4 para abrir linhas contra os peões dobrados em c e ativar as peças; o cavalo de d2 pode ir por f1 a e3, mirando f5 e d5. A dama vai para b3 ou c3.",
+    "pretas": "Manter o controle de d4 com ...c5 e ...e5 e responder a d4 com ...cxd4. Trocar o bispo de c4 com ...Be6 e buscar jogo no flanco do rei com ...Nf4."
    }
   },
   {
@@ -1930,6 +2186,10 @@
    "comentario": "Vantagem das brancas.",
    "dicas": {
     "11... Nh5": "O cavalo vai a f4, mas sai do centro: 12.d4 abre o jogo aproveitando a pressão do bispo de a3 sobre d6."
+   },
+   "plano": {
+    "brancas": "O cavalo de h3 está preso: se as pretas o entregarem em f2 por torre e peões, jogar com as duas peças menores, Nc4 e o avanço e5 contra d6, com o bispo de a3 na diagonal. O bispo de d5 é a melhor peça.",
+    "pretas": "O cavalo de h3 não tem saída boa: ...Nxf2 rende torre e dois peões pelas duas peças menores. Depois, ativar a dama (...Qxc3), trocar o bispo de d5 com ...Be6 e buscar um final de torre e peões."
    }
   },
   {
@@ -1945,6 +2205,10 @@
    "comentario": "Com 10...c6 as pretas abrem a coluna b e, com ...Ng6 e ...Nf4, igualam.",
    "dicas": {
     "10... c6": "Desafia o peão de b5 para abrir a coluna b antes de resolver a cravada do cavalo de f6."
+   },
+   "plano": {
+    "brancas": "Desenvolver com Nbd2 e Qc2, jogar d4 para dominar o centro e questionar o bispo de g4 com h3. A coluna b aberta pede uma torre, e o peão de f4 pode virar alvo.",
+    "pretas": "Sustentar o peão de f4 com ...g5 e levar o cavalo a e5 via d7. O bispo de g4 vai para h5 e g6, pressionando e4, e o bispo de b6 mira f2; ...Re8 completa o jogo."
    }
   },
   {
@@ -1960,6 +2224,10 @@
    "comentario": "Após 12.Bxh4 as pretas rompem a cravada com ...h6 e ...g5 e o jogo fica igual.",
    "dicas": {
     "12. Bxh4": "Retoma com o bispo e mantém a cravada sobre o cavalo de f6."
+   },
+   "plano": {
+    "brancas": "Os avanços ...g5 e ...h5 deixaram o rei preto exposto e a casa f5 fraca. Colocar o rei em h1, trocar os bispos de casas brancas com Ba2 ou Bd5 e levar o cavalo de a3 a c4 contra o bispo de b6; depois f3 e d4 abrem o jogo.",
+    "pretas": "Ganhar espaço com ...h4, expulsando o bispo de g3, e preparar ...g4 com a dama em g6. Trocar o bispo de c4 com ...Be6 e reativar o cavalo de h7 via f6; o rei precisa de cuidado."
    }
   },
   {
@@ -1975,6 +2243,10 @@
    "comentario": "Chances para os dois lados.",
    "dicas": {
     "6. d5": "Avança na hora e expulsa o cavalo de c6, ganhando espaço; o cavalo preto precisa recuar para d8."
+   },
+   "plano": {
+    "brancas": "Sem damas, jogar contra f7 e d6: Ng5 com o bispo de d5, depois Nc4 contra o peão de d6 e Be3. Rocar e trazer as torres ao centro.",
+    "pretas": "Desenvolver rápido com ...Nf6; sem damas, o rei pode ficar em e7, mesmo à custa do peão de f7. Seguir com ...b5, ...Bb7 e ...h6 para expulsar o cavalo."
    }
   },
   {
@@ -1990,6 +2262,10 @@
    "comentario": "Favoreceu as brancas.",
    "dicas": {
     "8... h6": "Impede Bg5 e prepara ...g5, adiando o roque, mas as brancas ganham espaço no flanco da dama com a4 e Na3."
+   },
+   "plano": {
+    "brancas": "Com uma peça a mais por dois peões, trocar os atacantes (Ne3 contra o cavalo de g4) e defender o roque com a torre pela terceira fileira (Ra3). Consolidado o rei, d6 vira alvo para o cavalo de c4.",
+    "pretas": "Eliminar o bispo de e2 com ...Nxe2+ e atacar o roque sem o peão h: ...Rg8 na coluna g e ...h5-h4 contra o rei. ...Bd7 e o roque longo levam todas as peças ao ataque."
    }
   },
   {
@@ -2005,6 +2281,10 @@
    "comentario": "As brancas ganham espaço no flanco da dama e ficam com uma pequena vantagem.",
    "dicas": {
     "12. b4": "Ganha espaço no flanco da dama e prepara a5 contra o bispo de b6."
+   },
+   "plano": {
+    "brancas": "Ganhar espaço no flanco da dama com c4, c5 e a5 contra o bispo de b6, sempre mantendo o centro e4+d4. O cavalo de e3 mira d5 e f5, e o bispo de c1 pode ir para a3 ou b2.",
+    "pretas": "Reagrupar com ...Qd8, ...Bd7 e ...Nce7, que controla d5, e levar o outro cavalo a f7 via h6. A meta continua sendo liberar o jogo com ...f5 ou trocar em d4; ficar passivo deixa as brancas melhor."
    }
   },
   {
@@ -2019,6 +2299,10 @@
    "comentario": "Um pouco melhor para as brancas.",
    "dicas": {
     "6... Bb4+": "Xeque com a ideia de trocar o bispo pelo cavalo de c3, abrindo mão do par de bispos."
+   },
+   "plano": {
+    "brancas": "Manter o centro e4+d4 e preparar f4 e e5 com Nd2, Be2 ou h3 contra a cravada. A torre em b1 pressiona b7; o centro forte dá às brancas uma pequena vantagem.",
+    "pretas": "Cravar com ...Bg4, rocar e pressionar d4 com o cavalo e a dama de f6. Os peões brancos de c3 e a2 são fracos: ...Na5 contra o bispo de c4 e as rupturas ...c5 ou ...d5 abrem o jogo."
    }
   },
   {
@@ -2034,6 +2318,10 @@
    "comentario": "O livro imprime \"11 0-0 6\", com um 6 no lugar do símbolo de avaliação; deixado sem avaliação.",
    "dicas": {
     "7... Nge7": "Desenvolve o cavalo por e7, mas deixa f7 sem defesa extra: 8.Ng5 ataca f7 junto com o bispo de c4."
+   },
+   "plano": {
+    "brancas": "As brancas estão bem melhor: Qd3 ameaça Qxh7, e Qf3 ataca f7 e o cavalo de d5. Re1 domina a coluna e; trocar o bispo de c8 e capturar peões fracos.",
+    "pretas": "Rocar imediatamente e defender h7 com ...g6. Depois, ...Be6 cobre f7, ...Na5 troca o bispo de c4 e ...Qf6 oferece a troca das damas para diminuir o ataque."
    }
   },
   {
@@ -2049,6 +2337,10 @@
    "comentario": "Com 7.h3 as brancas evitam ...Bg4, mas o lance é lento e as pretas ficam talvez um pouco melhor.",
    "dicas": {
     "7. h3": "Impede ...Bg4, que cravaria o cavalo de f3 e aumentaria a pressão sobre d4."
+   },
+   "plano": {
+    "brancas": "O cavalo de e4 está cravado pela torre de e8: desfazer a cravada com Ne5 ou Nfd2 e rocar quanto antes. Com a peça a mais, devolver parte do material para simplificar é aceitável; d5 expulsa o cavalo de c6.",
+    "pretas": "Explorar a cravada na coluna e: ...Be6 troca o bispo de c4, e ...f5 ou ...d5 ameaçam ganhar o cavalo cravado. Se as brancas rocarem com tudo seguro, a peça a menos começa a pesar."
    }
   },
   {
@@ -2063,6 +2355,10 @@
    "comentario": "Rocar em vez de 9.Bg5 também leva à igualdade.",
    "dicas": {
     "9. O-O": "Roca, mas deixa e4 sem apoio extra e permite o truque 9...Nxe4 10.Nxe4 d5, garfando bispo e cavalo para recuperar a peça."
+   },
+   "plano": {
+    "brancas": "Resolver o garfo com Bxd5 Qxd5 e Nc3 com tempo sobre a dama. Depois, Be3 e o avanço d5 ativam o peão isolado, e a3 tira casas do cavalo preto.",
+    "pretas": "Depois de ...Qxd5, levar a dama ao flanco do rei (...Qf5 e ...Qg6), de olho no roque branco e no peão de h3. Pressionar o peão isolado de d4 com o cavalo de c6, ...Rd8 e o bispo de b6."
    }
   },
   {
@@ -2077,6 +2373,10 @@
    "comentario": "Com a ideia de ...O-O-O, está bom para as pretas.",
    "dicas": {
     "8. O-O": "Roca sem dar apoio extra a d4; 8...Bg4 crava o cavalo de f3 contra a dama e aumenta a pressão sobre d4."
+   },
+   "plano": {
+    "brancas": "Forçar ...Bxf3 com h3 e retomar gxf3, ficando com o par de bispos. Nd5 ataca a dama e o bispo de b6; se as pretas rocarem longo, avançar a4-a5 contra o bispo e o rei e abrir a coluna c com Rc1.",
+    "pretas": "Trocar em f3, rocar longo e pressionar d4 com o cavalo de c6, o bispo de b6 e a torre de d8. Trocar o cavalo de d5 com ...Ne7 e preparar ...d5 ou ...f5; o rei branco ficou mais exposto."
    }
   },
   {
@@ -2092,6 +2392,10 @@
    "comentario": "Foi bom para as pretas.",
    "dicas": {
     "9. O-O": "Roca com o bispo ainda em c4, o que permite o golpe 9...Nxe4 10.Nxe4 d5, com garfo de peão sobre bispo e cavalo."
+   },
+   "plano": {
+    "brancas": "Avançar o peão isolado com d5 para expulsar o cavalo e trocar o bispo de b6 com Bxb6, tirando o par de bispos. Depois, Re1 e Ne5 deixam as peças ativas.",
+    "pretas": "Bloquear o peão isolado e usar o par de bispos: ...Bg4 crava o cavalo de f3 contra a dama, e ...Rd8 pressiona d4. A dama de h5 mira o roque branco."
    }
   },
   {
@@ -2107,6 +2411,10 @@
    "comentario": "Depois das trocas em c4, as pretas aplicam o truque 14...Nxe4 15.Nxe4 d5, garfando bispo e cavalo e recuperando a peça; o jogo fica igual.",
    "dicas": {
     "12. Nc4": "O cavalo ataca o bispo de b6 e o peão d6, mas 12...Nb4 ganha tempo contra a dama e prepara o golpe em e4."
+   },
+   "plano": {
+    "brancas": "Tirar a dama preta do centro com Rae1 e ativar o bispo com Bf4, mirando c7. Os peões de c4 e c5 estão expostos: proteger o de c5 e atacar o de c4.",
+    "pretas": "Usar as torres nas colunas abertas: ...Rd3 ataca a dama e o bispo, e ...Rb8 pressiona b2. O cavalo vai a d4 ou e5, e o peão de c5 é o alvo principal."
    }
   },
   {
@@ -2122,6 +2430,10 @@
    "comentario": "As pretas respondem 7...a6, dando casa ao bispo; ambos rocam e o cavalo preto segue a rota ...Ne7–g6, com posição equilibrada.",
    "dicas": {
     "7. a4": "Ganha espaço na ala da dama e ameaça a5, que expulsaria o bispo de b6."
+   },
+   "plano": {
+    "brancas": "Ganhar espaço com a5 e trocar os bispos de casas pretas com Be3. Depois, Re1, o cavalo de c4 para e3 e f5, e c4 no flanco da dama.",
+    "pretas": "Jogar ...h6 e ...Be6 para trocar o bispo de b3, e reagir no flanco da dama com ...Rc8 e ...c5. O cavalo de g6 pode ir para f4."
    }
   },
   {
@@ -2137,6 +2449,10 @@
    "comentario": "Por transposição, as pretas retomam o plano ...Ne7, ...c6 e ...Ng6, sem problemas na abertura; igualdade.",
    "dicas": {
     "7... O-O": "Roca primeiro e adia a manobra ...Ne7–g6, que pode vir no lance seguinte."
+   },
+   "plano": {
+    "brancas": "Trazer o cavalo de h4 de volta com Nf3, ganhar espaço com a4-a5 e levar o outro cavalo a e3, de olho em d5 e f5. A ruptura d4 vem depois, quando o bispo preto estiver em c7.",
+    "pretas": "O cavalo de f4 é forte e ataca d3; apoiá-lo com ...Ng6 e expulsar o bispo com ...h6. Trocar o bispo de b3 com ...Be6 e preparar a ruptura ...d5; posição igual."
    }
   },
   {
@@ -2152,6 +2468,10 @@
    "comentario": "Foi perigoso para as brancas.",
    "dicas": {
     "8. Bg5": "Desenvolve o bispo contra f6, mas com o rei branco já rocado e o preto ainda no centro, as pretas podem usar ...Ng6 e ...g5 para abrir a coluna g."
+   },
+   "plano": {
+    "brancas": "O bispo de g5 está atacado: Bh4 mantém a cravada no cavalo de f6. Bloquear a coluna g com Qf3 e Nd2, e ganhar espaço com a4-a5 contra o bispo de b6, mantendo o peão a mais.",
+    "pretas": "Atacar pela coluna g aberta: ...Rg4 e ...Qe7-g7 contra g2, enquanto o bispo de b6 pressiona f2. Rocar longo com ...Bd7 e ...O-O-O traz mais peças para o ataque."
    }
   },
   {
@@ -2167,6 +2487,10 @@
    "comentario": "As pretas rocam, reposicionam o bispo em c7 e completam ...Ng6; após 12.d4 h6 13.Bxf6 ficam com o par de bispos e um jogo um pouco melhor.",
    "dicas": {
     "9. Bb3": "Recua o bispo preventivamente, antes que ...d5, apoiado por c6, ganhe tempo sobre ele."
+   },
+   "plano": {
+    "brancas": "Abrir o flanco da dama com b5, minando c6, e usar a coluna b com Rb1; o bispo recua para c2. No centro, manter d4 firme e procurar f5 para o cavalo.",
+    "pretas": "Aproveitar o par de bispos: ...axb4 abre a coluna a contra a2, e o cavalo encontra boa casa em f4. ...Be6 oferece a troca do bispo de b3."
    }
   },
   {
@@ -2182,6 +2506,10 @@
    "comentario": "As pretas sustentam e5 com ...Ng6 e ...Re8 e levam o cavalo a h5, de olho em f4; ficam um pouco melhor.",
    "dicas": {
     "10. d4": "Avança logo no centro em vez de 10.Nc4, mas sem criar pressão real sobre e5."
+   },
+   "plano": {
+    "brancas": "Atacar o bispo de b6 com a4 e a5 e definir o centro com dxe5 dxe5. Depois, o cavalo vai para c4 e e3, mirando f5 e d5.",
+    "pretas": "Responder com ...a5 para abrir o flanco da dama e ocupar f4 com um cavalo (...Nhf4). O bispo pode voltar a c7, e a dama ataca o peão de b4 quando ele ficar fraco."
    }
   },
   {
@@ -2197,6 +2525,10 @@
    "comentario": "Favorece as pretas.",
    "dicas": {
     "12. Bb3": "Recua o bispo antecipando ...d5, mas as pretas fazem esse avanço de qualquer maneira e ganham espaço no centro."
+   },
+   "plano": {
+    "brancas": "Completar o desenvolvimento com Bd2 e romper com d4 para enfraquecer e5 e abrir linhas. O cavalo pode ir a c5 contra b7, e a6 cria fraquezas no flanco da dama; evitar ficar passivo.",
+    "pretas": "O centro e5 com o cavalo de d5 dá a vantagem: trocar o cavalo de e4 com ...Bxe4, pressionar d3 com ...Qd7 e ...Rad8 e lançar ...Nf4 contra g2 e d3. ...Kh8 e ...f5 são opções."
    }
   },
   {
@@ -2212,6 +2544,10 @@
    "comentario": "13.Nf1 foi jogado várias vezes.",
    "dicas": {
     "13. Nf1": "Mantém a tensão central e reconduz o cavalo de d2 por f1, manobra típica da Italiana lenta."
+   },
+   "plano": {
+    "brancas": "Avançar h4-h5 para expulsar o cavalo de g6 e conquistar espaço; no flanco da dama, c4-c5 com o bispo em b2. O cavalo de f1 vai para e3.",
+    "pretas": "O centro forte dá uma leve vantagem: ...b6 abre linhas no flanco da dama, e a dama vai para d7. Manter a tensão em d5 e e5 ou trocar em e4 para abrir a coluna d."
    }
   },
   {
@@ -2227,6 +2563,10 @@
    "comentario": "A estrutura é a mesma da linha principal: as pretas completam o desenvolvimento com ...Be6 e ...Qd7 e, com o centro sólido, ficam um pouco melhor.",
    "dicas": {
     "13... h6": "Lance útil de espera: controla g5, tirando essa casa do bispo e dos cavalos brancos."
+   },
+   "plano": {
+    "brancas": "Jogar h3 para tirar g4 dos cavalos pretos e manter a tensão central sem trocar em d5. A dama pode ir a c2 e b2, pressionando e5, e um cavalo busca f5.",
+    "pretas": "Minar o peão de a5 com ...b6 e depois jogar ...c5, ganhando espaço no centro. As torres vão a e8 e d8; o centro d5-e5 bem defendido dá às pretas uma leve vantagem."
    }
   },
   {
@@ -2242,6 +2582,10 @@
    "comentario": "A partida seguiu até 11...f5; 12.b4 a5 é igual segundo Keres.",
    "dicas": {
     "8... Qg6": "A dama ataca o peão de g2, mas deixa c7 sem defesa diante do cavalo de d5; um lance arriscado."
+   },
+   "plano": {
+    "brancas": "Capturar com bxa5 para abrir a coluna b e ganhar o peão. Depois, Nh4 ataca a dama e o peão de f5, e f3 encurrala o bispo de g4; o cavalo de d5 continua forte contra c7 e b6.",
+    "pretas": "Rocar curto e abrir a coluna f com ...fxe4, mirando f2. A dama na coluna g pressiona g2, e o par de bispos dá contrajogo; cuidado com o bispo de g4, que pode ficar preso."
    }
   },
   {
@@ -2257,6 +2601,10 @@
    "comentario": "A partida seguiu até 18.Bd5; 18...Re7! é a melhora que iguala.",
    "dicas": {
     "9... a6": "Prepara a casa a7 para o bispo, que ficará a salvo quando as brancas avançarem d4."
+   },
+   "plano": {
+    "brancas": "Ativar a torre com Rd4, ganhando tempo contra o bispo de g4, e dobrar na coluna d contra o peão fraco de d6. O bispo de d5 domina; o peão de e3 precisa de proteção.",
+    "pretas": "Trocar ou desalojar o bispo de d5 com ...Be6, pegar o peão de a2 quando possível e usar as torres nas colunas c e e contra c3 e e3. O avanço ...a5-a4 ganha espaço; final igual."
    }
   },
   {
@@ -2272,6 +2620,10 @@
    "comentario": "Após 11.cxd4 Bb6 12.Nxb6 axb6 as brancas ficam com o centro e4–d4 e mais espaço; vantagem leve.",
    "dicas": {
     "10... exd4": "Troca em d4 antes de eliminar o cavalo de d5, mas entrega às brancas o centro de peões."
+   },
+   "plano": {
+    "brancas": "Manter o centro e4-d4 e responder à ruptura ...d5 com exd5. A dama vai para c2 ou b3 contra c7 e f7, e Rfe1 apoia o centro.",
+    "pretas": "Dissolver o centro com ...d5, rocar e usar a coluna a semiaberta contra a2. Depois, ...Bf5 ou ...Be6 completam o desenvolvimento; os peões dobrados em b não pesam."
    }
   },
   {
@@ -2287,6 +2639,10 @@
    "comentario": "O cavalo vai a h3, de onde controla g1 e f2 e incomoda o roque branco; após 14.Bb5+ Kf8 as pretas também perdem o roque, e o jogo fica igual.",
    "dicas": {
     "12. g3": "Expulsa o cavalo de f4, que mirava g2 e d3."
+   },
+   "plano": {
+    "brancas": "Desenvolver com Qd2, levar o bispo de volta a c4 mirando f7 e usar Nh4-f5. O cavalo de h3 controla g1 e impede o roque curto, então o roque longo é a opção natural.",
+    "pretas": "Pressionar f2 e b2 com ...Qb6, cravar o cavalo com ...Bg4 e recuar o cavalo por g5. Com ...g6 e ...Kg7, o rei sai do caminho e as torres se ligam."
    }
   },
   {
@@ -2302,6 +2658,10 @@
    "comentario": "Após 9.Nxf6+ gxf6 as pretas têm peões dobrados, mas ganham o par de bispos e a coluna g semiaberta para a torre; igualdade.",
    "dicas": {
     "7. Nd5": "Ocupa d5 e aumenta a pressão sobre o cavalo cravado em f6, mas permite 7...Nxc4, que elimina o bispo italiano."
+   },
+   "plano": {
+    "brancas": "Fechar a coluna g com Bg3, que defende o roque contra ...Bxg2. Depois, Nh4 rumo a f5 e o avanço b4 no flanco da dama; a dama em d3 liga as torres.",
+    "pretas": "Usar o par de bispos e a coluna g: recolocar o bispo em g4, jogar ...Qd7 e rocar longo. A ruptura ...d5 abre diagonais para os bispos."
    }
   },
   {
@@ -2316,6 +2676,10 @@
    "comentario": "Com a dama em b6, as pretas atacam b2 e ficam um pouco melhor.",
    "dicas": {
     "10. Be3": "Recua o bispo para disputar a diagonal do bispo de c5, em vez de mantê-lo na diagonal h4–d8."
+   },
+   "plano": {
+    "brancas": "Simplificar com Bxc5 Qxc5, rocar e consolidar com b3 e Kh1. O cavalo vai a h4 e f5, e o roque preto fica comprometido pelos peões dobrados de f.",
+    "pretas": "Usar o par de bispos e a coluna g com ...Rg8 contra g2, rocar longo e cravar com ...Bg4. A ruptura ...d5 abre o centro e expõe os peões dobrados de c; posição um pouco melhor para as pretas."
    }
   },
   {
@@ -2331,6 +2695,10 @@
    "comentario": "Mais ou menos igual.",
    "dicas": {
     "12. O-O": "Completa o desenvolvimento e põe o rei a salvo, deixando o bispo de h4 sujeito a ...g5."
+   },
+   "plano": {
+    "brancas": "Explorar f5, fraca depois de ...g5: Nf5, Re1 e h3. Também é possível f4 para abrir o roque preto; a dama em d3 ou f3 apoia.",
+    "pretas": "O par de bispos e a ruptura ...d5 dão jogo igual; ...a5-a4 ataca os peões dobrados em b. Cuidado com o roque enfraquecido."
    }
   },
   {
@@ -2345,6 +2713,10 @@
    "comentario": "Entra no Ataque Max Lange, tratado à parte no livro.",
    "dicas": {
     "5... exd4": "Mantém o bispo em c5 e recaptura com o peão; 6.e5 ataca então o cavalo de f6."
+   },
+   "plano": {
+    "brancas": "Depois de ...d5, capturar exf6 e responder a ...dxc4 com Re1+ e o avanço fxg7, abrindo o rei preto. Bg5 ou Bh6 e o cavalo por d2 atacam o rei que não pode rocar curto.",
+    "pretas": "Contra-atacar com ...d5 e recuperar a peça com ...dxc4. Depois, ...Rg8 elimina o peão de g7, o rei vai a f7 ou o roque é longo, e os peões de c4 e d4 compensam."
    }
   },
   {
@@ -2359,6 +2731,10 @@
    "comentario": "Pegar d4 com o cavalo perde o peão de e5.",
    "dicas": {
     "5... Nxd4": "O cavalo de c6 deixa de defender e5; o cavalo branco captura com tempo e ainda mira f7 junto com o bispo."
+   },
+   "plano": {
+    "brancas": "Aproveitar a pressão em f7: Bxf7+ ou Nxf7 ganham material. Depois, e5 expulsa o cavalo de f6, c3 expulsa o de d4 e Nc3 completa o desenvolvimento.",
+    "pretas": "Contra-atacar com ...Qe7, que ataca o cavalo de e5, e expulsá-lo depois com ...d6. Os cavalos de d4 e f6 e o bispo de c5 dão atividade, mas o rei precisa de cuidado depois de perder f7."
    }
   },
   {
@@ -2374,6 +2750,10 @@
    "comentario": "Com 8.fxe5 dxe5 e 9.Bg5, as brancas abrem a coluna f e pressionam f6, o que compensa o peão entregue; segundo o livro, o jogo fica igual.",
    "dicas": {
     "7. f4": "Ataca e5 de imediato para abrir a coluna f contra as pretas, em vez de cravar com 7.Bg5."
+   },
+   "plano": {
+    "brancas": "Pegar o peão de f6 com Rxf6, dobrar as torres na coluna f com Raf1 e atacar f7 e e5. O cavalo de c4 pressiona e5 e d6; a estrutura preta é ruim e o final é favorável.",
+    "pretas": "Ativar tudo: ...Ke7 ataca a torre de f6, o cavalo vai a f4 e d3 e as torres ocupam a coluna g com ...Rag8 contra g2. Sem atividade, os peões fracos caem."
    }
   },
   {
@@ -2389,6 +2769,10 @@
    "comentario": "11.c3 expulsa o cavalo de d4; as pretas trocam em c4 e levam o cavalo a e6, atacando o bispo de g5, num jogo pouco claro.",
    "dicas": {
     "10... Qe7": "A dama protege o cavalo de f6, de modo que Bxf6 possa ser respondido com ...Qxf6 sem dobrar peões."
+   },
+   "plano": {
+    "brancas": "Pelo peão, Bxf6 estraga a estrutura preta. Depois, Qf1 ou Qf3 contra f6 e f7, Rd1 na coluna d e o cavalo em e3 ou d5 mantêm a pressão sobre o rei preto ainda no centro.",
+    "pretas": "Responder Bxf6 com ...Qc5+ e ...gxf6, usando a coluna g aberta com ...Rg8 contra o roque. O cavalo vai para f4, e o peão de e4 é um alvo; o rei pode ficar no centro ou rocar longo."
    }
   },
   {
@@ -2404,6 +2788,10 @@
    "comentario": "O livro imprime \"10 c3 Bxe4\", ilegal para o bispo de e6; pelo 11.Nxc4 seguinte, transcrito como 10...Bxc4.",
    "dicas": {
     "8... Be6": "Oferece a troca do bispo de c4, a peça branca mais perigosa contra f7, antes de reforçar e5."
+   },
+   "plano": {
+    "brancas": "A torre de f2 está cravada pela dama de c5: desfazer a cravada com Qf1 e Kh1, ocupar a coluna d com Rd1 e atacar os peões dobrados de f6 e f7. O cavalo de c4 vai a e3 ou a5.",
+    "pretas": "Retomar com ...gxf6, levar o cavalo a f4, uma casa forte, e usar a coluna g aberta com ...Rg8 contra g2. O peão de e4 é um alvo para a dama."
    }
   },
   {
@@ -2419,6 +2807,10 @@
    "comentario": "Chances aproximadamente iguais.",
    "dicas": {
     "12. Kh1": "Lance profilático: tira o rei da diagonal g1–a7, evitando xeques como ...Qc5+."
+   },
+   "plano": {
+    "brancas": "Com o peão a menos e atraso no desenvolvimento, tirar o cavalo de b1 com b3 e Na3. Bxf6 gxf6 estraga a estrutura preta, e Qf3 e Rf2 defendem a segunda fileira e pressionam f6.",
+    "pretas": "Dominar a coluna d e invadir com ...Qd2 ou ...Qd3. Depois de ...h6 e da troca em f6, a coluna g se abre para ...Rhg8 contra o rei; ...Bc4 ganha tempo contra a dama e a torre."
    }
   },
   {
@@ -2433,6 +2825,10 @@
    "comentario": "As brancas recuperam o bispo com 12.Qxc5.",
    "dicas": {
     "5... Bc5": "Recua para c5, mas ali o bispo fica exposto ao avanço d4 com ganho de tempo; 5...Ba5 é mais preciso."
+   },
+   "plano": {
+    "brancas": "Recuperar o bispo com Qxc5+, depois pegar o peão de d3 com Qxd3 e desenvolver com Ba3 contra f8, Nd2 e as torres no centro. O rei preto não roca; e5 abre linhas contra ele.",
+    "pretas": "Jogar ...Kf8, aceitar a perda do bispo e fechar a diagonal com ...d6. Desenvolver com ...b6, ...Bb7 contra e4 e ...Nf6, e então sair da casa f8 com ...h6 e ...Kf7 ou ...Kg8."
    }
   },
   {
@@ -2447,6 +2843,10 @@
    "comentario": "8.cxd4 restaura o centro e4–d4 atacando o bispo de c5; pelo peão do gambito, as brancas têm iniciativa e ficam um pouco melhor.",
    "dicas": {
     "7... d6": "Solidifica o centro e libera o bispo de c8, preferindo uma estrutura clássica ao agudo 7...d3."
+   },
+   "plano": {
+    "brancas": "Pelo peão, desenvolver com Nc3, Bb2 e h3 para tirar g4 do bispo, usando a coluna b contra b7 com Rb1. Avançar d5 ou e5 no momento certo.",
+    "pretas": "Recuar com ...Bb6, trocar o bispo de c4 com ...Na5 e desenvolver o cavalo por e7 antes de rocar. Manter o peão a mais com uma posição sólida."
    }
   },
   {
@@ -2462,6 +2862,10 @@
    "comentario": "Não se joga mais: as brancas ficam com jogo ativo.",
    "dicas": {
     "6... Qf6": "Defende e5 com a dama, mas ela sai cedo demais e fica exposta a ganhos de tempo, como d4 e e5."
+   },
+   "plano": {
+    "brancas": "Aproveitar a dama exposta: d4 ataca e5 com ganho de tempo, Bg5 empurra a dama, e d5 expulsa o cavalo de c6. Com a vantagem de desenvolvimento, abrir linhas antes que o rei preto roque.",
+    "pretas": "Desenvolver com ...Nge7, segurar e5 e reposicionar a dama (...Qd6 ou ...Qg6). Levar o bispo a b6, rocar e, se preciso, devolver o peão para completar o desenvolvimento."
    }
   },
   {
@@ -2476,6 +2880,10 @@
    "comentario": "Não se joga mais: as brancas ficam com jogo ativo.",
    "dicas": {
     "6... Nge7": "Desenvolve o cavalo pensando em ...d5, mas tira a proteção natural de f7, alvo de Ng5 com o bispo de c4."
+   },
+   "plano": {
+    "brancas": "Atacar f7 de imediato: Ng5, e se ...d5 exd5 Nxd5, o sacrifício Nxf7 seguido de Qf3+ expõe o rei preto. Depois, d4 e Ba3 abrem linhas contra o rei no centro.",
+    "pretas": "Fechar a diagonal do bispo com ...d5 e rocar o quanto antes. Defender f7 e não aceitar sacrifícios que deixem o rei aberto no centro; a posição é difícil."
    }
   },
   {
@@ -2491,6 +2899,10 @@
    "comentario": "Uma alternativa jogável.",
    "dicas": {
     "6... Nf6": "Desenvolve atacando e4; depois de 7.d4 as pretas aceitam abrir o jogo capturando mais um peão com 7...Nxe4."
+   },
+   "plano": {
+    "brancas": "Trocar em c6 com Nxc6, que estraga os peões pretos, e pressionar o cavalo de e4 e h7 com Bd3 e Qc2. Nd2 troca o cavalo, e Rae1 abre a coluna e; o par de bispos compensa o peão.",
+    "pretas": "Retomar ...bxc6, sustentar o cavalo de e4 com ...Re8 e ...f5 e desenvolver com ...Qf6 e ...Bd7. Com o peão a mais, trocar peças é bom para as pretas."
    }
   },
   {
@@ -2505,6 +2917,10 @@
    "comentario": "A antiga \"posição normal\": o ataque e o centro brancos compensam o material a menos.",
    "dicas": {
     "7... exd4": "Fica com o peão a mais, mas cede o centro: após 8.cxd4 as brancas formam a dupla e4–d4."
+   },
+   "plano": {
+    "brancas": "Manter o bispo com Bd3 se ...Na5, jogar h3 e usar Rb1 contra b7. O avanço e5 ou d5 abre linhas contra o rei preto; Bg5 incomoda o cavalo de e7.",
+    "pretas": "Trocar o bispo de c4 com ...Na5, desenvolver com ...Ne7 (não ...Nf6, por causa de e5) e rocar. Depois, ...c5 ataca o centro branco."
    }
   },
   {
@@ -2519,6 +2935,10 @@
    "comentario": "Leva a posições agudas.",
    "dicas": {
     "9... Bg4": "Crava o cavalo de f3 contra a dama, aumentando a pressão sobre d4."
+   },
+   "plano": {
+    "brancas": "Com Bb5 cravar o cavalo de c6 e avançar d5 para ganhar espaço; Ba3 controla f8 e dificulta o roque. Mais tarde, e5 ou d6 abrem o centro contra o rei.",
+    "pretas": "Pressionar d4 com a cravada do cavalo de f3 e desenvolver o cavalo de g8 (...Nge7 ou ...Nf6) para rocar. Com o peão a mais, bloquear o centro com um cavalo em e5."
    }
   },
   {
@@ -2533,6 +2953,10 @@
    "comentario": "Leva a posições agudas.",
    "dicas": {
     "9... Na5": "Ataca o bispo de c4, buscando trocá-lo ou desviá-lo da diagonal contra f7."
+   },
+   "plano": {
+    "brancas": "Manter o bispo com Bd3, jogar h3 e usar a coluna b aberta com Rb1 e Rb5. O avanço e5 abre linhas contra o rei preto.",
+    "pretas": "Desenvolver o cavalo com ...Ne7-g6, rocar e minar o centro com ...c5. Trocar o bispo de c4 é uma boa ideia, e o peão a mais deve ser mantido."
    }
   },
   {
@@ -2548,6 +2972,10 @@
    "comentario": "Lance jogado com frequência por Anderssen.",
    "dicas": {
     "9. d5": "Ganha espaço e expulsa o cavalo de c6, mas desocupa d4 e abre a diagonal do bispo de b6 rumo a f2."
+   },
+   "plano": {
+    "brancas": "Romper com e5 para abrir linhas enquanto as pretas não se desenvolvem, apoiado por Nc3, Bb2, Qb3 contra f7 e b7 e torre em e1. O centro e a vantagem de desenvolvimento compensam o peão.",
+    "pretas": "Tirar o cavalo de c6 com ...Nce7 ou ...Na5, desenvolver com ...Nf6 e ...O-O e usar o bispo de b6 na diagonal até f2. Com o peão a mais, trocar peças e frear o avanço e5."
    }
   },
   {
@@ -2563,6 +2991,10 @@
    "comentario": "Sem damas, as brancas restabelecem a igualdade material em e5; as pretas se desenvolvem rapidamente com ...Be6 e ...Ne7, e o final é igual.",
    "dicas": {
     "9. Qxd8+": "Troca as damas e recupera o peão do gambito com 10.Nxe5, abrindo mão do ataque por um final equilibrado."
+   },
+   "plano": {
+    "brancas": "Desenvolver o cavalo de b1 por d2 ou a3, avançar a4-a5 contra o bispo de b6 e disputar a coluna d com Rd1. Proteger os peões isolados de a2 e c3.",
+    "pretas": "Trocar com ...Bxc4 e levar os cavalos a g6 e e5, de olho em d3. O roque longo põe a torre na coluna d; os peões de a2 e c3 são os alvos."
    }
   },
   {
@@ -2577,6 +3009,10 @@
    "comentario": "Após as trocas em e7 e c6, as brancas recuperam o peão com 14.Nxe5; o rei preto fica no centro, mas as pretas têm o par de bispos e oferecem a troca de damas com 14...Qe6; igualdade.",
    "dicas": {
     "11... Nge7": "Desenvolve e protege o cavalo de c6, atacado pelo bispo de d5, mas permite 12.Bxe7, que tira o roque das pretas."
+   },
+   "plano": {
+    "brancas": "Forçar a troca das damas com Qa3+ e melhorar os cavalos: Nc4 ataca o bispo de b6 e Nd2 desenvolve. a4-a5 incomoda os bispos, e as torres vão para a coluna b.",
+    "pretas": "Com o par de bispos numa posição aberta, desenvolver com ...Be6 e colocar as torres nas colunas c e d. Num final, o rei fica bem no centro, e os peões de c3 e a2 são alvos."
    }
   },
   {
@@ -2592,6 +3028,10 @@
    "comentario": "As pretas vencem. As brancas devem evitar esta linha antiga, se não houver melhora.",
    "dicas": {
     "13. Nxg5": "Recupera o peão de g5, mas 13...Kf8! prende o bispo de g8 e a investida do cavalo não compensa."
+   },
+   "plano": {
+    "brancas": "A posição está perdida: há a ameaça de ...Qg2#, e f3 abre a diagonal do bispo de b6 até g1. Só resta adiar com xeques como Qa3+; a lição é evitar esta linha.",
+    "pretas": "Dar o mate: ...Qg2#, com o bispo de h3 protegendo a dama. Contra os xeques, cobrir com ...Ne7; o mate sai em poucos lances."
    }
   },
   {
@@ -2606,6 +3046,10 @@
    "comentario": "Após 13...Qf6 as pretas mantêm o peão a mais; a dama pressiona o cavalo de f3 e o avanço ...g4 fica no ar, deixando as pretas melhor.",
    "dicas": {
     "13. Bd5": "Salva o bispo de g8, atacado pela torre de h8, e o alinha com a dama de b3 contra f7, mas não recupera o peão."
+   },
+   "plano": {
+    "brancas": "Com um peão a menos e pressão em f2, desenvolver o cavalo de b1 (Na3, Nd2), impedir o roque com Qb4 e trocar o bispo de b6 com Nc4. O ataque preto a f2 é o problema a resolver primeiro.",
+    "pretas": "Expulsar a dama com ...Na5, avançar ...g4 contra o cavalo de f3 e f2 e levar a torre a f8. ...Bxf2+ é um tema constante; com o peão a mais e as peças ativas, as pretas estão bem melhor."
    }
   },
   {
@@ -2621,6 +3065,10 @@
    "comentario": "As pretas fecham a diagonal com 8...d5 e, depois de ...Ne5 e ...Ng4, o cavalo fica muito ativo contra o roque branco; as pretas ficam um pouco melhor.",
    "dicas": {
     "8. Ng5": "Mira f7 de imediato em vez de recuperar o peão com 8.cxd4, mas 8...d5 corta a diagonal do bispo."
+   },
+   "plano": {
+    "brancas": "Recuar o cavalo para e4 e desenvolver com Bg5 e Qf3, mantendo o bispo forte de b3. O peão de d5 pode cair; manter as peças ativas contra o roque preto.",
+    "pretas": "Ganhar o peão de d5 com ...Nxd5 e pôr os cavalos em d5 e f6, bloqueando o centro. Depois, ...c6 e ...Bf5 consolidam, e o peão de d4 e o de a2 viram alvos."
    }
   },
   {
@@ -2636,6 +3084,10 @@
    "comentario": "10...Be6 sustenta d5; após 11.Qxb7 as pretas ganham tempo contra a dama com ...Ndb4 e ...Rb8, e ficam um pouco melhor.",
    "dicas": {
     "10. Qb3": "Forma bateria com o bispo contra d5 e ataca b7, buscando material, mas a dama se afasta do centro e sofre ganhos de tempo."
+   },
+   "plano": {
+    "brancas": "A dama de b7 está atacada pela torre: simplificar com Bxc6+ e Nxc6, entrando num final. Depois, ativar o bispo (Be3), levar a torre à coluna c contra c7 e trazer o cavalo de b1.",
+    "pretas": "Depois das trocas, ocupar a segunda fileira com ...Rb2 e ganhar o peão de a2. Com o par de bispos e o peão passado de a7, o final favorece as pretas."
    }
   },
   {
@@ -2651,6 +3103,10 @@
    "comentario": "Após 13.Bxc6 Rb8 a dama é expulsa de b7 e o cavalo de b4 recaptura em c6, recuperando a peça; posição pouco clara.",
    "dicas": {
     "12... O-O": "Roca e tira o rei da cravada, deixando o cavalo de c6 provisoriamente entregue em troca de tempo contra a dama."
+   },
+   "plano": {
+    "brancas": "Salvar a dama com Qxa7 e desenvolver rápido com Nc3 e Be3, segurando o peão de d4. A segurança do rei é a maior preocupação.",
+    "pretas": "Recuperar a peça com ...Nxc6 e jogar ...Bd5 e ...Bxf3 para dobrar os peões do roque branco. Depois, ganhar o peão de d4 e levar o cavalo a e2 ou f4."
    }
   },
   {
@@ -2666,6 +3122,10 @@
    "comentario": "A partida foi até 13...Kf8; 14.Ne5 deve dar vantagem às brancas.",
    "dicas": {
     "12... Bd7": "Defende o cavalo de c6, cravado pelo bispo de b5, mas abre a coluna e para 13.Re1+."
+   },
+   "plano": {
+    "brancas": "Explorar o rei preto em f8: Ba3 crava o cavalo de b4 contra a diagonal até f8, Nc3 desenvolve e Rad1 apoia d4. A dama de b7 é ativa, mas cuidado com ...Rb8.",
+    "pretas": "Trocar o cavalo de e5 com ...Nxe5, expulsar a dama com ...Rb8 e trocar os bispos com ...Bxb5. O cavalo pode ganhar d4, e o rei se esconde com ...h6 e ...Kg8."
    }
   },
   {
@@ -2681,6 +3141,10 @@
    "comentario": "Após 12.Bxc6+ bxc6 13.Bxb4 Nxb4 as pretas ficam com peões dobrados em c, mas podem rocar e o cavalo chega a d3; jogo igual.",
    "dicas": {
     "11... Bb4": "Oferece a troca do bispo de a3, que controlava f8 e impedia o roque preto."
+   },
+   "plano": {
+    "brancas": "Depois da troca das damas, o peão de c6 aperta as pretas. Levar uma torre à coluna e (Rae1) e outra à coluna b, e usar os cavalos contra a7 e c7.",
+    "pretas": "Trocar as damas com ...Qxc6, rocar e levar o cavalo a d3. As torres atacam o peão de c6 e o de a2."
    }
   },
   {
@@ -2696,6 +3160,10 @@
    "comentario": "As pretas ficam um pouco melhor.",
    "dicas": {
     "13. Bxc6+": "Recupera o peão do gambito desfazendo a estrutura preta, mas abre mão do bispo e o rei preto fica bem em f7."
+   },
+   "plano": {
+    "brancas": "Trocar o forte cavalo de d5 com Nc3, ocupar a coluna e com Rfe1 contra o bispo de e6 e oferecer a troca do bispo de b6 com Bc5. A dama em c6 pressiona c7.",
+    "pretas": "Ligar as torres com ...Re8 e centralizar a dama em d5, oferecendo a troca. O par de bispos e o cavalo pressionam o peão isolado de d4, e o de a2 também é alvo."
    }
   },
   {
@@ -2711,6 +3179,10 @@
    "comentario": "Após 9.Nxc3 a oferta de troca 9...Qb4 deixa f7 desguarnecido: 10.Bxf7+ Kd8 tira o roque das pretas e, com o par de bispos e melhor desenvolvimento, as brancas ficam melhor.",
    "dicas": {
     "8... Qe7": "Também protege f7, mas, ao contrário de 8...Qf6, não pressiona c3, que as brancas recapturam com o cavalo e ganho de desenvolvimento."
+   },
+   "plano": {
+    "brancas": "Explorar o atraso preto: f4 e e5 expulsam o cavalo de f6, as torres vão para e1 e f3, e Nf7+ ameaça garfar o rei e a torre de h8. O par de bispos domina as diagonais.",
+    "pretas": "Defender com ...Ke7, que protege f7, e ganhar tempo com ...b5 e ...b4 contra o bispo de c3. Desenvolver com ...Ba6, atacando a torre de f1, e ...d6; devolver o peão é aceitável."
    }
   },
   {
@@ -2726,6 +3198,10 @@
    "comentario": "Com o bispo de a3 dominando as casas escuras, a dama em c3 apoiando e5 e a torre ocupando a coluna d, as brancas têm clara vantagem.",
    "dicas": {
     "11... Bxc3": "Troca o bispo pelo cavalo de c3, mas entrega o par de bispos e enfraquece as casas escuras."
+   },
+   "plano": {
+    "brancas": "Explorar as casas escuras com o bispo de a3 e a dama de c3, manter o peão de d7 travado com a torre de d1 e perseguir a dama com Bd3 ou Nh4. Rfe1 apoia e5; vantagem branca.",
+    "pretas": "Com dois peões a mais, desenvolver o bispo de c8 com ...b6 e ...Bb7 ou ...Ba6, e ativar o cavalo com ...a5 e ...Nb4-d5. Devolver um peão para liberar d7 é razoável."
    }
   },
   {
@@ -2741,6 +3217,10 @@
    "comentario": "A Defesa Comprometida é difícil para as pretas.",
    "dicas": {
     "13. Bd3": "Ataca a dama de g6 com ganho de tempo e mira h7, preparando Bxh7+."
+   },
+   "plano": {
+    "brancas": "Ataque decisivo: exd6 abre a coluna d, o cavalo de d5 ataca e7 e c7, e o bispo de a3 mira e7. Recuar o bispo de h7 só quando ele tiver feito seu trabalho.",
+    "pretas": "Posição muito difícil: ...d6 libera o bispo de c8, e ...Nf5 troca um atacante. Devolver material para trocar peças é a única chance de sobreviver."
    }
   },
   {
@@ -2756,6 +3236,10 @@
    "comentario": "Melhora sobre 9.Bxf7+.",
    "dicas": {
     "7... Nxd4": "Contragolpe que ataca a dama de b3, mas após 8.Nxd4 exd4 o desenvolvimento preto atrasa e f7 continua fraco."
+   },
+   "plano": {
+    "brancas": "Manter a bateria contra f7 e recuperar um peão com cxd4. Bg5 ou Ba3 desenvolvem com ganho de tempo, e as colunas e e f podem se abrir contra o rei ainda no centro.",
+    "pretas": "Neutralizar a bateria com ...Be6, desenvolver com ...Ne7 e rocar. Com dois peões a mais, devolver um deles para completar o desenvolvimento é aceitável."
    }
   },
   {
@@ -2771,6 +3255,10 @@
    "comentario": "Após 9...Kf8 10.O-O Qf6 a dama ataca o bispo de f7 e as pretas reorganizam a defesa; por isso o livro prefere 9.O-O, que mantém o ataque.",
    "dicas": {
     "9. Bxf7+": "Recupera um peão com xeque e tira o roque das pretas, mas o bispo fica exposto em f7."
+   },
+   "plano": {
+    "brancas": "Recuar o bispo para c4 e pressionar a coluna e com Re1 e Re3. Depois de ...dxc3, desenvolver com Nxc3 e Bb2 contra o rei preto, que está sem roque.",
+    "pretas": "Ganhar o peão com ...dxc3 e centralizar com ...Qe5 e ...Nf6. Depois, ...b5 expulsa o bispo; o rei e a torre de h8 ainda precisam de casas."
    }
   },
   {
@@ -2786,6 +3274,10 @@
    "comentario": "A coluna segue 8.Nbd2, sugestão de Larry Christiansen como melhora sobre esta linha.",
    "dicas": {
     "8. dxe5": "Troca em e5 para abrir a coluna d, mas alivia a tensão central e facilita o jogo das pretas."
+   },
+   "plano": {
+    "brancas": "Rocar, firmar o cavalo de d6 com c4 e trocar o bispo de c8 com Nxc8+. A dama vai para c2, a torre para d5 e o cavalo para h4-f5, buscando atividade contra o rei preto.",
+    "pretas": "Com dois peões a mais, desafiar o cavalo de d6 com ...Nh6-f7, levar o rei para f8 e trocar peças. O peão de c5 e o centro e5-f6 dão solidez; as pretas estão melhor."
    }
   },
   {
@@ -2801,6 +3293,10 @@
    "comentario": "Bom para as brancas.",
    "dicas": {
     "8... exd4": "Cede o centro: após 9.cxd4 as brancas ficam com a dupla e4–d4 e mais espaço."
+   },
+   "plano": {
+    "brancas": "Retomar com cxd4, formar o centro e4-d4 e avançar d5 para expulsar o cavalo de c6. Rocar, pôr o bispo em a3 contra d6 e romper com e5.",
+    "pretas": "Desenvolver com ...Nf6, ...Ne7 e rocar logo; depois, ...a6 e ...b5 atacam o bispo de c4. Devolver o peão para se desenvolver é aceitável."
    }
   },
   {
@@ -2816,6 +3312,10 @@
    "comentario": "Bom para as brancas.",
    "dicas": {
     "8... Nf6": "Desenvolve atacando e4, mas adia ...Bb6 e o bispo de a5 segue com pouca mobilidade."
+   },
+   "plano": {
+    "brancas": "Rocar e abrir o jogo com dxe5, levando o bispo a a3. Ng5, com a dama em b3 e o bispo em c4, pressiona f7; a coluna d aberta serve às torres.",
+    "pretas": "Rocar curto, cuidar de f7 e ativar o bispo de a5 por b6, contra f2. Com o peão a mais e as peças desenvolvidas, trocar peças favorece as pretas."
    }
   },
   {
@@ -2831,6 +3331,10 @@
    "comentario": "Bom para as brancas.",
    "dicas": {
     "8... Nh6": "O cavalo vai à borda para defender f7, mas fica mal colocado e o bispo de a5 continua sem ...Bb6."
+   },
+   "plano": {
+    "brancas": "Rocar e cravar o cavalo de c6 com Bb5, trocando-o depois. Nc4 ataca o bispo de a5, e Bxh6 estraga o roque preto.",
+    "pretas": "Recuar o bispo para b6, rocar e trocar o bispo de c4 com ...Na5. Com o centro firme, manter o peão a mais."
    }
   },
   {
@@ -2845,6 +3349,10 @@
    "comentario": "Equilíbrio de material incomum, provavelmente um pouco melhor para as brancas.",
    "dicas": {
     "13. exd6": "Captura em d6 e ameaça dxc7, ignorando a pressão do cavalo de g4 e do bispo sobre f2."
+   },
+   "plano": {
+    "brancas": "As quatro peças menores funcionam bem juntas: Bb5 ataca a dama, os cavalos vão a d4 e f5 e o bispo de a3 pressiona d6. Evitar abrir linhas para as torres pretas.",
+    "pretas": "Desenvolver o bispo com ...b6 e ...Bb7 ou ...Be6, oferecer a troca das damas com ...Qe6 e abrir colunas para as torres. Os peões de a e b, sem oposição, podem avançar."
    }
   },
   {
@@ -2859,6 +3367,10 @@
    "comentario": "6...Nh6 defende f7; com ...Na5 e ...Nxc4 as pretas eliminam o bispo italiano e, nas complicações seguintes, ficam um pouco melhor.",
    "dicas": {
     "6. Qb3": "Forma uma bateria com o bispo contra f7, tentando ganhar tempo antes de d4."
+   },
+   "plano": {
+    "brancas": "Rocar e trazer peças: Nbd2 e Re1 contra o bispo de e7 e o rei preto ainda no centro. Xeques com Qh5+ e a dama em h6 atrapalham o rei.",
+    "pretas": "Fechar a coluna e com ...d5, liberar o bispo de c8 (...Bg4 ou ...Bf5) e levar o rei para g8. O par de bispos e a torre de g7 contra g2 dão boas chances."
    }
   },
   {
@@ -2873,6 +3385,10 @@
    "comentario": "Também está bom para as pretas.",
    "dicas": {
     "12. d5": "Ganha espaço em vez de recuperar a peça com 12.Qxe4, mas o cavalo preto se retira para c5 em segurança."
+   },
+   "plano": {
+    "brancas": "O bispo de g7 está em perigo na coluna g: trocá-lo com Bf6 ou recuá-lo, desenvolver com Nbd2 e rocar. A troca das damas reduz o perigo, mas o par de bispos preto continua forte.",
+    "pretas": "Atacar o bispo de g7 e usar a coluna g aberta contra g2. ...d6, ...Qd7 e ...Bf5 desenvolvem; num final, o par de bispos e o rei em d7 dão vantagem às pretas."
    }
   },
   {
@@ -2887,6 +3403,10 @@
    "comentario": "Mais ou menos igual.",
    "dicas": {
     "7. Nxe5": "Captura e5, mas entrega o bispo de c4; as pretas ficam com o par de bispos e jogam ...d5 com tempo."
+   },
+   "plano": {
+    "brancas": "Ganhar tempo com Ne3 contra a dama e rocar. Trocar os bispos de casas pretas com Ba3 e levar a dama a b3.",
+    "pretas": "Atacar os peões fracos de a2 e c3 com ...Qa5, desenvolver com ...Nf6 e ...Be6 e rocar. O par de bispos favorece as pretas a longo prazo."
    }
   },
   {
@@ -2901,6 +3421,10 @@
    "comentario": "Jogado às vezes, mas não preocupa muito as pretas.",
    "dicas": {
     "7. Bd3": "Preserva o bispo e protege e4, mas o bispo em d3 obstrui a coluna d e não pressiona f7."
+   },
+   "plano": {
+    "brancas": "Recuperar o peão com dxe5 e Nxe5, rocar e desenvolver com Qc2 e Nbd2. O centro e a vantagem de desenvolvimento compensam os peões fracos de a2 e c3.",
+    "pretas": "Jogar ...d6 e, após as trocas, ...Nf6 e ...O-O, ganhando tempo com ...Qd6 ou ...Ng4. Trazer o cavalo de a5 de volta via c6 e atacar os peões fracos de a2 e c3."
    }
   },
   {
@@ -2915,6 +3439,10 @@
    "comentario": "Jogado às vezes, mas não preocupa muito as pretas.",
    "dicas": {
     "7. Bxf7+": "Sacrifica o bispo em f7 para tirar o roque das pretas e capturar e5 em seguida, mas o ataque não compensa a peça."
+   },
+   "plano": {
+    "brancas": "Pela peça, as brancas têm dois peões e o rei preto deslocado: Nxe5+ e xeques como Qh5+. Depois, rocar e avançar f4-f5 contra o rei, mas as pretas têm muito material.",
+    "pretas": "Capturar com ...Kxf7 e, depois de Nxe5+, levar o rei a e8. Desenvolver com ...Nf6, ...d6 e ...Rg8, trazendo o cavalo de a5 de volta; com a peça a mais, consolidar e trocar."
    }
   },
   {
@@ -2930,6 +3458,10 @@
    "comentario": "Mais seguro que 7...exd4.",
    "dicas": {
     "7... d6": "Sustenta e5 em vez de capturar em d4, mantendo o centro fechado e o rei mais seguro."
+   },
+   "plano": {
+    "brancas": "Desenvolver com Bf4 e Nd2, ocupar a coluna d com Rd1 e levar o cavalo a d4, onde mira c6 e b5. A maioria de peões no centro e no flanco do rei é o trunfo para mais tarde.",
+    "pretas": "Completar com ...Qb6 e ...Be6, levar as torres às colunas e e d e ocupar c4 com o cavalo de a5. A maioria de peões no flanco da dama (...a5, ...b4) é o plano de longo prazo."
    }
   },
   {
@@ -2945,6 +3477,10 @@
    "comentario": "As pretas aceitam perder g7 em troca de desenvolvimento rápido: após ...Bf6, ...Qe7, ...Bd7 e o roque grande, a posição fica equilibrada.",
    "dicas": {
     "8... d6": "Libera o bispo de c8, mas entrega o peão de g7, contando com ...Bf6 com tempo e a coluna g semiaberta."
+   },
+   "plano": {
+    "brancas": "Jogar Qe3 e Nbd2 e abrir a coluna b contra o rei preto com Rb1. Trocar o bispo de d7 com Bb5 ou Nd4 e avançar c4.",
+    "pretas": "Levar o rei a b8 e o bispo a g7, e usar a coluna g semiaberta com ...Rhg8 contra o roque branco. O cavalo de a5 volta para c6 quando possível."
    }
   },
   {
@@ -2959,6 +3495,10 @@
    "comentario": "O roque aqui entrega o peão de e4.",
    "dicas": {
     "11. O-O": "Roca antes de proteger e4, que fica sem defesa diante da dama de e7."
+   },
+   "plano": {
+    "brancas": "Jogar pela atividade contra o rei no centro: Re1, Nbd2 e Bd3 ganham tempo contra a dama de e4, e Bf4 ou Bh6 controlam casas importantes. A coluna g aberta ajuda a dama de g3.",
+    "pretas": "Tirar o rei da coluna e com ...Kf8 ou ...Ne7, desenvolver com ...Bd7 e ...Nf6 e trocar com ...Be5. A torre vai a g8 contra a dama de g3, e o cavalo de a5 volta por c6."
    }
   },
   {
@@ -2974,6 +3514,10 @@
    "comentario": "As pretas atacam e5 e acabam capturando o peão, mas 15.Bh6 impede o roque curto e, com Rd1 e Nc3, as brancas têm bom ataque.",
    "dicas": {
     "13. c4": "Tira a casa d5 do cavalo de b6 e ameaça c5, ganhando espaço antes de completar o desenvolvimento."
+   },
+   "plano": {
+    "brancas": "Com cxd6 abrir a coluna d contra o rei preto, que não pode rocar curto por causa do bispo de h6. Rab1 contra b7, Qe3 e Ne4 somam pressão.",
+    "pretas": "Com dois peões a mais, desenvolver com ...Be6 e trocar o bispo de h6 com ...Nf7 para poder rocar. O cavalo de e5 é forte; devolver peões para concluir o desenvolvimento."
    }
   },
   {
@@ -2988,6 +3532,10 @@
    "comentario": "Após 14.cxd5 Qxd5 15.Nc3 a dama preta é atacada com ganho de tempo; as brancas se desenvolvem rápido e a posição fica pouco clara.",
    "dicas": {
     "13... d5": "Contragolpe central que libera o bispo de c8, mas abre a coluna d com o rei preto ainda no centro."
+   },
+   "plano": {
+    "brancas": "Aproveitar o desenvolvimento: Rb1 contra b7, Rfc1 ou Rd1 e Bg5 para trocar o bispo de e7, deixando fracas as casas f6 e h6. O peão de e5 restringe as peças pretas.",
+    "pretas": "Tirar a dama do ataque (...Qa5), trocar cavalos com ...Nd5 e rocar curto. Depois, ...Be6, ...Rd8 e a dama em e4 pressionam o peão de e5, com o peão a mais."
    }
   },
   {
@@ -3003,6 +3551,10 @@
    "comentario": "Sugestão de Kasparov.",
    "dicas": {
     "13... Na4": "Antecipa c5 e controla c3, dificultando o desenvolvimento do cavalo de b1."
+   },
+   "plano": {
+    "brancas": "Impedir o roque curto com Bh6 e manter o peão de e5, que aperta as pretas. Desenvolver com Re1 e o cavalo de a3 para c2 e d4.",
+    "pretas": "Atacar o peão de e5 com ...d6, desenvolver com ...Be6 e ...Qd7 e rocar longo. O cavalo de a4 controla c3 e b2; com o peão a mais, trocar peças."
    }
   },
   {
@@ -3018,6 +3570,10 @@
    "comentario": "Após 6.b5 o cavalo é trocado em d4 e as brancas ganham tempo com c3 e d4, montando um centro forte; vantagem branca.",
    "dicas": {
     "5... a5": "Ataca b4 de novo, mas 6.b5 expulsa o cavalo de c6 com ganho de espaço."
+   },
+   "plano": {
+    "brancas": "Depois de ...Bxa1 Qxa1, a dama ataca g7 e o cavalo de d5 ameaça Nxc7+. Romper com b6 e e5, abrir a coluna d com Rd1 e caçar o rei preto, que não consegue rocar com tranquilidade.",
+    "pretas": "Fechar a diagonal com ...f6, colocar o rei em d8 ou f7 e devolver material para desenvolver o bispo de c8 com ...b6. Sobreviver ao ataque é mais importante que manter a qualidade a mais."
    }
   },
   {
@@ -3033,6 +3589,10 @@
    "comentario": "As brancas rocam e abrem a coluna f com f4, mas as pretas completam o desenvolvimento com ...d6 e ...Be6 e a posição fica igual.",
    "dicas": {
     "9... Qe7": "Defende e5 com a dama em vez de trocar em d4, mantendo o bispo de b6 ativo na diagonal."
+   },
+   "plano": {
+    "brancas": "Usar o centro de peões: f5 expulsa o bispo de e6, e a coluna f pressiona f7. Ba3 contra d6 e Qd3 completam a estrutura.",
+    "pretas": "Trocar em d4, trocar o bispo de c4 com ...Bxc4 e desenvolver com ...Nf6 contra e4, depois rocar. O bispo de b6 crava o peão de d4."
    }
   },
   {
@@ -3048,6 +3608,10 @@
    "comentario": "Após 7.b5 e as trocas na coluna a, o bispo fica em a1 mirando e5; as brancas mantêm leve vantagem.",
    "dicas": {
     "6. Bb2": "Desenvolve o bispo na grande diagonal, pressionando o peão de e5."
+   },
+   "plano": {
+    "brancas": "Pressionar f7 com a dama e o bispo de c4 e manter o bispo de a1 na grande diagonal. Ne4 troca o cavalo de f6, defensor do roque, e o peão de b5 restringe o flanco da dama preto.",
+    "pretas": "Resolver o centro com ...dxc3 e trocar o forte bispo de c3 com ...Bd4. ...Be6 neutraliza o bispo de c4, e trocar peças leva a um final igual."
    }
   },
   {
@@ -3063,6 +3627,10 @@
    "comentario": "Um gambito promissor.",
    "dicas": {
     "7. d4": "Gambito central: entrega o peão de d4 para abrir linhas enquanto o rei preto ainda está no centro."
+   },
+   "plano": {
+    "brancas": "Com dois peões a menos, atacar o rei no centro: Bg5 incomoda a dama, Re1 ocupa a coluna e e Qb3 mira f7. Recuperar material com c3 e Nxd4.",
+    "pretas": "Recuar com ...Nc6 e defender com ...f6 e ...Qf8, levando o rei para d8 se necessário. Depois, ...a5 mina o flanco da dama; com dois peões a mais, consolidar é o objetivo."
    }
   },
   {
@@ -3077,6 +3645,10 @@
    "comentario": "Após as trocas o material fica igual, mas as pretas ficam com peões dobrados em c e o rei no centro, enquanto 12.Re1 ativa as brancas; vantagem branca.",
    "dicas": {
     "8... e4": "Contra-ataca o cavalo de f3 em vez de salvar o seu; as peças se trocam, mas as brancas saem mais desenvolvidas."
+   },
+   "plano": {
+    "brancas": "Expulsar o bispo com a5, atacar o peão de e6 com Qh5+ e Qh3 e pegar com Rxe6. Bb2 e d3 completam o desenvolvimento e protegem o rei de d1.",
+    "pretas": "Retomar com ...fxe6, rocar curto e usar a coluna f contra f2 e o bispo de b6 na mesma diagonal. A dama pode atacar b4; o peão de e6 precisa de defesa."
    }
   },
   {
@@ -3092,6 +3664,10 @@
    "comentario": "As brancas recapturam com 11.Qxf3 e, com 12.Bb2, o bispo na grande diagonal mira g7; vantagem branca.",
    "dicas": {
     "10. O-O": "Roca antes de recapturar em f3, evitando o xeque ...Qe7+ que obrigaria o rei a se mover."
+   },
+   "plano": {
+    "brancas": "O bispo de b2 na grande diagonal e a dama em f3 miram o roque. Rae1 domina a coluna e; a5 expulsa o bispo de b6, e b5 ataca os peões dobrados em c.",
+    "pretas": "Trocar o bispo forte de b2 com ...Bd4, desenvolver com ...Bf5 e ...Qd6 e levar as torres à coluna e. Os peões brancos de c2 e d2 estão atrasados."
    }
   },
   {
@@ -3107,6 +3683,10 @@
    "comentario": "As pretas trocam o cavalo em f3 e, com 11...d6, completam o desenvolvimento com conforto; ficam um pouco melhor.",
    "dicas": {
     "10. O-O": "Roque natural, mas perde o momento de 10.d6, que atrapalharia o desenvolvimento preto."
+   },
+   "plano": {
+    "brancas": "Desenvolver com d3 e Be3 para trocar o bispo de a7, o melhor das pretas. O peão de d5 e o espaço no flanco da dama (a5, b4) dão uma posição sólida; f3 segura o roque.",
+    "pretas": "Rocar e avançar ...f5, usando a maioria no flanco do rei contra o roque branco, com a dama indo a h4. ...Bd7 e ...Bb5 oferecem a troca do bispo de c4."
    }
   },
   {
@@ -3122,6 +3702,10 @@
    "comentario": "Compensação pelo peão.",
    "dicas": {
     "13. c3": "Expulsa o bispo de d4 com ganho de tempo, preparando d4 para dominar o centro."
+   },
+   "plano": {
+    "brancas": "Abrir o centro com d4, ocupar a coluna e com Re1 e ativar o bispo de c1 em g5. A dama de f3 e o bispo de c4 pressionam f7 e b7.",
+    "pretas": "Devolver o peão com ...d5 para liberar o bispo de c8 e o peão de d7. Depois, ...Qc7 e ...Be6 completam o desenvolvimento; o bispo de a7 continua mirando f2."
    }
   }
  ],

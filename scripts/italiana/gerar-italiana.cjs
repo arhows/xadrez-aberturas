@@ -1,7 +1,7 @@
 // Gera data/openings/italiana.json a partir da transcrição das pp. 18–25 do MCO.
 // Uso (na raiz do projeto): node scripts/italiana/gerar-italiana.cjs
 // Os textos ficam nos arquivos ao lado: evans-dados.cjs (colunas 19–24), ameacas-dados.cjs (ameaças e armadilhas),
-// planos-dados.cjs (planos de meio-jogo) e dicas-italiana-*.json (dica do desvio e comentário de cada nota; "obs" é só para revisão).
+// planos-dados.cjs (planos de meio-jogo das colunas), planos-notas.json (os das notas) e dicas-italiana-*.json (dica do desvio e comentário de cada nota; "obs" é só para revisão).
 // Não edite data/openings/italiana.json à mão: ele é reescrito por este script.
 const fs = require('fs')
 const { createRequire } = require('module')
@@ -434,6 +434,8 @@ const dicas = {
 const evans = require('./evans-dados.cjs')
 const extras = require('./ameacas-dados.cjs')
 const planos = require('./planos-dados.cjs').italiana
+// Planos de meio-jogo do fim de cada nota (texto do app, a partir da posição final e da linha do Stockfish).
+const planosNotas = require('./planos-notas.json')
 const dicasNotas = { ...require('./dicas-italiana-1.json'), ...require('./dicas-italiana-2.json') }
 Object.assign(colunas, evans.colunas)
 notas.push(...evans.notas)
@@ -525,6 +527,7 @@ const saidaNotas = notas.map(([base, sufixo, letra, rotulo, texto, o]) => {
   const textoComentario = comentario || extra.comentario
   if (textoComentario) nota.comentario = textoComentario
   nota.dicas = { [`${Math.ceil(desvio / 2)}${desvio % 2 ? '.' : '...'} ${sans[desvio - 1].replace(/[?!]+$/, '')}`]: extra.dica }
+  if (planosNotas[id]) nota.plano = planosNotas[id]
   return nota
 })
 

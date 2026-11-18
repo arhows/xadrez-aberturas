@@ -8,6 +8,7 @@ import AvisoXeque from '../components/AvisoXeque.vue'
 import CartaoDica from '../components/CartaoDica.vue'
 import ExploradorLichess from '../components/ExploradorLichess.vue'
 import MinhaNota from '../components/MinhaNota.vue'
+import PlanoMeioJogo from '../components/PlanoMeioJogo.vue'
 import LegendaQualidade from '../components/LegendaQualidade.vue'
 import SeloQualidade from '../components/SeloQualidade.vue'
 import { marcasDoCapitulo, qualidadeDoMotor } from '../lib/qualidade'
@@ -98,6 +99,20 @@ provide(CONTEXTO_ARVORE, {
   },
   selecionar,
 })
+
+/** Plano de meio-jogo de cada posição em que termina uma coluna ou nota que tem plano. */
+const planosNoFim = new Map<string, { brancas: string; pretas: string }>()
+{
+  const planos = new Map(
+    [...capitulo.capitulo.linhas, ...(capitulo.capitulo.notas ?? [])].flatMap((u) => (u.plano ? [[u.id, u.plano] as const] : [])),
+  )
+  for (const unidade of capitulo.unidades) {
+    const plano = planos.get(unidade.id)
+    const fim = plano && percorrer(arvore, unidade.lances.map((l) => l.san))?.at(-1)?.para
+    // Colunas primeiro (vêm antes nas unidades): numa transposição, vale o plano da coluna.
+    if (fim && !planosNoFim.has(fim)) planosNoFim.set(fim, plano)
+  }
+}
 
 const noAtual = computed(() => caminho.value.at(-1)?.para ?? arvore.raiz)
 const foraDoLivro = computed(() => fora.value.length > 0)
@@ -461,6 +476,7 @@ if (!caminho.value.length && !foraDoLivro.value) responderSeForAVez()
         :texto="ultima.dica"
       />
       <CartaoDica v-else texto="Escolha um lance na lista, nas setas ou movendo a peça no tabuleiro." />
+      <PlanoMeioJogo v-if="!foraDoLivro" :plano="planosNoFim.get(noAtual)" />
       <SeloQualidade v-if="ultima" :marca="marcaDe(ultima)" :motor="motorDe(ultima)" />
       <MinhaNota
         v-if="ultima"
