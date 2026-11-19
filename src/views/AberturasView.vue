@@ -36,8 +36,11 @@ const linhasAtivas = (capitulo: CapituloCarregado) =>
 const route = useRoute()
 const router = useRouter()
 const texto = ref(String(route.query.q ?? ''))
+// Grava direto no histórico, sem o router: o RouterView usa a URL completa como chave, e um
+// router.replace recriaria a página a cada letra (o campo perdia o foco).
 watch(texto, (novo) => {
-  router.replace({ query: novo.trim() ? { q: novo } : {} })
+  const href = router.resolve({ name: 'aberturas', query: novo.trim() ? { q: novo } : {} }).href
+  window.history.replaceState(window.history.state, '', href)
 })
 
 const busca = computed(() => buscarAberturas(obterCapitulos(), texto.value))
