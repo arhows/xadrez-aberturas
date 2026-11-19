@@ -28,6 +28,7 @@ export const NOMES_DAS_FAIXAS: Record<NonNullable<Problema['faixa']>, string> = 
 export const AUTORES_DOS_LIVROS: Record<string, string> = {
   koblenz: 'Koblenz',
   grooten: 'Grooten',
+  siciliana: 'Siciliana',
 }
 
 /** Explicação curta de cada tema, mostrada antes dos problemas. */
@@ -36,6 +37,8 @@ export const EXPLICACOES: Record<string, string> = {
     'Exercícios do livro de estratégia de Alexander Koblenz (treinador de Mikhail Tal): finais, estudos e posições de partidas de mestres. Em cada um, encontre o plano. Nos finais, muitas vezes a ideia é empatar com afogamento, oposição ou xeques pelo flanco; no meio-jogo, nem sempre há combinação: às vezes o certo é um lance de manobra que prepara o ataque.',
   grooten:
     'Exercícios de estratégia do livro de Herman Grooten, organizados pelos temas do livro (peões fracos, casas fortes, coluna aberta, par de bispos…). Quase nunca há combinação: procure o plano certo para a posição, e a linha mostra como o livro o executa.',
+  siciliana:
+    'Problemas táticos de partidas reais da Defesa Siciliana jogadas no lichess, sempre pelas pretas. As brancas acabam de jogar: ache o melhor lance e siga a combinação até o fim. Estão separados pela fase da partida (abertura, saída da abertura e meio-jogo) e por dificuldade, e cada um mostra a variante e o lance em que aconteceu. Os padrões se repetem: aprenda a reconhecê-los nas suas partidas.',
   hangingPiece:
     'Uma peça desprotegida (ou mal protegida) pode ser capturada de graça. Antes de qualquer plano, olhe o que o adversário deixou sem defesa — e o que você deixou.',
   fork: 'Garfo: uma peça ataca duas (ou mais) peças ao mesmo tempo, e o adversário só consegue salvar uma. O cavalo é o rei dos garfos, mas peões, damas e até o rei também garfam.',

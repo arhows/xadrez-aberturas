@@ -299,6 +299,7 @@ const PECAS_PROMOCAO: { peca: PecaPromocao; nome: string }[] = [
           @click="trocarFaixa(f)"
         >{{ NOMES_DAS_FAIXAS[f] }}</button>
       </div>
+      <p v-if="problema.partida" class="suave">{{ problema.partida }}</p>
 
       <details class="explicacao" :open="mostrarExplicacao">
         <summary>{{ autorDoLivro ? 'Sobre estes exercícios' : `O que é ${conjunto.nome.toLowerCase()}?` }}</summary>
