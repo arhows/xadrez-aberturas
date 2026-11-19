@@ -1,7 +1,8 @@
-// Gera data/taticas/siciliana-pretas-*.json: 900 problemas táticos de partidas da Siciliana no
-// lichess, resolvidos pelas pretas, em 3 fases (pelo número do lance) × 3 faixas de dificuldade.
+// Gera data/taticas/siciliana-<lado>-*.json: 900 problemas táticos de partidas da Siciliana no
+// lichess, resolvidos pelo lado escolhido, em 3 fases (pelo número do lance) × 3 faixas de dificuldade.
+// Pretas = quem joga a Siciliana; brancas = quem a enfrenta.
 // Fonte: base de problemas do lichess (CC0), https://database.lichess.org/lichess_db_puzzle.csv.zst
-// Uso: node scripts/taticas/gerar-siciliana.mjs <caminho do .csv (descompactado)>
+// Uso: node scripts/taticas/gerar-siciliana.mjs <caminho do .csv (descompactado)> [pretas|brancas]
 //
 // O lichess só marca a abertura (coluna OpeningTags) em problemas do começo da partida, por isso
 // as fases vão do lance 2 até o meio-jogo. A escolha é aleatória com semente fixa.
@@ -11,11 +12,14 @@ import { Chess } from 'chess.js'
 
 const ARQUIVO = process.argv[2]
 if (!ARQUIVO) throw new Error('Informe o caminho do lichess_db_puzzle.csv')
+const LADO = process.argv[3] ?? 'pretas'
+if (!['pretas', 'brancas'].includes(LADO)) throw new Error('Lado: pretas ou brancas')
+const PRETAS = LADO === 'pretas'
 
 const FASES = [
-  { arquivo: 'siciliana-pretas-1-abertura', nome: 'Abertura (lances 2 a 10)', min: 2, max: 10 },
-  { arquivo: 'siciliana-pretas-2-transicao', nome: 'Saída da abertura (lances 11 a 15)', min: 11, max: 15 },
-  { arquivo: 'siciliana-pretas-3-meio-jogo', nome: 'Meio-jogo (lance 16 em diante)', min: 16, max: 999 },
+  { arquivo: `siciliana-${LADO}-1-abertura`, nome: 'Abertura (lances 2 a 10)', min: 2, max: 10 },
+  { arquivo: `siciliana-${LADO}-2-transicao`, nome: 'Saída da abertura (lances 11 a 15)', min: 11, max: 15 },
+  { arquivo: `siciliana-${LADO}-3-meio-jogo`, nome: 'Meio-jogo (lance 16 em diante)', min: 16, max: 999 },
 ]
 const FAIXAS = [
   { nome: 'facil', min: 400, max: 1300 },
@@ -143,13 +147,13 @@ for await (const linha of linhas) {
   const [id, fen, lances, rating, desvio, popularidade, jogadas, temas, url, aberturas] = linha.split(',')
   if (!aberturas?.startsWith('Sicilian_Defense')) continue
   // O FEN é a posição antes do lance do adversário: brancas na vez = as pretas resolvem.
-  if (fen.split(' ')[1] !== 'w') continue
+  if (fen.split(' ')[1] !== (PRETAS ? 'w' : 'b')) continue
   if (Number(popularidade) < 85 || Number(jogadas) < 300 || Number(desvio) > 90) continue
   const r = Number(rating)
   const faixa = FAIXAS.findIndex((f) => r >= f.min && r < f.max)
   if (faixa < 0) continue
-  // Lance das pretas que resolve = número do lance no FEN (as brancas jogam o 1º, as pretas respondem).
-  const lance = Number(fen.split(' ')[5])
+  // Número do lance que resolve: as pretas respondem no mesmo lance do FEN; as brancas, no seguinte.
+  const lance = Number(fen.split(' ')[5]) + (PRETAS ? 0 : 1)
   const fase = FASES.findIndex((f) => lance >= f.min && lance <= f.max)
   if (fase < 0) continue
   const etiquetas = aberturas.split(' ')
@@ -189,7 +193,7 @@ for (const [f, fase] of FASES.entries()) {
     for (const p of escolhidos) {
       problemas.push({
         ...converter(p),
-        partida: `${nomeDaVariante(p.variante)} · lance ${p.lance} das pretas`,
+        partida: `${nomeDaVariante(p.variante)} · lance ${p.lance} das ${LADO}`,
         rating: p.rating,
         faixa: faixa.nome,
         lichess: p.id,
@@ -199,10 +203,10 @@ for (const [f, fase] of FASES.entries()) {
   const conjunto = {
     id: fase.arquivo,
     tipo: 'tatica',
-    tema: 'siciliana',
+    tema: PRETAS ? 'siciliana' : 'siciliana-brancas',
     nome: fase.nome,
     fonte: 'Base de problemas do lichess (CC0), lichess.org: partidas da Defesa Siciliana',
-    livro: 'Siciliana, táticas pelas pretas',
+    livro: PRETAS ? 'Siciliana, táticas pelas pretas' : 'Contra a Siciliana, táticas pelas brancas',
     lances: 0,
     problemas: problemas.map((p, i) => ({ n: i + 1, ...p, solucoes: [p.linha[0]] })),
   }
