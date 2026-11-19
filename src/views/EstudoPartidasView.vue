@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useVolta } from '../lib/volta'
 import { estudosVisiveis, lerPgnDoEstudo, novoIdDeEstudo, revisoesDeEstudo, separar, type EstudoPartida, type LadoDoEstudo } from '../lib/estudoPartidas'
 import { progresso } from '../lib/progresso'
+import modelosSiciliana from '../../data/estudos/siciliana-pretas.json'
 
 /** Estudo de partidas: a lista, a revisão dos lances errados e as formas de pôr uma partida nova. */
 
@@ -15,6 +16,27 @@ const revisoes = computed(() => revisoesDeEstudo(progresso.cartoesEstudos, progr
 
 const NOME_DO_LADO: Record<LadoDoEstudo, string> = { w: 'brancas', b: 'pretas', ambos: 'os dois lados' }
 const lancesCheios = (e: EstudoPartida) => Math.ceil(separar(e.lances).length / 2)
+
+// ---------- Partidas modelo ----------
+type Modelo = (typeof modelosSiciliana)[number]
+const tituloDoModelo = (m: Modelo) => `${m.brancas} × ${m.pretas}, ${m.evento}`
+/** O estudo já criado a partir do modelo (mesmos lances, adivinhando as pretas). */
+const estudoDoModelo = (m: Modelo) => estudos.value.find((e) => e.lances === m.lances && !e.fen && e.lado === 'b')
+const faltam = computed(() => modelosSiciliana.filter((m) => !estudoDoModelo(m)))
+
+function criarDoModelo(m: Modelo): string {
+  const agora = new Date().toISOString()
+  const id = novoIdDeEstudo()
+  progresso.estudos[id] = { id, nome: tituloDoModelo(m), lances: m.lances, lado: 'b', criado: agora, atualizado: agora }
+  return id
+}
+function estudarModelo(m: Modelo) {
+  const id = estudoDoModelo(m)?.id ?? criarDoModelo(m)
+  void router.push({ name: 'estudo-partida', params: { id } })
+}
+function estudarTodas() {
+  for (const m of faltam.value) criarDoModelo(m)
+}
 
 // ---------- Colar PGN ----------
 const colando = ref(false)
@@ -109,6 +131,26 @@ function salvarPgn() {
           <button type="button" class="botao fantasma" @click="colando = false">Cancelar</button>
         </div>
       </form>
+    </section>
+
+    <section class="cartao nova">
+      <strong>Partidas modelo: Siciliana pelas pretas</strong>
+      <span class="suave">
+        Dez vitórias das pretas em partidas clássicas de jogadores de elite, uma por variante. "Estudar" põe a partida na sua
+        lista para adivinhar os lances das pretas.
+      </span>
+      <ul class="lista modelos">
+        <li v-for="m in modelosSiciliana" :key="m.id">
+          <div>
+            <strong class="titulo-item">{{ m.brancas }} × {{ m.pretas }}, {{ m.evento }}</strong>
+            <span class="suave">{{ m.variante }} · {{ Math.ceil(m.lances.split(' ').length / 2) }} lances</span>
+          </div>
+          <button type="button" class="botao" @click="estudarModelo(m)">{{ estudoDoModelo(m) ? 'Abrir' : 'Estudar' }}</button>
+        </li>
+      </ul>
+      <div v-if="faltam.length > 1" class="acoes">
+        <button type="button" class="botao fantasma" @click="estudarTodas">Pôr todas na minha lista</button>
+      </div>
     </section>
 
     <ul v-if="estudos.length" class="lista">

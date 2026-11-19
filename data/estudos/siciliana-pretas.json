@@ -1,0 +1,92 @@
+[
+ {
+  "id": "YuQ8kZDT",
+  "brancas": "Anand",
+  "pretas": "Kasparov",
+  "ano": 2000,
+  "evento": "Linares 2000",
+  "variante": "Najdorf, 6.Be2",
+  "lances": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O Be6 f4 Qc7 Nd5 Bxd5 exd5 Nbd7 c4 O-O Kh1 Rfe8 Be3 exf4 Bxf4 Bf8 Rc1 Qb6 Rc2 g6 Bf3 Rac8 Nc1 Ne5 b3 h5 h3 Bg7 Ne2 Nxf3 gxf3 Qc5 Rc1 b5 Qd2 bxc4 bxc4 h4 Bg5 Nh5 Bxh4 Rb8 Ng1 Rb2 Rc2 Qxc4 Rxc4 Rxd2 f4 Rxd5"
+ },
+ {
+  "id": "bgEBwWXX",
+  "brancas": "Ivanchuk",
+  "pretas": "Kasparov",
+  "ano": 1990,
+  "evento": "Linares 1990",
+  "variante": "Najdorf, Peão Envenenado (6.Bg5 e6 7.f4 Qb6)",
+  "lances": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Bg5 e6 f4 Qb6 Qd2 Qxb2 Rb1 Qa3 f5 Nc6 fxe6 fxe6 Nxc6 bxc6 Be2 Be7 O-O O-O Rb3 Qc5+ Be3 Qe5 Bf4 Qc5+ Kh1 Ng4 h3 e5 Na4 Qa7 Bc4+ Kh8 hxg4 exf4 Nb6 d5 exd5 cxd5 Bxd5 Rb8 Nxc8 Rbxc8 Rh3 Qb6 Re1 Bg5 Re6 Qd8 c4 Rb8 Qd3 Bh4 Be4 Qg5 Bxh7 Rfd8 Qc2 f3 Rxf3 Rd2 Qe4 Rd1+ Kh2 Re1 Qf5 Rxe6 Qxe6 Kxh7 Qe4+ g6 Rh3 Kg7 Qd4+ Kg8 Qe4 Qf6"
+ },
+ {
+  "id": "u6d46Sdi",
+  "brancas": "Nisipeanu",
+  "pretas": "Carlsen",
+  "ano": 2010,
+  "evento": "Medias 2010",
+  "variante": "Dragão, Ataque Iugoslavo (9...d5)",
+  "lances": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O O-O-O d5 Kb1 Rb8 Ndb5 a6 Na7 e6 g4 Re8 g5 Nh5 Bf2 Bd7 exd5 exd5 Qxd5 Ne5 Qb3 Qxg5 Ne4 Qf4 Be2 Be6 Qa3 Nc4 Bxc4 Bxc4 Nd6 Bf8 Rd4 Qe5 Rxc4 Bxd6 Qd3 Bf8 a4 Rbd8 Qb3 Qd5 Rc3 Qd2 Be3 Qe2 Bb6 Rd1+"
+ },
+ {
+  "id": "krvgf6Sq",
+  "brancas": "Caruana",
+  "pretas": "Mamedyarov",
+  "ano": 2016,
+  "evento": "Shamkir 2016",
+  "variante": "Sveshnikov",
+  "lances": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Ndb5 d6 Bg5 a6 Na3 b5 Nd5 Be7 Bxf6 Bxf6 c4 b4 Nc2 O-O h4 a5 g3 Be6 Bh3 Rb8 Qd3 Qd7 Nxf6+ gxf6 Bf5 Qb7 Ne3 Nd4 O-O b3 a3 Kh8 Rac1 Rbc8 Rfe1 Rc5 Qd1 Bxf5 Nxf5 Nxf5 exf5 Rd8 Qh5 Kg7 Rc3 h6 Ree3 a4 Qe2 d5 Qf3 Rdc8 cxd5 Rxc3 Rxc3 Rxc3 Qxc3 Qxd5 Qb4 h5 Qxa4 Qd3 g4 Qb1+ Kg2 Qxb2 gxh5 Qc2 Qg4+ Kh7 h6 Kxh6 Qg8 Qxf5 Qf8+ Kh5 f3 Kxh4 Qb4+ Qf4 Qxb3 Qd2+ Kf1 Kg3 f4+ Kxf4 a4 f5 Qb5 Qd1+ Kf2 Qc2+ Kf1 f6 Qb4+ e4 Qb5 Kg3 Qe2 Qxe2+ Kxe2 f4 a5 f3+ Kf1 e3"
+ },
+ {
+  "id": "8ENETNzW",
+  "brancas": "Karpov",
+  "pretas": "Kasparov",
+  "ano": 1985,
+  "evento": "Mundial de Moscou 1985, partida 16",
+  "variante": "Taimanov (5.Nb5 d6 6.c4)",
+  "lances": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nc6 Nb5 d6 c4 Nf6 N1c3 a6 Na3 d5 cxd5 exd5 exd5 Nb4 Be2 Bc5 O-O O-O Bf3 Bf5 Bg5 Re8 Qd2 b5 Rad1 Nd3 Nab1 h6 Bh4 b4 Na4 Bd6 Bg3 Rc8 b3 g5 Bxd6 Qxd6 g3 Nd7 Bg2 Qf6 a3 a5 axb4 axb4 Qa2 Bg6 d6 g4 Qd2 Kg7 f3 Qxd6 fxg4 Qd4+ Kh1 Nf6 Rf4 Ne4 Qxd3 Nf2+ Rxf2 Bxd3 Rfd2 Qe3 Rxd3 Rc1 Nb2 Qf2 Nd2 Rxd1+ Nxd1 Re1+"
+ },
+ {
+  "id": "9oMy7FQV",
+  "brancas": "Ljubojevic",
+  "pretas": "Kasparov",
+  "ano": 1988,
+  "evento": "Copa do Mundo, Belfort 1988",
+  "variante": "Scheveningen, Ataque Keres (6.g4)",
+  "lances": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 Nf6 Nc3 d6 g4 Nc6 g5 Nd7 Rg1 Be7 Be3 O-O Qd2 a6 O-O-O Nxd4 Bxd4 b5 f4 b4 Ne2 Qa5 Kb1 e5 Bf2 Nc5 Qe3 Be6 Nc1 exf4 Qxf4 Rac8 Bd4 Rfe8 Nb3 Qa4 Bf6 Bf8 Rg3 Qc6 Nxc5 dxc5 Be5 c4 Bd6 b3 c3 Rcd8 e5 Bxd6 exd6 Rxd6 Rc1 Qc5 Ka1 Red8 Re3 Rd1 Re1 Rxe1 Rxe1 Qa5 a3 Qd5 Be2 g6 h4 Qd2 Qf1 Bh3 Qg1 Re8"
+ },
+ {
+  "id": "UTjtjG4y",
+  "brancas": "Torre",
+  "pretas": "Karpov",
+  "ano": 1977,
+  "evento": "Bad Lauterberg 1977",
+  "variante": "Kan (5.c4, Maroczy)",
+  "lances": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 c4 Qc7 a3 Nf6 Nc3 Nc6 Be3 Be7 Rc1 Ne5 Be2 Ng6 O-O b6 f4 O-O b4 Bb7 Bd3 Rac8 Nb3 d6 Qe2 Rfe8 h3 Nd7 Qf2 Ba8 Rc2 Qb8 Rfc1 Bh4 g3 Bd8 Nd2 Bf6 h4 h6 h5 Ngf8 g4 Nh7 e5 dxe5 g5 exf4 Bxf4 Be5 g6 fxg6 hxg6 Bxf4 gxh7+ Kh8 Rf1 Rf8 Be4 Ne5 Qg2 Nxc4"
+ },
+ {
+  "id": "sOJ580QG",
+  "brancas": "Morozevich",
+  "pretas": "Ivanchuk",
+  "ano": 2008,
+  "evento": "Campeonato russo por equipes, Dagomys 2008",
+  "variante": "Dragão Acelerado",
+  "lances": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Be2 Bg7 Nb3 d6 O-O Nf6 Nc3 O-O Bg5 Be6 f4 b5 a3 a5 Bf3 a4 Nc1 Nd7 Nd3 Nc5 Kh1 Nxd3 cxd3 Rb8 f5 Bb3 Qd2 b4 axb4 Rxb4 Bh6 Qb6 Bxg7 Kxg7 Bd1 Bxd1 Qxd1 Qd4 Nd5 Rb3 Qc1 Ne5 Qc7 Nxd3 Qxe7 Nf2+ Rxf2 Qxf2 Qxd6 Rc8 f6+ Kh6 Qd7 Rxb2 Qg4 Rcc2 Nf4 a3 h4 Rb5 Rxa3 Qd4 Nd5 Rb1+ Kh2 Qg1+"
+ },
+ {
+  "id": "XErOLKA5",
+  "brancas": "Smerdon",
+  "pretas": "Vachier-Lagrave",
+  "ano": 2016,
+  "evento": "Olimpíada de Baku 2016",
+  "variante": "Alapin (2.c3 d5)",
+  "lances": "e4 c5 c3 d5 exd5 Qxd5 Nf3 Nf6 d4 e6 Bd3 Be7 O-O O-O Qe2 cxd4 cxd4 Nc6 Be3 Nb4 Nc3 Qh5 Bc4 b6 Bf4 Bb7 a3 Nbd5 Nxd5 Nxd5 Be5 Qf5 Rfd1 Rac8 Rac1 Nf4 Bxf4 Qxf4 Rc3 Rfd8 Qe3 Qf5 Qe5 Qxe5 Nxe5 a6 a4 Bc5 Rcd3 Bd6 b3 Kf8 h4 g6 f4 Rc7 Kf2 f6 Nf3 Bxf4 g3 Bh6 Re1 Re8 h5 gxh5 Rh1 b5 axb5 axb5 Bxb5 Rc2+ Kf1 Ra8 Ne1 Ra1"
+ },
+ {
+  "id": "XAwc5zJ8",
+  "brancas": "Caruana",
+  "pretas": "Carlsen",
+  "ano": 2015,
+  "evento": "Tata Steel, Wijk aan Zee 2015",
+  "variante": "Rossolimo (3.Bb5 g6 4.Bxc6)",
+  "lances": "e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 dxc6 d3 Bg7 h3 Nf6 Nc3 b6 Be3 e5 O-O O-O a3 Qe7 Qb1 Nh5 b4 f5 bxc5 f4 Bd2 bxc5 Qb3+ Be6 Qa4 Rac8 Qa5 g5 Na4 g4 hxg4 Bxg4 Qxc5 Qf6 Nh2 f3 Nxg4 Qg6 Qe7 fxg2 Rfb1 Qxg4 Qg5 Qe2 Qe3 Qg4 Qg5 Qxg5 Bxg5 Nf4 Bxf4 exf4 Kxg2 f3+ Kf1 Rf4 c3 Rd8 d4 Bh6 Ke1 Rxe4+ Kd1 c5 Kc2 cxd4 Kd3 Re2 c4 Rxf2 Rd1 Re2"
+ }
+]
