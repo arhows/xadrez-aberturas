@@ -11,9 +11,35 @@ function audio(): AudioContext {
   return contexto
 }
 
+/**
+ * Libera o áudio dentro do próprio toque. O som dos lances sai de um watch (fora do evento), e no
+ * celular, sobretudo no iPhone, um áudio criado antes do primeiro toque (as táticas jogam o lance do
+ * adversário sozinhas ao abrir) pode ficar mudo para sempre. Aqui ele é criado ou retomado no toque,
+ * com um som vazio, que é o que o Safari exige.
+ */
+function desbloquear(): void {
+  try {
+    const ctx = audio()
+    const vazio = ctx.createBufferSource()
+    vazio.buffer = ctx.createBuffer(1, 1, 22050)
+    vazio.connect(ctx.destination)
+    vazio.start(0)
+    if (ctx.state === 'running') for (const evento of EVENTOS_DE_TOQUE) window.removeEventListener(evento, desbloquear, true)
+  } catch {
+    // Navegador sem Web Audio.
+  }
+}
+const EVENTOS_DE_TOQUE = ['pointerdown', 'touchend', 'mousedown', 'keydown'] as const
+if (typeof window !== 'undefined' && typeof AudioContext !== 'undefined') {
+  for (const evento of EVENTOS_DE_TOQUE) window.addEventListener(evento, desbloquear, true)
+}
+
+/** Antes do primeiro toque o navegador não deixa tocar: nem cria o áudio (ele nasceria travado). */
+const podeTocar = () => (navigator as { userActivation?: { hasBeenActive: boolean } }).userActivation?.hasBeenActive ?? true
+
 /** Bipe curto de feedback; sem áudio disponível, o treino segue em silêncio. */
 export function tocar(tipo: 'certo' | 'errado'): void {
-  if (!progresso.config.som) return
+  if (!progresso.config.som || !podeTocar()) return
   try {
     const ctx = audio()
     const oscilador = ctx.createOscillator()
@@ -84,7 +110,7 @@ function notas(ctx: AudioContext, inicio: number, frequencias: number[], passo: 
 
 /** Som das peças, como no lichess: lance, captura, xeque, mate e empate. */
 export function tocarLance(tipo: SomDoLance): void {
-  if (!progresso.config.somPecas) return
+  if (!progresso.config.somPecas || !podeTocar()) return
   try {
     const ctx = audio()
     const agora = ctx.currentTime + 0.01
