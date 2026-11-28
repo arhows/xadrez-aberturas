@@ -1,8 +1,9 @@
-// Gera data/taticas/siciliana-<lado>-*.json: 900 problemas táticos de partidas da Siciliana no
+// Gera data/taticas/<abertura>-<lado>-*.json: 900 problemas táticos de partidas de uma abertura no
 // lichess, resolvidos pelo lado escolhido, em 3 fases (pelo número do lance) × 3 faixas de dificuldade.
-// Pretas = quem joga a Siciliana; brancas = quem a enfrenta.
+// Siciliana: pretas = quem a joga, brancas = quem a enfrenta. Italiana: o contrário.
 // Fonte: base de problemas do lichess (CC0), https://database.lichess.org/lichess_db_puzzle.csv.zst
-// Uso: node scripts/taticas/gerar-siciliana.mjs <caminho do .csv (descompactado)> [pretas|brancas]
+// (o .zst vem no formato pzstd, com vários frames; descompacte com zstd -d ou pzstd -d)
+// Uso: node scripts/taticas/gerar-abertura.mjs <caminho do .csv (descompactado)> <siciliana|italiana> <pretas|brancas>
 //
 // O lichess só marca a abertura (coluna OpeningTags) em problemas do começo da partida, por isso
 // as fases vão do lance 2 até o meio-jogo. A escolha é aleatória com semente fixa.
@@ -12,14 +13,15 @@ import { Chess } from 'chess.js'
 
 const ARQUIVO = process.argv[2]
 if (!ARQUIVO) throw new Error('Informe o caminho do lichess_db_puzzle.csv')
-const LADO = process.argv[3] ?? 'pretas'
+const ABERTURA = process.argv[3]
+const LADO = process.argv[4]
 if (!['pretas', 'brancas'].includes(LADO)) throw new Error('Lado: pretas ou brancas')
 const PRETAS = LADO === 'pretas'
 
 const FASES = [
-  { arquivo: `siciliana-${LADO}-1-abertura`, nome: 'Abertura (lances 2 a 10)', min: 2, max: 10 },
-  { arquivo: `siciliana-${LADO}-2-transicao`, nome: 'Saída da abertura (lances 11 a 15)', min: 11, max: 15 },
-  { arquivo: `siciliana-${LADO}-3-meio-jogo`, nome: 'Meio-jogo (lance 16 em diante)', min: 16, max: 999 },
+  { arquivo: `${ABERTURA}-${LADO}-1-abertura`, nome: 'Abertura (lances 2 a 10)', min: 2, max: 10 },
+  { arquivo: `${ABERTURA}-${LADO}-2-transicao`, nome: 'Saída da abertura (lances 11 a 15)', min: 11, max: 15 },
+  { arquivo: `${ABERTURA}-${LADO}-3-meio-jogo`, nome: 'Meio-jogo (lance 16 em diante)', min: 16, max: 999 },
 ]
 const FAIXAS = [
   { nome: 'facil', min: 400, max: 1300 },
@@ -30,7 +32,7 @@ const POR_FAIXA = 100
 const RESERVATORIO = 1500
 
 /** Nomes em português das variantes (a 2ª etiqueta do lichess); as outras ficam traduzidas por regra. */
-const VARIANTES = {
+const VARIANTES_DA_SICILIANA = {
   Sicilian_Defense: 'Siciliana',
   Sicilian_Defense_Alapin_Variation: 'Alapin (2.c3)',
   Sicilian_Defense_Delayed_Alapin_Variation: 'Alapin adiada',
@@ -116,11 +118,58 @@ const VARIANTES = {
   Sicilian_Defense_Wing_Gambit_Deferred: 'Gambito da Ala adiado',
   Sicilian_Defense_Bucker_Variation: 'Bücker',
 }
+const VARIANTES_DA_ITALIANA = {
+  Italian_Game: 'Italiana',
+  Italian_Game_Two_Knights_Defense: 'Dois Cavalos (3...Nf6)',
+  Italian_Game_Classical_Variation: 'Clássica (3...Bc5)',
+  Italian_Game_Giuoco_Pianissimo: 'Giuoco Pianissimo (d3)',
+  Italian_Game_Giuoco_Piano: 'Giuoco Piano',
+  'Italian_Game_Anti-Fried_Liver_Defense': 'Anti-Fried Liver (3...h6)',
+  Italian_Game_Evans_Gambit: 'Gambito Evans',
+  Italian_Game_Evans_Gambit_Accepted: 'Gambito Evans aceito',
+  Italian_Game_Evans_Gambit_Declined: 'Gambito Evans recusado',
+  Italian_Game_Scotch_Gambit: 'Gambito Escocês',
+  Italian_Game_Scotch_Gambit_Declined: 'Gambito Escocês recusado',
+  Italian_Game_Scotch_Invitation_Declined: 'Convite escocês recusado',
+  Italian_Game_Rousseau_Gambit: 'Gambito Rousseau (3...f5)',
+  Italian_Game_Other_variations: 'Italiana (outras)',
+  'Italian_Game_Blackburne-Kostic_Gambit': 'Gambito Blackburne-Kostić (3...Nd4)',
+  'Italian_Game_Schilling-Kostic_Gambit': 'Gambito Schilling-Kostić (3...Nd4)',
+  Italian_Game_Hungarian_Defense: 'Defesa Húngara (3...Be7)',
+  Italian_Game_Paris_Defense: 'Defesa Paris (3...d6)',
+  Italian_Game_Deutz_Gambit: 'Gambito Deutz',
+  Italian_Game_Rosentreter_Gambit: 'Gambito Rosentreter',
+  Italian_Game_Birds_Attack: 'Ataque Bird',
+  Italian_Game_Jerome_Gambit: 'Gambito Jerome',
+}
+
+const ABERTURAS = {
+  siciliana: {
+    etiqueta: 'Sicilian_Defense',
+    nome: 'Siciliana',
+    variantes: VARIANTES_DA_SICILIANA,
+    tema: { pretas: 'siciliana', brancas: 'siciliana-brancas' },
+    fonte: 'partidas da Defesa Siciliana',
+    livro: { pretas: 'Siciliana, táticas pelas pretas', brancas: 'Contra a Siciliana, táticas pelas brancas' },
+  },
+  italiana: {
+    etiqueta: 'Italian_Game',
+    nome: 'Italiana',
+    variantes: VARIANTES_DA_ITALIANA,
+    tema: { brancas: 'italiana', pretas: 'italiana-pretas' },
+    fonte: 'partidas do Jogo Italiano',
+    livro: { brancas: 'Italiana, táticas pelas brancas', pretas: 'Contra a Italiana, táticas pelas pretas' },
+  },
+}
+const CONFIG = ABERTURAS[ABERTURA]
+if (!CONFIG) throw new Error(`Abertura: ${Object.keys(ABERTURAS).join(' ou ')}`)
+const VARIANTES = CONFIG.variantes
+
 /** Etiqueta sem tradução: tira o prefixo e os "_" ("Sicilian_Defense_Foo_Variation" → "Foo"). */
 const nomeDaVariante = (etiqueta) =>
   VARIANTES[etiqueta] ??
-  (etiqueta.replace(/^Sicilian_Defense_?/, '').replace(/_(Variation|Attack)$/, '').replaceAll('_', ' ').trim() ||
-    'Siciliana')
+  (etiqueta.replace(new RegExp(`^${CONFIG.etiqueta}_?`), '').replace(/_(Variation|Attack)$/, '').replaceAll('_', ' ').trim() ||
+    CONFIG.nome)
 
 // PRNG com semente (mulberry32), para a amostra ser reproduzível.
 let semente = 20261119
@@ -145,7 +194,7 @@ for await (const linha of linhas) {
   }
   total++
   const [id, fen, lances, rating, desvio, popularidade, jogadas, temas, url, aberturas] = linha.split(',')
-  if (!aberturas?.startsWith('Sicilian_Defense')) continue
+  if (!aberturas?.startsWith(CONFIG.etiqueta)) continue
   // O FEN é a posição antes do lance do adversário: brancas na vez = as pretas resolvem.
   if (fen.split(' ')[1] !== (PRETAS ? 'w' : 'b')) continue
   if (Number(popularidade) < 85 || Number(jogadas) < 300 || Number(desvio) > 90) continue
@@ -203,10 +252,10 @@ for (const [f, fase] of FASES.entries()) {
   const conjunto = {
     id: fase.arquivo,
     tipo: 'tatica',
-    tema: PRETAS ? 'siciliana' : 'siciliana-brancas',
+    tema: CONFIG.tema[LADO],
     nome: fase.nome,
-    fonte: 'Base de problemas do lichess (CC0), lichess.org: partidas da Defesa Siciliana',
-    livro: PRETAS ? 'Siciliana, táticas pelas pretas' : 'Contra a Siciliana, táticas pelas brancas',
+    fonte: `Base de problemas do lichess (CC0), lichess.org: ${CONFIG.fonte}`,
+    livro: CONFIG.livro[LADO],
     lances: 0,
     problemas: problemas.map((p, i) => ({ n: i + 1, ...p, solucoes: [p.linha[0]] })),
   }

@@ -30,6 +30,8 @@ export const AUTORES_DOS_LIVROS: Record<string, string> = {
   grooten: 'Grooten',
   siciliana: 'Siciliana',
   'siciliana-brancas': 'Contra a Siciliana',
+  italiana: 'Italiana',
+  'italiana-pretas': 'Contra a Italiana',
 }
 
 /** Explicação curta de cada tema, mostrada antes dos problemas. */
@@ -42,6 +44,10 @@ export const EXPLICACOES: Record<string, string> = {
     'Problemas táticos de partidas reais da Defesa Siciliana jogadas no lichess, sempre pelas pretas. As brancas acabam de jogar: ache o melhor lance e siga a combinação até o fim. Estão separados pela fase da partida (abertura, saída da abertura e meio-jogo) e por dificuldade, e cada um mostra a variante e o lance em que aconteceu. Os padrões se repetem: aprenda a reconhecê-los nas suas partidas.',
   'siciliana-brancas':
     'Problemas táticos de partidas reais contra a Defesa Siciliana (1.e4 c5) jogadas no lichess, sempre pelas brancas. As pretas acabam de jogar: ache o melhor lance e siga a combinação até o fim. Estão separados pela fase da partida (abertura, saída da abertura e meio-jogo) e por dificuldade, e cada um mostra a variante e o lance em que aconteceu.',
+  italiana:
+    'Problemas táticos de partidas reais do Jogo Italiano (1.e4 e5 2.Nf3 Nc6 3.Bc4), incluindo a Defesa dos Dois Cavalos, jogadas no lichess, sempre pelas brancas. As pretas acabam de jogar: ache o melhor lance e siga a combinação até o fim. Estão separados pela fase da partida (abertura, saída da abertura e meio-jogo) e por dificuldade, e cada um mostra a variante e o lance em que aconteceu. Os padrões se repetem: aprenda a reconhecê-los nas suas partidas.',
+  'italiana-pretas':
+    'Problemas táticos de partidas reais contra o Jogo Italiano (1.e4 e5 2.Nf3 Nc6 3.Bc4), incluindo a Defesa dos Dois Cavalos, jogadas no lichess, sempre pelas pretas. As brancas acabam de jogar: ache o melhor lance e siga a combinação até o fim. Estão separados pela fase da partida (abertura, saída da abertura e meio-jogo) e por dificuldade, e cada um mostra a variante e o lance em que aconteceu.',
   hangingPiece:
     'Uma peça desprotegida (ou mal protegida) pode ser capturada de graça. Antes de qualquer plano, olhe o que o adversário deixou sem defesa — e o que você deixou.',
   fork: 'Garfo: uma peça ataca duas (ou mais) peças ao mesmo tempo, e o adversário só consegue salvar uma. O cavalo é o rei dos garfos, mas peões, damas e até o rei também garfam.',
